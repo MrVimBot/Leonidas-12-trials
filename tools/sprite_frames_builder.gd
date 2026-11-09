@@ -66,13 +66,14 @@ static func build(json_path: String) -> String:
 
 	DirAccess.make_dir_recursive_absolute(OUT_DIR)
 	var out_path := "%s/%s.tres" % [OUT_DIR, manifest.name]
-	# Conserva el UID si el recurso ya existía, para no romper referencias.
-	if ResourceLoader.exists(out_path):
-		frames.take_over_path(out_path)
+	# Conservar el UID del archivo anterior para no romper las escenas que lo usan.
+	var uid_anterior := ResourceLoader.get_resource_uid(out_path) if FileAccess.file_exists(out_path) else ResourceUID.INVALID_ID
 	var err := ResourceSaver.save(frames, out_path)
 	if err != OK:
 		push_error("No se pudo guardar %s (error %d)" % [out_path, err])
 		return ""
+	if uid_anterior != ResourceUID.INVALID_ID:
+		ResourceSaver.set_uid(out_path, uid_anterior)
 	var warnings: Array = manifest.get("warnings", [])
 	for w in warnings:
 		push_warning("%s: %s" % [manifest.name, w])

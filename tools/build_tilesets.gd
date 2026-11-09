@@ -91,11 +91,14 @@ func _construir(cfg: Dictionary) -> bool:
 		datos.set_collision_polygon_points(0, 0, cuadrado)
 
 	DirAccess.make_dir_recursive_absolute(cfg.salida.get_base_dir())
-	if ResourceLoader.exists(cfg.salida):
-		ts.take_over_path(cfg.salida) # conserva el UID: no rompe los mapas ya pintados
+	# Conservar el UID del archivo anterior: si cambia, las zonas ya pintadas que lo
+	# referencian por UID dan avisos "invalid UID" hasta volver a guardarlas.
+	var uid_anterior := ResourceLoader.get_resource_uid(cfg.salida) if FileAccess.file_exists(cfg.salida) else ResourceUID.INVALID_ID
 	var err := ResourceSaver.save(ts, cfg.salida)
 	if err != OK:
 		push_error("No se pudo guardar %s (error %d)" % [cfg.salida, err])
 		return false
+	if uid_anterior != ResourceUID.INVALID_ID:
+		ResourceSaver.set_uid(cfg.salida, uid_anterior)
 	print("[tilesets] %s: %d tiles, %d sólidos -> %s" % [cfg.textura.get_file(), n, cfg.solidos.size(), cfg.salida])
 	return true

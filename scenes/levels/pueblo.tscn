@@ -57,6 +57,7 @@ sombra = false
 [node name="PuestoMercado" parent="Objetos" unique_id=1874371847 instance=ExtResource("3_dec")]
 position = Vector2(90, 300)
 textura = ExtResource("8_t")
+sombra = false
 
 [node name="Manzano1" parent="Objetos" unique_id=800923521 instance=ExtResource("3_dec")]
 position = Vector2(200, 262)
@@ -69,6 +70,7 @@ textura = ExtResource("10_t")
 [node name="Estatua" parent="Objetos" unique_id=1359109158 instance=ExtResource("3_dec")]
 position = Vector2(336, 330)
 textura = ExtResource("11_t")
+sombra = false
 
 [node name="Cartel" parent="Objetos" unique_id=35523704 instance=ExtResource("3_dec")]
 position = Vector2(384, 236)

@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://dm8ps1hkc1s1k"]
 
 [ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_zon"]
-[ext_resource type="TileSet" uid="uid://dv738xedg774h" path="res://resources/tilesets/naturaleza.tres" id="2_ts"]
+[ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="2_ts"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="3_dec"]
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="4_sal"]
 [ext_resource type="Texture2D" uid="uid://ihf64cpt7s7h" path="res://assets/sprites/entorno/pino.png" id="5_t"]

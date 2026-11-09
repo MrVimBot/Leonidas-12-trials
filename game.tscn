@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bqrc482efmsq3" path="res://scenes/player/jugador.tscn" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://c8521nkmoch8j" path="res://scripts/systems/game.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://bo4ak683tshp5" path="res://scripts/systems/camara_pixel.gd" id="3_feb5d"]
 
 [node name="Game" type="Node2D" unique_id=194216102]
 y_sort_enabled = true
@@ -13,16 +14,12 @@ y_sort_enabled = true
 [node name="Jugador" parent="." unique_id=1575559739 instance=ExtResource("1_80nbo")]
 position = Vector2(55.933884, 46.802414)
 
-[node name="SeguirCamara" type="RemoteTransform2D" parent="Jugador" unique_id=471680784]
-position = Vector2(0, -12)
-remote_path = NodePath("../../Camara")
-update_rotation = false
-update_scale = false
-
-[node name="Camara" type="Camera2D" parent="." unique_id=1303309162]
+[node name="Camara" type="Camera2D" parent="." unique_id=1303309162 node_paths=PackedStringArray("objetivo")]
 position = Vector2(55.933884, 34.802414)
-position_smoothing_enabled = true
+process_callback = 0
 position_smoothing_speed = 6.0
+script = ExtResource("3_feb5d")
+objetivo = NodePath("../Jugador")
 
 [node name="Transicion" type="CanvasLayer" parent="." unique_id=895772840]
 layer = 10

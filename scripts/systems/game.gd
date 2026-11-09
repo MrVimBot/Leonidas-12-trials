@@ -5,8 +5,8 @@ extends Node2D
 ##
 ##   Game (este script, y_sort_enabled)
 ##   ├─ Mundo (Node2D, y_sort)    aquí se instancia la zona actual
-##   ├─ Jugador                   (+ SeguirCamara → Camara)
-##   ├─ Camara (Camera2D)         sus límites se ajustan a cada zona
+##   ├─ Jugador
+##   ├─ Camara (CamaraPixel)      sigue al jugador; sus límites se ajustan a cada zona
 ##   └─ Transicion (CanvasLayer)  fundido a negro al cambiar de zona
 
 signal zona_cambiada(zona: Zona)
@@ -20,13 +20,14 @@ var _cambiando := false
 
 @onready var mundo: Node2D = $Mundo
 @onready var jugador: Jugador = $Jugador
-@onready var camara: Camera2D = $Camara
+@onready var camara: CamaraPixel = $Camara
 @onready var fundido: ColorRect = $Transicion/Fundido
 
 
 func _ready() -> void:
 	add_to_group(&"game")
 	fundido.color.a = 0.0
+	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	_cargar_zona(zona_inicial, entrada_inicial)
 
 
@@ -70,8 +71,7 @@ func _ajustar_camara() -> void:
 		camara.limit_right = r.end.x
 		camara.limit_bottom = r.end.y
 	# Coloca la cámara de golpe (sin el suavizado) sobre el jugador.
-	camara.global_position = jugador.global_position + Vector2(0, -12)
-	camara.reset_smoothing()
+	camara.saltar_a_objetivo()
 
 
 func _fundir(alfa: float) -> void:
