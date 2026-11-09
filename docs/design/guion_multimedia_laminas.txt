@@ -1,0 +1,2031 @@
+Guión Multimedia
+        Integrantes:
+
+      Emilia Cárdenas
+      Alexadra Criollo
+       Rafaela Castro
+       Valeria Idrovo
+       Ana Sanmartin
+       Sofia Quezada
+        Lucia Segura
+           Barra de
+             vida
+                      Interfaz
+                                 Inventario
+ Objeto
+equipado
+
+
+
+
+                                 Contador de
+                                   dinero
+nivel 1
+                                          NIVEL 1
+             Descripción                                            Historia
+
+ La zona 1 o el primer nivel funciona a             Aquí se da el comienzo de la historia, en
+      base de tutorial para conocer las              su 15º cumpleaños Leonidas recibe su
+           mécanicas del juego.                     misión de matar a Medusa y se debé de
+  Está primera zona se divide en dos                       embarcar en la aventura.
+ 1.    La ciudad de Leonidas (siendo un                Leonidas es medio conocido en la
+                 lugar seguro)                      ciudad por ser algo patoso y rebelde, así
+2.       El bosque (siendo un lugar de               que los habitantes le desean suerte en
+                    peligro)                           su misión para llegar a la adultez.
+       En la ciudad se explicará como                Debe de llegar a la orilla del mar para
+ interactuar con el entorno y los NPCs               poder llegar a la siguiente zona, la isla
+mientras que en el bosque se explicará                             de Medusa.
+      el sistema de combate y esquive
+                  básicos
+           Está zona no tiene jefe.
+NIVEL 1
+                         Moodboard
+
+          Para está primera zona se utilizará una estética
+          más tradicional, aka, pixel art para la ciudad y
+          el bosque.
+          Con varias referencias de como funcionaban
+          estas ciudades y los colores que se usaban.
+
+
+          En la zona del bosque ver como funcionan la
+          construcción de estos niveles y sus elementos.
+
+
+          Se usará en está zona colores más vivos al ser
+          una zona inicial para representar un poco el
+          sentimiento de aventura infantil y
+          emocionante.
+NIVEL 1
+Guión gráfico
+
+
+
+    El juego comienza en la casa de Leonidas, dondé su madre
+    le avisa que es su cumpleaños número 15 y debe de ir a la
+    sala de reuniones para recibir su misión para “convertirse”
+    en adulto.
+
+
+    Se ve que a Leonidas está idea no le gusta mucho y hay un
+    poco de tira y afloja entre él y su mamá.
+NIVEL 1
+Guión gráfico
+
+ Una vez Leonidas sale de casa, el jugador gana el control
+ sobre el personaje e inicia un pequeño tutorial de cómo
+ moverse y cómo interactuar con el mundo y los NPCs del
+ lugar.
+
+
+
+
+ Leonidas por las instrucciones de su madre y pistas que hay
+ en el mundo, se dirige hacia el norte de la ciudad, dondé se
+ encuentra la sala de reuniones.
+NIVEL 1
+Guión gráfico
+Tras una charla con los sabios del pueblo, se le asigna su
+primera misión, el ir a la isla de Medusa y matarla.
+Se le dice al jugador el ir al sur y llegar a la orilla dondé allí le
+espera una barca y alguien que le dirá qué hacer después.
+
+
+
+
+El jugador vuelve a ganar el control de Leonidas después de
+está conversación y debe de ir al sur del mapa para poder
+avanzar en la historia.
+  NIVEL 1
+        Guión gráfico
+
+El jugador saldrá de la zona segura que es la ciudad y entrará al
+bosque, aquí hay enemigos que atacarán al jugador en cuanto le
+vean.
+
+
+
+Aquí el jugador se le da la opción de huir de ellos o luchar para
+desbloquear zonas del mapa o conseguir dinero.
+
+
+
+El jugador también puede investigar un poco más la zona y
+averiguar del lugar o conseguir alguna recompensa en el mapa.
+NIVEL 1
+Guión gráfico
+
+
+
+
+ El jugador para poder avanzar deberá ir al sur y llegar a la orilla de
+ la playa.
+
+
+
+
+ Aquí hay un NPC que le hablará un poco del mundo, le advertirá
+ de la siguiente zona y le explicará la mécanica del barco.
+NIVEL 1
+Guión gráfico
+
+
+
+
+  Se empezará el inicio de la pequeña sección del barco y se
+  deberá ir hacia el sur, dondé se llegara a la siguiente zona, la isla
+  de Medusa y aquí terminaría esta primera sección.
+NIVEL 1
+                            Leonidas
+
+ Leonidas en está parte es pequeño, de cerca de unos 25 pixeles de
+ alto, en esta zona está animado frame a frame y tiene mucha
+ caraterización a como se hacían los sprites de Link de “The legend
+ of Zelda” en varios juegos como “A Link to the past” o “Minish Cap”
+ o juegos clásicos de Pokémon.
+
+
+                      Paleta de colores
+NIVEL 1
+                             NPCs
+
+ Los NPCs en este lugar, al comienzo solo dan un poco de
+ información general y tiendas con items limitados.
+
+
+ Una vez se avanza en la historia, en la ciudad algunos NPCs
+ pueden empezar a tener misiones secundarias que te pueden
+ dar algunos objetos extra o algun objeto importante.
+
+
+
+
+  Diálogo normal            Misión             Tienda
+   NIVEL 1
+        Objeto consumible para recuperar vida
+El objeto de esta zona son las manzanas, estas se encuentran en los árboles
+fuera de la ciudad, si el jugador golpea el árbol con su espada una manzana
+caerá, al acercarse se recoge y se almacenará en el inventario.
+
+
+El árbol no producirá más manzanas hasta visitar otro bioma, en ese
+momento el árbol se resetea y producirá más manzanas, de está forma el
+jugador tiene un limite del objeto y no puede farmear de más.
+                  NIVEL 1
+              Enemigo 1/
+              Seta bomba
+La seta bomba es una pequeña seta con
+patas que camina por el mapa, una vez se
+acerca   al   jugador   la   seta   “explota”
+provocando daño en un área, lo mejor
+para enfrentar a este enemigo es dar una
+voltereta y alejarse mientras esta en el
+“cooldown” de su ataque.
+Una vez ataca se queda quieto durante un
+tiempo y es inofensivo, en ese momento es
+de atacarle y eliminarlo.
+                      NIVEL 1
+         Enemigo 2/
+          Falsa flor
+La flor falsa se encuentra en alguna
+parte    del      mapa     y     pasa
+desapercibida     como     una    flor
+cualquiera.
+Una vez el jugador se acerca la flor
+sale y se estira para atacar al
+jugador y se queda fuera durante
+un pequeño periodo de tiempo.
+Si no se la ataca y se elimina la flor
+vuelve a bajar y aparecera en otra
+parte del mapa.
+Este enemigo hace que el jugador
+tenga que estar atento por donde
+esta caminando y sus alrededores.
+            NIVEL 1
+            Enemigo 3/
+           Montón Tocotón
+Este enemigo es más un obstáculo, no suele
+moverse mucho y bloquean caminos.
+Tiene      bastante        vida,    practicamente
+considerandose un tanque.
+Una vez se derrota al enemigo del fondo del
+montón, solo bajará el siguiente a pelear.
+Este enemigo no tiene mécanicas especiales de
+ataque, una vez se le hace daño te persigue un
+poco sin alejarse mucho de la zona que bloquea.
+Si el jugador intenta alejarlo del lugar que
+bloquea,   despues    de   pasar   cierta    área   el
+enemigo priorizara volver a bloquear el camino a
+atacar a Leonidas.
+Son ataques físicos sin mucho más añadido.
+        NIVEL 1
+            Mecánica del
+              barco
+
+Cuando se llega a la costa del nivel 1 se
+encontrará un pequeño barco con el cual
+poder llegar al nivel 2.
+Esta sección actua más como un minijuego
+para poder llegar a zonas opcionales u
+obligatorias, no todos los niveles tienen
+esta pequeña mecánica.
+Mientras se está en el barco solo se puede
+mover y no atacar, el objetivo principal es
+esquivar    obtáculos      y   enemigos   que
+eliminan la vida del barco.
+NIVEL 1
+                          Mapa
+    El como se desarrolla este mapa es viajando de un
+    lugar a otro, al ser un tutorial es corto y sin muchas
+    vueltas.
+    Puedes explorar y lograr encontrar algunos cofres
+    con objetos consumibles o encontrar algunos npcs
+    con misiones o diálogos.
+
+
+    Uno solo debe de bajar y encontrarse con el NPC a
+    cargo del barco para llegar a la siguiente zona.
+
+
+    (Mapa aún en desarrollo no es la versión final)
+nivel 2
+                                              NIVEL 2
+           Descripción                                               Historia
+
+La zona 2 o el segundo nivel es una isla                Leonidas debe de enfrentarse a Medusa,
+alejada que solo se puede llegar a ella a                pero antes de poder llegar a su cueva
+ través de un viaje en barco, esta es la                 tiene que pasar por esta isla llena de
+primera parte de la historia con un jefe a               enemigos y alguna que otra sorpresa.
+       derrotar y presenta ciertas                        En esta isla se encuentran algunas
+caracteristicas diferentes al primer nivel.             estatuas que la gente dice ser obra de
+  Es un lugar hostil sin lugares seguros                Medusa, convirtiendo en piedra a aquel
+ muy grandes pero con la presencia de                          que ponga pie en su isla.
+             algunos NPCs.
+NIVEL 2                Moodboard
+     Este nivel estará altamente basado en algunos
+     niveles de playa, con colores cálidos y una estética
+     “lineless” con mucha textura
+
+
+     Esto debido a como es la playa, lleno de textura por
+     su arena, los pequeños objetos y la vegetación.
+
+
+     Con una alta cantidad de textura tambien se puede
+     diferenciar los elementos y en que nivel están.
+
+
+     La animación que se dará aquí es con un “rig” o
+     esqueleto.
+
+
+     Los fondos también tendran una gran gantidad de
+     presencia de figuras en espiral o zigzageante para
+     mostrar más visualmente que es la zona de Medusa.
+NIVEL 2
+ Guión gráfico
+
+
+
+
+ Al llegar a la isla Leonidas se ve frente a un nuevo estilo de arte.
+
+
+ En esté lugar no existen muchos NPCs y los que hay no explican en
+ donde encontrar a Medusa
+
+
+ La forma de poder encontrarla es seguir una estatuas que hay en
+ la isla que van indicando hacía que dirección ir.
+NIVEL 2
+ Guión gráfico
+
+
+
+
+ Tras explorar las zonas que las estatuas indican Leonidas
+ encontrará un escudo, su primer objeto intercambiable.
+
+
+ Este escudo le protege de ataques aunque gasta una cierta
+ cantidad de estamina, así el jugador tiene que decidir cuando
+ utilizarlo o no.
+NIVEL 2
+ Guión gráfico
+
+
+
+
+ Después de un tiempo y de seguir a las estatuas, Leonidas
+ encuentra la cueva de Medusa, en este lugar hay enemigos que
+ no se había encontrado en la isla.
+
+
+ En este lugar Leonidas debe de activar un mecanismo para que la
+ puerta que lleva a Medusa se abra y poder entrar a la zona final.
+NIVEL 2
+ Guión gráfico
+
+
+
+
+ Aquí Leonidas se encuentra a Medusa y tienen un pequeño
+ intercambio de palabras, despues de este intercambio Leonidas y
+ Medusa empezarán a pelear.
+NIVEL 2
+ Guión gráfico
+
+
+
+
+ A la final el jugador ganará contra Medusa.
+
+
+
+
+ Aunque antes de poder matarla Medusa suplica por su vida y
+ explica un poco su historia y que está maldita por los dioses, ella
+ no quiere hacer daño a nadie ni es realmente peligrosa.
+NIVEL 2
+ Guión gráfico
+
+ Tras pensarlo Medusa y Leonidas un poco llegan a la conclusión
+ de como hacerla pasarla por muerta, porque si no regresa con
+ una prueba de haberla matado habrá fallado su prueba y el
+ recibirá un castigo cuando vuelva.
+
+
+
+
+ Medusa entonces le entrega una pequeña recreación de su
+ cabeza para hacerla pasar como que la mato y se convirtio en
+ piedra, Leonidas acepta y decide volver a su ciudad.
+NIVEL 2
+ Guión gráfico
+ Al llegar a la orilla de su ciudad se encuentra un extraño personaje
+ que le habla de forma extraña y misteriosa.
+
+
+ Diciendo que sabe lo que hizo y aceptan el reto que dió Leonidas.
+
+
+ Tras preguntar un poco se presenta como Hermes, el dios
+ mensajero y que los dioses aceptan su reto hacia ellos de no
+ matar a su prueba y que no se preocupe por nada, muchas más
+ vienen y que si logra derrotarlas a todas ganará el respeto de los
+ dioses.
+
+
+ Leonidas pregunta que pasa si no quiere hacerlo y solo le
+ responde “es mejor no preguntar y aceptar niño”
+
+
+ Ahora Leonidas se ve obligado a hacer más misiones para verse
+ bien ante los dioses y no recibir un castigo divino.
+NIVEL 2
+                           Leonidas
+
+ Leonidas es uno de los primeros indicativos del cambio de estilo
+ entre los biomas y niveles del juego, aqui toma una estética
+ lineless con una gran cantidad de textura.
+
+
+
+
+                     Paleta de colores
+           NIVEL 2
+                        NPCs
+Solo se encuentran 2 NPCs en esta zona, una sirena
+que   te   dará   una   misión   secundaria   y   un
+comerciante de mapas para poder conseguir
+rápidamente el mapa de la zona.
+NIVEL 2
+      Objeto consumible para recuperar vida
+
+ En está isla el objeto consumible es un coco que durante un
+ pequeño periódo de tiempo te da la oportunidad de tener más
+ defensa, por lo que los enemigos hacen menos daño hasta que se
+ termine este período de tiempo.
+       NIVEL 2
+            Enemigo 1/
+            Gran pinza
+
+Este   enemigo   al   verte   empieza   a
+perseguirte y a atacarte, aunque tiene una
+mecánica algo especial, este bloquea los
+ataques con su gran pinza, así que para
+poder hacerle daño no se le puede atacar
+de frente, con una voltereta se debe de
+poner en la espalda y atacarle para
+hacerle daño
+NIVEL 2
+                    Enemigo 2/
+                    Espada pez
+  La espada pez al verte carga un ataque en línea recta
+  y va a toda velocidad hacia tí, para poder evitarlo es
+  solo salirse de su camino hasta que termine el tiempo
+  de ataque, durante su tiempo de cooldown de ataque
+  es más fácil atacarle y hacerle daño, pero tiene un
+  ataque mucho más débil durante este cooldown así
+  que hay que ir con ojo con este enemigo.
+         NIVEL 2
+            Enemigo 3/
+             La gamba
+
+La gamba es un         enemigo sin mucha
+caracteristicas   especiales,   te   ve,   te
+persigue y te ataca.
+Es un enemigo básico.
+Pero es de tener cuidado, si se ve a uno de
+estos muchos más estan cerca, siendo
+algo molestosos porque atacan en grupo.
+ NIVEL 2
+             Enemigo 4/
+          Ciclope serpiente
+
+La serpiente ciclope solo aparece cuando
+entras en la cueva de medusa, en unas
+pantallas antes de poder encontrar a Medusa.
+Estos enemigos tiran un rayo que tienes que
+evitar antes de que te golpeen.
+    ZONA 2
+                   Jefe
+
+El jefe del lugar es Medusa, está siendo la
+primera misión de Leonidas y un punto
+importante para la historia general.
+
+
+Medusa se caracteriza por ser una mujer
+que recibió una maldición y cuando
+Leonidas conoce ese dato se rehusa a
+matarla y llega a un plan para fingir su
+muerte y que las personas crean que el
+superó su prueba
+                                    JEFE
+                                         Ella también tiene la capacidad de
+                                         spawnear enemigos como la serpiente
+                                         ciclope y se vuelve invulnerable hasta
+                                         que todos estos enemigos pequeños
+                                         sean eliminados.
+
+
+                                         Medusa despues de llegar a su mitad
+                                         de la vida empezará a tirar pedazos
+                                         de sus estatuas para lastimar al
+                                         jugador a distancia.
+
+
+
+
+Medusa su ataque principal es embestir
+con su espada al piso donde esté el
+personaje
+NIVEL 2
+                      Mapa
+
+
+     Este nivel tiene como objetivo para poder
+     lograr encontrar la cueva de Medusa,
+     seguir    unas     estatuas     colocadas
+     estratégicamente por todo el mapa.
+     Las principales caracteristicas es tener la
+     capacidad de varios miveles de altura y
+     tener una estética específica de playa.
+nivel 3
+NIVEL 3: DESIERTO DE KHYMERA
+Jefa: Khymera
+Jugador: Leonidas
+Tipo: Exploración y combate
+Vista: Cenital
+Escenario: Desierto, ciudad abandonada y ruinas
+Objetivo: Atravesar el desierto, superar sus amenazas, encontrar las ruinas y
+enfrentarse a Khymera para conseguir el acceso al siguiente territorio.
+
+Descripción general del nivel
+MOODBOARD
+Elementos principales:
+
+
+* Desierto y dunas
+* Ciudad abandonada
+* Ruinas inspiradas en la antigua Grecia
+* Columnas y estructuras destruidas
+* Arena cubriendo antiguas construcciones
+* Cactus y tunas
+* Escorpiones
+* Remolinos de arena
+* Khymera
+* Texturas de piedra, arena y estructuras
+antiguas
+
+La intención es transmitir la sensación de estar
+recorriendo un antiguo territorio que alguna vez
+estuvo habitado, pero que ahora ha sido consumido
+por el desierto y permanece protegido por Khymera.
+STORYBOARD
+                                                                                                   1. Llegada al nuevo territorio              6. Descubrimiento de las ruinas
+                                                                                                   Después de superar el nivel anterior,       Después de atravesar el desierto,
+                                                                                                   Leonidas llega a la entrada de una          Leonidas finalmente encuentra las
+                                                                                                   antigua ciudad abandonada cubierta          antiguas ruinas custodiadas por
+                                                                                                   por el desierto.                            Khymera.
+
+
+                                                                                                   2. Inicio de la búsqueda                    7. Aparición de Khymera
+1       LLEGADA AL DESIERTO             2        EXPLORACIÓ N
+
+                                                                                                   Leonidas comienza a recorrer libremente     Leonidas entra en las ruinas y
+                                                                         9   COMBATE               el escenario con el objetivo de encontrar   encuentra a su guardiana. El espacio
+                                                                                                   las ruinas donde se encuentra Khymera.      se convierte en la arena del
+                                                                                                                                               enfrentamiento final.
+            ENCUENTRO CON ESCORPIONES   4        REMOLINOS DE ARENA                                3. Primer encuentro con los escorpiones
+    3
+                                                                                                   Durante la exploración aparecen             8. Enfrentamiento
+                                                                                                   escorpiones. Leonidas puede                 Khymera utiliza sus tres ataques
+                                                                        10   DERROTA DE KHYMERA
+                                                                                                   enfrentarlos utilizando su espada o         mientras Leonidas se desplaza
+                                                                                                   esquivarlos y continuar avanzando.          libremente por la arena, esquiva y
+    5      RECUPERACIÓ N DE VIDA            6     CAMINO A LAS RUINAS
+                                                                                                                                               busca oportunidades para acercarse y
+                                                                                                   4. Remolinos de arena                       atacar con su espada.
+                                                                                                   A medida que avanza aparecen
+                                                                                                   remolinos que se desplazan por el           9. Derrota de Khymera
+                                                                        11   ACCESO DESBLOQUEADO
+                                                                                                   escenario. Leonidas debe observar su        Leonidas consigue reducir
+    7     ENTRADA A LAS RUINAS          8       APARICIÓ N DE KHYMERA
+                                                                                                   trayectoria y evitarlos para no perder      completamente su vida, pero decide
+                                                                                                   vida.                                       no matarla. Khymera reconoce que ha
+                                                                                                                                               superado el enfrentamiento.
+                                                                                                   5. Recuperación de vida
+                                                                                                   Si ha recibido daño, puede encontrar        10. Acceso al siguiente nivel
+                                                                                                   cactus con tunas durante el recorrido. Al   Khymera desbloquea el acceso oculto de
+                                                                                                   recogerlas recupera parte de su vida.       las ruinas. Leonidas atraviesa el nuevo
+                                                                                                                                               camino y continúa su recorrido.
+JUGABILIDAD Y FLUJO DEL NIVEL
+El nivel comienza como una fase de exploración libre.            A medida que avanza, los restos de la ciudad y las
+Leonidas puede desplazarse en cuatro direcciones                 estructuras antiguas se vuelven más frecuentes hasta
+mientras recorre el desierto buscando las ruinas. No existe      conducir visualmente al jugador hacia las ruinas.
+un único recorrido obligatorio, por lo que el jugador puede
+elegir por dónde avanzar.
+                                                                 Al entrar en ellas cambia la dinámica del nivel: la
+                                                                 exploración da paso al enfrentamiento contra Khymera. El
+Durante esta exploración aparecen escorpiones y remolinos de
+                                                                 jugador continúa teniendo libertad de movimiento, pero
+arena de manera variable, haciendo que el jugador tenga que
+                                                                 ahora debe utilizarla para reconocer y esquivar los
+reaccionar constantemente a lo que ocurre en el escenario. Los
+                                                                 ataques de la guardiana
+escorpiones pueden ser derrotados con la espada o
+simplemente esquivados, mientras que los remolinos funcionan
+como obstáculos y únicamente pueden evitarse.                    La victoria depende de aprender cómo funciona cada
+                                                                 ataque, evitarlo y aprovechar los pequeños momentos en
+                                                                 los que Khymera queda expuesta para acercarse y utilizar
+El daño recibido durante esta parte se mantiene mientras
+                                                                 la espada
+Leonidas continúa avanzando. Para recuperar vida, el jugador
+puede desviarse del recorrido y buscar tunas en los cactus
+distribuidos por el escenario.
+LOOP DEL JUEGO
+                                RECORRIDO
+ EXPLORAR   → ENCONTRAR AMENAZAS → ESQUIVAR / COMBATIR → RECUPERAR VIDA →
+                CONTINUAR EXPLORANDO → ENCONTRAR LAS RUINAS
+
+
+                                 COMBATE
+ OBSERVAR A KHYMERA   → IDENTIFICAR ATAQUE → ESQUIVAR → BUSCAR APERTURA →
+                     CONTRAATACAR → ALEJARSE → REPETIR
+
+
+                                   FINAL
+    DERROTAR A KHYMERA    → DECIDIR NO MATARLA → DESBLOQUEAR ACCESO →
+                         CONTINUAR AL SIGUIENTE NIVEL
+MAPA DEL NIVEL POR ZONAS
+                                                                                                                                    ZONA 1 — Entrada a la ciudad abandonada
+    LEYENDA
+                                                                                                                                    Punto inicial del nivel. Leonidas entra al nuevo territorio y
+           RECORRIDO                                                                                                                comienza la búsqueda de las ruinas.
+           LEONIDAS
+           (JUGADOR)                                                                                                                ZONA 2 — Desierto abierto
+
+           ESCORPIONES                                                                                                              Zona principal de exploración. Aquí comienzan a aparecer
+           (ENEMIGOS)
+                                                                                                                                    escorpiones, remolinos y cactus con tunas.
+
+           REMOLINOS
+           (OBSTÁCULOS)                                                                                                             ZONA 3 — Ciudad cubierta por la arena
+                                                                                                                                    La presencia de restos arquitectónicos aumenta y también
+           TUNAS                                                                                                                    aparecen más amenazas. Estos elementos sirven para
+           (RECUPERACIÓN
+           DE VIDA)
+                                                                                                                                    indicar que Leonidas se está acercando a las ruinas.
+
+
+           RUINAS                                                                                                                   ZONA 4 — Entrada a las ruinas
+           (ESTRUCTURAS)
+                                                                                                                                    Leonidas encuentra finalmente la estructura que estaba
+                                                                                                                                    buscando y abandona la zona de exploración.
+
+
+                                                                                                                                    ZONA 5 — Arena de Khymera
+                                                                                                                                    Espacio cerrado dentro de las ruinas donde ocurre el
+
+                                                         4                         5                                                enfrentamiento contra la guardiana.
+1     ENTRADA              2   DESIERTO   ZONA CENTRAL       CAMINO A LAS RUINAS       ARENA DE KHYMERA   6   ACCESO DESBLOQUEADO
+
+
+
+                                                                                                                                    ZONA 6 — Acceso bloqueado
+                                                                                                                                    Permanece cerrado durante el combate. Después de
+                                                                                                                                    derrotar a Khymera, ella desbloquea este camino y permite
+                                                                                                                                    que Leonidas avance al siguiente nivel.
+NPCS Y RECUPERACIÓN
+         ESCORPIONES — NPC ENEMIGO                                                                                TUNAS — RECUPERACIÓN DE VIDA
+ Los escorpiones aparecen en diferentes puntos                                                           Las tunas aparecen en cactus distribuidos por el
+del desierto. Cuando Leonidas entra en su rango,                                                                               escenario.
+  se acercan para atacarlo y disminuir su vida.
+
+                                                                                                           Leonidas puede acercarse y recogerlas para
+       El jugador tiene dos posibilidades:
+                                                                                                            recuperar parte de los corazones perdidos
+      ESQUIVARLOS y continuar avanzando.
+                                                                                                                         durante el recorrido.
+       DERROTARLOS utilizando la espada.
+                                                                                                         Esto permite al jugador decidir si continúa directamente
+No es obligatorio derrotar a todos los escorpiones                                                          hacia las ruinas o explora el escenario buscando
+             para completar el nivel.                                                                           recursos antes de enfrentarse a Khymera.
+
+
+
+
+                                                                REMOLINOS — OBSTÁCULO
+                                                         Los remolinos de arena se desplazan por
+                                                     diferentes partes del escenario y funcionan como
+                                                                   obstáculos móviles.
+
+
+                                                         No pueden ser destruidos. Leonidas debe
+                                                       observar su recorrido y moverse fuera de su
+                                                     trayectoria. Si entra en contacto con uno, pierde
+                                                            parte de su vida y es desplazado.
+JEFA DEL NIVEL: KHYMERA
+Khymera es la guardiana de las ruinas y jefa del nivel. Su función es proteger el
+acceso que Leonidas necesita atravesar para continuar su recorrido.
+
+
+Su diseño combina características de guepardo, serpiente y mariposa, creando
+una criatura ágil que puede utilizar diferentes partes de su cuerpo durante el
+combate.
+
+
+A diferencia de los enemigos encontrados durante el desierto, Khymera posee
+una barra de vida propia y diferentes patrones de ataque.
+
+
+El jugador no puede derrotarla atacando constantemente. Primero debe observar
+qué movimiento prepara, esquivarlo y esperar una oportunidad para acercarse.
+
+Khymera cuenta con tres ataques principales, cada uno con un comportamiento diferente.
+ATAQUE 1: EMBESTIDA FELINA
+                                                                                      1   EMBESTIDA FELINA
+Khymera utiliza su velocidad felina para realizar una rápida embestida hacia la
+posición de Leonidas.                                                                 1
+                                                                                                             KHYMERA SE POSICIONA
+                                                                                                             MIRANDO AL JUGADOR.
+Antes de lanzarse, orienta su cuerpo hacia el jugador, funcionando como una
+pequeña señal de advertencia.
+
+
+Una vez definida la dirección, avanza rápidamente en línea recta.
+                                                                                      2
+                                                                                                             REALIZA UNA EMBESTIDA
+                                                                                                             RÁPIDA EN LINEA RECTA.
+¿Cómo evitarlo?
+
+
+Leonidas debe desplazarse hacia uno de los lados y salir de la trayectoria antes de
+que Khymera llegue hasta él.
+
+                                                                                      3
+Después de terminar la embestida, Khymera necesita un pequeño momento para                                   DESPUÉS DEL ATAQUE
+                                                                                                             QUEDA EXPUESTA POR
+recuperarse. Esta es una de las oportunidades que Leonidas puede aprovechar                                  UNOS SEGUNDOS.
+
+para acercarse, atacar con la espada y volver a alejarse.
+
+
+SEÑAL   → EMBESTIDA → ESQUIVA LATERAL → APERTURA → CONTRAATAQUE
+ATAQUE 2: BARRIDO DE COLA
+Khymera utiliza su cola de serpiente para realizar un ataque circular alrededor de   2   BARRIDO DE COLA
+
+su cuerpo.                                                                           1
+                                                                                                           KHYMERA PREPARA
+
+Este movimiento afecta principalmente el espacio cercano a ella, evitando que
+                                                                                                           SU COLA.
+
+
+Leonidas permanezca atacando continuamente a corta distancia.
+
+
+¿Cómo evitarlo?
+                                                                                     2
+
+Antes del barrido, Khymera prepara y levanta la cola. El jugador debe reconocer
+                                                                                                           REALIZA UN BARRIDO
+                                                                                                           CIRCULAR ALREDEDOR
+                                                                                                           DE SU CUERPO.
+esta señal y alejarse de su radio de ataque.
+
+
+Cuando la cola termina de pasar, Leonidas puede volver a acercarse.
+
+
+PREPARACIÓN   → BARRIDO → ALEJARSE → FIN DEL ATAQUE → ACERCARSE                      3
+                                                                                                           TERMINA EL ATAQUE
+                                                                                                           Y QUEDA EXPUESTA
+                                                                                                           BREVEMENTE.
+ATAQUE 3: TORBELLINO DE ARENA
+Khymera utiliza sus alas para levantar la arena de las ruinas y formar un torbellino   3   TORBELLINO DE ARENA
+que comienza a desplazarse por el escenario.
+                                                                                       1
+                                                                                                          KHYMERA UTILIZA
+
+A diferencia de sus otros ataques, este movimiento modifica temporalmente el                              SUS ALAS PARA
+                                                                                                          LEVANTAR LA ARENA.
+
+espacio disponible para moverse, obligando al jugador a cambiar constantemente
+de posición.
+
+
+¿Cómo evitarlo?                                                                        2
+                                                                                                          SE GENERA UN
+                                                                                                          TORBELLINO QUE
+Leonidas debe observar hacia dónde se desplaza el torbellino y mantenerse fuera                           SE DESPLAZA POR
+                                                                                                          EL ESCENARIO.
+de su trayectoria mientras continúa pendiente de Khymera.
+
+
+Después de algunos segundos, el remolino desaparece y el espacio vuelve a
+quedar libre.                                                                          3
+                                                                                                          DESPUÉ S DE UNOS
+
+
+                → DESPLAZAMIENTO → ESQUIVA → DESAPARECE → CONTINÚA EL
+                                                                                                          SEGUNDOS EL
+                                                                                                          TORBELLINO
+FORMACIÓN                                                                                                 DESAPARECE.
+
+COMBATE
+¿CÓMO DERROTAR A KHYMERA?
+   Khymera no puede ser derrotada únicamente acercándose y atacando de manera continua. Cada uno de
+      sus movimientos obliga al jugador a observar, reaccionar y encontrar el momento adecuado para
+                                                 contraatacar.
+
+
+                          El jugador debe reconocer las señales de sus tres ataques:
+
+
+                                   Embestida felina: moverse lateralmente.
+                                     Barrido de cola: alejarse de Khymera.
+                            Torbellino de arena: mantenerse fuera de su trayectoria.
+
+
+   Después de esquivar correctamente, Leonidas puede acercarse durante los momentos de vulnerabilidad y
+              atacar con su espada para disminuir progresivamente la barra de vida de Khymera.
+   Cuando la barra llega a cero, el enfrentamiento termina. Leonidas tiene la oportunidad de acabar con ella,
+                                            pero decide no hacerlo.
+
+
+      Khymera comprende que Leonidas ha superado su prueba y reconoce su victoria. Como resultado,
+             desbloquea el acceso de las ruinas, permitiendo que continúe hacia el siguiente nivel.
+¿CÓMO DERROTAR A KHYMERA?
+   Khymera no puede ser derrotada únicamente acercándose y atacando de manera continua. Cada uno de
+      sus movimientos obliga al jugador a observar, reaccionar y encontrar el momento adecuado para
+                                                 contraatacar.
+
+
+                          El jugador debe reconocer las señales de sus tres ataques:
+
+
+                                   Embestida felina: moverse lateralmente.
+                                     Barrido de cola: alejarse de Khymera.
+                            Torbellino de arena: mantenerse fuera de su trayectoria.
+
+
+   Después de esquivar correctamente, Leonidas puede acercarse durante los momentos de vulnerabilidad y
+              atacar con su espada para disminuir progresivamente la barra de vida de Khymera.
+   Cuando la barra llega a cero, el enfrentamiento termina. Leonidas tiene la oportunidad de acabar con ella,
+                                            pero decide no hacerlo.
+
+
+      Khymera comprende que Leonidas ha superado su prueba y reconoce su victoria. Como resultado,
+             desbloquea el acceso de las ruinas, permitiendo que continúe hacia el siguiente nivel.
+nivel 4
+ZONA 4: ARACNE
+El nivel de Aracne se desarrolla en un pantano compuesto por bosques, lagos y cuevas, donde Leonidas
+deberá avanzar superando obstáculos y enfrentándose a diferentes criaturas. Al inicio del nivel, se encuentra
+con una Dríade, quien lo guía y le permite aprender a utilizar su nueva habilidad de garras mediante una
+telaraña.
+
+A medida que Leonidas explora el pantano, encontrará insectos, musgos vivientes y reflejos, además de
+diferentes peligros ambientales. Los lagos representan un obstáculo importante, ya que Leonidas no sabe
+nadar y puede ahogarse si entra en zonas demasiado profundas y su reflejo intentara arrastrarlo a lo mas
+profundo. También podrá encontrar trozos de papel relacionados con la historia de Aracne, telarañas doradas
+y joyas ocultas, estas últimas como recompensa para quienes exploren el escenario.
+
+El recorrido conduce finalmente hasta Aracne, donde Leonidas deberá enfrentarse a ella. Sin embargo, el
+encuentro no termina únicamente con su derrota: al conocer su pasado, Leonidas tendrá la posibilidad de
+perdonarle la vida.
+
+En conjunto, el nivel combina exploración, combate, obstáculos ambientales y narrativa, permitiendo que el
+jugador no solo avance, sino que también descubra la historia detrás de Aracne.
+MOODBOARD
+    STORYBOARD
+
+
+
+El jugaador esta en la entrada del     Siguiendo el camino, el jugador tiene la   Al seguir adelante, se encontrara con   El jugador sigue adelante y se
+                                       opción de explorar pero al irse a la       otro camino bloqueado pero tambien      encuentra con su primer enemigo y
+nivel en donde se encontrará con
+                                       izquiera habra una telaraña dorada         se encontrara con una Driade quien      Driade le guiara al jugador diciendo
+un cartel interactuable en donde
+                                       que no le permitira avanzar y no puede     puede interactuar y le ayudara a        que pruebe la habilidad “Garras” para
+dira “ellos te observan”, el jugador                                                                                      hacer daño y tiene otro camino en
+                                       destruirla con la espada ya que son        desbloquear la habilidad “Garras” que
+avanza adelante con la tecla W         muy resistentes y le obligará a irse por   sirve para destuir las telarañas.       donde llevara hacia el primer trozo de
+                                       el otro camino                                                                     papel sobre la historia de Aracne.
+                                                                                  Si es que decide tomar la izquiersa,
+                                                                                  tiene que pasar por telarañas que
+                                                                                  estan exparsidas y tendra que
+                                                                                  destruirlas con “Garras” y se encontrar
+                                                                                  con musgos y libelulas
+
+
+
+
+                                     Al seguir avanzando se encontrara con
+Al ir a la derecha el jugador se
+                                     3 caminos, adelante seguira la historia,
+encuentra con lago con zonas
+                                     derecha encontrara a 5 musgos, pero
+profundas en el que si cae se        tambien se encontrara con otro lago
+ahogara, por ello el jugador tiene   profundo y los musgos pueden pasar
+que ir por las zonas que no están    el lago sin problemas, por lo que el
+marcadas y conseguir la nota         jugador debe decidir si atacar primero
+                                     y seguir o ignorarlos y evitar a Reflejo.|
+ESTÉTICA
+Se ha decidido esta estética de Cell Shading en donde
+las líneas de sombras son mas definidas por lo que va
+bien para el nivel del pantano para dar una sensación de
+tensión y precaución
+NPC’S
+En este nivel solo se encontrar un npc principal, Driade,
+quien ayudara a Leonidas a usar sus garras para poder
+romper las telarañas que bloquean su camino, asi
+desbloqueando una nueva habilidad del nivel para el
+jugador y que pueda continuar con su ruta y buscar
+tesorso. Driade usa su cabeza de arbusto para poder
+camuflarse de los peligros del pantano, pues estr lugar
+nunca estaras solo.
+NPC ENEMIGO 1
+Libelula: Tiene 2 vidas, con solo un ataque
+potenciado de la espada el jugador matara
+instantaneamente pero si es solo con con
+ataques normales solo le quitara 1 vida al
+igual que los musgos. Libelula es un insecto
+agresivo, si llega a lastimar a Leonidas le
+quitara 1 de vida.
+NPC ENEMIGO 2
+Musgos: tiene 4 vidas, con un ataque
+potenciado con la espada le quitara
+2 vidas y si es un ataque potenciado
+con Garras le quitara las 3 vidas.
+Musgo tiende a camuflarse y esperar
+la oportunidad para una emboscada,
+si es que llega a lastimar a Leonidas,
+este le quitara 1 vida y media
+ENEMIGO 3
+
+Reflejos: En cuanto Leonidas se
+adentra al agua poco profunda pues
+se generara un reflejo que no tiene
+vida y la unica forma de evitarlo es
+en salir lo mas rapido del agua
+¿CÓMO RECUPERAR
+VIDA?
+Para que el jugador pueda recuperar vida, en la zona del
+pantano tiene plantas medicinales que puede
+recolectarlas y guardarlas para luego o consumirlas en
+ese momento ya que esa planta te recupera 3 corazones,
+cuando este en la batalla final contra Aracne, las hierbas
+van apareciendo pero no permaneceran por mucho
+tiempo pues solo aparecera durante 10 segundos para
+dar tiempo al jugador para poder conseguirlo.
+NOTAS
+El jugador tendrá la opción de buscar trozos
+de papel que cuentan la historia, para
+buscarlos pues tendrá que explorar todo el
+mapa si es que se interesa en saber sobre
+su pasado y del por que es así Aracne.
+INTERFAZ DE ARACNE VIDA
+Aracne como jefe del nivel tendra 30
+corazones. Con la vida que tiene tendra
+2 fases:
+
+1ERA FASE: Sus ataques son lentos y su
+resistencia contra los ataques normales
+y potenciados de Leonidas será menor.
+
+2DA FASE: Los ataques de Aracnes seran
+más rápidos y letales y en ello tambien
+su    resistencia    contra     ataques
+pontenciados sera mayor
+PRIMER ATAQUE   ZARPADO
+                Como primer ataque Aracne empieza
+                con zarpado de cada lado sus dos patas
+                principales, ambos lados tendran una
+                secuencia (el primer ataque derecho de
+                Aracne sera de corto alcance ya que
+                sera con sus brazos, el segundo lado
+                izquierdo sera de largo alcance ya que
+                atacara con sus patas). Si es que llega a
+                pegar al jugador solo le quitara 1
+                corazon
+
+
+
+
+                Para evitar el ataque, el jugador debe de
+                moverse fuera de la zona de alcance de
+                Aracne de ambos ataques.
+                                          SEGUNDO ATAQUE
+   VENENO
+El segundo ataque de Aracne será un
+secuencia en 3 filas de veneno,
+empezando desde la izquierda hasta la
+derecha, cada       camino de veneno
+durara 8 segundos en desaparecer por
+lo que el jugador quedara con menos
+espacio en el mapa. Al ser un camino de
+veneno si es que el jugador pasa encima
+del camino perderá ¼ de corazón, lo
+cuál este ataque te ayudara a
+administrar la vida más adelante
+ATAQUE (Ofensivo)    TRAMPAS
+                    Un único de ataque defensivo de Aracne
+                    será en botar telarañas por todo el
+                    mapa aleatoriamente lo cuál reducirá el
+                    espacio, no hace daño pero si es que el
+                    jugador no las quita a tiempo con la
+                    habilidad “Garras” y al pasar encima de
+                    ellas quedara atrapado por 5 segundos
+                    y si quiere salir de la trampa tendrá que
+                    aplastar rápidamente 5 veces repetidos
+                    x’s tecla para escapar antes. Si es que el
+                    jugador no logra escapar o destruir las
+                    telarañas los otros ataques de Aracne
+                    golpeara a Leonidas lo que le hará
+                    perder vidas dependiendo del daño del
+                    ataque.
+ATAQUE FINAL     NO MAS
+               ESCAPATORIA
+               Al igual que el tercer ataque de Aracne
+               esta se subira al techo y se quedara 3.5
+               segundos analizando los movimientos
+               del jugador y preparara su habilidad
+               letal, en donde dependiendo en donde
+               esta Leonidas habra un indicador en
+               donde va a caer la telaraña de Aracne.
+               Si el jugador es atrapado por la telaraña
+               de Aracne, ella le inyectara veneno que
+               palarizara a Leonidas y será una muerte
+               instantanea en el que aparecera una
+               cinemática de Leonidas envuelto en
+               telaraña.
+           ¿CÓMO DERROTAR A ARACNE?
+Aracne podrá ser derrotada mediante una combinación de estrategia, esquiva y uso adecuado de las
+habilidades de Leonidas. El jugador deberá esperar a que Aracne termine uno de sus ataques para
+cargar las Garras durante 2 segundos, logrando aturdirla durante 5 segundos. Durante este periodo
+deberá decidir entre atacar de forma segura con las Garras o arriesgarse a cargar la espada durante
+4,5 segundos para realizar un ataque potenciado. En la primera fase, este ataque infligirá 2 corazones
+de daño, pero despertará inmediatamente a Aracne al impactar. Cuando Aracne llegue a 15 de sus 30
+corazones, entrará en una segunda fase, aumentando la velocidad y peligrosidad de sus ataques y
+reduciendo el daño del ataque potenciado de la espada a 1 corazón. Por ello, el jugador deberá
+administrar cuidadosamente su vida, esquivar los ataques y aprovechar estratégicamente cada
+oportunidad para conseguir derrotarla.
+                                                                                                                                                                                           ¿CÓMO RESPONDE EL
+MOMENTO             ¿QUÉ SUCEDE?                                   ¿QUÉ VE?                           ¿QUÉ ESCUCHA?                                ¿QUÉ HACE EL JUGADOR?                                                       ¿QUÉ CAMBIA?
+                                                                                                                                                                                           JUEGO?
+Aparece una         El jugador llega al inicio del pantano, al     - Driade                           - Música de escenario mágico                 - Se mueve (derecha / Izquierda /       - Leonidas se mueve y tiene         - Se mantiene su
+                    caminar se encontrara con una Diadre           - Insecto                          - Sonido / Voz de dialogo entre personajes   Arriba / Abajo)                         animación de ataque de garras
+Driade              En este nivel se le indicar al jugador en un   - Escenario: Pantano               -Efecto de sonido de garras                  - Usa las garras                        - Suena los golpes de espada        objetivo de derrotar a
+                    Tras aprender en usar la                       - Trozos de papel exparsidos que   - Sonido de sapos                            - Explora el escenario                  - Los insectos reciben daño y son   El jugador comienza a
+Insectos                                                           cuentan la historia de Aracne      - Ambiente del pantano                       - Ataca a los insectos con las garras   derrotados con un golpe
+                    habilidad "Garras", Leonidas se                - Escenario: Bosque de pantano     - Sonidos de los insectos                    - Recoge los trozos de papel            - Al recoger un papel, se muestra   conocer la historia de
+Primera aparición   Leonidas llega a una zona más                  - Aracne                           - Música más misteriosa y oscura             - Se acerca a Aracne                    - Se activa una cinemática o        El jugador descubre
+                                                                   - Telarañas gigantes               - Sonidos de telarañas                       - Observa la escena                     diálogo
+de Aracne           profunda del pantano y                         - Árboles cubiertos de telarañas   - Sonidos de arañas                          - Puede moverse durante el              - Aracne aparece y desaparece       que Aracne controla el
+Laberinto de        Leonidas llega a una zona donde                - Telarañas grandes                - Sonido de las telarañas tensándose         - Salta entre plataformas               - Las telarañas se rompen           El jugador consigue
+                                                                   - Caminos bloqueados               - Música de tensión                          - Trepa                                 cuando reciben un ataque
+telarañas           las telarañas bloquean                         - Ruinas griegas                   - Sonido de las garras al cortar los hilos   - Utiliza las garras para cortar        - Algunas plataformas se            avanzar hacia la
+nivel 5
+NIVEL 5: HIDRA
+IDENTIFICACIÓN Y
+DESCRIPCIÓN GENERAL
+Nombre del nivel: Hidra de Lerna.
+Protagonista: Leónidas.
+Antagonista principal: Hidra de Lerna.
+Localización: Antigua aldea griega destruida.
+Tipo de nivel: Combate directo contra jefe de nivel.
+
+Leónidas llega a una antigua aldea griega reducida a escombros, donde la Hidra de Lerna bloquea el camino hacia
+su siguiente prueba. La criatura posee siete cabezas capaces de regenerarse rapidamente.
+Durante el enfrentamiento, el jugador deberá observar los patrones de ataque, esquivar, defenderse y aprovechar
+los momentos de vulnerabilidad para debilitar e inmovilizar cada cabeza mediante cadenas. La prueba culmina
+cuando Leónidas consigue controlar las siete cabezas simultáneamente y termina venciendo a la Hidra. Como
+recompensa, la Hidra le entrega la espada de Khrysos, un arma capaz de matar a un dios.
+OBJETIVO DEL NIVEL
+El objetivo principal es superar a la Hidra de Lerna e inmovilizar sus siete cabezas para conseguir que libere el
+camino hacia la siguiente prueba.
+
+Para lograrlo, el jugador deberá:
+   Recorrer la aldea destruida y superar los obstáculos del entorno.
+   Identificar y aprender los diferentes patrones de ataque de las siete cabezas.
+   Utilizar correctamente la espada, la lanza, el escudo, las esquivas y el parry.
+   Debilitar cada cabeza antes de sujetarla con cadenas.
+   Administrar los recursos disponibles durante el combate.
+   Completar la prueba sin matar a la Hidra, sino venciéndola.
+ESTADO DE LA ENTRADA
+               Al comenzar el nivel, Leónidas llega a una antigua aldea griega
+               destruida. En las calles hay escombros y las estructuras colapsadas.
+               Leónidas entra por el lado izquierdo de la pantalla y comienza a
+               avanzar por el camino. En este momento, la Hidra todavía no ha
+               aparecido y el jugador puede explorar el entorno mientras utiliza sus
+               habilidades de desplazamiento.
+               La progresión conduce hasta una gran plaza central. Allí, los
+               escombros comienzan a moverse y las siete cabezas de la Hidra
+               emergen progresivamente, bloqueando el camino. Tras un breve
+               diálogo entre ambos personajes, comienza el combate.
+               Condiciones iniciales:
+                   Leónidas se encuentra en la entrada de la aldea.
+                   La Hidra permanece oculta hasta el encuentro en la plaza.
+                   El camino hacia la siguiente prueba está bloqueado.
+                   El jugador dispone de sus habilidades de movimiento y combate.
+                   Las siete cabezas de la Hidra están activas y pueden atacar en
+                   cualquier momento.
+ESTADO DE SALIDA
+El nivel finaliza cuando Leónidas consigue inmovilizar las siete cabezas
+de la Hidra al mismo tiempo. La criatura deja de atacar y reconoce que
+el protagonista ha superado la prueba.
+Leónidas se coloca frente a ella con la espada en la mano, pero no
+ejecuta un ataque final. En su lugar, decide bajar el arma y explica que
+no necesita matarla para demostrar su victoria. La Hidra acepta su
+decisión, libera sus cabezas y se aparta para permitirle continuar.
+Antes de que Leónidas abandone la aldea, la Hidra le entrega la
+espada de Khrysos, capaz de matar a un dios. Finalmente, Leónidas
+atraviesa las ruinas mientras la Hidra le recuerda que todavía le
+esperan nuevas pruebas. En pantalla aparece el mensaje «NIVEL
+COMPLETADO».
+Condiciones finales:
+    Las siete cabezas de la Hidra han sido inmovilizadas.
+    La Hidra permanece viva pero ya no es una amenaza.
+    Leónidas obtiene la espada de Khrysos.
+    El camino hacia la siguiente prueba queda desbloqueado.
+    El jugador completa el nivel y comprende su resolución narrativa.
+PERSONAJES Y NPC
+En este nivel intervienen únicamente dos personajes principales.
+No existen enemigos secundarios ni NPC adicionales.
+
+   Leónidas (Protagonista): Debe superar la prueba de la Hidra
+   utilizando las habilidades adquiridas durante su aventura. El
+   jugador controla sus desplazamientos, ataques, defensas y
+   decisiones estratégicas. Su desarrollo se manifiesta al elegir la
+   victoria sin matar a su adversaria.
+
+   Hidra de Lerna (Jefe de nivel): Criatura inmortal y regenerativa
+   de siete cabezas que bloquea el avance de Leónidas. Cada
+   cabeza presenta diferentes patrones de ataque. Su función es
+   poner a prueba la capacidad de observación, reacción y
+   estrategia del jugador. Al final, reconoce que Leónidas ha
+   superado el desafío y le permite continuar.
+ESCENARIOS
+La estética del nivel combina la estética heráldica griega con la propuesta gráfica de EPIC: The Musical. El resultado será
+un mundo bidimensional, estilizado y teatral, construido mediante líneas y contrastes de color, sin recurrir a escenarios
+realistas ni a texturas excesivamente detalladas.
+La composición visual será monocromática en su base, con el rojo como color dominante de los fondos, pero con
+degradados y variaciones de tono, líneas negras para definir las estructuras y colores específicos para distinguir a los
+personajes.
+
+   Escenario 1: Calles de la aldea destruida
+Calles representadas mediante líneas negras sobre fondos de color. Las casas derrumbadas, piedras, columnas y restos
+de templos se construirán con formas simplificadas y contornos definidos, manteniendo la inspiración heráldica griega.
+
+   Escenario 2: Plaza central
+Espacio principal del combate, delimitado por las líneas negras de las ruinas. Su composición permitirá distinguir
+claramente a Leónidas y a la Hidra.
+
+  Escenario 3: Camino de salida
+Camino definido mediante líneas negras que atraviesan las ruinas y se abre después de superar la prueba. Su aparición
+marca visualmente el cierre del nivel.
+JUGABILIDAD
+La jugabilidad combina exploración, combate estratégico y progresión narrativa. El jugador controla a Leónidas mientras
+recorre una aldea griega destruida y se enfrenta a la Hidra de Lerna, una criatura de siete cabezas capaz de regenerarse.
+
+El desafío principal consiste en aprender los patrones de ataque de la Hidra, aprovechar sus momentos de
+vulnerabilidad y utilizar correctamente las armas y los recursos disponibles para inmovilizar sus siete cabezas
+simultáneamente.
+
+   ESCENA 1 - EXPLORACIÓN DE LA ALDEA
+¿Qué sucede? Leónidas entra en la aldea destruida y avanza hacia la plaza central.
+¿Qué ve? Casas derrumbadas, columnas y escombros. Leónidas destaca en naranja.
+¿Qué escucha? Sonidos ambientales que transmiten una atmósfera oscura y peligrosa.
+¿Qué hace el jugador? Camina, corre y esquiva obstáculos para avanzar.
+¿Cómo responde el juego? Leónidas se desplaza según las acciones del jugador y el entorno condiciona su recorrido.
+¿Qué cambia? El jugador pasa de la entrada de la aldea a la plaza central, donde comienza el enfrentamiento.
+JUGABILIDAD
+   ESCENA 2 - APARICIÓN DE LA HIDRA
+¿Qué sucede? Los escombros comienzan a moverse y aparecen progresivamente las siete cabezas de la Hidra, que
+bloquea el camino.
+¿Qué ve? La criatura roja emerge. Se produce un breve intercambio de diálogos entre ella y Leónidas.
+¿Qué escucha? Los movimientos de la criatura y el diálogo: «Has llegado demasiado lejos, mortal». Leónidas responde:
+«Solo necesito pasar». La Hidra concluye: «Entonces tendrás que vencerme».
+¿Qué hace el jugador? Se prepara para combatir y comienza a utilizar sus habilidades de ataque y defensa conocidas.
+¿Cómo responde el juego? Se activa el combate contra el jefe y las cabezas comienzan a atacar de manera alternada.
+¿Qué cambia? La exploración termina y el jugador debe concentrarse en sobrevivir y estudiar los ataques del enemigo.
+
+    ESCENA 3 - DESCUBRIMIENTO DE LA REGENERACIÓN
+¿Qué sucede? Leónidas ataca las cabezas con la espada. Una de ellas parece ser derrotada, pero vuelve a crecer
+después de unos segundos.
+¿Qué ve? La cabeza cortada se regenera y la Hidra continúa atacando.
+¿Qué escucha? Los impactos de los ataques y los movimientos de la criatura.
+¿Qué hace el jugador? Ataca, esquiva y prueba diferentes respuestas frente al enemigo.
+¿Cómo responde el juego? Las cabezas cortadas vuelven a crecer, demostrando que el daño convencional no permite
+derrotar a la criatura.
+¿Qué cambia? El jugador comprende que necesita cambiar de estrategia y buscar una forma de controlar las cabezas
+en lugar de limitarse a cortarlas.
+JUGABILIDAD
+   ESCENA 4 - DEBILITAR E INMOVILIZAR LAS CABEZAS
+¿Qué sucede? El jugador descubre que puede inmovilizar las cabezas cuando quedan debilitadas.
+¿Qué ve? Las cabezas atacan de manera alternada, quedan vulnerables después de sus ataques y pueden ser
+sujetadas con cadenas.
+¿Qué escucha? Sonidos de ataques, bloqueos, impactos y movimientos de las cuerdas durante el combate.
+¿Qué hace el jugador? Esquiva o ejecuta parry, espera la vulnerabilidad, ataca con la espada y utiliza las cadenas.
+¿Cómo responde el juego? Si la cabeza está debilitada, queda inmovilizada y deja de atacar. Se bloquea y Leónidas
+obtiene un pequeño bonus de velocidad. Si se intenta sujetarla antes de tiempo, puede liberarse.
+¿Qué cambia? Disminuye la cantidad de cabezas activas y aumenta la velocidad de Leónidas, pero la Hidra se vuelve
+más agresiva conforme pierde movilidad.
+
+    ESCENA 5 - SUPERVIVENCIA Y GESTIÓN DE RECURSOS
+¿Qué sucede? El combate continúa mientras la Hidra intenta liberar sus cabezas y atacar a Leónidas.
+¿Qué ve? Algunas estructuras pueden destruirse o desplazarse durante el enfrentamiento.
+¿Qué escucha? Los ataques de la Hidra, los impactos contra el entorno y los sonidos del combate.
+¿Qué hace el jugador? Se desplaza constantemente, bloquea o esquiva ataques y utiliza las armas.
+¿Cómo responde el juego? Leónidas pierde vida al recibir impactos. Si su vida llega a cero, se activa una cinemática de
+derrota y regresa al último punto de control. Las plantas medicinales permiten recuperar vida.
+¿Qué cambia? El espacio disponible puede modificarse, los recursos se reducen con su uso y el jugador debe adaptar su
+estrategia para mantener el progreso.
+JUGABILIDAD
+    ESCENA 6 - VICTORIA Y RESOLUCIÓN NARRATIVA
+¿Qué sucede? Leónidas consigue inmovilizar las siete cabezas simultáneamente y la Hidra deja de atacar.
+¿Qué ve? Leónidas queda frente a la criatura con su espada, pero no aparece una acción para matarla.
+¿Qué escucha? La Hidra pregunta: «¿Por qué no acabas conmigo?». Leónidas responde: «Porque ya te he vencido». A la
+pregunta «¿Y eso te basta?», Leónidas contesta: «No necesito matarte para demostrarlo».
+¿Qué hace el jugador? Presencia la resolución del enfrentamiento y continúa hacia la salida cuando el camino queda
+libre.
+¿Cómo responde el juego? La Hidra reconoce la victoria, libera sus cabezas, entrega a Leónidas la espada de Khrysos y
+permite que continúe.
+¿Qué cambia? El combate termina, Leónidas obtiene su recompensa y se desbloquea el camino hacia la siguiente
+prueba.
+
+   ESCENA 7 - CIERRE
+¿Qué sucede? Leónidas abandona la aldea mientras la Hidra le advierte que su verdadera prueba todavía le espera.
+¿Qué ve? El camino de salida entre las ruinas y, finalmente, el mensaje «NIVEL COMPLETADO».
+¿Qué escucha? Las palabras finales de la Hidra: «Entonces continúa, Leónidas. Tu verdadera prueba todavía te espera».
+¿Qué hace el jugador? Avanza hacia la salida.
+¿Cómo responde el juego? Se muestra la finalización del nivel.
+¿Qué cambia? La experiencia del Nivel 5 concluye y Leónidas queda preparado para continuar su aventura.
+MOODBOARD
+STORYBOARD
+STORYBOARD
+STORYBOARD
+STORYBOARD
+STORYBOARD
+nivel 6
+LA PRISIÓN DEL MINOTAURO
+
+  El nivel se basa en el laberinto del minotauro,
+ esta es una carcél para gente indeseable de la
+ sociedad que no puede volver afuera, allí tienen
+        su propio comercio y socialización.
+   El minotauro funciona como un carcelero en
+   contra de su voluntad de este gran lugar en
+              ruinas y semi destruido.
+MOODBOARD
+LEONIDAS
+            Casi no llega la luz del sol asi que tiene una sensación de
+           escalofrios, enfermedad y miedo. Se eligio este estilo para
+               poder reflejar a Leonidas el único personaje que se
+           encuentra con buena salud, pero debido al ambiente tiene
+            una paleta de colores mas apagada debido a que esta
+             rodeado de npcs enfermos y negociantes/estafadores
+NPC´S
+          La rata es un comerciante estafador muy astuto,
+        solo a podido sobrevivir gracias a sus habilidades de
+          negocio y escape, nadie lo puede atrapar. Pero a
+            pesar de su reputación ayudará a Leonidas a
+         comprar objetos que el solo tiene y que podra usar
+          mas adelante pero no te sorprendas a sentir tus
+               bolsillos vacios. Su estética se basa a un
+         comerciante enfermo en donde su objetivo es vivir
+                              otro día más.
+ENEMIGOS     Los enemigos son prisioneros muy enfermos
+           que estan viviendo su condena durante mucho
+            tiempo. Tras varias torturas sus mentes estan
+             corrompidas y no les gusta tener una charla
+            pacífica, no importa quien este en su camino
+           pues ellos queran destrozar cualquier cosa asi
+               que el jugador tendra que tener mucho
+             cuidado. La estética ayuda a comprender al
+            jugador a los enemigos que debe de evitar o
+                                atacar.
+MÉCANICA ESPECIAL DEL NIVEL
+                 Una mécanica especial de este nivel es su
+               moneda, durante el tiempo que se este dentro
+                de la mazmorra, el dinero obtenido fuera no
+                                  funciona.
+              Este lugar tiene su propia economía y trueque y
+               al eliminar los enemigos de la zona se te dará
+                            unas pocas monedas.
+              Este nivel se desarrolla a base de averiguar que
+               quieren los comerciantes y que piden por este
+              hasta lograr conseguir el cuerno dle minotauro.
+COMIDA DEL NIVEL
+             En esta mazmorra se da una muy extraña seta.
+                Esta funciona a modo de apuesta, puede
+             devolverte mucha vida, poca o quitarte, puede
+                darte un buff en algun aspecto o darte un
+                                  debuff.
+                  Este se puede conseguir por el mapa o
+                 comprarse a los comerciantes del lugar.
+              Pero tienes que tener bien pensado si usarla o
+                                    no.
+                                                               4. Recorrido de Leonidas
+1. Contexto del juego
+Leonidas es un personaje que explora diferentes zonas
+para cumplir misiones y descubrir historias relacionadas
+con los habitantes del mundo.
+El jugador puede desplazarse libremente, interactuar con
+personajes y objetos, recoger recursos y utilizar diferentes
+elementos para avanzar.
+
+
+2. Contexto de la zona
+Leonidas llega a una zona antigua y abandonada donde
+habita el Minotauro Desterrado.
+El lugar se caracteriza por ser gris, oscuro y poco
+iluminado, creando una sensación de abandono y
+misterio. La zona funciona principalmente como un
+espacio de exploración, descubrimiento e interacción, no
+como una zona de combate.
+
+
+
+3. Objetivo de la misión
+Misión: Comprender al Minotauro
+Leonidas debe llegar hasta Luck, conocer su historia y
+comprender las razones que lo llevaron a convertirse en
+un ser solitario y resentido.
+                                                               5. Sistema de iluminación
+Para completar la misión deberá:
+Explorar →       obtener información    → conseguir el
+                                                               Debido a que la zona presenta una ambientación predominantemente gris y oscura, Leonidas
+
+cuerno  →     llegar hasta Luck    → hablar con él       →     debe llevar una antorcha durante el recorrido.
+
+devolverle el cuerno.
+                                                               Mecánica:
+La solución para avanzar en esta zona es devolverle a
+                                                               Leonidas obtiene la antorcha y la mantiene equipada durante la exploración. La antorcha no
+Luck su cuerno perdido.
+                                                               funciona como arma, sino como herramienta de exploración.
+MAPA DE LA ZONA
+                         Para saber la misión del nivel tendrá     En cada estación de los
+                         que moverse por todo el lugar y           vendedores le contarán la
+                         hablando con sus vendedores.              histria del Minotauro.
+
+
+
+
+   Cuando llega al
+   minotauro tienen
+   una conversación y
+   el le devuelve su
+   cuerno.                                                                                     Minotauro lo espera.
+
+
+
+
+                                                                                               Este camino lo
+                                                                                               llevará a conseguir
+                                                                                               monedas.
+
+                                                                                               Con las monedas
+                                                                                               que consiguió podrá
+                                                                                               comprar el cuerno
+                                                                                               de minotauro.
+
+                                                                                               Entrada de leonidas
+
+
+
+
+                                                                                               En este camino
+                                                                                               obtendrá toda la
+   En todo el camino                                                                           historia del
+   tiene que moverse                                                                           minotauro.
+   con agilidad ya que
+   sirvientes de
+   minotauro estan en                     obtiene una
+   movimiento.                            antorcha para
+                                          iluminar la fortaleza.
+JEFE: MINOTAURO
+        El minotuaro es alguien obligado a ser el    El minotauro es alguien maldecido desde
+        carcelero de este gran laberinto, pero       su nacimiento y perdió el cuerno muy de
+        solo es el y nadie más para cuidar de los    niño.
+        prisioneros.                                 La misión de Leonidas es evitarlo por el
+        Esto llevo a que él empezase a descuidar     mapa que el patrulla hasta poder
+        hasta cierto punto los prisioneros y ellos   conseguir recuperar su cuerno y
+        vagan por el lugar sin rumbo.                devolverselo.
+        Varios ladrones agarraron este lugar         No es un enemigo que se pueda vencer y
+        como una sede debido a este descuido del     su    vida  funciona   más    como    la
+        minotauro y contruyeron una pequeña          oportunidad de estunearlo.
+        economía del lugar pero le tienen miedo y
+        respeto a este carcelero y ojalá nunca
+        encontrarse con él.
+nivel 7
+ ENTRADA AL
+INFRAMUNDO                                                               ZONA
+                                                                         OASIS
+
+
+
+
+                El nivel comienza cuando Leonidas sale de una cueva y llega a un
+                pequeño oasis. Allí puede recolectar arándanos que le permitirán
+               recuperar vida durante los dos enfrentamientos finales. Al entrar al
+                     lago de la cascada, cae por un portal que lo transporta al
+                 Inframundo. En este nuevo escenario deberá atravesar caminos
+               destruidos, zonas de fuego y mecanismos antiguos hasta alcanzar
+                las grandes puertas custodiadas por Cancerbero. A diferencia de
+              otros niveles, no existen enemigos menores: el único enfrentamiento
+                   será contra el jefe. Tras vencerlo, Cancerbero acepta fingir su
+                derrota y permite que Leonidas continúe hacia el enfrentamiento
+                                             final con Ares.
+MOODBOARD
+LEONIDAS
+                       JUSTIFICACIÓN
+                         DEL ESTILO
+ Elegí un estilo gráfico inspirado en el cyberpunk, caracterizado por trazos
+    rudos, imperfectos, formas irregulares y contrastes intensos, ya que
+  permite transmitir la violencia, el caos y la hostilidad del Inframundo. La
+rudeza de las ilustraciones refuerza la naturaleza salvaje y amenazante de
+Cancerbero, mientras que los trazos poco precisos generan una sensación
+de inestabilidad y peligro, acorde con un escenario lleno de ruinas, fuego y
+                                  obstáculos.
+                         STORYBOARD
+                  Las situaciones más importantes son:
+
+
+                               01 · Salida de la cueva
+          Leonidas llega al oasis después de completar el nivel anterior.
+                                   02 · Recolección
+Interactúa con los árboles para recoger arándanos y guardarlos en el inventario.
+                                       03 · Portal
+       Entra al lago de la cascada, cae y aparece una pantalla de carga.
+                                   04 · Inframundo
+        Atraviesa caminos derrumbados, mecanismos y zonas de fuego.
+                                      05 · Puertas
+              Llega a la arena y se activa el diálogo con Cancerbero.
+                                     06 · Combate
+    Esquiva los ataques del jefe y aprovecha los momentos de vulnerabilidad.
+STORYBOARD
+            En el oasis, Leonidas puede
+            recolectar arándanos de
+            los árboles y almacenarlos
+            en su inventario. Estos
+  ¿CÓMO     frutos permiten recuperar
+            corazones al consumirlos.
+RECUPERAR   El oasis es la última zona
+            donde podrá conseguir
+   VIDA?    objetos de curación, por lo
+            que deberá administrar los
+            arándanos durante los
+            combates contra
+            Cancerbero y Ares.
+ INTERFAZ
+CORAZONES
+  (VIDAS)
+                   OBSTÁCULOS
+
+Antes de llegar a Cancerbero, Leonidas debe atravesar caminos
+    derrumbados, zonas de fuego, plataformas estrechas y
+ mecanismos antiguos. Para avanzar utiliza el movimiento, la
+ acción de rodar y la interacción con objetos. Estos obstáculos
+ pueden provocar pérdida de vida, por lo que el jugador debe
+                   evitar daños innecesarios.
+                          JEFE DEL NIVEL
+Cancerbero es el guardián de las puertas del
+Inframundo y el penúltimo jefe al que Leonidas
+deberá enfrentarse. Sus tres cabezas le permiten
+ejecutar distintos patrones de ataque, que aumentan
+su dificultad a medida que pierde vida.
+Características:
+    Tres cabezas con ataques diferentes.
+    Combate directo en una arena cerrada.
+    Barra de vida visible durante el enfrentamiento.
+    Tres ataques principales y uno final.
+    Al ser derrotado, no muere: permite que Leonidas
+    continúe.
+                         PRIMER ATAQUE: EMBESTIDA
+                                                                                 Cancerbero se prepara durante 1
+                                                                              segundo y corre en línea recta hacia
+                                                                                Leonidas. El ataque afecta toda su
+                                                                              trayectoria y, si alcanza al jugador, le
+                                                                                         quita 1 corazón.
+                                                                                Para evitarlo, Leonidas debe rodar
+                                                                                 hacia cualquiera de los costados
+                                                                                antes de que Cancerbero avance.
+                                                                                 Después de la embestida, el jefe
+                                                                                   queda vulnerable durante 2
+                                                                                  segundos, permitiendo que el
+                                                                                jugador lo ataque con su espada.
+El rectángulo rojo representa la trayectoria de la embestida. Leonidas debe
+                         desplazarse lateralmente.
+ SEGUNDO ATAQUE: MORDIDA TRIPLE
+                                                           Cancerbero utiliza sus tres cabezas
+                                                             para atacar tres zonas diferentes
+                                                              frente a él. Antes de morder, las
+                                                           cabezas realizan una animación de
+                                                                preparación de 1,5 segundos,
+                                                               indicando las áreas que serán
+                                                                          afectadas.
+                                                            Si Leonidas se encuentra dentro de
+                                                           una de estas zonas al momento del
+                                                               ataque, pierde 1 corazón. Para
+                                                           evitarlo debe identificar los espacios
+                                                              seguros y desplazarse fuera del
+Las tres zonas rojas muestran el alcance de cada cabeza.          alcance de las mordidas.
+         TERCER ATAQUE: ALIENTO INFERNAL
+                                                                         Cancerbero expulsa fuego hacia el
+                                                                             suelo, generando franjas que
+                                                                            permanecen activas durante 4
+                                                                           segundos. Estas zonas reducen el
+                                                                              espacio disponible para que
+                                                                             Leonidas pueda desplazarse.
+                                                                        Si el jugador entra en contacto con el
+                                                                        fuego, pierde ¼ de corazón por cada
+                                                                          intervalo de daño, por lo que debe
+                                                                            mantenerse fuera de las áreas
+                                                                        afectadas hasta que desaparezcan.
+Las franjas de fuego reducen temporalmente el espacio disponible para
+                               moverse.
+ATAQUE FINAL: FURIA DE LAS TRES CABEZAS
+                                                                      Cuando Cancerbero llega al 25 % de su
+                                                                        vida, activa su ataque final. Sus tres
+                                                                         cabezas rugen simultáneamente y
+                                                                        comienzan a generar explosiones de
+                                                                      fuego en diferentes puntos de la arena.
+                                                                         Antes de cada explosión aparecen
+                                                                       círculos rojos que indican las zonas de
+                                                                          impacto. El jugador dispone de 2
+                                                                      segundos para salir de ellas. Si recibe el
+                                                                             ataque, pierde 2 corazones.
+                                                                      Durante esta fase Cancerbero también
+                                                                       aumenta la velocidad de sus ataques
+                                                                         anteriores, obligando a Leonidas a
+  Los círculos rojos advierten las zonas donde caerán los impactos.   mantenerse en constante movimiento.
+        RESUMEN DE LOS ATAQUES
+
+ATAQUE                 DAÑO              CÓMO EVITARLO
+1.Embestida frontal   1 corazón          1.Rodar lateralmente
+2.Mordida triple      1 corazón          2.Salir de las zonas
+3.Aliento infernal    ¼ de corazón por     marcadas
+4.Furia de las tres   intervalo          3.Evitar las franjas de fuego
+  cabezas             2 corazones        4.Salir de los círculos de
+                                           impacto
+    ENTONCES... ¿CÓMO DERROTO A
+           CANCERBERO?
+   Para derrotar a Cancerbero, el jugador deberá reconocer los patrones de
+ataque de sus tres cabezas y esquivar utilizando el movimiento y la acción de
+  rodar. Después de determinados ataques, Cancerbero quedará vulnerable
+durante unos segundos, permitiendo que Leonidas se acerque y lo golpee con
+   su espada. Conforme disminuye su vida, los ataques serán más rápidos y
+     difíciles de evitar. El jugador deberá administrar cuidadosamente sus
+arándanos, ya que los que conserve serán necesarios para enfrentarse a Ares.
+   FIN DEL NIVEL: DERROTA DE CANCERBERO
+
+
+
+
+Cuando la barra de vida de Cancerbero llega a cero, el combate termina y se activa
+   una breve cinemática. Cancerbero queda agotado, pero Leonidas no lo mata.
+  Después de un pequeño diálogo, Cancerbero reconoce la victoria de Leonidas y
+         acepta fingir su derrota para permitirle continuar con su misión.
+ Las grandes puertas del Inframundo se abren y Leonidas puede atravesarlas para
+             dirigirse al último nivel, donde deberá enfrentarse a Ares.
+nivel 8
+NIVEL    Nombre del nivel: El Juicio de Ares
+         Jefe: Ares, Dios de la Guerra
+         Jugador: Leonidas
+         Tipo: Nivel final / Boss Fight
+
+
+
+FINAL:
+         Vista: 2D cenital
+         Género: RPG de acción, exploración y
+         combate
+
+
+
+
+ARES
+         Objetivo: Derrotar a Ares y demostrarse
+         digno.
+
+
+
+         “Para superar el reto contra los dioses, Leonidas deberá
+         enfrentarse al dios de la guerra. No necesita matarlo. Solo
+         demostrar que es digno de regresar.”
+MOODBOARD
+                               JUSTIFICACIÓN
+   Formas          Silueta       Colores        Contraste    Texturas      Armadura         Elementos   Proporciones     Pocos
+geométricas       grande y       cálidos:          con      pictóricas.   simplificada.    exagerados ligeramente       detalles
+y angulares.     fácilmente    naranja, rojo,   marrones                                     como los   caricaturesc  pequeños
+                reconocible.     dorado y        oscuros.                                 cuernos y las      as.     para facilitar
+                                magenta.                                                   hombreras.                la lectura en
+                                                                                                                     una cámara
+                                                                                                                        cenital.
+                 →
+Cuernos grandes identifican al jefe
+inmediatamente.                                     La estética busca reinterpretar la mitología griega mediante un
+       →
+Dorado representa poder y divinidad.                lenguaje gráfico estilizado, geométrico y pictórico. Utilizamos una
+            →
+Rojo/naranja representa guerra, fuego y
+                                                    paleta cálida para representar el poder, la guerra y la divinidad
+agresividad.
+        →
+Magenta diferencia al personaje del                 de Ares, mientras que las formas exageradas permiten que el jefe
+escenario y le da identidad propia.                 sea reconocible incluso desde la cámara cenital del videojuego.
+                  →
+Formas angulares transmiten fuerza y
+movimiento.
+DESCRIPCIÓN DE JUGABILIDAD Y
+       FLUJO DEL NIVEL
+                                         Al llegar a una zona con dos caminos, el jugador debe
+                                         elegir una dirección. El camino de la izquierda no lleva a
+                                         ningún lugar, por lo que el jugador debe regresar y
+                                         tomar el camino de la derecha, que es el que permite
+                                                                                                      El jugador debe combinar los ataques y
+                                         continuar con el nivel.
+                                                                                                      la esquiva para reducir la vida de Ares
+ Al llegar a una zona con dos caminos,                                                                hasta derrotarlo.
+ el jugador debe elegir una dirección.   Enfrentamiento con Ares:                                     Final del nivel:
+ El camino de la izquierda no lleva a    Al llegar al centro del Olimpo, Leónidas se encuentra con    Cuando Leónidas derrota a Ares,
+                                         Ares, el único enemigo del nivel. Comienza el combate        completa la prueba del Olimpo. Se
+ ningún lugar, por lo que el jugador
+                                         final y el jugador debe utilizar las habilidades de          activa la cinemática final, donde
+ debe regresar y tomar el camino de la                                                                Leónidas regresa a su ciudad y es
+                                         Leónidas:
+ derecha, que es el que permite                                                                       recibido y celebrado por los habitantes.
+                                         Golpe Divino
+ continuar con el nivel.
+                                         Embestida
+                                         Lluvia de Fuego
+                                         Esquivar
+                                            STORYBOARD
+                                                                                                                           Escena 7. Final del nivel: Tras
+                                                                                                                           derrotar a Ares, se activa una
+                                                                                                                           cinemática en la que Leónidas
+                                                                                                                           regresa a su ciudad y los
+                                                                                                                           habitantes lo reciben y celebran
+                                                                                                                           su victoria.
+                                                     Escena 2. Recorrido y bifurcación: Leónidas continúa
+                                                     hacia adelante hasta llegar a una zona donde
+   Escena 1. Entrada al nivel: Leónidas
+                                                     encuentra dos caminos. El jugador puede explorar
+   aparece en la entrada del Olimpo. El                                                                           Escena 6. Combate contra Ares:
+                                                     ambos, pero debe tomar el camino de la derecha para
+   jugador debe avanzar por el                                                                                    Comienza el enfrentamiento final. El
+                                                     continuar. Si va por la izquierda, no encontrará una
+   escenario utilizando las teclas W, A, S y                                                                      jugador debe alternar entre los ataques
+                                                     salida ni podrá avanzar, por lo que tendrá que regresar.
+                                                                                                                  de Leónidas —Golpe Divino, Embestida y
+   D para desplazarse. W
+                                                                                                                  Lluvia de Fuego— y utilizar Esquivar para
+                                                                                                                  evitar los ataques de Ares. El combate
+                        A    S   D
+                                                                                                                  termina cuando la vida de Ares llega a
+                                                                                                                  cero.
+Escena 3. Obtención del objeto: Al avanzar por el
+camino de la derecha, Leónidas encuentra una
+llave u objeto especial que puede guardar en su          Escena 4. Desbloqueo del camino: Leónidas
+inventario, utilizando la tecla I para consultarlo       continúa avanzando hasta encontrar un
+posteriormente. Este objeto será útil más                acceso bloqueado. El jugador debe utilizar la          Escena 5. Llegada al centro del Olimpo:
+adelante para desbloquear el acceso a la                 llave obtenida anteriormente para                      Después de desbloquear el acceso,
+siguiente zona.                                          desbloquearlo e ingresar a la siguiente zona.          Leónidas avanza hasta el centro del
+                                                         Puede interactuar utilizando las teclas Z o X,         Olimpo, donde encuentra a Ares, el único
+                                                         según la acción asignada.                              enemigo del nivel.
+            LOOP DEL JUEGO
+       →           →                         →              →
+EXPLORAR PREPARARSE ENFRENTAR A ARES ESQUIVAR ATACAR APRENDER SU  →
+             →                   →                  →
+       PATRÓN CONTRAATACAR DERROTARLO CONSEGUIR LA SALIDA
+
+
+                  La lógica respeta el funcionamiento general:
+                  combate, movimiento, voltereta, objetos, vida
+                   y patrones específicos de enemigos/jefes.
+  1    GOLPE DIVINO
+                                    1. ENTRADA 2.PASILLO                                                                         2     EMBESTIDA
+
+
+
+                                    AL TEMPLO DEL DIOS
+                                    Leonidas llega al templo de Ares después de   Leonidas avanza hacia el centro del templo.
+                                    superar los niveles anteriores.                  Columnas destruidas.
+                                       Punto de control.                             Estatuas y símbolos de Ares.
+                                       Recuperación/preparación.                     Marcas de batalla.
+                                       Camino de piedra y ruinas.                    Fuego en los laterales.
+                                       Antorchas y símbolos de guerra.               Algunas rocas y grietas bloquean el
+                                       No hay enemigos.                              camino.
+Ares levanta el brazo y golpea el                                                                                               Ares baja la cabeza y
+suelo, creando una onda de daño                                                                                                 corre
+circular.                                                                                                                       directamente hacia
+                                       Se genera tensión antes del combate.          El escenario se vuelve progresivamente     Leonidas.
+                  CÓMO
+                  EVITARLO:                                                          más oscuro.                                                   CÓMO
+                                                                                                                                                   EVITARLO:
+                  Voltereta.
+                                                                                  Objetivo: llegar a la arena.                                     Apartarse en
+                                                                                                                                                   diagonal.
+                         3.ARENA DE ARES
+                                                                                       3    LLUVIA DE FUEGO
+
+
+
+
+Esta es la zona principal del mapa.
+Una arena circular rodeada de columnas, fuego y ruinas.
+En el centro aparece Ares.
+Aquí comienza el combate final.
+Ciclo de juego:
+OBSERVAR →           →
+              ESQUIVAR                      →
+                           ENCONTRAR APERTURA    ATACAR→ ALEJARSE
+Esto mantiene la misma lógica de combate planteada para Cancerbero: el jugador debe
+reconocer patrones y esperar el momento adecuado para atacar.
+                                                                                      Aparecen círculos rojos en el
+                                                                                      suelo.
+                                                                                      Después de unos segundos
+                                                                                      caen
+                                                                                      proyectiles de fuego.
+
+                                                                                                      CÓMO EVITARLO:
+
+                                                                                                      Moverse
+                                                                                                      constantemente.
+4   GOLPE DE ÁREA
+                            4.SANTUARIO 5.SALIDA                                                                                    FURIA DE ARES
+
+
+
+
+                                FINAL  DEL OLIMPO
+                            Después de derrotar a Ares, Leonidas llega al   Se activa el portal al vencer a Ares
+                            santuario.                                      PORTAL →  FIN DE LA AVENTURA
+                               Ares queda derrotado, pero no muere.         La función de esta última zona sería llevar a
+                               Leonidas guarda su espada.                   Leonidas nuevamente al lugar desde donde
+                               Se activa una breve escena narrativa.        comenzó su aventura.                            Al llegar al 50% de vida, Ares entra
+                                                                                                                            en segunda fase. Aumenta su
+                               Se revela el portal de regreso.                                                              velocidad y combina todos sus
+                                                                                                                            ataques.
+
+          ESQUIVAR                                                                                                                            CÓMO EVITARLO:
+
+          Evita ataques y                                                                                                                     Observar y
+          gana ventaja en                                                                                                                     mantener la
+          el combate.                                                                                                                         calma.
+                                              MAPA DEL NIVEL                                                                 1       ENTRADA DEL TEMPLO
+
+                                                                                                                                      Preparación
+                                                                                                                                      Recuperación de vida
+                                                                                                                                      Último punto de guardado
+
+
+
+
+Leonidas deberá enfrentarse
+a Ares, el único enemigo de este
+nivel. El combate final se desarrolla
+en el templo del dios de la guerra.
+                                               POR ZONAS                                                                         2    PASILLO DEL DIOS
+
+                                                                                                                                       Sin enemigos
+                                                                                                                                       Estatuas y armas
+                                                                                                                                       Marcas de batalla
+
+
+
+
+ ELEMENTOS PRINCIPALES
+                                                                        3   ARENA DE ARES
+          Columnas / Ruinas                                                                 4
+                                                                                                SANTUARIO
+                                                                                                            5
+                                                                                                                SALIDA           3    ARENA DE ARES
+
+                                                                                                FINAL           DEL OLIMPO                 Combate final
+                                                                                                                                           Columnas y fuego
+                                            ENTRADA
+                                        1   DEL TEMPLO   2
+                                                             PASILLO
+                                                                                                                                           Zona de peligro
+
+
+          Fuego                                              DEL DIOS
+
+
+
+          Rocas / Obstáculos
+
+          Grietas                                                                                                            4        SANTUARIO FINAL
+
+                                                                                                                                       Momento narrativo
+                                                                                                                                       Ares derrotado
+                                                                                                                                       Fragmento divino
+
+
+          Símbolos de Ares
+
+
+          Portal
+
+                                                                                                                                 5    SALIDA DEL OLIMPO
+
+          Punto de inicio                                                                                                               Portal
+                                                                                                                                        Regreso a la biblioteca
+                                                                                                                                        Fin del nivel
+   fichas
+de personaje
+KHYMERA                        DATOS GENERALES
+                               Nombre: Khymerá
+                                                                                    PALETA DE COLORES
+
+
+NIVEL 3: DESIERTO DE KHYMERA   Tipo:      Jefa del nivel
+                               Lugar:     Ruinas del desierto
+     FICHA DE PERSONAJE                                                             #E7804          #F4586      #C6283   #1A0E1   #F6É8D      #F2C6C
+                               Inspiración: Gueparda, serpiente y mariposa             1              8           D        4        4            1
+                               Rol:     Guardiana de las ruinas
+
+
+                               HISTORIA DEL PERSONAJE                               RASGOS DE PERSONALIDAD                ICONOS / DETALLES
+
+                               Khymerá es la guardiana de las antiguas                     Fuerte
+                               ruinas del desierto, un lugar sagrado que
+                               protege desde hace generaciones.                            Orgullosa
+                               Representa la unión de la fuerza, la                        Observadora
+                               belleza y la astucia.
+                                                                                           Desafiante
+                               Solo permite el paso a quien demuestre su                   Sabia
+                               valor, su respeto y sus verdaderas intenciones.
+                                                                                           Justa
+                               Aunque imponente en combate, observa con                    Protectora
+                               atención a Leonidas y decide no enfrentarlo más
+                               cuando nota que no busca destruir el lugar.
+
+
+                               VISTAS DEL PERSONAJE                                                      EXPRESIONES
+
+
+
+
+                                                                                                             NEUTRA      DESAFIANTE        EN COMBATE
+                                       FRENTE                   LADO             ESPALDA
+
+
+                               DETALLES
+
+
+
+
+                                         ROSTRO                         ALAS                            COLA                 ROPA Y ACCESORIOS
+    DATOS GENERALES                                            PALETA DE COLORES
+    Nombre: Leonidas
+    Tipo:     Protagonista (jugador)
+    Lugar:    Desierto de Khymera
+    Inspiración: Guerrero, explorador                       #982D2D    #C44538      #684A32       #C9A258     #F2C94C   #F8EBD7
+    Rol: Avanzar por el desierto, enfrentarse a
+              los desafíos y detener a Khymera
+
+
+   HISTORIA DEL PERSONAJE                            RASGOS DE PERSONALIDAD                       ICONOS / DETALLES
+Leonidas es un joven guerrero que se                        Valiente
+adentra en el desierto para detener a                       Determinado
+Khymera y proteger lo que queda de su
+hogar. Su determinación y valentía lo
+                                                            Curioso
+llevan a enfrentar numerosos peligros,                      Respetuoso
+demostrando que incluso en la soledad                       Empático
+del desierto, siempre hay una razón para
+seguir adelante.                                            Persistente
+                                                            Observador
+
+   VISTAS DEL PERSONAJE                                                          EXPRESIONES
+
+
+
+
+                                                                                 NEUTRA            DECIDIDO        SORPENDIDO
+     FRENTE                  LADO                 ESPALDA
+
+   DETALLES
+
+
+
+
+      ROSTRO                     CABELLO            TÚNICA Y CINTURÓN                 SANDALIAS               MARCAS FACIALES
+ Cancerbero
+                                               especie:
+                                            can infernal
+                                                de tres
+                                               cabezas
+                                                 rol:
+                                              guardián
+                                            inspiración:
+                                              mitología
+                                               griega
+                                              tamaño:
+                                               grande
+                                              combate:
+                                              cuerpo a
+                                               cuerpo
+                                             elemento:
+                                               fuego /
+                                             oscuridad
+                                                arma:
+                                                fuerza
+                                                física,
+                                               garras,
+                                             colmillos y
+                                              cadenas
+Vistas del
+personaje              Tipo:
+             Enemigo/Guardián Mitológico
+
+             agresivo, territorial y dominante. cancerbero
+                   permanece constantemente alerta y
+              reacciona con violencia ante cualquiera que
+               intente atravesar el territorio que protege.
+                  sus tres cabezas le permiten observar
+                diferentes direcciones al mismo tiempo.
+                   ARES
+                DIOS DE LA GUERRA
+                                                                                                                                                                                   ROL
+                                                                                                                                                                                   Enemigo final / Jefe final
+
+                                                                                                                                                                                   MUNDO
+                                                                                                                                                                                   Valle de los Caballeros
+                                                                                                                                                                                   TIPO
+            “Ningún mortal está a mi altura.”
+                                                                                                                                                                                   Dios / Guerrero divino
+
+                                                                                                                                                                                   ENEMIGO
+                                                                                                                                                                                   Leonidas
+                                                                                                                                                                                   RESULTADO
+                                                                                                                                                                                   Derrotado por Leonidas
+
+
+                                                                                                                                                                                   PERSONALIDAD
+
+
+                                                                                                                                                                                       Orgulloso
+                                                                                                                                                                                       Agresivo
+                                                                                                                                                                                       Desafiante
+                                                                                                                                                                                       Imponente
+                                                                                                                                                                                       Arrogante
+                                                                                                                                                                                       Guerrero
+
+
+
+                                                                                                                                                                                   PALETA DE COLORES
+
+
+
+
+                         FRENTE                                          PERFIL                                           EN ATAQUE
+
+
+
+HISTORIA
+                                                                HABILIDADES
+
+Ares, el dios de la guerra, es el último gran obstaculo que
+Leonidas debe enfrentar para regresar a la biblioteca. Se
+presenta en el Valle de los Caballeros para desafiar,
+convencido de que su fuerza divina lo hace invencible.
+                                                                                                 GOLPE DEL DIOS                FURIA DIVINA           LLUVIA DE GUERRA          ARMADURA DIVINA                 CÖLERA DE ARES
+Tras una batalla intensa, Leonidas logra derrotarlo,               IRDA DE ARES                   DE LA GUERRA
+demostrando que la fuerza no siempre pertenece al más                                                                       Golpe el suelo y genera    Invoca proyectos de         Reduce el daño               En su fase final ataca
+                                                              Aumenta temporalmente              Atasque cuerpo a            una onda expansiva.      energía desde el cielo.                                   más rápido y agresivo.
+poderoso, sino a quién sabe superar sus límites.                su fuerza y velocidad.                                                                                          recibido durante una
+                                                                                                  gran potencia.                                                                 parte del combate.
+
+
+
+
+                           DETALLES                                                                                 REFERENCIA DE ESTILO                                         VISTA EN EL JUEGO
+                                                                          Caxo con cuernos
+                                                                          de carnero.
+
+                                                                          Hombreras y armadura
+                                                                          métalica.
+
+                                                                          Falda/armadura
+                                                                          segmentada.
+
+                                                                          Capa o cresta rosa
+                                                                          para dar movimiento.
+             LEÓNIDAS
+            EL PEQUEÑO GRAN GUERRERO
+                                                                                                                                                                       ROL
+                                                                                                                                                                       Protagonista
+
+                                                                                                                                                                       MUNDO
+                                                                                                                                                                       Mundo mitológico griego
+            "La valentía también puede ser pequeña."                                                                                                                   TIPO
+                                                                                                                                                                       León / Guerrero joven
+
+                                                                                                                                                                       ENEMIGO PRINCIPAL
+                                                                                                                                                                       Los
+
+                                                                                                                                                                       RESULTADO
+                                                                                                                                                                       Completa su última prueba y
+                                                                                                                                                                       regresa a su ciudad.
+
+
+                                                                                                                                                                       PERSONALIDAD
+
+                                                                                                                                                                           Valiente
+                                                                                                                                                                           Persistente
+                                                                                                                                                                           Curioso
+                                                                                                                                                                           Determinado
+                                                                                                                                                                           Noble
+                                                                                                                                                                           Optimista
+
+
+
+                                                                                                                                                                       PALETA DE COLORES
+
+
+
+
+                      FRENTE                                             PERFIL                         ESPALDA                     EN ATAQUE
+
+
+
+
+HISTORIA                                                                 HABILIDADES
+
+Leóndias es un joven león que, guiado por su valentía y
+curiosidad, enfrenta las casi 12 pruebas para demostrar
+que, sin importar su tamaño, también puede ser un gran
+guerrero.
+
+Su último desafío lo lleva al Olímpo, donde se enfrenta a                    GOLPE DIVINO                     EMBESTIDA              LLUVIA DE FUEGO             ESQUIVAR
+Ares y demuestra que la fuerza no siempre está                           Ataque rápido y fuerte          Carga hacia adelante    Invoca una lluvia de fuego   Movimiento rápido
+en el poder, sino en la determinación, la inteligencia                   en corto alcance.               para atacar y empujar   desde el cielo en un área    para rotar ataques
+y la valentía de seguir adelante.                                                                        enemigos.               determinada.                 enemigos.
+
+
+                DETALLES                                                                  EXPRESIONES                                REFREENCIA DE ESTILO            VISTA EN EL JUEGO
+
+                                                            Cinta en la frente
+                                                            de tela.
+
+
+
+                                                            Cinturón sencillo
+                                                            con nudo y medalla.
+
+
+
+                                                            Túnica ligera
+                                                            de tela.
+Link Animaciones:
+https://drive.google.com/drive/folders/1FzMoCk
+ FLrw-YCepZzYDl0uZiStLWHqhB?usp=drive_link
+

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://drml1xsgip2fe"
+path="res://.godot/imported/carta.aseprite-ed9aa8afa5aa5ad2d8e692f9b34a8235.res"
+
+[deps]
+
+source_file="res://assets/sprites/carta.aseprite"
+dest_files=["res://.godot/imported/carta.aseprite-ed9aa8afa5aa5ad2d8e692f9b34a8235.res"]
+
+[params]
+

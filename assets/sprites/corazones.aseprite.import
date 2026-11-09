@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://blscxi7ksxlux"
+path="res://.godot/imported/corazones.aseprite-607ef0e32f9a432c1eef6630598d2a6f.res"
+
+[deps]
+
+source_file="res://assets/sprites/corazones.aseprite"
+dest_files=["res://.godot/imported/corazones.aseprite-607ef0e32f9a432c1eef6630598d2a6f.res"]
+
+[params]
+
