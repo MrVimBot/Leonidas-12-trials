@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c4soyi4luwydq"
+path="res://.godot/imported/npc_zorro.aseprite-d844dc3724bf5d3977eb1ad469eef14f.res"
+
+[deps]
+
+source_file="res://assets/sprites/npc_zorro.aseprite"
+dest_files=["res://.godot/imported/npc_zorro.aseprite-d844dc3724bf5d3977eb1ad469eef14f.res"]
+
+[params]
+

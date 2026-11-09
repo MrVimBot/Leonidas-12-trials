@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://drcivhikotj1j"
+path="res://.godot/imported/npc_burro.aseprite-c39f2fa787b35d819eb552976318fa7a.res"
+
+[deps]
+
+source_file="res://assets/sprites/npc_burro.aseprite"
+dest_files=["res://.godot/imported/npc_burro.aseprite-c39f2fa787b35d819eb552976318fa7a.res"]
+
+[params]
+

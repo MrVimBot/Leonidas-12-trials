@@ -1,21 +1,21 @@
-    Funcionamiento básico a respetar en cada parte
+	Funcionamiento básico a respetar en cada parte
 
 
 LAS CASI 12 PRUEBAS DE LEONIDAS
-                  Videojuego RPG
+				  Videojuego RPG
 JUGABILIDAD
 
-                                                   Descripción
-                                      Jugabilidad clásica en 2D que combina
-                                      exploración, combate y resolución de
-                                                     acertijos.
+												   Descripción
+									  Jugabilidad clásica en 2D que combina
+									  exploración, combate y resolución de
+													 acertijos.
 
-                                           El juego se divide en distintos estilos
-                                             gráficos por cada bioma que hay
-                                          demostrando un cambio en la historia.
+										   El juego se divide en distintos estilos
+											 gráficos por cada bioma que hay
+										  demostrando un cambio en la historia.
 
-                                     Cada punto importante se divide por un
-                                               combate de jefe.
+									 Cada punto importante se divide por un
+											   combate de jefe.
 
 
 
@@ -27,7 +27,7 @@ DISEÑO
  El juego se basa con la historia de la
 mitología griega por lo extenso de su
 historia y al estar en una época de un
-    BOOM plataformero se decidio
+	BOOM plataformero se decidio
 hacer con una cámara de vista cenital
 PERFIL DEL JUGADOR
 MAPA
@@ -36,173 +36,173 @@ hacer con una cámara de vista cenital
 
  Mapa general de todo el
 juego y delimitaciones de
-        secciones
+		secciones
 MAPA
 
 
 
 
-                           Mapa de “minish cap” que demuestra el funcionamiento
-                                    de las pantallas y como interactuan
+						   Mapa de “minish cap” que demuestra el funcionamiento
+									de las pantallas y como interactuan
 
-       Como funciona de cada zona y como se          La camará se acercara a un cierto nivel y
-       deberia de conectar entre las pantallas,         seguira al jugador hasta llegar a un
-       para acceder a un nuevo bioma se debe            tope, al salir se cargara la siguiente
-           de completar el jefe de la zona.                            pantalla.
+	   Como funciona de cada zona y como se          La camará se acercara a un cierto nivel y
+	   deberia de conectar entre las pantallas,         seguira al jugador hasta llegar a un
+	   para acceder a un nuevo bioma se debe            tope, al salir se cargara la siguiente
+		   de completar el jefe de la zona.                            pantalla.
 JUGABILIDAD                                                               Acciones del personaje
 
-                                                                      El ataque se realiza con un arma base
-                                                                         que no cambiara a lo largo de la
-                                                                      historia, pero puede ser reemplazada
-                                                                        por otros items importantes como
-                                                                         ejemplo “bombas” o “arco” que
-                                                                              sustituye este arma base
-                                                          Ataque
+																	  El ataque se realiza con un arma base
+																		 que no cambiara a lo largo de la
+																	  historia, pero puede ser reemplazada
+																		por otros items importantes como
+																		 ejemplo “bombas” o “arco” que
+																			  sustituye este arma base
+														  Ataque
 
 
 
 
-                                                                     Una forma rápida de movimiento y para
-                                                                       evitar ataques será con una voltereta
-                                                                      que consume un poco de estamina del
-                                                                     personaje, para asi evitar que un jugador
+																	 Una forma rápida de movimiento y para
+																	   evitar ataques será con una voltereta
+																	  que consume un poco de estamina del
+																	 personaje, para asi evitar que un jugador
 Movimiento es horizontal, vertical y diagonal                             solo spamee el botón de “roll”
-                                                         Voltereta
+														 Voltereta
 
 
 
-                                                                       El personaje tambien puede coger
-                                                                          cosas del suelo y tirarlos para
-                                                                     romperlos, despejar caminos o atacar a
-                                                                            los enemigos a distancia
+																	   El personaje tambien puede coger
+																		  cosas del suelo y tirarlos para
+																	 romperlos, despejar caminos o atacar a
+																			los enemigos a distancia
 
-                               Agarrar y tirar objetos
+							   Agarrar y tirar objetos
 JUGABILIDAD                                                                                   Vida del personaje
 
 
-                                                                                     El personaje pierde vida cuando un enemigo
-                                                                                       le ataca, hay enemigos que dan mayor o
-                                                                                            menor daño o tiene patrones o
-                                                                                          comportamientos más específicos.
+																					 El personaje pierde vida cuando un enemigo
+																					   le ataca, hay enemigos que dan mayor o
+																							menor daño o tiene patrones o
+																						  comportamientos más específicos.
 
-                                                  Ataque de enemigo
+												  Ataque de enemigo
 
 
 
-                                                                                      También puede haber ciertos lugares que
-                                                                                     puedan provocar daños o efectos de estado
-                                                                                      y uno tiene que estar pendiente de dondé
+																					  También puede haber ciertos lugares que
+																					 puedan provocar daños o efectos de estado
+																					  y uno tiene que estar pendiente de dondé
 En el juego al perder toda la vida                                                              será su siguiente paso.
-    se llega a un game over.
+	se llega a un game over.
 
-                                     Leonnidas cayendo en una trampa de espinas
-                                                                                      Para poder recuperar vida hay objetos en el
-                                                                                      entorno que se almacenan en el inventario.
-     Sería una fruta que se                                                            Estos objetos puede recuperar vida o dar
+									 Leonnidas cayendo en una trampa de espinas
+																					  Para poder recuperar vida hay objetos en el
+																					  entorno que se almacenan en el inventario.
+	 Sería una fruta que se                                                            Estos objetos puede recuperar vida o dar
   puede conseguir por lugar.                                                                          algún efecto.
   En la ciudad manzanas, en
-     la playa cocos, en el
-                                                                                     También para recuperar vida en lugares como
-    desierto pitajayas, etc.                                                         posadas donde se paga y se te recupera toda
+	 la playa cocos, en el
+																					 También para recuperar vida en lugares como
+	desierto pitajayas, etc.                                                         posadas donde se paga y se te recupera toda
    Cada uno con su efecto.                                                              la vida por si acaso no se quiere gastar
-                                                                                                         objetos.
-                                     Leonidas apunto de disfrutar una rica manzana
+																										 objetos.
+									 Leonidas apunto de disfrutar una rica manzana
 JUGABILIDAD                                                          Mécanica del barco
 
 
 
-                                                                 El personaje en algunas secciones
-                                                                podrá subirse a un barco para poder
-                                                               viajar de un punto a otro, este viaje no
-                                                               tiene la opción de ataque, solo la del
-                                                                   movimiento. Es más un pequeño
-                                                               minijuego para cambiar el ritmo de la
-                                                                          historia un poco.
-                                      Movimiento de barquito
+																 El personaje en algunas secciones
+																podrá subirse a un barco para poder
+															   viajar de un punto a otro, este viaje no
+															   tiene la opción de ataque, solo la del
+																   movimiento. Es más un pequeño
+															   minijuego para cambiar el ritmo de la
+																		  historia un poco.
+									  Movimiento de barquito
 
 
 
 
-                                                                Durante este momento de estar en el
-     Pocas secciones del juego                                  barco la principal mecánica es evitar
+																Durante este momento de estar en el
+	 Pocas secciones del juego                                  barco la principal mecánica es evitar
  permite usar un barco para poder                              obstáculos y enemigos que trataran de
-     llegar a islas opcionales u        Obstáculo/Remolino       hacer que el barquito se hunda. La
+	 llegar a islas opcionales u        Obstáculo/Remolino       hacer que el barquito se hunda. La
  obligatorias en el juego, no todos                             misión sería llegar con toda la salud
    los biomas tienen esta opción                                      posible al final del nivel.
  (posible mécanica de soplar para
  que el barquito vaya más rápido)
 
-                                          Enemigo/Tiburón
+										  Enemigo/Tiburón
 JUGABILIDAD
-                                            NPCs
+											NPCs
 
-                            Habrá en algunos lugares NPCs que te
-                             pueden ayudar a conocer el mundo,
-                            darte pistas, decirte consejos, venderte
-                               objetos o son importantes para la
-                                         historia general
-
-
-
-    NPC para hablar
+							Habrá en algunos lugares NPCs que te
+							 pueden ayudar a conocer el mundo,
+							darte pistas, decirte consejos, venderte
+							   objetos o son importantes para la
+										 historia general
 
 
 
+	NPC para hablar
 
-                            Al acercarte a un NPC tres opciones
-                                pueden salir sobre su cabeza
 
-                                       *Diálogo normal
-                                            *Misión
-                                                                       NPC que vende mapas de la zona
-                                            *Tienda
+
+
+							Al acercarte a un NPC tres opciones
+								pueden salir sobre su cabeza
+
+									   *Diálogo normal
+											*Misión
+																	   NPC que vende mapas de la zona
+											*Tienda
 
 
 NPC uno de los sabios del
   pueblo de Leonidas
 JUGABILIDAD
-                                           Enemigos
+										   Enemigos
 
-                               En cada bioma se tendra sus enemigos
-                                específicos con su comportamiento
-                                            específico.
+							   En cada bioma se tendra sus enemigos
+								específicos con su comportamiento
+											específico.
 
 
 
-                                Algunos pueden tener un sistema de
+								Algunos pueden tener un sistema de
   Enemigo común primera zona
-                                 ataque básico como acercarse al
-                                jugador una vez lo “ve” o tener una
-                                      forma de ataque única.
+								 ataque básico como acercarse al
+								jugador una vez lo “ve” o tener una
+									  forma de ataque única.
 
 
 
-                                  Puede ser que algunos enemigos
-                               puedan ser derrotados unicamente con
-                                  items especiales o golpeando un
-                                punto débil, en ese caso es de ver el   Enemigo común primera zona
-                               comportamiento del enemigo antes de
-                                         golpear sin pensar.
+								  Puede ser que algunos enemigos
+							   puedan ser derrotados unicamente con
+								  items especiales o golpeando un
+								punto débil, en ese caso es de ver el   Enemigo común primera zona
+							   comportamiento del enemigo antes de
+										 golpear sin pensar.
 
   Enemigo común primera zona
 JUGABILIDAD                                                                             Jefes
 
 
-                                                                            Cada zona tiene su jefe que es
-                                                                        importante para la historia, estos jefes
-                                                                      tienen su propio lore dentro del mundo y
-                                                                          el jugador debe de vencerlos para
-                                                                        conseguir nuevos objetos y formas de
-                                                                              poder avanzar en la historia.
+																			Cada zona tiene su jefe que es
+																		importante para la historia, estos jefes
+																	  tienen su propio lore dentro del mundo y
+																		  el jugador debe de vencerlos para
+																		conseguir nuevos objetos y formas de
+																			  poder avanzar en la historia.
 
 
-                                                                         Los jefes tienen su propio patron de
-                                                                      ataque totalmente distinto a los enemigos
-                                                                                       comunes.
+																		 Los jefes tienen su propio patron de
+																	  ataque totalmente distinto a los enemigos
+																					   comunes.
 
-                                                                         Una vez vencido, aparte de dar un
-                                                                      objeto, al jugador se le dara un corazón
-                                                                        extra para su barra de vida y que el
+																		 Una vez vencido, aparte de dar un
+																	  objeto, al jugador se le dara un corazón
+																		extra para su barra de vida y que el
  Medusa, pero este no es su estilo final, solo pa esta presentación    siguiente encuentro resulte más fácil.
 DIRECCIÓN ESTÉTICA
 
@@ -215,60 +215,60 @@ NPC uno de los sabios del
  conservando la dispocición
  original al primer nivel
   INTERFAZ INTERACCIÓN CON NPCS (DEMO)
-                                 Puerta hacia el interior de una casa
-       Barra de vida                       (otra pantalla)              Acción de diálogo con el NPC
+								 Puerta hacia el interior de una casa
+	   Barra de vida                       (otra pantalla)              Acción de diálogo con el NPC
 
-                                                                                                         Inventario
-                                                                                            (posiblemente quitar y volver un botón
-      NPC                                                                                               del teclado)
-
-
+																										 Inventario
+																							(posiblemente quitar y volver un botón
+	  NPC                                                                                               del teclado)
 
 
-                                                                                                     Objeto interactuable
-    Jugador                                                                                    (arbusto, se puede agarrar y tirar)
+
+
+																									 Objeto interactuable
+	Jugador                                                                                    (arbusto, se puede agarrar y tirar)
 
 
 
 Nombre del personaje
 
-                                                                                                       Cuadro de diálogo
+																									   Cuadro de diálogo
 
 
 
   Menú de ajustes (posiblemente quitar y
-      volver un botón del teclado)           Cuadro con cara del personaje (solo             Pasar diálogo
-                                            personajes importantes adquieren este
-                                                          cuadro)
-                                                                                     Captura “in game” que realmente no es “in game”
+	  volver un botón del teclado)           Cuadro con cara del personaje (solo             Pasar diálogo
+											personajes importantes adquieren este
+														  cuadro)
+																					 Captura “in game” que realmente no es “in game”
            Barra de
-             vida
-                      Interfaz
-                                 Inventario
+			 vida
+					  Interfaz
+								 Inventario
  Objeto
 equipado
 
 
 
 
-                                 Contador de
-                                   dinero
+								 Contador de
+								   dinero
 MENÚS
 
-                                                   El menú del inventario contiene el mapa
-                                                       (el cual se tiene que investigar o
-                                                     comprar para tenerlo por completo)
+												   El menú del inventario contiene el mapa
+													   (el cual se tiene que investigar o
+													 comprar para tenerlo por completo)
 
-                                                   Contiene objetos, siendo consumibles u
-                                                            objetos importantes
+												   Contiene objetos, siendo consumibles u
+															objetos importantes
 
-                                                    Las maldiciones, que puede facilitar
-                                                   ciertas zonas del juego pero a cambio
-                                                            de un precio al usarlas
+													Las maldiciones, que puede facilitar
+												   ciertas zonas del juego pero a cambio
+															de un precio al usarlas
 
-                                                     Misiones, que es un registro de las
-                                                     misiones principales y secundarias
-    Menú del inventario (no hay más presupuesto)
+													 Misiones, que es un registro de las
+													 misiones principales y secundarias
+	Menú del inventario (no hay más presupuesto)
 ESCENARIOS
 
 
@@ -279,30 +279,30 @@ equipado
 
 
 
-                                                                          9   COMBATE
+																		  9   COMBATE
 
 
 
 
-                                                  REMOLINOS DE ARENA
-             ENCUENTRO CON ESCORPIONES   4
+												  REMOLINOS DE ARENA
+			 ENCUENTRO CON ESCORPIONES   4
 
-     3
+	 3
 
-                                                                         10   DERROTA DE KHYMERA
-
-
-
-
-     5      RECUPERACIÓ N DE VIDA            6     CAMINO A LAS RUINAS
+																		 10   DERROTA DE KHYMERA
 
 
 
 
-                                                                         11   ACCESO DESBLOQUEADO
+	 5      RECUPERACIÓ N DE VIDA            6     CAMINO A LAS RUINAS
 
 
-     7     ENTRADA A LAS RUINAS          8       APARICIÓ N DE KHYMERA
+
+
+																		 11   ACCESO DESBLOQUEADO
+
+
+	 7     ENTRADA A LAS RUINAS          8       APARICIÓ N DE KHYMERA
 ESCENARIOS
 SFX
 
@@ -321,7 +321,7 @@ Sonido para ataque y voltereta
 
 Sonidos específicos para ciertos
 enemigos
-                                        Tocadiscos, no lo dibuje yo equis d
+										Tocadiscos, no lo dibuje yo equis d
 EFECTOS VISUALES
 
 Partículas:
@@ -339,6 +339,6 @@ oscura o la iluminación de una antorcha)
 
 
 
-                         Pequeño Leonidas que demuestra como funciona esto de shaders y me siento orgullosa porque se ve bonito
+						 Pequeño Leonidas que demuestra como funciona esto de shaders y me siento orgullosa porque se ve bonito
 THANK YOU!
 

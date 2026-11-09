@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dk7ki54k72oiv"
+path="res://.godot/imported/flor_falsa.aseprite-bcfb833df5f84bdc0b9ef043bc1374fd.res"
+
+[deps]
+
+source_file="res://assets/sprites/flor_falsa.aseprite"
+dest_files=["res://.godot/imported/flor_falsa.aseprite-bcfb833df5f84bdc0b9ef043bc1374fd.res"]
+
+[params]
+

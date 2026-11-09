@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dv5ctp6ribil0"
+path="res://.godot/imported/caminar_sin_nada.aseprite-3a8fc8cffbddc888ffe57424f00425fa.res"
+
+[deps]
+
+source_file="res://assets/sprites/caminar_sin_nada.aseprite"
+dest_files=["res://.godot/imported/caminar_sin_nada.aseprite-3a8fc8cffbddc888ffe57424f00425fa.res"]
+
+[params]
+

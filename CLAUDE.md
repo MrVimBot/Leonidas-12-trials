@@ -12,8 +12,8 @@ Idioma del equipo y de los textos del juego: **español**. Responde en español.
 - Para controlar el editor en vivo usa las herramientas MCP de Godot AI; prefiérelas a editar `project.godot` o `.tscn` a mano mientras el editor está abierto (el editor puede sobrescribir los cambios).
 
 ## Decisiones de diseño técnico (acordadas)
-- Resolución base **480×270** (16:9), escala entera ×4 a 1920×1080. Pendiente de aplicar en `project.godot` (hoy está en el valor por defecto con `stretch/mode=canvas_items`, `aspect=expand`).
-- Filtro de texturas por defecto: **Nearest** (pixel art). Pendiente de aplicar.
+- Resolución base **480×270** (16:9), escala entera ×4 a 1920×1080. Aplicado: `stretch/mode=viewport`, `aspect=keep`, `scale_mode=integer`, ventana 1920×1080.
+- Filtro de texturas por defecto: **Nearest** (pixel art). Aplicado.
 - Tiles de 16 px. Leonidas mide ~25 px de alto.
 - Fuente de diálogos: `assets/fonts/perfect_dos_vga_437.ttf` (pixel, tipo DOS).
 - Movimiento en 8 direcciones. La animación lateral se **espeja** para izquierda/derecha.
@@ -46,16 +46,21 @@ autoload/  resources/{sprite_frames,dialogues}  tools/  docs/{design,reference}
 Convención: nombres de archivo en `snake_case`, sin espacios ni acentos; escenas y scripts con el mismo nombre base.
 
 ## Estado de los sprites (IMPORTANTE)
-Los `.aseprite` están en `assets/sprites/` con nombres originales (espacios, paréntesis, "leonidsa", etc.) y Godot ya generó sus `.import`. **Renombrarlos hay que hacerlo desde el editor / MCP de Godot** (para que no queden `.import` huérfanos ni referencias rotas), p. ej. `leonidas mini (1).aseprite` → `leonidas.aseprite` según corresponda.
+Los `.aseprite` de `assets/sprites/` ya están en snake_case (renombrados desde el MCP de Godot; `leonidas mini (1)` → `leonidas_mini.aseprite`). `leonidas.aseprite` es otro archivo y lo usa `scenes/character_body_2d.tscn`.
 
-Hallazgo al inspeccionarlos: en `leonidas mini (1).aseprite` (100×310 px, 16 frames) **todas las animaciones viven en los mismos frames 0–15**, apiladas en franjas verticales distintas del lienzo, dentro de grupos de capas (`ataque frente/lado/espalda`, `pirueta lado/delante/detras`, `agarrar ...`, `tirar ...`, `caminar frente/lado/espalda` con y sin objeto, `barquito quieto/moviéndose`). No hay **tags**. Por eso Aseprite Wizard las importa como una sola animación `default`; ni tags por rango ni importar por capa lo resuelven.
-Otros archivos (`seta bomba`, `flor falsa`, `npc burro`, `npc zorro`) siguen el mismo patrón con 8 frames.
+En `leonidas_mini.aseprite` (100×310 px, 16 frames, sin tags) las animaciones son una **rejilla**: 3 columnas (frente / lado / espalda; el barco va lado / frente / espalda) × filas por acción. El "lado" mira a la **izquierda** (derecha = `flip_h`). Hallazgos: la mayoría son ciclos de **8 frames** (8–15 repiten 0–7); `parado*` y `barco_quieto*` son un único frame; la paleta de la artista está dentro de `parado normal` (x 24–27).
+Pendiente con la artista: la fila `Layer 17` (y 226–255) no tiene nombre (¿recibir daño?); se exporta como `fila_17_*`.
 
-**Plan de pipeline (por hacer):** script Lua para la CLI de Aseprite (`aseprite -b archivo.aseprite --script tools/export_strips.lua`) que, por cada animación (grupo/franja), recorte su región y exporte una tira PNG (+ JSON); y un script de Godot (`@tool`) que construya los `SpriteFrames` en `resources/sprite_frames/`. Debe ser repetible: la artista seguirá editando los `.aseprite` y se regenera con un comando. Trabajar siempre sobre copias; no modificar sus originales.
-Pendiente de confirmar con la artista: si los 16 frames de cada animación son todos reales (algunas podrían repetir frames).
+**Pipeline de sprites (hecho):**
+- `tools/sprite_layouts/<nombre>.lua`: tabla con la rejilla de cada `.aseprite` (columnas, filas, línea de pies, loop).
+- `tools/export_strips.lua`: script de la CLI de Aseprite; exporta una tira PNG por animación + JSON a `assets/sprites/strips/<nombre>/` (detecta frames repetidos/vacíos y el periodo del ciclo).
+- `tools/sprite_frames_builder.gd` + `tools/build_sprite_frames.gd`: construyen `resources/sprite_frames/<nombre>.tres` usando solo los frames del periodo.
+- Todo con un comando: `tools/export_sprites.sh [nombre]` (trabaja sobre una copia temporal; no toca los originales).
+- Celda 40×40 con los pies en (20, 34): en un `AnimatedSprite2D` usar `offset = (0, -14)` para que la posición del nodo sean los pies.
+- Para añadir otro sprite (seta_bomba, flor_falsa, npc_burro, npc_zorro…): crear su layout en `tools/sprite_layouts/` y ejecutar el script.
 
 ## Assets que faltan o no se vieron
-Recibir daño y morir (Leonidas), monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, barco y obstáculos del mar, jefe Medusa. Puede que parte esté en `todos los assets.aseprite` (1000×600, un solo frame).
+Recibir daño y morir (Leonidas), monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, obstáculos del mar (el barco con Leonidas sí está en `leonidas_mini`), jefe Medusa. Puede que parte esté en `todos_los_assets.aseprite` (1000×600, un solo frame).
 
 ## Reglas del repo
 - GitHub rechaza archivos >100 MB. **Fuera del repo** (están en la carpeta externa `Leonidas_12_pruebas/Assets_guion_todo`): el PDF "Guión Multimedia" (146 MB), el video del prototipo (110 MB), `playa entero.png` (16 MB) y los 360 PNG de "Fondo con puesta sol" (~430 MB). Si hacen falta, usar Git LFS.

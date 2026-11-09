@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dbppk0gqww7e7"
+path="res://.godot/imported/leonidas_mini.aseprite-e8b2ac4858b6de930b3cee1674212d01.res"
+
+[deps]
+
+source_file="res://assets/sprites/leonidas_mini.aseprite"
+dest_files=["res://.godot/imported/leonidas_mini.aseprite-e8b2ac4858b6de930b3cee1674212d01.res"]
+
+[params]
+
