@@ -80,6 +80,7 @@ sprite = NodePath("../Sprite")
 
 [node name="Vida" type="Node" parent="." unique_id=1561587931 node_paths=PackedStringArray("hurtbox")]
 script = ExtResource("7_vid")
+vida_max = 12
 hurtbox = NodePath("../Hurtbox")
 
 [node name="Estamina" type="Node" parent="." unique_id=183146501]

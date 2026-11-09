@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+EstadoJuego="*res://autoload/estado_juego.gd"
+Dialogos="*res://scenes/ui/caja_dialogo.tscn"
 
 [display]
 
@@ -31,6 +33,10 @@ window/stretch/scale_mode="integer"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
+
+[gui]
+
+theme/custom="res://resources/ui/tema.tres"
 
 [input]
 

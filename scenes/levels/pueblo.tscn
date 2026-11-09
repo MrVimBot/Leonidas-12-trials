@@ -11,13 +11,18 @@
 [ext_resource type="Texture2D" uid="uid://b50emni8xr7q5" path="res://assets/sprites/entorno/manzano_1.png" id="9_t"]
 [ext_resource type="Texture2D" uid="uid://bcvtmhxwdmtro" path="res://assets/sprites/entorno/manzano_2.png" id="10_t"]
 [ext_resource type="Texture2D" uid="uid://cy5fssglxaq6o" path="res://assets/sprites/entorno/estatua.png" id="11_t"]
+[ext_resource type="Script" uid="uid://br8btnpahhgfj" path="res://scripts/componentes/zona_dialogo.gd" id="12_bbvkh"]
 [ext_resource type="Texture2D" uid="uid://b3ock3yu28fix" path="res://assets/sprites/entorno/cartel.png" id="12_t"]
+[ext_resource type="Resource" path="res://resources/dialogues/cartel_pueblo.tres" id="13_175bh"]
 [ext_resource type="Texture2D" uid="uid://ihf64cpt7s7h" path="res://assets/sprites/entorno/pino.png" id="13_t"]
 [ext_resource type="Texture2D" uid="uid://8ed0eogba4q3" path="res://assets/sprites/entorno/cipres.png" id="14_t"]
 [ext_resource type="Texture2D" uid="uid://dnvtm3pdyu4bb" path="res://assets/sprites/entorno/arbusto_verde.png" id="15_t"]
 [ext_resource type="Texture2D" uid="uid://cloy3mprobs70" path="res://assets/sprites/entorno/arbusto_dorado.png" id="16_t"]
 [ext_resource type="Texture2D" uid="uid://ud8vggy6uuj7" path="res://assets/sprites/entorno/macizo_flores_1.png" id="17_t"]
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="18_op5kd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e58en"]
+size = Vector2(30, 36)
 
 [sub_resource type="RectangleShape2D" id="Shape_salida"]
 size = Vector2(16, 32)
@@ -75,6 +80,15 @@ sombra = false
 [node name="Cartel" parent="Objetos" unique_id=35523704 instance=ExtResource("3_dec")]
 position = Vector2(384, 236)
 textura = ExtResource("12_t")
+
+[node name="ZonaDialogo" type="Area2D" parent="Objetos/Cartel" unique_id=732662639]
+script = ExtResource("12_bbvkh")
+dialogo = ExtResource("13_175bh")
+posicion_burbuja = Vector2(0, -42)
+
+[node name="Forma" type="CollisionShape2D" parent="Objetos/Cartel/ZonaDialogo" unique_id=1736728530]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_e58en")
 
 [node name="Pino" parent="Objetos" unique_id=157463500 instance=ExtResource("3_dec")]
 position = Vector2(580, 300)

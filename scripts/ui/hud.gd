@@ -1,0 +1,89 @@
+class_name HUD
+extends CanvasLayer
+## Interfaz durante el juego (scenes/ui/hud.tscn), según la lámina "Interfaz" de
+## docs/pdf/Jugabilidad.pdf (p. 16):
+##   arriba izq.: corazones y, debajo, la ranura del objeto equipado
+##   arriba der.: bolsa del inventario con la tecla [ i ]
+##   abajo der.:  placa de dinero
+## La estamina no sale en la maqueta: se muestra como una barrita sobre la cabeza de
+## Leonidas, solo mientras no está llena.
+##
+## Va dentro de Game; se asigna `jugador` en el Inspector. Solo ESCUCHA señales:
+##   jugador.vida.cambio, jugador.estamina.cambio, EstadoJuego.monedas_cambio
+## Vida en CUARTOS de corazón: assets/ui/corazones.png tiene 5 estados cada 12 px
+## (lleno, 3/4, 1/2, 1/4, vacío).
+
+@export var jugador: Jugador
+@export var textura_corazones: Texture2D = preload("res://assets/ui/corazones.png")
+## Segundos que la barra de estamina sigue visible después de llenarse.
+@export var ocultar_estamina_tras := 0.6
+## Dónde va la barra de estamina respecto a los pies de Leonidas (en pantalla).
+@export var posicion_estamina := Vector2(-8, -33)
+
+const CUARTOS_POR_CORAZON := 4
+const ANCHO_CELDA := 12
+
+var _estados: Array[AtlasTexture] = []
+var _tiempo_estamina_llena := 0.0
+
+@onready var corazones: HBoxContainer = $Corazones
+@onready var icono_objeto: TextureRect = $RanuraObjeto/Icono
+@onready var barra_estamina: BarraEstamina = $BarraEstamina
+@onready var monedas: ContadorMonedas = $Monedas
+
+
+func _ready() -> void:
+	# Una textura por estado: índice = cuartos llenos (0 = vacío ... 4 = lleno).
+	for cuartos in range(CUARTOS_POR_CORAZON + 1):
+		var a := AtlasTexture.new()
+		a.atlas = textura_corazones
+		a.region = Rect2((CUARTOS_POR_CORAZON - cuartos) * ANCHO_CELDA, 0, ANCHO_CELDA, ANCHO_CELDA)
+		_estados.append(a)
+	if jugador:
+		jugador.vida.cambio.connect(_al_cambiar_vida)
+		jugador.estamina.cambio.connect(_al_cambiar_estamina)
+		_al_cambiar_vida(jugador.vida.vida, jugador.vida.vida_max)
+	EstadoJuego.monedas_cambio.connect(_al_cambiar_monedas)
+	_al_cambiar_monedas(EstadoJuego.monedas)
+	barra_estamina.modulate.a = 0.0
+
+
+func _process(delta: float) -> void:
+	if jugador == null:
+		return
+	# Objeto equipado: de momento solo la espada (la dan los sabios).
+	icono_objeto.visible = jugador.tiene_espada
+
+	# Estamina sobre la cabeza de Leonidas; se desvanece un rato después de llenarse.
+	var en_pantalla := jugador.get_global_transform_with_canvas().origin
+	barra_estamina.position = (en_pantalla + posicion_estamina).round()
+	if barra_estamina.valor >= 1.0:
+		_tiempo_estamina_llena += delta
+		if _tiempo_estamina_llena > ocultar_estamina_tras:
+			barra_estamina.modulate.a = move_toward(barra_estamina.modulate.a, 0.0, delta * 4.0)
+	else:
+		_tiempo_estamina_llena = 0.0
+		barra_estamina.modulate.a = 1.0
+
+
+func _al_cambiar_vida(vida: int, vida_max: int) -> void:
+	var total := ceili(vida_max / float(CUARTOS_POR_CORAZON))
+	while corazones.get_child_count() < total:
+		var t := TextureRect.new()
+		t.stretch_mode = TextureRect.STRETCH_KEEP
+		corazones.add_child(t)
+	while corazones.get_child_count() > total:
+		var sobra := corazones.get_child(corazones.get_child_count() - 1)
+		corazones.remove_child(sobra)
+		sobra.queue_free()
+	for i in total:
+		var cuartos := clampi(vida - i * CUARTOS_POR_CORAZON, 0, CUARTOS_POR_CORAZON)
+		(corazones.get_child(i) as TextureRect).texture = _estados[cuartos]
+
+
+func _al_cambiar_estamina(estamina: float, estamina_max: float) -> void:
+	barra_estamina.valor = estamina / estamina_max if estamina_max > 0.0 else 0.0
+
+
+func _al_cambiar_monedas(cantidad: int) -> void:
+	monedas.valor = cantidad

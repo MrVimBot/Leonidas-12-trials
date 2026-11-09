@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bqrc482efmsq3" path="res://scenes/player/jugador.tscn" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://c8521nkmoch8j" path="res://scripts/systems/game.gd" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://bo4ak683tshp5" path="res://scripts/systems/camara_pixel.gd" id="3_feb5d"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_fc0e3"]
 
 [node name="Game" type="Node2D" unique_id=194216102]
 y_sort_enabled = true
@@ -30,3 +31,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+
+[node name="HUD" parent="." unique_id=655721400 node_paths=PackedStringArray("jugador") instance=ExtResource("4_fc0e3")]
+jugador = NodePath("../Jugador")
