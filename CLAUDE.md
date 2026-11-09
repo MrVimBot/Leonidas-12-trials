@@ -85,7 +85,7 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - Contrato de daño: un `Hitbox` llama a `recibir_golpe(danio, origen)`; lo implementan `Hurtbox`, `ObjetoAgarrable` (vasijas) y lo rompible (arbustos). Interactuar: cualquier nodo con `interactuar(jugador)` en la capa `interactuable`.
 - **Ojo:** en Godot un `Area2D` no detecta `StaticBody2D`. Por eso `Hitbox` e `Interaccion` usan `Hitbox.consultar()` (consulta directa al espacio físico), no `get_overlapping_bodies()`.
 - Capas de física: 1 mundo · 2 jugador · 3 enemigos · 4 golpe_jugador · 5 golpe_enemigo · 6 interactuable · 7 obstaculo_bajo (la pirueta lo atraviesa).
-- Única escena por ahora: `scenes/player/jugador.tscn`. Siguiente: escena principal (nodo `Game`) con el jugador.
+- Escena principal: `game.tscn` (nodo `Game`, main scene) con el Jugador y la `Camara` (Camera2D, zoom 1, suavizado 6). La cámara NO va dentro de `jugador.tscn`: la mueve un `RemoteTransform2D` (`SeguirCamara`) añadido a la instancia del Jugador dentro de `Game`. Zoom 1 = 480×270 px de mundo visibles (el ×4 ya lo hace el estiramiento de la ventana).
 
 ## Assets que faltan o no se vieron
 Monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, obstáculos del mar (el barco con Leonidas sí está en `leonidas_mini`), jefe Medusa. `todos_los_assets.aseprite` (1000×600, 1 frame, 1 capa) tiene: tiles (franja arriba a la izquierda), casas, templo redondo, casa-tocón, puesto de mercado, árboles de manzanas, pinos, cipreses, arbustos, flores, rocas, troncos, columnas, ruinas, estatua, cartel. Las PNG de `assets/sprites/environment/` son ilustraciones grandes (~600 px), no pixel art a escala.
