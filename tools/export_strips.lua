@@ -42,10 +42,43 @@ end
 
 -- Recorta `rect` del frame y lo pega en una celda con el ancla alineada.
 -- Devuelve la celda y cuántos píxeles quedaron fuera de ella.
-local function make_cell(frame_img, rect, foot)
+-- ¿La columna x (coordenadas de la región) está vacía?
+local function column_empty(img, x)
+  for y = 0, img.height - 1 do
+    if app.pixelColor.rgbaA(img:getPixel(x, y)) > 0 then return false end
+  end
+  return true
+end
+
+local function erase_columns(img, x1, x2)
+  for x = math.max(0, x1), math.min(img.width - 1, x2) do
+    for y = 0, img.height - 1 do img:drawPixel(x, y, 0) end
+  end
+end
+
+-- Cortes por frame para animaciones que se solapan en x en frames distintos.
+-- col.cut_right = {a, b}: busca la PRIMERA columna vacía en [a, b] (lienzo) y borra a su derecha.
+-- col.cut_left  = {a, b}: busca la ÚLTIMA columna vacía en [a, b] y borra a su izquierda.
+local function apply_cuts(region, rect, col)
+  if col.cut_right then
+    for x = col.cut_right[1], col.cut_right[2] do
+      if column_empty(region, x - rect.x) then erase_columns(region, x - rect.x, region.width - 1); break end
+    end
+  end
+  if col.cut_left then
+    for x = col.cut_left[2], col.cut_left[1], -1 do
+      if column_empty(region, x - rect.x) then erase_columns(region, 0, x - rect.x); break end
+    end
+  end
+end
+
+local function make_cell(frame_img, rect, foot, col)
+  local ax = col.ax
   local region = Image(rect.w, rect.h, ColorMode.RGB)
   region:drawImage(frame_img, Point(-rect.x, -rect.y))
-  local anchor_x = math.floor(rect.w / 2)       -- centro de la columna
+  apply_cuts(region, rect, col)
+  -- ancla horizontal: `ax` (absoluta en el lienzo) o el centro de la columna
+  local anchor_x = ax and (ax - rect.x) or math.floor(rect.w / 2)
   local anchor_y = foot - rect.y                -- pies, relativo a la región
   local dx, dy = ox - anchor_x, oy - anchor_y
   local cell = Image(cell_w, cell_h, ColorMode.RGB)
@@ -100,15 +133,17 @@ for _, row in ipairs(L.rows) do
     local col = (row.columns and row.columns[dir]) or L.columns[dir]
     local skip = row.skip and row.skip[dir]
     if col and not skip then
-      local anim = row.name .. "_" .. dir
+      local anim = col.name or (row.name .. "_" .. dir)
       local rect = { x = col.x, y = row.y, w = col.w, h = row.h }
       local cells, durations, dup_of, empty = {}, {}, {}, {}
       local clipped_total = 0
       for i = 1, nframes do
-        local c, clipped = make_cell(flat[i], rect, row.foot)
+        local c, clipped = make_cell(flat[i], rect, row.foot, col)
         clipped_total = clipped_total + clipped
         cells[i] = c
-        durations[i] = math.floor(spr.frames[i].duration * 1000 + 0.5)
+        -- `fps` en la fila fuerza una duración fija; si no, la de Aseprite
+        durations[i] = row.fps and math.floor(1000 / row.fps + 0.5)
+          or math.floor(spr.frames[i].duration * 1000 + 0.5)
         empty[i] = is_empty(c)
         dup_of[i] = -1
         for j = 1, i - 1 do
@@ -147,11 +182,14 @@ for _, row in ipairs(L.rows) do
         warnings[#warnings + 1] = anim .. ": todos los frames están vacíos (¿región mal definida?)"
       end
 
+      local loop = row.loop ~= false
+      if col.loop ~= nil then loop = col.loop end
+
       manifest.animations[anim] = {
         file = file,
         frame_count = nframes,
         durations_ms = durations,
-        loop = row.loop ~= false,
+        loop = loop,
         period = period,
         unique_frames = unique,
         duplicates = dups,          -- pares [frame, igual_a_frame]

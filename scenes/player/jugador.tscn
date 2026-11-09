@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://bqrc482efmsq3"]
+
+[ext_resource type="Script" uid="uid://v7ik7ojavmnp" path="res://scripts/player/jugador.gd" id="1_jug"]
+[ext_resource type="SpriteFrames" uid="uid://i6yarktrbmgc" path="res://resources/sprite_frames/leonidas_mini.tres" id="2_spr"]
+[ext_resource type="Script" uid="uid://coo3mjwfps0kv" path="res://scripts/componentes/hurtbox.gd" id="3_hur"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
+[ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="5_mov"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="6_ani"]
+[ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="7_vid"]
+[ext_resource type="Script" uid="uid://drt2keub1u5s2" path="res://scripts/componentes/componente_estamina.gd" id="8_est"]
+[ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="9_ata"]
+[ext_resource type="Script" uid="uid://cj5lnwstvysut" path="res://scripts/componentes/componente_carga.gd" id="10_car"]
+[ext_resource type="Script" uid="uid://co5jka0synv8f" path="res://scripts/componentes/componente_interaccion.gd" id="11_int"]
+[ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="12_par"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(10, 6)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(12, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_espada"]
+size = Vector2(22, 14)
+
+[sub_resource type="CircleShape2D" id="Shape_alcance"]
+radius = 7.0
+
+[node name="Jugador" type="CharacterBody2D" unique_id=1575559739 groups=["jugador"]]
+collision_layer = 2
+collision_mask = 65
+motion_mode = 1
+script = ExtResource("1_jug")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1901057979]
+sprite_frames = ExtResource("2_spr")
+animation = &"parado_frente"
+offset = Vector2(0, -14)
+
+[node name="Colision" type="CollisionShape2D" parent="." unique_id=1163450284]
+position = Vector2(0, -3)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1384082180]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_hur")
+
+[node name="Forma" type="CollisionShape2D" parent="Hurtbox" unique_id=322132887]
+position = Vector2(0, -11)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Espada" type="Area2D" parent="." unique_id=1487472814]
+collision_layer = 8
+collision_mask = 36
+monitoring = false
+monitorable = false
+script = ExtResource("4_hit")
+activo = false
+
+[node name="Forma" type="CollisionShape2D" parent="Espada" unique_id=929743004]
+position = Vector2(0, 2)
+shape = SubResource("Shape_espada")
+
+[node name="PuntoCarga" type="Marker2D" parent="." unique_id=1672171138]
+position = Vector2(0, -26)
+
+[node name="Camara" type="Camera2D" parent="." unique_id=1523133174]
+position = Vector2(0, -12)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+
+[node name="Movimiento" type="Node" parent="." unique_id=2039863102]
+script = ExtResource("5_mov")
+
+[node name="Animador" type="Node" parent="." unique_id=1592302876 node_paths=PackedStringArray("sprite")]
+script = ExtResource("6_ani")
+sprite = NodePath("../Sprite")
+
+[node name="Vida" type="Node" parent="." unique_id=1561587931 node_paths=PackedStringArray("hurtbox")]
+script = ExtResource("7_vid")
+hurtbox = NodePath("../Hurtbox")
+
+[node name="Estamina" type="Node" parent="." unique_id=183146501]
+script = ExtResource("8_est")
+
+[node name="Ataque" type="Node" parent="." unique_id=1117553780 node_paths=PackedStringArray("hitbox", "animador")]
+script = ExtResource("9_ata")
+hitbox = NodePath("../Espada")
+animador = NodePath("../Animador")
+
+[node name="Carga" type="Node" parent="." unique_id=1030449962 node_paths=PackedStringArray("punto_carga")]
+script = ExtResource("10_car")
+punto_carga = NodePath("../PuntoCarga")
+
+[node name="Interaccion" type="Area2D" parent="." unique_id=1867358659 node_paths=PackedStringArray("animador")]
+position = Vector2(0, 4)
+collision_layer = 0
+collision_mask = 32
+monitoring = false
+monitorable = false
+script = ExtResource("11_int")
+animador = NodePath("../Animador")
+
+[node name="Forma" type="CollisionShape2D" parent="Interaccion" unique_id=1636675522]
+shape = SubResource("Shape_alcance")
+
+[node name="Parpadeo" type="Node" parent="." unique_id=864839979 node_paths=PackedStringArray("objetivo")]
+script = ExtResource("12_par")
+objetivo = NodePath("../Sprite")

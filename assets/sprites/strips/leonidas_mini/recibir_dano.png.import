@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4kanc5t3b0qe"
-path="res://.godot/imported/fila_17_frente.png-ebd7526b2de8fc1ad93451a93acc1bb8.ctex"
+uid="uid://un3mcg856c3v"
+path="res://.godot/imported/recibir_dano.png-045e3d0fb5187642ff250fb114216e0e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/strips/leonidas_mini/fila_17_frente.png"
-dest_files=["res://.godot/imported/fila_17_frente.png-ebd7526b2de8fc1ad93451a93acc1bb8.ctex"]
+source_file="res://assets/sprites/strips/leonidas_mini/recibir_dano.png"
+dest_files=["res://.godot/imported/recibir_dano.png-045e3d0fb5187642ff250fb114216e0e.ctex"]
 
 [params]
 

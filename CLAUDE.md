@@ -40,16 +40,16 @@ Un prototipo previo en **Unity 6** mostró: ilustración con confeti (cumpleaño
 ```
 assets/{sprites,ui,fonts,backgrounds/cinematica,audio/{music,sfx}}
 scenes/{player,npcs,enemies,levels,ui,cinematics,items}
-scripts/{player,npcs,enemies,systems,ui}
+scripts/{player,npcs,enemies,componentes,items,systems,ui}
 autoload/  resources/{sprite_frames,dialogues}  tools/  docs/{design,reference}
 ```
 Convención: nombres de archivo en `snake_case`, sin espacios ni acentos; escenas y scripts con el mismo nombre base.
 
 ## Estado de los sprites (IMPORTANTE)
-Los `.aseprite` de `assets/sprites/` ya están en snake_case (renombrados desde el MCP de Godot; `leonidas mini (1)` → `leonidas_mini.aseprite`). `leonidas.aseprite` es otro archivo y lo usa `scenes/character_body_2d.tscn`.
+Los `.aseprite` de `assets/sprites/` ya están en snake_case (renombrados desde el MCP de Godot; `leonidas mini (1)` → `leonidas_mini.aseprite`). `leonidas.aseprite` es otro archivo (ya no lo usa ninguna escena).
 
 En `leonidas_mini.aseprite` (100×310 px, 16 frames, sin tags) las animaciones son una **rejilla**: 3 columnas (frente / lado / espalda; el barco va lado / frente / espalda) × filas por acción. El "lado" mira a la **izquierda** (derecha = `flip_h`). Hallazgos: la mayoría son ciclos de **8 frames** (8–15 repiten 0–7); `parado*` y `barco_quieto*` son un único frame; la paleta de la artista está dentro de `parado normal` (x 24–27).
-Pendiente con la artista: la fila `Layer 17` (y 226–255) no tiene nombre (¿recibir daño?); se exporta como `fila_17_*`.
+La fila `Layer 17` (y 226–255) NO son direcciones: `recibir_dano` (frente), `morir` y una tercera pose de frente con el brazo en alto (`sin_nombre`, **pendiente** de confirmar con la artista; ¿recibir objeto?). Daño y morir se solapan en x según el frame: se separan con `cut_left/cut_right` del layout.
 
 **Pipeline de sprites (hecho):**
 - `tools/sprite_layouts/<nombre>.lua`: tabla con la rejilla de cada `.aseprite` (columnas, filas, línea de pies, loop).
@@ -59,8 +59,36 @@ Pendiente con la artista: la fila `Layer 17` (y 226–255) no tiene nombre (¿re
 - Celda 40×40 con los pies en (20, 34): en un `AnimatedSprite2D` usar `offset = (0, -14)` para que la posición del nodo sean los pies.
 - Para añadir otro sprite (seta_bomba, flor_falsa, npc_burro, npc_zorro…): crear su layout en `tools/sprite_layouts/` y ejecutar el script.
 
+## Arquitectura: composición (acordado)
+Cada entidad = **cerebro** (script propio en la raíz: decide QUÉ hacer; el jugador lee la entrada, un enemigo tendrá IA) + **componentes** hijos reutilizables en `scripts/componentes/` (el CÓMO). No meter lógica reutilizable en el cerebro.
+
+| Componente | Nodo | Para qué |
+|---|---|---|
+| `ComponenteMovimiento` | Node | acelera/frena el CharacterBody2D padre y llama a `move_and_slide()` (el padre se procesa antes que los hijos, así que el cerebro fija la intención y el componente la aplica en el mismo frame) |
+| `AnimadorDireccional` | Node | dirección cardinal, regla de diagonales tipo Zelda, `reproducir(base)` → `base_frente/lado/espalda` con espejo |
+| `ComponenteVida` | Node | vida, invulnerabilidad, `danado`/`murio`/`cambio`; se conecta solo a un `Hurtbox` |
+| `ComponenteEstamina` | Node | `gastar()`, regeneración con retraso |
+| `ComponenteAtaque` | Node | coloca el `Hitbox` por dirección y lo activa solo en `frames_golpe` |
+| `ComponenteCarga` | Node | levantar/lanzar `ObjetoAgarrable` |
+| `ComponenteInteraccion` | Area2D | busca delante algo con `interactuar(quien)` u `ObjetoAgarrable` |
+| `ComponenteParpadeo` | Node | parpadeo de un CanvasItem |
+| `Hitbox` / `Hurtbox` | Area2D | hace / recibe daño |
+
+Dependencias entre componentes por `@export` (se ven en el Inspector), no por rutas fijas. Las máquinas de estado van como enum en el cerebro.
+Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D + Movimiento + Animador + Vida→Hurtbox (capa enemigos) + Hitbox de contacto (`continuo = true`, capa golpe_enemigo, máscara jugador) + script cerebro con su IA.
+
+## Jugador (hecho)
+- `scenes/player/jugador.tscn` + `scripts/player/jugador.gd` (`class_name Jugador`, cerebro). La posición del nodo son los pies. Estados: NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO (`set_bloqueado()` para diálogos/cinemáticas).
+- Vida en **medios corazones** (`Vida.vida_max = 6` → 3 corazones). HUD: conectarse a `jugador.vida.cambio` y `jugador.estamina.cambio`. El jugador emite `murio` y `reaparecio`; reaparece en `punto_control`.
+- `tiene_espada` empieza en false (la dan los sabios).
+- Controles: WASD/flechas mover · J atacar · Espacio/K pirueta · E/L interactuar (agarrar, lanzar, hablar). Mando: X atacar, A pirueta, B interactuar.
+- Contrato de daño: un `Hitbox` llama a `recibir_golpe(danio, origen)`; lo implementan `Hurtbox`, `ObjetoAgarrable` (vasijas) y lo rompible (arbustos). Interactuar: cualquier nodo con `interactuar(jugador)` en la capa `interactuable`.
+- **Ojo:** en Godot un `Area2D` no detecta `StaticBody2D`. Por eso `Hitbox` e `Interaccion` usan `Hitbox.consultar()` (consulta directa al espacio físico), no `get_overlapping_bodies()`.
+- Capas de física: 1 mundo · 2 jugador · 3 enemigos · 4 golpe_jugador · 5 golpe_enemigo · 6 interactuable · 7 obstaculo_bajo (la pirueta lo atraviesa).
+- Única escena por ahora: `scenes/player/jugador.tscn`. Siguiente: escena principal (nodo `Game`) con el jugador.
+
 ## Assets que faltan o no se vieron
-Recibir daño y morir (Leonidas), monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, obstáculos del mar (el barco con Leonidas sí está en `leonidas_mini`), jefe Medusa. Puede que parte esté en `todos_los_assets.aseprite` (1000×600, un solo frame).
+Monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, obstáculos del mar (el barco con Leonidas sí está en `leonidas_mini`), jefe Medusa. `todos_los_assets.aseprite` (1000×600, 1 frame, 1 capa) tiene: tiles (franja arriba a la izquierda), casas, templo redondo, casa-tocón, puesto de mercado, árboles de manzanas, pinos, cipreses, arbustos, flores, rocas, troncos, columnas, ruinas, estatua, cartel. Las PNG de `assets/sprites/environment/` son ilustraciones grandes (~600 px), no pixel art a escala.
 
 ## Reglas del repo
 - GitHub rechaza archivos >100 MB. **Fuera del repo** (están en la carpeta externa `Leonidas_12_pruebas/Assets_guion_todo`): el PDF "Guión Multimedia" (146 MB), el video del prototipo (110 MB), `playa entero.png` (16 MB) y los 360 PNG de "Fondo con puesta sol" (~430 MB). Si hacen falta, usar Git LFS.
