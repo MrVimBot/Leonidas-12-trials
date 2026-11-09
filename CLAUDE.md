@@ -38,9 +38,9 @@ Un prototipo previo en **Unity 6** mostró: ilustración con confeti (cumpleaño
 
 ## Estructura de carpetas
 ```
-assets/{sprites,ui,fonts,backgrounds/cinematica,audio/{music,sfx}}
-scenes/{player,npcs,enemies,levels,ui,cinematics,items}
-scripts/{player,npcs,enemies,componentes,items,systems,ui}
+assets/{sprites/{strips,entorno},tilesets,ui,fonts,backgrounds/cinematica,audio/{music,sfx}}
+scenes/{player,npcs,enemies,levels,entorno,ui,cinematics,items}
+scripts/{player,npcs,enemies,componentes,entorno,items,systems,ui}
 autoload/  resources/{sprite_frames,dialogues}  tools/  docs/{design,reference}
 ```
 Convención: nombres de archivo en `snake_case`, sin espacios ni acentos; escenas y scripts con el mismo nombre base.
@@ -86,6 +86,18 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - **Ojo:** en Godot un `Area2D` no detecta `StaticBody2D`. Por eso `Hitbox` e `Interaccion` usan `Hitbox.consultar()` (consulta directa al espacio físico), no `get_overlapping_bodies()`.
 - Capas de física: 1 mundo · 2 jugador · 3 enemigos · 4 golpe_jugador · 5 golpe_enemigo · 6 interactuable · 7 obstaculo_bajo (la pirueta lo atraviesa).
 - Escena principal: `game.tscn` (nodo `Game`, main scene) con el Jugador y la `Camara` (Camera2D, zoom 1, suavizado 6). La cámara NO va dentro de `jugador.tscn`: la mueve un `RemoteTransform2D` (`SeguirCamara`) añadido a la instancia del Jugador dentro de `Game`. Zoom 1 = 480×270 px de mundo visibles (el ×4 ya lo hace el estiramiento de la ventana).
+
+## Mundo (hecho: primer trozo)
+- **Recortes de entorno:** `tools/recortes/todos_los_assets.lua` (tabla nombre → rectángulo) + `tools/export_recortes.lua` sacan cada objeto de `todos_los_assets.aseprite` a `assets/sprites/entorno/*.png` y la franja de tiles a `assets/tilesets/tiles_naturaleza.png`. `aislar = true` se queda solo con la mancha más grande (para objetos que se solapan). Las coordenadas salieron de detectar manchas de píxeles.
+- **Tiles:** 16×16 con **1 px de separación** (20 en la fila 0; fila 1: 0–6 y 17–19). `tools/build_tilesets.gd` genera `resources/tilesets/naturaleza.tres`; los tiles sólidos (seto 12,0 · agua 16–18,0 · mar 19,0 y 0/17–19,1) se definen como datos en ese script (capa física 1 = mundo). Faltan transiciones (hierba↔arena, esquinas de camino/bordillo): pedírselas a la artista.
+- Hierba y tierra (tiles 0–5 de la fila 0) tienen **volteos** como tiles alternativos (1 = H, 2 = V, 3 = H+V), definidos en `volteables` de `build_tilesets.gd`.
+- **VariadorPasto** (`scripts/entorno/variador_pasto.gd`, `@tool`): nodo de editor dentro de cada zona; botón "Variar pasto" en el Inspector (o cambiar `semilla`) reparte al azar variantes de hierba con volteos según `pesos`, con semilla fija. Solo toca celdas de pasto.
+- Todo se regenera con `tools/export_sprites.sh` (mejor con el editor **cerrado**: si el editor está abierto no recarga el TileSet regenerado y su caché de UID queda vieja → avisos "invalid UID"; se arregla con Proyecto → Recargar proyecto actual).
+- **Sombras:** `ComponenteSombra` (`scripts/componentes/componente_sombra.gd`, `@tool`) dibuja el óvalo opaco #106165 de la artista (`sombra.png`, 29×9) a cualquier tamaño, nítido. Va antes del sprite en el árbol. `Decorado` lo trae (`sombra`, `tamano_sombra` 0 = automático 70 % del ancho, `desplazamiento_sombra`); desactivarlo en casas y en objetos que ya traen sombra pintada (rocas, troncos, arbustos grandes de la artista). El jugador tiene una de 12×4.
+- **Decorado** (`scenes/entorno/decorado.tscn` + `scripts/entorno/decorado.gd`, `@tool`): StaticBody2D genérico; se elige `textura` en el Inspector. La posición = base del objeto (como los pies del jugador) → orden por Y correcto. Colisión en la base: `base` (0,0 = automática), `desplazamiento_base`, `solido`.
+- **Zonas:** cada zona es una escena en `scenes/levels/` con `Zona` (`scripts/systems/zona.gd`): `Suelo` (TileMapLayer, z_index −1), `Objetos` (y_sort), `Entradas/<nombre>` (Marker2D) y `SalidaZona` (Area2D: `zona_destino` + `entrada_destino`). Límites de cámara = rectángulo pintado (o `limites_camara`).
+- **Game** (`scripts/systems/game.gd`): `Mundo` (aquí se instancia la zona), `Jugador`, `Camara`, `Transicion/Fundido`. `cambiar_zona(ruta, entrada)` hace fundido a negro, bloquea al jugador, cambia la zona, coloca al jugador, fija su `punto_control` y ajusta los límites de la cámara. Game, Mundo, Zona y Objetos tienen `y_sort_enabled` para que el jugador se ordene con los decorados.
+- Zonas actuales (de prueba, para repintar): `pueblo.tscn` (40×24 tiles, casas, puesto, manzanos, estatua, estanque; salida derecha) ↔ `bosque.tscn` (32×20, pinos y cipreses; salida izquierda).
 
 ## Assets que faltan o no se vieron
 Monedas, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, obstáculos del mar (el barco con Leonidas sí está en `leonidas_mini`), jefe Medusa. `todos_los_assets.aseprite` (1000×600, 1 frame, 1 capa) tiene: tiles (franja arriba a la izquierda), casas, templo redondo, casa-tocón, puesto de mercado, árboles de manzanas, pinos, cipreses, arbustos, flores, rocas, troncos, columnas, ruinas, estatua, cartel. Las PNG de `assets/sprites/environment/` son ilustraciones grandes (~600 px), no pixel art a escala.

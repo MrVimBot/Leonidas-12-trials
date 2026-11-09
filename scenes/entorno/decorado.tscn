@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/entorno/decorado.gd" id="1_dec"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+
+[sub_resource type="RectangleShape2D" id="Shape_base"]
+size = Vector2(16, 8)
+
+[node name="Decorado" type="StaticBody2D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_dec")
+
+[node name="Sombra" type="Node2D" parent="."]
+script = ExtResource("2_som")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+centered = false
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_base")
