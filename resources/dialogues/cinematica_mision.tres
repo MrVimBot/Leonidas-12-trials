@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# Cinemática inicial: ya despierto. Al terminar, Kathita le entrega la carta.
+Leonidas: ¿¡Qué!? ¿¿¿QUÉ PASA???
+Kathita: Ay, niño, cómo eres. Hoy es el día de la reunión.
+Leonidas: ¿No se suponía que los cumpleaños eran para descansar?
+Kathita: Ayer cumpliste quince años, Leonidas. Y eso significa que ya tienes edad para recibir tu primera misión y demostrar que estás preparado para convertirte en adulto.
+Leonidas: ¿Y no podemos dejar eso para cuando tenga dieciséis?
+Kathita: ...
+No funciona así, hijo. Es una tradición que debemos cumplir. Cada joven, al cumplir quince años, debe demostrar su valor y cumplir con la misión que le asignan los sabios.
+"

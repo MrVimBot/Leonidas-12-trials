@@ -49,7 +49,21 @@ if [[ $# -eq 0 ]]; then
   done
 fi
 
+# Tiras de la cinemática inicial: cada .aseprite tal cual, en una tira horizontal.
+# (Los cortes de cada tira están en tools/build_cinematica.gd.)
+if [[ $# -eq 0 ]]; then
+  mkdir -p assets/sprites/cinematica
+  for n in leonidas_dormido leonidas_sorprendido_2 leonidas_termina_de_leer \
+           mama_caminando_con_regalo mama_parada dar_regalo parada_sin_nada \
+           caminar_sin_nada carta; do
+    cp "assets/sprites/$n.aseprite" "$TMP/copia.aseprite"
+    "$ASEPRITE" -b "$TMP/copia.aseprite" --sheet "assets/sprites/cinematica/$n.png" \
+      --sheet-type horizontal >/dev/null
+  done
+fi
+
 # Importar los PNG nuevos y construir los SpriteFrames y los TileSets.
 "$GODOT" --headless --path "$ROOT" --import >/dev/null 2>&1 || true
 "$GODOT" --headless --path "$ROOT" --script res://tools/build_sprite_frames.gd
 "$GODOT" --headless --path "$ROOT" --script res://tools/build_tilesets.gd
+"$GODOT" --headless --path "$ROOT" --script res://tools/build_cinematica.gd

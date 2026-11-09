@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# Cinemática inicial, escena 1: ilustración del cumpleaños.
+Kathita: ¡Feliz cumpleaños, Leonidas! ¡Quince años ya! Parece que fue ayer cuando apenas aprendías a caminar.
+Leonidas: Sí, y parece que fue ayer cuando podía hacer lo que quisiera sin que me mandaras a hacer cosas.
+Kathita: ¡Qué gracioso! Disfruta tu cumpleaños, porque mañana será un día muy importante para ti.
+Leonidas: ¿Más importante que mi cumpleaños?
+Kathita: Mucho más importante.
+"

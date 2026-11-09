@@ -100,6 +100,12 @@ func _process(delta: float) -> void:
 				_mostrar_pagina()
 
 
+## Cierra el diálogo abierto de inmediato (p. ej. al saltar una cinemática).
+func cerrar() -> void:
+	if abierto:
+		_cerrar()
+
+
 ## La fuente DOS (perfect_dos_vga_437_win.ttf) no tiene Á Í Ó Ú mayúsculas:
 ## se muestran sin tilde, como se hacía en mayúsculas antes.
 const SIN_GLIFO := { "Á": "A", "Í": "I", "Ó": "O", "Ú": "U" }

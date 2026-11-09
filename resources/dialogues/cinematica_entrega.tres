@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# Cinemática inicial: después de entregar la carta. Al terminar se abre la carta.
+Kathita: Aquí está todo lo que necesitas saber. Los sabios han preparado esta carta para ti. Léela con atención, porque en ella encontrarás las instrucciones; usualmente suele ser un viaje.
+Leonidas: ¿Un viaje? Espero que al menos incluya comida.
+Kathita: ...
+Leonidas, por favor. Tómate esto en serio.
+Leonidas: (Suspiro) Bueno, vamos a revisar qué dice.
+"

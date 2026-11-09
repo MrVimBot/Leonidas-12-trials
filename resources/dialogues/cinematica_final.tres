@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# Cinemática inicial: después de leer la carta. Al terminar empieza el juego.
+Leonidas: ¿Matar? ¿En serio?... Espera, ¿puedo morir?... Ojalá me toque algo como cuidar algún ganado o recoger aceitunas.
+...
+Quince años... y ya quieren acabar conmigo.
+Bueno... supongo que no me queda otra.
+No todos los días te mandan a morir por una tradición.
+"

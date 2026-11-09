@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# Texto de la carta de los sabios. Aquí NO se usa Nombre:; cada línea es un párrafo.
+Por mandato divino, gracias a las grandes hazañas del héroe Heracles y para honrar sus misiones y hazañas, a todo joven que cumplió 15 años durante este eniauto se le asignará una misión por parte de los sabios del pueblo. Se le recibirá a cada postulante a adulto en el ágora de la ciudad; recuerden no faltar, puesto que de hacerlo se podría considerar una traición hacia los dioses, el pueblo y la tradición.
+Deberás ir, aceptar tu misión y acabarla en el plazo de una semana junto con una prueba de haber completado el desafío. Una vez los sabios confirmen su éxito sobre la misión, se le dará el gran honor de ser visto como adulto y ciudadano de nuestra gran nación.
+Las misiones dependen de lo que los sabios creen que el postulante puede realizar como ayuda a la población; estas pruebas pueden llevarlos hasta los confines de nuestro mundo conocido, pueden ser peleas épicas que terminen en muerte, pueden ser algo que pondrá sus nombres en la historia.
+- Los sabios de ciudad Kratheon
+"
