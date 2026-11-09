@@ -138,7 +138,7 @@ for _, row in ipairs(L.rows) do
       local cells, durations, dup_of, empty = {}, {}, {}, {}
       local clipped_total = 0
       for i = 1, nframes do
-        local c, clipped = make_cell(flat[i], rect, row.foot, col)
+        local c, clipped = make_cell(flat[i], rect, col.foot or row.foot, col)
         clipped_total = clipped_total + clipped
         cells[i] = c
         -- `fps` en la fila fuerza una duración fija; si no, la de Aseprite
@@ -195,7 +195,7 @@ for _, row in ipairs(L.rows) do
         duplicates = dups,          -- pares [frame, igual_a_frame]
         empty_frames = empties,
         region = { rect.x, rect.y, rect.w, rect.h },
-        foot = row.foot,
+        foot = col.foot or row.foot,
       }
     end
   end

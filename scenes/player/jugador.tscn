@@ -33,6 +33,7 @@ motion_mode = 1
 script = ExtResource("1_jug")
 
 [node name="Sombra" type="Node2D" parent="." unique_id=526539022]
+position = Vector2(0, -1)
 script = ExtResource("2_xxoxl")
 tamano = Vector2i(12, 4)
 
