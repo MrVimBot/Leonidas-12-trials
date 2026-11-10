@@ -27,6 +27,13 @@ const TILESETS := [
 			Vector2i(4, 0), # parche de tierra
 			Vector2i(5, 0), # tierra redonda
 		],
+		# Tiles con las 7 transformaciones (giros y volteos) como alternativas:
+		# id de la alternativa = H (1) + V (2) + transponer (4). Así 1 = H, 2 = V, 3 = H+V
+		# igual que en "volteables", y 4–7 añaden la transposición (girar 90°).
+		"transformables": [
+			Vector2i(4, 1), # esquina de la greca (plaza)
+			Vector2i(5, 1), # borde de la greca (plaza)
+		],
 		# Tiles que bloquean el paso (capa de física 1 = "mundo").
 		"solidos": [
 			Vector2i(12, 0), # seto
@@ -82,6 +89,14 @@ func _construir(cfg: Dictionary) -> bool:
 			var datos_alt := fuente.get_tile_data(coords, alt)
 			datos_alt.flip_h = volteo[0]
 			datos_alt.flip_v = volteo[1]
+
+	for coords in cfg.get("transformables", []):
+		for bits in range(1, 8):
+			var alt := fuente.create_alternative_tile(coords)
+			var datos_alt := fuente.get_tile_data(coords, alt)
+			datos_alt.flip_h = bits & 1 != 0
+			datos_alt.flip_v = bits & 2 != 0
+			datos_alt.transpose = bits & 4 != 0
 
 	var m: Vector2 = Vector2(cfg.tamano) / 2.0
 	var cuadrado := PackedVector2Array([Vector2(-m.x, -m.y), Vector2(m.x, -m.y), Vector2(m.x, m.y), Vector2(-m.x, m.y)])

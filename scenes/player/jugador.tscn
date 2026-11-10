@@ -85,6 +85,7 @@ hurtbox = NodePath("../Hurtbox")
 
 [node name="Estamina" type="Node" parent="." unique_id=183146501]
 script = ExtResource("8_est")
+estamina_max = 1000.0
 
 [node name="Ataque" type="Node" parent="." unique_id=1117553780 node_paths=PackedStringArray("hitbox", "animador")]
 script = ExtResource("9_ata")
