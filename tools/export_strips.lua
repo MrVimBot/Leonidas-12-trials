@@ -25,11 +25,66 @@ local ox, oy = L.cell.origin.x, L.cell.origin.y
 local nframes = #spr.frames
 
 -- 1) Aplanar cada frame una sola vez (solo capas visibles).
-local flat = {}
-for i = 1, nframes do
-  local img = Image(spr.width, spr.height, ColorMode.RGB)
-  img:drawSprite(spr, i)
-  flat[i] = img
+local function flatten()
+  local out = {}
+  for i = 1, nframes do
+    local img = Image(spr.width, spr.height, ColorMode.RGB)
+    img:drawSprite(spr, i)
+    out[i] = img
+  end
+  return out
+end
+local flat = flatten()
+
+-- Columnas con `layers = {"capa", ...}`: se aplana solo con esas capas visibles.
+-- Sirve cuando dos animaciones vecinas se tocan en el lienzo pero están en capas
+-- distintas (p. ej. la cola del zorro). Se cachea por combinación de capas.
+local flat_by_layers = {}
+local function flat_for(layers)
+  if not layers then return flat end
+  local key = table.concat(layers, "|")
+  if flat_by_layers[key] then return flat_by_layers[key] end
+  local wanted, found = {}, {}
+  for _, n in ipairs(layers) do wanted[n] = true end
+  local saved = {}
+  for _, layer in ipairs(spr.layers) do
+    saved[layer] = layer.isVisible
+    layer.isVisible = wanted[layer.name] == true
+    if wanted[layer.name] then found[layer.name] = true end
+  end
+  for _, n in ipairs(layers) do
+    if not found[n] then error("No existe la capa '" .. n .. "' en " .. L.source) end
+  end
+  local out = flatten()
+  for layer, v in pairs(saved) do layer.isVisible = v end
+  flat_by_layers[key] = out
+  return out
+end
+
+-- Frames con UNA sola capa (filas/columnas con `layer = "nombre"`), para sprites
+-- cuyas animaciones están en capas que se solapan en el lienzo (seta_bomba, flor_falsa).
+local function find_layer(layers, name)
+  for _, l in ipairs(layers) do
+    if l.name == name then return l end
+    if l.isGroup then
+      local r = find_layer(l.layers, name)
+      if r then return r end
+    end
+  end
+end
+local by_layer = {}
+local function layer_frames(name)
+  if by_layer[name] then return by_layer[name] end
+  local layer = find_layer(spr.layers, name) or error("No existe la capa '" .. name .. "'")
+  local imgs = {}
+  for i = 1, nframes do
+    local img = Image(spr.width, spr.height, ColorMode.RGB)
+    local cel = layer:cel(i)
+    if cel then img:drawImage(cel.image, cel.position) end
+    imgs[i] = img
+  end
+  by_layer[name] = imgs
+  return imgs
 end
 
 -- ¿La imagen tiene algún píxel no transparente?
@@ -57,6 +112,7 @@ local function erase_columns(img, x1, x2)
 end
 
 -- Cortes por frame para animaciones que se solapan en x en frames distintos.
+-- (Alternativa: `layers` o `layer` en la columna o la fila, ver flat_for y layer_frames.)
 -- col.cut_right = {a, b}: busca la PRIMERA columna vacía en [a, b] (lienzo) y borra a su derecha.
 -- col.cut_left  = {a, b}: busca la ÚLTIMA columna vacía en [a, b] y borra a su izquierda.
 local function apply_cuts(region, rect, col)
@@ -137,8 +193,20 @@ for _, row in ipairs(L.rows) do
       local rect = { x = col.x, y = row.y, w = col.w, h = row.h }
       local cells, durations, dup_of, empty = {}, {}, {}, {}
       local clipped_total = 0
+      -- De dónde salen los frames (de más a menos específico):
+      --   `layers = {"a", "b"}`: solo esas capas visibles (npc_zorro);
+      --   `layer = "nombre"`: una sola capa, también dentro de grupos (seta_bomba, flor_falsa);
+      --   nada: el sprite aplanado con todas las capas visibles.
+      local layers = col.layers or row.layers
+      local layer_name = col.layer or row.layer
+      local source
+      if layers then source = flat_for(layers)
+      elseif layer_name then source = layer_frames(layer_name)
+      else source = flat end
+      -- `frames` (opcional): cuántos frames usar (p. ej. si los últimos están vacíos)
+      local nframes = col.frames or row.frames or nframes
       for i = 1, nframes do
-        local c, clipped = make_cell(flat[i], rect, col.foot or row.foot, col)
+        local c, clipped = make_cell(source[i], rect, col.foot or row.foot, col)
         clipped_total = clipped_total + clipped
         cells[i] = c
         -- `fps` en la fila fuerza una duración fija; si no, la de Aseprite
@@ -195,6 +263,8 @@ for _, row in ipairs(L.rows) do
         duplicates = dups,          -- pares [frame, igual_a_frame]
         empty_frames = empties,
         region = { rect.x, rect.y, rect.w, rect.h },
+        layer = layer_name,
+        layers = layers,
         foot = col.foot or row.foot,
       }
     end

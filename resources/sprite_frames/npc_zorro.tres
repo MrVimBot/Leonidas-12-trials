@@ -1,0 +1,234 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_espalda.png" id="1_mjub3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_frente.png" id="2_mluml"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_lado.png" id="3_oynrk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_espalda.png" id="4_ec40f"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_frente.png" id="5_gj2tx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_lado.png" id="6_3jtnu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ui5wk"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mice0"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1va5c"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5oc6"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmj6c"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n1xsn"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_626mh"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dispn"]
+atlas = ExtResource("1_mjub3")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_isces"]
+atlas = ExtResource("2_mluml")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfgwr"]
+atlas = ExtResource("2_mluml")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehbf8"]
+atlas = ExtResource("2_mluml")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujrbu"]
+atlas = ExtResource("2_mluml")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1vsu"]
+atlas = ExtResource("2_mluml")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pi8gg"]
+atlas = ExtResource("2_mluml")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi08r"]
+atlas = ExtResource("2_mluml")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5oiup"]
+atlas = ExtResource("2_mluml")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0x0xv"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nw8r"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amyge"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6w1o"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_omkcs"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvgca"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ra4i"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xg3gh"]
+atlas = ExtResource("3_oynrk")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n24yh"]
+atlas = ExtResource("4_ec40f")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x857s"]
+atlas = ExtResource("5_gj2tx")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0vm0"]
+atlas = ExtResource("6_3jtnu")
+region = Rect2(0, 0, 56, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ui5wk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mice0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1va5c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5oc6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmj6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n1xsn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_626mh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dispn")
+}],
+"loop": 1,
+"name": &"caminar_espalda",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_isces")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gfgwr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehbf8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujrbu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1vsu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pi8gg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi08r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5oiup")
+}],
+"loop": 1,
+"name": &"caminar_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0x0xv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nw8r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_amyge")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f6w1o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_omkcs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvgca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ra4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xg3gh")
+}],
+"loop": 1,
+"name": &"caminar_lado",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n24yh")
+}],
+"loop": 1,
+"name": &"parado_espalda",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x857s")
+}],
+"loop": 1,
+"name": &"parado_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0vm0")
+}],
+"loop": 1,
+"name": &"parado_lado",
+"speed": 10.0
+}]
+metadata/origin = Vector2(28, 50)
+metadata/cell_size = Vector2i(56, 52)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/npc_zorro.aseprite"

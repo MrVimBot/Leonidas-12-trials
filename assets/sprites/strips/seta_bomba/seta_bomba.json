@@ -1,0 +1,159 @@
+{
+  "animations": {
+    "caminar_espalda": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_espalda.png",
+      "foot": 46,
+      "frame_count": 8,
+      "layer": "caminar espalda",
+      "loop": true,
+      "period": 8,
+      "region": [37, 24, 38, 25],
+      "unique_frames": 8
+    },
+    "caminar_frente": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_frente.png",
+      "foot": 46,
+      "frame_count": 8,
+      "layer": "caminar frente",
+      "loop": true,
+      "period": 8,
+      "region": [0, 24, 37, 25],
+      "unique_frames": 8
+    },
+    "esconderse_espalda": {
+      "duplicates": [[1, 0], [4, 3], [5, 3], [6, 3], [7, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "esconderse_espalda.png",
+      "foot": 112,
+      "frame_count": 8,
+      "layer": "esconderse atras",
+      "loop": true,
+      "period": 8,
+      "region": [37, 92, 38, 24],
+      "unique_frames": 3
+    },
+    "esconderse_frente": {
+      "duplicates": [[1, 0], [4, 3], [5, 3], [6, 3], [7, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "esconderse_frente.png",
+      "foot": 112,
+      "frame_count": 8,
+      "layer": "esconderse tras explosion",
+      "loop": true,
+      "period": 8,
+      "region": [0, 92, 37, 24],
+      "unique_frames": 3
+    },
+    "explotar_espalda": {
+      "duplicates": [[4, 2], [5, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "explotar_espalda.png",
+      "foot": 87,
+      "frame_count": 8,
+      "layer": "explotar de espalda",
+      "loop": false,
+      "period": 8,
+      "region": [37, 52, 38, 38],
+      "unique_frames": 6
+    },
+    "explotar_frente": {
+      "duplicates": [[4, 2], [5, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "explotar_frente.png",
+      "foot": 87,
+      "frame_count": 8,
+      "layer": "explotar de frente",
+      "loop": false,
+      "period": 8,
+      "region": [0, 52, 37, 38],
+      "unique_frames": 6
+    },
+    "nube": {
+      "duplicates": [[3, 1], [4, 0], [5, 1], [6, 2], [7, 1]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "nube.png",
+      "foot": 166,
+      "frame_count": 8,
+      "layer": "nube de toxinas",
+      "loop": true,
+      "period": 4,
+      "region": [0, 142, 37, 28],
+      "unique_frames": 3
+    },
+    "parado_espalda": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_espalda.png",
+      "foot": 20,
+      "frame_count": 8,
+      "layer": "parado",
+      "loop": true,
+      "period": 1,
+      "region": [37, 0, 38, 24],
+      "unique_frames": 1
+    },
+    "parado_frente": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_frente.png",
+      "foot": 20,
+      "frame_count": 8,
+      "layer": "parado",
+      "loop": true,
+      "period": 1,
+      "region": [0, 0, 37, 24],
+      "unique_frames": 1
+    },
+    "salir_espalda": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "salir_espalda.png",
+      "foot": 137,
+      "frame_count": 8,
+      "layer": "salir detras",
+      "loop": false,
+      "period": 8,
+      "region": [37, 117, 38, 24],
+      "unique_frames": 3
+    },
+    "salir_frente": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "salir_frente.png",
+      "foot": 137,
+      "frame_count": 8,
+      "layer": "salir adelante",
+      "loop": false,
+      "period": 8,
+      "region": [0, 117, 37, 24],
+      "unique_frames": 3
+    }
+  },
+  "cell": {
+    "h": 40,
+    "w": 40
+  },
+  "name": "seta_bomba",
+  "origin": {
+    "x": 20,
+    "y": 36
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/seta_bomba.aseprite",
+  "warnings": []
+}

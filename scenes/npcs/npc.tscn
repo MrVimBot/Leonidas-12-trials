@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npcs/npc.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+[ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="3_mov"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="4_ani"]
+[ext_resource type="Script" uid="uid://br8btnpahhgfj" path="res://scripts/componentes/zona_dialogo.gd" id="5_dia"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(12, 6)
+
+[sub_resource type="CircleShape2D" id="Shape_hablar"]
+radius = 28.0
+
+[node name="NPC" type="CharacterBody2D"]
+collision_layer = 1
+collision_mask = 3
+motion_mode = 1
+script = ExtResource("1_npc")
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, -1)
+script = ExtResource("2_som")
+tamano = Vector2i(14, 4)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+offset = Vector2(0, -24)
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Movimiento" type="Node" parent="."]
+script = ExtResource("3_mov")
+aceleracion = 400.0
+friccion = 600.0
+
+[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("4_ani")
+sprite = NodePath("../Sprite")
+
+[node name="ZonaDialogo" type="Area2D" parent="."]
+script = ExtResource("5_dia")
+
+[node name="Forma" type="CollisionShape2D" parent="ZonaDialogo"]
+position = Vector2(0, -8)
+shape = SubResource("Shape_hablar")

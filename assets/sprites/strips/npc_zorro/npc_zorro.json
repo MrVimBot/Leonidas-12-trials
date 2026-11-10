@@ -1,0 +1,94 @@
+{
+  "animations": {
+    "caminar_espalda": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_espalda.png",
+      "foot": 97,
+      "frame_count": 8,
+      "layers": ["Layer 3", "Layer 4"],
+      "loop": true,
+      "period": 8,
+      "region": [62, 50, 38, 50],
+      "unique_frames": 8
+    },
+    "caminar_frente": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_frente.png",
+      "foot": 97,
+      "frame_count": 8,
+      "layers": ["caminar delante", "Layer 5"],
+      "loop": true,
+      "period": 8,
+      "region": [0, 50, 32, 50],
+      "unique_frames": 8
+    },
+    "caminar_lado": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_lado.png",
+      "foot": 96,
+      "frame_count": 8,
+      "layers": ["caminar e lado"],
+      "loop": true,
+      "period": 8,
+      "region": [31, 50, 40, 50],
+      "unique_frames": 8
+    },
+    "parado_espalda": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_espalda.png",
+      "foot": 44,
+      "frame_count": 8,
+      "layers": ["parado"],
+      "loop": true,
+      "period": 1,
+      "region": [67, 0, 33, 50],
+      "unique_frames": 1
+    },
+    "parado_frente": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_frente.png",
+      "foot": 45,
+      "frame_count": 8,
+      "layers": ["parado"],
+      "loop": true,
+      "period": 1,
+      "region": [0, 0, 31, 50],
+      "unique_frames": 1
+    },
+    "parado_lado": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_lado.png",
+      "foot": 45,
+      "frame_count": 8,
+      "layers": ["parado"],
+      "loop": true,
+      "period": 1,
+      "region": [31, 0, 36, 50],
+      "unique_frames": 1
+    }
+  },
+  "cell": {
+    "h": 52,
+    "w": 56
+  },
+  "name": "npc_zorro",
+  "origin": {
+    "x": 28,
+    "y": 50
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/npc_zorro.aseprite",
+  "warnings": []
+}

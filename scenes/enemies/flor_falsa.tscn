@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/flor_falsa.gd" id="1_cer"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/flor_falsa.tres" id="2_spr"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="3_som"]
+[ext_resource type="Script" uid="uid://coo3mjwfps0kv" path="res://scripts/componentes/hurtbox.gd" id="4_hur"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="5_hit"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="7_ani"]
+[ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="8_vid"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_deteccion.gd" id="9_det"]
+[ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="10_ata"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_muerte.gd" id="11_mue"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(10, 6)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(18, 26)
+
+[sub_resource type="RectangleShape2D" id="Shape_mordisco"]
+size = Vector2(20, 16)
+
+[node name="FlorFalsa" type="CharacterBody2D" groups=["enemigos"]]
+collision_layer = 4
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_cer")
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, -1)
+script = ExtResource("3_som")
+tamano = Vector2i(10, 3)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_spr")
+animation = &"escondida"
+offset = Vector2(0, -20)
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_hur")
+
+[node name="Forma" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -14)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Mordisco" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("5_hit")
+activo = false
+
+[node name="Forma" type="CollisionShape2D" parent="Mordisco"]
+position = Vector2(-13, -10)
+shape = SubResource("Shape_mordisco")
+
+[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("7_ani")
+sprite = NodePath("../Sprite")
+espejar_sin_direccion = true
+
+[node name="Vida" type="Node" parent="." node_paths=PackedStringArray("hurtbox")]
+script = ExtResource("8_vid")
+vida_max = 4
+invulnerabilidad = 0.3
+hurtbox = NodePath("../Hurtbox")
+
+[node name="Deteccion" type="Node" parent="."]
+script = ExtResource("9_det")
+radio_vision = 40.0
+radio_perder = 96.0
+
+[node name="Ataque" type="Node" parent="." node_paths=PackedStringArray("hitbox", "animador")]
+script = ExtResource("10_ata")
+hitbox = NodePath("../Mordisco")
+animador = NodePath("../Animador")
+animacion = &"morder"
+frames_golpe = Vector2i(3, 5)
+danio = 2
+formas = {
+Vector2(-1, 0): Rect2(-13, -10, 20, 16),
+Vector2(0, 1): Rect2(-13, -10, 20, 16),
+Vector2(1, 0): Rect2(13, -10, 20, 16)
+}
+
+[node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar")]
+script = ExtResource("11_mue")
+vida = NodePath("../Vida")
+visual = NodePath("../Sprite")
+desactivar = [NodePath("../Hurtbox"), NodePath("../Mordisco")]
+monedas = 2

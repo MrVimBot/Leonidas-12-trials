@@ -25,7 +25,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ❌ Pendiente (nivel 2) |
 | Tienda del mercader | Ninguna maqueta | ❌ Pendiente: diseñar |
 | Game over | Jugabilidad p. 8 (solo el texto "game over") | ❌ Pendiente: diseñar |
-| Menú principal / título | Ninguna maqueta | ❌ Pendiente: diseñar |
+| Menú principal / título | Ninguna maqueta | ✅ Hecho (arte provisional: `scenes/ui/menu_principal.tscn`) |
 | Barco: vida del barco | Jugabilidad p. 9, Guión p. 18 (solo el texto) | ❌ Pendiente: diseñar |
 
 ---

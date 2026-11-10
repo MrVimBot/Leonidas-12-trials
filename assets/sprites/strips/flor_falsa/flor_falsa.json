@@ -1,0 +1,107 @@
+{
+  "animations": {
+    "esconderse": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "esconderse.png",
+      "foot": 143,
+      "frame_count": 7,
+      "layer": "se desactiva el enemigo",
+      "loop": false,
+      "period": 7,
+      "region": [30, 104, 34, 42],
+      "unique_frames": 7
+    },
+    "escondida": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "escondida.png",
+      "foot": 32,
+      "frame_count": 8,
+      "layer": "totalmente quieto",
+      "loop": true,
+      "period": 1,
+      "region": [0, 0, 28, 40],
+      "unique_frames": 1
+    },
+    "morder": {
+      "duplicates": [[7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "morder.png",
+      "foot": 66,
+      "frame_count": 8,
+      "layer": "ataque",
+      "loop": false,
+      "period": 8,
+      "region": [36, 30, 49, 40],
+      "unique_frames": 7
+    },
+    "morder_exito": {
+      "duplicates": [[1, 0], [2, 0], [5, 0], [6, 3], [7, 4]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "morder_exito.png",
+      "foot": 66,
+      "frame_count": 8,
+      "layer": "ataque exitoso del enemigo",
+      "loop": false,
+      "period": 8,
+      "region": [0, 30, 36, 40],
+      "unique_frames": 3
+    },
+    "quieta": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "quieta.png",
+      "foot": 35,
+      "frame_count": 8,
+      "layer": "totalmente quieto",
+      "loop": true,
+      "period": 1,
+      "region": [28, 0, 32, 40],
+      "unique_frames": 1
+    },
+    "recibir_dano": {
+      "duplicates": [[4, 0], [5, 1], [6, 2], [7, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "recibir_dano.png",
+      "foot": 107,
+      "frame_count": 8,
+      "layer": "recibe daño",
+      "loop": false,
+      "period": 4,
+      "region": [0, 70, 50, 40],
+      "unique_frames": 4
+    },
+    "salir": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "salir.png",
+      "foot": 110,
+      "frame_count": 8,
+      "layer": "se activa el enemigo",
+      "loop": false,
+      "period": 8,
+      "region": [50, 70, 35, 45],
+      "unique_frames": 8
+    }
+  },
+  "cell": {
+    "h": 48,
+    "w": 64
+  },
+  "name": "flor_falsa",
+  "origin": {
+    "x": 32,
+    "y": 44
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/flor_falsa.aseprite",
+  "warnings": []
+}

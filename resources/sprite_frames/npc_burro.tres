@@ -1,0 +1,234 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_espalda.png" id="1_uv255"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_frente.png" id="2_u6xuo"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_lado.png" id="3_sjsgh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_espalda.png" id="4_6321m"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_frente.png" id="5_n5opu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_lado.png" id="6_2ikh8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qu1f0"]
+atlas = ExtResource("1_uv255")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_on4hm"]
+atlas = ExtResource("1_uv255")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1bgi"]
+atlas = ExtResource("1_uv255")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m43eb"]
+atlas = ExtResource("1_uv255")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j77xc"]
+atlas = ExtResource("1_uv255")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n4ud8"]
+atlas = ExtResource("1_uv255")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rt0kl"]
+atlas = ExtResource("1_uv255")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_je276"]
+atlas = ExtResource("1_uv255")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vx61"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vq77s"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rj7ps"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw1y2"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u474r"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hn3wj"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qbj7c"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx7sp"]
+atlas = ExtResource("2_u6xuo")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dihb0"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lj4bo"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(56, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1dc0n"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(112, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_owpob"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(168, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7b61"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(224, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmr3q"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(280, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2imu"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(336, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yk2ee"]
+atlas = ExtResource("3_sjsgh")
+region = Rect2(392, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oewo4"]
+atlas = ExtResource("4_6321m")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnhr6"]
+atlas = ExtResource("5_n5opu")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xipms"]
+atlas = ExtResource("6_2ikh8")
+region = Rect2(0, 0, 56, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qu1f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_on4hm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1bgi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m43eb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j77xc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n4ud8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rt0kl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_je276")
+}],
+"loop": 1,
+"name": &"caminar_espalda",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8vx61")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vq77s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rj7ps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lw1y2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u474r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hn3wj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qbj7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx7sp")
+}],
+"loop": 1,
+"name": &"caminar_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dihb0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lj4bo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1dc0n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_owpob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7b61")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmr3q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2imu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yk2ee")
+}],
+"loop": 1,
+"name": &"caminar_lado",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oewo4")
+}],
+"loop": 1,
+"name": &"parado_espalda",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qnhr6")
+}],
+"loop": 1,
+"name": &"parado_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xipms")
+}],
+"loop": 1,
+"name": &"parado_lado",
+"speed": 10.0
+}]
+metadata/origin = Vector2(28, 50)
+metadata/cell_size = Vector2i(56, 52)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/npc_burro.aseprite"

@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/tendedera/parado_frente.png" id="1_2t61u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsufi"]
+atlas = ExtResource("1_2t61u")
+region = Rect2(0, 0, 56, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsufi")
+}],
+"loop": 1,
+"name": &"parado_frente",
+"speed": 10.0
+}]
+metadata/origin = Vector2(28, 50)
+metadata/cell_size = Vector2i(56, 52)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/tendedera.aseprite"

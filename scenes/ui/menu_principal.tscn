@@ -1,0 +1,118 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menu_principal.gd" id="1_men"]
+[ext_resource type="Texture2D" uid="uid://clo0w4gh4oba1" path="res://assets/backgrounds/cinematica/fondo_1.png" id="2_fon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.965, 0.925, 0.824, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.176, 0.106, 0.078, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
+
+[sub_resource type="Theme" id="Theme_menu"]
+Button/colors/font_color = Color(0.176, 0.106, 0.078, 1)
+Button/colors/font_disabled_color = Color(0.176, 0.106, 0.078, 1)
+Button/colors/font_focus_color = Color(0.71, 0.33, 0.14, 1)
+Button/colors/font_hover_color = Color(0.71, 0.33, 0.14, 1)
+Button/colors/font_hover_pressed_color = Color(0.71, 0.33, 0.14, 1)
+Button/colors/font_pressed_color = Color(0.71, 0.33, 0.14, 1)
+Button/styles/disabled = SubResource("StyleBoxEmpty_boton")
+Button/styles/focus = SubResource("StyleBoxEmpty_boton")
+Button/styles/hover = SubResource("StyleBoxEmpty_boton")
+Button/styles/normal = SubResource("StyleBoxEmpty_boton")
+Button/styles/pressed = SubResource("StyleBoxEmpty_boton")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MenuPrincipal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_menu")
+script = ExtResource("1_men")
+
+[node name="Fondo" type="TextureRect" parent="."]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_fon")
+expand_mode = 1
+
+[node name="Titulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 120.0
+offset_top = 22.0
+offset_right = -20.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.965, 0.925, 0.824, 1)
+theme_override_colors/font_outline_color = Color(0.176, 0.106, 0.078, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 32
+text = "Las casi 12 pruebas
+de Leonidas"
+horizontal_alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -110.0
+offset_right = 110.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Botones" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Jugar" type="Button" parent="Panel/Botones"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Salir")
+text = "Jugar"
+alignment = 0
+
+[node name="Salir" type="Button" parent="Panel/Botones"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Jugar")
+text = "Salir"
+alignment = 0
+
+[node name="Fundido" type="CanvasLayer" parent="."]
+layer = 30
+
+[node name="Negro" type="ColorRect" parent="Fundido"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

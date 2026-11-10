@@ -8,6 +8,9 @@ signal direccion_cambio(direccion: Vector2)
 @export var sprite: AnimatedSprite2D
 
 @export_enum("izquierda", "derecha") var lado_mira := "izquierda"
+## Para sprites sin direcciones (p. ej. la flor falsa): las animaciones sin sufijo
+## también se espejan según hacia qué lado (izquierda/derecha) se mira por última vez.
+@export var espejar_sin_direccion := false
 
 var direccion := Vector2.DOWN:
 	set(valor):
@@ -51,13 +54,25 @@ func sufijo() -> String:
 	return "lado"
 
 
+## Reproduce `base_frente/lado/espalda` según la dirección. Si el sprite no tiene
+## vista lateral (seta bomba), de lado usa la de frente; si no tiene direcciones, `base`.
 func reproducir(base: StringName, reiniciar := false) -> void:
-	var nombre := StringName("%s_%s" % [base, sufijo()])
+	var suf := sufijo()
+	var nombre := StringName("%s_%s" % [base, suf])
+	if suf == "lado" and not sprite.sprite_frames.has_animation(nombre):
+		suf = "frente"
+		nombre = StringName("%s_frente" % base)
 	var direccional := sprite.sprite_frames.has_animation(nombre)
 	if not direccional:
 		nombre = base
 	var mira_derecha := direccion == Vector2.RIGHT
-	sprite.flip_h = direccional and sufijo() == "lado" and (mira_derecha == (lado_mira == "izquierda"))
+	if direccional:
+		sprite.flip_h = suf == "lado" and (mira_derecha == (lado_mira == "izquierda"))
+	elif espejar_sin_direccion:
+		if direccion.x != 0.0:
+			sprite.flip_h = mira_derecha == (lado_mira == "izquierda")
+	else:
+		sprite.flip_h = false
 	if reiniciar or sprite.animation != nombre:
 		sprite.play(nombre)
 

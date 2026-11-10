@@ -34,6 +34,13 @@
 [ext_resource type="Texture2D" uid="uid://cicdk2baktx10" path="res://assets/sprites/entorno/arbol_naranja.png" id="32_hd0v6"]
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="33_vse4p"]
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="34_ymumi"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/npc.tscn" id="40_npc"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tendedera.tres" id="41_tnd"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/npc_burro.tres" id="42_bur"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/npc_zorro.tres" id="43_zor"]
+[ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera.tres" id="44_dtn"]
+[ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
+[ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
@@ -4391,3 +4398,28 @@ shape = SubResource("RectangleShape2D_i2xvp")
 script = ExtResource("34_ymumi")
 capa = NodePath("../Suelo")
 semilla = 8
+
+[node name="NPCs" type="Node2D" parent="Objetos"]
+y_sort_enabled = true
+
+[node name="Tendedera" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
+position = Vector2(492, 834)
+sprite_frames = ExtResource("41_tnd")
+dialogo = ExtResource("44_dtn")
+burbuja = 2
+posicion_burbuja = Vector2(0, -36)
+paseo = false
+mirar_al_hablar = false
+
+[node name="Burro" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
+position = Vector2(553, 664)
+sprite_frames = ExtResource("42_bur")
+dialogo = ExtResource("45_dbu")
+radio_paseo = 40.0
+
+[node name="Zorro" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
+position = Vector2(1560, 928)
+sprite_frames = ExtResource("43_zor")
+dialogo = ExtResource("46_dzo")
+posicion_burbuja = Vector2(0, -42)
+radio_paseo = 40.0

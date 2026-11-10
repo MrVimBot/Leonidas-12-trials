@@ -10,6 +10,8 @@ extends Area2D
 ## El NPC puede escuchar `hablado` para, por ejemplo, dar un objeto al terminar.
 
 signal hablado
+## Justo antes de abrir el diálogo (p. ej. para que un NPC se pare y mire al jugador).
+signal empezo(quien: Node)
 
 enum Tipo { HABLAR, MISION, TIENDA }
 
@@ -52,8 +54,9 @@ func _process(_delta: float) -> void:
 
 
 ## Lo llama ComponenteInteraccion del jugador al pulsar interactuar.
-func interactuar(_quien: Node) -> void:
+func interactuar(quien: Node) -> void:
 	if dialogo == null or Dialogos.abierto:
 		return
+	empezo.emit(quien)
 	await Dialogos.mostrar(dialogo)
 	hablado.emit()
