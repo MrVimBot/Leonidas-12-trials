@@ -101,6 +101,8 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - Zonas actuales (de prueba, para repintar): `pueblo.tscn` (40×24 tiles, casas, puesto, manzanos, estatua, estanque; salida derecha) ↔ `bosque.tscn` (32×20, pinos y cipreses; salida izquierda).
 
 ## Interfaz (hecho)
+> Guía completa, con lo pendiente y dónde mirar en los PDF: **`docs/design/guia_interfaz.md`**.
+
 - **Fuente:** `assets/fonts/perfect_dos_vga_437_win.ttf` a 16 px (glifos de 9×16), importada sin antialiasing/hinting/subpíxel. Usar la versión **_win**: la otra coloca los caracteres según la página de códigos de MS-DOS y las tildes salen como símbolos. No tiene Á Í Ó Ú mayúsculas: `CajaDialogo.adaptar_a_fuente()` las muestra sin tilde. Tema global `resources/ui/tema.tres` (`gui/theme/custom`).
 - **Arte de UI agrandado:** `dialog_box.png` y `dialog_continue_arrow.png` venían a ×6 (1800×630). `tools/reducir_png.lua` los reduce a tamaño real → `assets/ui/caja_dialogo.png` y `flecha_dialogo.png` (300×105, mismo lienzo). Pestaña del nombre: x 47–136, y 9–23; texto: x 20–260, y 33–81 (3 renglones de ~26 letras).
 - **Referencia visual:** `docs/pdf/` (fuera de git: `.gitignore`). La interfaz del nivel 1 sale de `Jugabilidad.pdf` p. 16 ("Interfaz", = Guión p. 2), p. 15 (diálogo con NPC, demo) y p. 10 (burbujas de NPC). Las de Aracne/Cancerbero (Guión p. 68, 113) son de niveles fuera de alcance. Para ver una página: renderizarla con PDFKit (`swift`), el PDF del guion pesa 140 MB.
@@ -132,5 +134,9 @@ Sprite de monedas, ranura/ítem de la espada, arbustos, enemigo Tocotón, ítem 
 - No subir el binario de Aseprite, nada de `.godot/` ni `.DS_Store` (en `.gitignore`).
 - Commits pequeños y en español; avisar al usuario antes de reescribir historial ya subido.
 
-## Documentos de diseño
-`docs/design/`: `jugabilidad_primera_parte.md` (el más claro), `guion_primera_cinematica.md`, `jugabilidad_laminas.txt` y `guion_multimedia_laminas.txt` (texto extraído de PDFs de láminas; tiene ruido de maquetación, y las imágenes de las láminas no están incluidas).
+## Documentos de diseño (LEER ANTES DE EMPEZAR UNA TAREA)
+- **`docs/design/indice_pdfs.md`**: índice página por página de `docs/pdf/Jugabilidad.pdf` (22 pp.) y `docs/pdf/Guión Multimedia (1).pdf` (145 pp.): qué hay en cada lámina, qué entra en el alcance (Guión pp. 1–39 = niveles 1 y 2, fichas pp. 135–145) y qué no. Para cualquier tarea (enemigo, NPC, barco, Medusa…), buscar ahí su página antes de abrir el PDF.
+- **`docs/design/guia_interfaz.md`**: guía de la UI. Recoge las reglas de escala, cada pieza hecha (con posiciones y arte), y para cada pieza pendiente (menú de inventario, pausa, vida de Medusa, tienda, game over) qué dicen los PDF y una propuesta. **Leerla antes de tocar la interfaz.**
+- **`tools/pdf_paginas.swift`**: consulta los PDF sin abrirlos (`info`, `texto`, `render`, `hoja` de miniaturas). Los renders van al scratchpad o a `/tmp`, nunca al repo.
+- `docs/design/jugabilidad_primera_parte.md` (el más claro), `guion_primera_cinematica.md`, `jugabilidad_laminas.txt` y `guion_multimedia_laminas.txt` (texto extraído de las láminas, con ruido de maquetación).
+- ⚠ **Nivel 2 (Guión p. 22):** estética "lineless" con textura y animación con rig/esqueleto, **no pixel art**. Antes de empezarlo, hablar con la artista sobre el formato del arte y la escala.
