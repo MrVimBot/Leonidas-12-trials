@@ -60,3 +60,24 @@ offset_right = 16.0
 offset_bottom = 3.0
 mouse_filter = 2
 script = ExtResource("2_bar")
+
+[node name="MedidorViento" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 15.0
+offset_right = 42.0
+offset_bottom = 20.0
+mouse_filter = 2
+script = ExtResource("2_bar")
+color_relleno = Color(0.486, 0.769, 0.816, 1)
+umbral_bajo = 0.0
+
+[node name="Pista" type="Label" parent="MedidorViento"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = -6.0
+offset_right = 124.0
+offset_bottom = 10.0
+text = "[Espacio]"

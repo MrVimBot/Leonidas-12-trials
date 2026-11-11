@@ -9,7 +9,10 @@ extends CanvasLayer
 ## Leonidas, solo mientras no está llena.
 ##
 ## Va dentro de Game; se asigna `jugador` en el Inspector. Solo ESCUCHA señales:
-##   jugador.vida.cambio, jugador.estamina.cambio, EstadoJuego.monedas_cambio
+##   jugador.vida.cambio, jugador.estamina.cambio, EstadoJuego.monedas_cambio,
+##   Game.modo_cambio (al ir en barco los corazones son los del barco)
+## En barco: se oculta la ranura del objeto y la estamina, y aparece el `MedidorViento`
+## (fuerza del soplido) con la pista "[Espacio]" si no llega audio del micrófono.
 ## Vida en CUARTOS de corazón: assets/ui/corazones.png tiene 5 estados cada 12 px
 ## (lleno, 3/4, 1/2, 1/4, vacío).
 
@@ -25,11 +28,17 @@ const ANCHO_CELDA := 12
 
 var _estados: Array[AtlasTexture] = []
 var _tiempo_estamina_llena := 0.0
+var _vida: ComponenteVida = null
+var _en_barco := false
+var _game: Game = null
 
 @onready var corazones: HBoxContainer = $Corazones
 @onready var icono_objeto: TextureRect = $RanuraObjeto/Icono
 @onready var barra_estamina: BarraEstamina = $BarraEstamina
 @onready var monedas: ContadorMonedas = $Monedas
+@onready var ranura_objeto: Control = $RanuraObjeto
+@onready var medidor_viento: BarraEstamina = $MedidorViento
+@onready var pista_viento: Label = $MedidorViento/Pista
 
 
 func _ready() -> void:
@@ -40,15 +49,54 @@ func _ready() -> void:
 		a.region = Rect2((CUARTOS_POR_CORAZON - cuartos) * ANCHO_CELDA, 0, ANCHO_CELDA, ANCHO_CELDA)
 		_estados.append(a)
 	if jugador:
-		jugador.vida.cambio.connect(_al_cambiar_vida)
+		seguir_vida(jugador.vida)
 		jugador.estamina.cambio.connect(_al_cambiar_estamina)
-		_al_cambiar_vida(jugador.vida.vida, jugador.vida.vida_max)
 	EstadoJuego.monedas_cambio.connect(_al_cambiar_monedas)
 	_al_cambiar_monedas(EstadoJuego.monedas)
 	barra_estamina.modulate.a = 0.0
+	medidor_viento.visible = false
+	_conectar_game.call_deferred()
+
+
+## Game puede prepararse después del HUD (y ya haber creado el barco): por eso diferido.
+func _conectar_game() -> void:
+	_game = get_tree().get_first_node_in_group(&"game") as Game
+	if _game == null:
+		return
+	_game.modo_cambio.connect(_al_cambiar_modo)
+	if _game.barco:
+		_al_cambiar_modo(true, _game.barco.vida)
+
+
+## Los corazones muestran esta vida (la de Leonidas o la del barco).
+func seguir_vida(v: ComponenteVida) -> void:
+	if _vida and _vida.cambio.is_connected(_al_cambiar_vida):
+		_vida.cambio.disconnect(_al_cambiar_vida)
+	_vida = v
+	if _vida:
+		_vida.cambio.connect(_al_cambiar_vida)
+		_al_cambiar_vida(_vida.vida, _vida.vida_max)
+
+
+func modo_barco(activo: bool) -> void:
+	_en_barco = activo
+	ranura_objeto.visible = not activo
+	medidor_viento.visible = activo
+	if activo:
+		barra_estamina.modulate.a = 0.0
+
+
+func _al_cambiar_modo(en_barco: bool, vida: ComponenteVida) -> void:
+	seguir_vida(vida)
+	modo_barco(en_barco)
 
 
 func _process(delta: float) -> void:
+	if _en_barco:
+		var barco := _game.barco if _game else null
+		medidor_viento.valor = barco.soplido() if barco else 0.0
+		pista_viento.visible = not Microfono.disponible
+		return
 	if jugador == null:
 		return
 	# Objeto equipado: de momento solo la espada (la dan los sabios).
