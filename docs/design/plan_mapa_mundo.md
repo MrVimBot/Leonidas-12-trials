@@ -220,6 +220,8 @@ Objetos y límites:
 
 ### 6.3 `mar` — 48×90 tiles (768×1440 px). Semilla 23. Boceto: "Barquito" (travesía hacia el sur)
 
+> **Actualizado (2026-11-10):** ahora es el minijuego del barco (`modo_barco = true`, muelles `[22,0,25,1]` / `[22,88,25,89]`, entradas (384,96)/(384,1344), salidas (384,40)/(384,1400), 6 remolinos y 4 tiburones en `Objetos/Peligros`, sin `PuntoBarco`, sin `MAR_NAV_OLA`: las olas las dibuja el shader). Detalle en `plan_minijuego_barco.md`; lo de abajo es el trazado original.
+
 Todo en `SueloProvisional` (`Suelo` queda vacío):
 1. Todo `MAR_NAV` con variante `MAR_NAV_OLA` al 12 %.
 2. `ARRECIFE` (sólido): `[0,0,2,89]`, `[45,0,47,89]`, `[0,0,47,1]`, `[0,88,47,89]`.

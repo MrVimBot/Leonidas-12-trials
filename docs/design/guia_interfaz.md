@@ -26,7 +26,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Tienda del mercader | Ninguna maqueta | ✅ Hecha (diseño provisional): `scenes/ui/menu_tienda.tscn` |
 | Game over | Jugabilidad p. 8 (solo el texto "game over") | ❌ Pendiente: diseñar |
 | Menú principal / título | Ninguna maqueta | ✅ Hecho (arte provisional: `scenes/ui/menu_principal.tscn`) |
-| Barco: vida del barco | Jugabilidad p. 9, Guión p. 18 (solo el texto) | ❌ Pendiente: diseñar |
+| Barco: vida del barco | Jugabilidad p. 9, Guión p. 18 (solo el texto) | ✅ Hecho (provisional): corazones del barco + `MedidorViento` |
 
 ---
 
@@ -95,8 +95,13 @@ Jugabilidad p. 10 y Guión p. 13 solo dicen que hay NPCs con tienda (burbuja "$"
 ### Game over — sin maqueta
 Jugabilidad p. 8: perder toda la vida = game over; el jugador reaparece en el último punto de control (ya implementado: `Jugador.murio` / `reaparecio`). Falta la pantalla: fundido, texto y "continuar". La animación `morir` de Leonidas ya existe.
 
-### Barco — sin maqueta de UI
-Jugabilidad p. 9 / Guión p. 18: el barco tiene su propia vida ("llegar con toda la salud posible"). Se puede reutilizar el HUD de corazones conectándolo a la vida del barco.
+### Barco — sin maqueta de UI (hecho, provisional)
+Jugabilidad p. 9 / Guión p. 18: el barco tiene su propia vida ("llegar con toda la salud posible").
+- Game emite `modo_cambio(en_barco, vida)` y el HUD llama a `seguir_vida(vida)`: los **corazones** muestran la vida del barco mientras se navega (la de Leonidas no cambia).
+- En barco se ocultan la ranura del objeto y la barra de estamina.
+- **`MedidorViento`** (`BarraEstamina` reutilizada, 40×5 px en (2, 15), relleno celeste `7cc4d0`, `umbral_bajo = 0`): fuerza del soplido, la misma que usa el barco (`Barco.soplido()`).
+- **Pista `[Espacio]`** (Label hijo del medidor) mientras `Microfono.disponible == false` (sin permiso, sin dispositivo o sin sonido).
+- Pendiente: icono de vela/viento de la artista en lugar de la barra; la pista con la fuente a 16 px ocupa mucho.
 
 ### Efectos y sonido (no son UI, pero afectan a ella)
 - **Jugabilidad p. 20:** sonido para cuando los personajes hablan → en `CajaDialogo`, un "blip" por cada letra.
