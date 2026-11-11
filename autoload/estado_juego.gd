@@ -16,12 +16,15 @@ const MANZANAS_MAX := 9
 
 var monedas := 0
 var manzanas := 0
+## El tutorial del barco (y la calibración del micrófono) sale solo la primera vez.
+var tutorial_barco_visto := false
 
 
 ## Empieza una partida nueva.
 func reiniciar() -> void:
 	monedas = 0
 	manzanas = 0
+	tutorial_barco_visto = false
 	monedas_cambio.emit(monedas)
 	manzanas_cambio.emit(manzanas)
 

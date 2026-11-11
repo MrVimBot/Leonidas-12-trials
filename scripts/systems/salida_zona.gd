@@ -1,6 +1,6 @@
 class_name SalidaZona
 extends Area2D
-## Al entrar el jugador, Game carga `zona_destino` y lo coloca en `entrada_destino`.
+## Al entrar el jugador (o el barco), Game carga `zona_destino` y lo coloca en `entrada_destino`.
 ## Se pone en el borde del mapa (camino que sale del pueblo) o en una puerta.
 ## Necesita un CollisionShape2D hijo. Capa 0, máscara jugador (2).
 ##
@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func _al_entrar(cuerpo: Node2D) -> void:
-	if not cuerpo is Jugador or zona_destino.is_empty():
+	if not (cuerpo is Jugador or cuerpo is Barco) or zona_destino.is_empty():
 		return
 	var game := get_tree().get_first_node_in_group(&"game")
 	if game:

@@ -15,6 +15,8 @@ extends Node2D
 ## Límites de la cámara en píxeles. Si está vacío se usa el rectángulo pintado en `suelo`.
 @export var limites_camara := Rect2i()
 @export var suelo: TileMapLayer
+## En esta zona se viaja en barco (minijuego del mar): Game sustituye a Leonidas por el Barco.
+@export var modo_barco := false
 
 
 ## Rectángulo (en píxeles del mundo) que la cámara no debe sobrepasar.
