@@ -47,6 +47,22 @@ const TILESETS := [
 			Vector2i(19, 1), # mar con orilla
 		],
 	},
+	{
+		# PROVISIONAL (tools/build_arte_provisional.gd): cueva, mar navegable, muelle...
+		# Sustituir por los tiles de la artista cuando los entregue.
+		"textura": "res://assets/tilesets/tiles_provisional.png",
+		"salida": "res://resources/tilesets/provisional.tres",
+		"tamano": Vector2i(16, 16),
+		"separacion": Vector2i(0, 0),
+		# 0 suelo cueva · 1 suelo cueva B · 2 pared cueva · 3 vacío · 4 mar navegable ·
+		# 5 mar navegable con ola · 6 losa del jefe · 7 muelle · 8 arrecife
+		"tiles": [[0, 0, 8]],
+		"solidos": [
+			Vector2i(2, 0), # pared de cueva
+			Vector2i(3, 0), # vacío
+			Vector2i(8, 0), # arrecife
+		],
+	},
 ]
 
 const CAPA_MUNDO := 1
@@ -113,7 +129,6 @@ func _construir(cfg: Dictionary) -> bool:
 	if err != OK:
 		push_error("No se pudo guardar %s (error %d)" % [cfg.salida, err])
 		return false
-	if uid_anterior != ResourceUID.INVALID_ID:
-		ResourceSaver.set_uid(cfg.salida, uid_anterior)
+	ResourceSaver.set_uid(cfg.salida, uid_anterior if uid_anterior != ResourceUID.INVALID_ID else ResourceUID.create_id())
 	print("[tilesets] %s: %d tiles, %d sólidos -> %s" % [cfg.textura.get_file(), n, cfg.solidos.size(), cfg.salida])
 	return true

@@ -46,6 +46,7 @@
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_sin_monedas.tres" id="50_dsm"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
+[ext_resource type="Resource" path="res://resources/dialogues/cartel_camino_cerrado.tres" id="52_ccc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
@@ -56,11 +57,20 @@ size = Vector2(300, 281)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rayou"]
 size = Vector2(300, 281)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_74p3n"]
-size = Vector2(80, 104)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i2xvp"]
 size = Vector2(72, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_csuro"]
+size = Vector2(300, 121)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_csure"]
+size = Vector2(300, 121)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbosq"]
+size = Vector2(72, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cest"]
+size = Vector2(30, 36)
 
 [node name="Pueblo" type="Node2D" unique_id=287964049 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
@@ -369,6 +379,19 @@ posicion_burbuja = Vector2(0, -42)
 [node name="Forma" type="CollisionShape2D" parent="Objetos/Cartel/ZonaDialogo" unique_id=1223668217]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_xr1lb")
+
+[node name="CartelEste" parent="Objetos" instance=ExtResource("3_t1f4t")]
+position = Vector2(1716, 700)
+textura = ExtResource("26_odgk1")
+
+[node name="ZonaDialogo" type="Area2D" parent="Objetos/CartelEste"]
+script = ExtResource("27_jndu0")
+dialogo = ExtResource("52_ccc")
+posicion_burbuja = Vector2(0, -42)
+
+[node name="Forma" type="CollisionShape2D" parent="Objetos/CartelEste/ZonaDialogo"]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_cest")
 
 [node name="Muralla" type="Node2D" parent="Objetos" unique_id=244963249]
 y_sort_enabled = true
@@ -4378,26 +4401,42 @@ shape = SubResource("RectangleShape2D_amysx")
 position = Vector2(1106, 76.5)
 shape = SubResource("RectangleShape2D_rayou")
 
-[node name="PuertaSurCerrada" type="CollisionShape2D" parent="Limites" unique_id=809575928]
-position = Vector2(920, 1371)
-shape = SubResource("RectangleShape2D_74p3n")
+[node name="CaminoSurOeste" type="CollisionShape2D" parent="Limites"]
+position = Vector2(734, 1475.5)
+shape = SubResource("RectangleShape2D_csuro")
+
+[node name="CaminoSurEste" type="CollisionShape2D" parent="Limites"]
+position = Vector2(1106, 1475.5)
+shape = SubResource("RectangleShape2D_csure")
 
 [node name="Entradas" type="Node2D" parent="." unique_id=402366032]
 
 [node name="inicio" type="Marker2D" parent="Entradas" unique_id=1241104316]
 position = Vector2(586, 1127)
 
-[node name="desde_bosque" type="Marker2D" parent="Entradas" unique_id=1745217607]
+[node name="desde_casa_arbol" type="Marker2D" parent="Entradas" unique_id=1745217607]
 position = Vector2(920, 40)
 
-[node name="SalidaBosque" type="Area2D" parent="." unique_id=161310519]
+[node name="desde_bosque" type="Marker2D" parent="Entradas"]
+position = Vector2(920, 1428)
+
+[node name="SalidaCasaArbol" type="Area2D" parent="." unique_id=161310519]
 position = Vector2(920, -4)
+script = ExtResource("33_vse4p")
+zona_destino = "res://scenes/levels/casa_arbol.tscn"
+entrada_destino = "desde_pueblo"
+
+[node name="Forma" type="CollisionShape2D" parent="SalidaCasaArbol" unique_id=1438352482]
+shape = SubResource("RectangleShape2D_i2xvp")
+
+[node name="SalidaBosque" type="Area2D" parent="."]
+position = Vector2(920, 1464)
 script = ExtResource("33_vse4p")
 zona_destino = "res://scenes/levels/bosque.tscn"
 entrada_destino = "desde_pueblo"
 
-[node name="Forma" type="CollisionShape2D" parent="SalidaBosque" unique_id=1438352482]
-shape = SubResource("RectangleShape2D_i2xvp")
+[node name="Forma" type="CollisionShape2D" parent="SalidaBosque"]
+shape = SubResource("RectangleShape2D_sbosq")
 
 [node name="VariadorPasto" type="Node" parent="." unique_id=1770927585 node_paths=PackedStringArray("capa")]
 script = ExtResource("34_ymumi")
