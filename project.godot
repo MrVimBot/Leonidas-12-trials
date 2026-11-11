@@ -15,12 +15,17 @@ run/main_scene="res://scenes/ui/menu_principal.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/enable_input=true
+
 [autoload]
 
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 EstadoJuego="*res://autoload/estado_juego.gd"
 Dialogos="*res://scenes/ui/caja_dialogo.tscn"
 Tienda="*res://scenes/ui/menu_tienda.tscn"
+Microfono="*res://autoload/microfono.gd"
 
 [display]
 
