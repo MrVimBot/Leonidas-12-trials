@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/tiburon.gd" id="1_cer"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tiburon.tres" id="2_spr"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
+[ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="4_mov"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="5_ani"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_deteccion.gd" id="6_det"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(20, 6)
+
+[sub_resource type="RectangleShape2D" id="Shape_mordisco"]
+size = Vector2(22, 12)
+
+[node name="Tiburon" type="CharacterBody2D" groups=["enemigos"]]
+collision_layer = 4
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_cer")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_spr")
+animation = &"nadar"
+offset = Vector2(0, -11)
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("3_hit")
+danio = 2
+continuo = true
+
+[node name="Forma" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -8)
+shape = SubResource("Shape_mordisco")
+
+[node name="Movimiento" type="Node" parent="."]
+script = ExtResource("4_mov")
+velocidad = 60.0
+aceleracion = 400.0
+friccion = 200.0
+
+[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("5_ani")
+sprite = NodePath("../Sprite")
+espejar_sin_direccion = true
+
+[node name="Deteccion" type="Node" parent="."]
+script = ExtResource("6_det")
+radio_vision = 90.0
+radio_perder = 150.0
+grupo = &"barco"
