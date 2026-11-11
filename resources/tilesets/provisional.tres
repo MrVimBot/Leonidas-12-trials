@@ -1,9 +1,10 @@
 [gd_resource type="TileSet" format=3 uid="uid://5qynuptas48g"]
 
-[ext_resource type="Texture2D" path="res://assets/tilesets/tiles_provisional.png" id="1_faaqu"]
+[ext_resource type="Material" path="res://resources/shaders/agua_provisional.tres" id="1_bjpum"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/tiles_provisional.png" id="2_7f5gj"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bjpum"]
-texture = ExtResource("1_faaqu")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xmxak"]
+texture = ExtResource("2_7f5gj")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -11,7 +12,9 @@ texture = ExtResource("1_faaqu")
 3:0/0 = 0
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:0/0 = 0
+4:0/0/material = ExtResource("1_bjpum")
 5:0/0 = 0
+5:0/0/material = ExtResource("1_bjpum")
 6:0/0 = 0
 7:0/0 = 0
 8:0/0 = 0
@@ -20,4 +23,4 @@ texture = ExtResource("1_faaqu")
 [resource]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
-sources/0 = SubResource("TileSetAtlasSource_bjpum")
+sources/0 = SubResource("TileSetAtlasSource_xmxak")

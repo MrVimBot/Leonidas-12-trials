@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://resources/shaders/agua.gdshader" id="1_agua"]
+
+[resource]
+shader = ExtResource("1_agua")
+shader_parameter/color_agua = Color(0.3804, 0.6902, 0.5647, 1)
+shader_parameter/color_cresta = Color(0.5529, 0.8784, 0.8353, 1)
+shader_parameter/color_valle = Color(0.2902, 0.6039, 0.5020, 1)
+shader_parameter/tolerancia = 0.06
+shader_parameter/pasos_por_segundo = 4.0

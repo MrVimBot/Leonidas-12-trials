@@ -46,6 +46,12 @@ const TILESETS := [
 			Vector2i(18, 1), # mar con orilla
 			Vector2i(19, 1), # mar con orilla
 		],
+		# Agua animada: material (shader resources/shaders/agua.gdshader) por tile.
+		# Un material por color base de agua (el shader solo toca ese color).
+		"materiales": {
+			"res://resources/shaders/agua_estanque.tres": [Vector2i(16, 0), Vector2i(17, 0), Vector2i(18, 0)],
+			"res://resources/shaders/agua_mar.tres": [Vector2i(19, 0), Vector2i(0, 1), Vector2i(17, 1), Vector2i(18, 1), Vector2i(19, 1)],
+		},
 	},
 	{
 		# PROVISIONAL (tools/build_arte_provisional.gd): cueva, mar navegable, muelle...
@@ -62,6 +68,9 @@ const TILESETS := [
 			Vector2i(3, 0), # vacío
 			Vector2i(8, 0), # arrecife
 		],
+		"materiales": {
+			"res://resources/shaders/agua_provisional.tres": [Vector2i(4, 0), Vector2i(5, 0)],
+		},
 	},
 ]
 
@@ -120,6 +129,17 @@ func _construir(cfg: Dictionary) -> bool:
 		var datos := fuente.get_tile_data(coords, 0)
 		datos.add_collision_polygon(0)
 		datos.set_collision_polygon_points(0, 0, cuadrado)
+
+	var materiales: Dictionary = cfg.get("materiales", {})
+	for ruta in materiales:
+		var material := load(ruta) as Material
+		if material == null:
+			push_error("No se pudo cargar el material %s" % ruta)
+			return false
+		for coords in materiales[ruta]:
+			# También a las alternativas (volteos), si las hay.
+			for i in fuente.get_alternative_tiles_count(coords):
+				fuente.get_tile_data(coords, fuente.get_alternative_tile_id(coords, i)).material = material
 
 	DirAccess.make_dir_recursive_absolute(cfg.salida.get_base_dir())
 	# Conservar el UID del archivo anterior: si cambia, las zonas ya pintadas que lo
