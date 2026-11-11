@@ -1,0 +1,28 @@
+{
+  "animations": {
+    "girar": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "girar.png",
+      "foot": 10,
+      "frame_count": 4,
+      "loop": true,
+      "period": 4,
+      "region": [0, 0, 20, 20],
+      "unique_frames": 4
+    }
+  },
+  "cell": {
+    "h": 20,
+    "w": 20
+  },
+  "name": "remolino",
+  "origin": {
+    "x": 10,
+    "y": 10
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/remolino.aseprite",
+  "warnings": []
+}

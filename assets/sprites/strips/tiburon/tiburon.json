@@ -1,0 +1,55 @@
+{
+  "animations": {
+    "embestir": {
+      "duplicates": [[1, 0], [3, 2], [4, 0], [5, 0], [6, 2], [7, 2]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "embestir.png",
+      "foot": 53,
+      "frame_count": 8,
+      "layer": "Layer 2",
+      "loop": true,
+      "period": 4,
+      "region": [2, 33, 30, 21],
+      "unique_frames": 2
+    },
+    "morder": {
+      "duplicates": [[7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "morder.png",
+      "foot": 83,
+      "frame_count": 8,
+      "layer": "Layer 3",
+      "loop": false,
+      "period": 8,
+      "region": [2, 58, 35, 26],
+      "unique_frames": 7
+    },
+    "nadar": {
+      "duplicates": [[1, 0], [3, 2], [4, 0], [5, 0], [6, 2], [7, 2]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "nadar.png",
+      "foot": 53,
+      "frame_count": 8,
+      "layer": "Layer 2",
+      "loop": true,
+      "period": 4,
+      "region": [32, 33, 29, 21],
+      "unique_frames": 2
+    }
+  },
+  "cell": {
+    "h": 28,
+    "w": 40
+  },
+  "name": "tiburon",
+  "origin": {
+    "x": 20,
+    "y": 25
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/tiburon.aseprite",
+  "warnings": []
+}

@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/remolino/girar.png" id="1_vbidi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81vps"]
+atlas = ExtResource("1_vbidi")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aq45n"]
+atlas = ExtResource("1_vbidi")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_byssm"]
+atlas = ExtResource("1_vbidi")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81d3c"]
+atlas = ExtResource("1_vbidi")
+region = Rect2(60, 0, 20, 20)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81vps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aq45n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byssm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81d3c")
+}],
+"loop": 1,
+"name": &"girar",
+"speed": 10.0
+}]
+metadata/origin = Vector2(10, 10)
+metadata/cell_size = Vector2i(20, 20)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/remolino.aseprite"
