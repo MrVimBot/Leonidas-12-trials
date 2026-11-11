@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/barco.gd" id="1_bar"]
+[ext_resource type="SpriteFrames" uid="uid://i6yarktrbmgc" path="res://resources/sprite_frames/leonidas_mini.tres" id="2_spr"]
+[ext_resource type="Script" uid="uid://coo3mjwfps0kv" path="res://scripts/componentes/hurtbox.gd" id="3_hur"]
+[ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="4_mov"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="5_ani"]
+[ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="6_vid"]
+[ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="7_par"]
+
+[sub_resource type="RectangleShape2D" id="Shape_casco"]
+size = Vector2(20, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(22, 14)
+
+[node name="Barco" type="CharacterBody2D" groups=["barco"]]
+collision_layer = 2
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_bar")
+
+[node name="Estela" type="CPUParticles2D" parent="."]
+z_index = -1
+position = Vector2(0, -3)
+emitting = false
+amount = 24
+lifetime = 0.6
+local_coords = false
+emission_shape = 3
+emission_rect_extents = Vector2(6, 1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 6.0
+color = Color(0.86, 0.96, 1, 0.8)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_spr")
+animation = &"barco_quieto_frente"
+offset = Vector2(0, -14)
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+shape = SubResource("Shape_casco")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_hur")
+
+[node name="Forma" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -8)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Movimiento" type="Node" parent="."]
+script = ExtResource("4_mov")
+velocidad = 120.0
+aceleracion = 240.0
+friccion = 90.0
+
+[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("5_ani")
+sprite = NodePath("../Sprite")
+
+[node name="Vida" type="Node" parent="." node_paths=PackedStringArray("hurtbox")]
+script = ExtResource("6_vid")
+vida_max = 12
+hurtbox = NodePath("../Hurtbox")
+
+[node name="Parpadeo" type="Node" parent="." node_paths=PackedStringArray("objetivo")]
+script = ExtResource("7_par")
+objetivo = NodePath("../Sprite")
