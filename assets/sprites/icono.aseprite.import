@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://1mxgfpmjwrjm"
+path="res://.godot/imported/icono.aseprite-5ecf579f0c567d4bdaa2eed73061eaef.res"
+
+[deps]
+
+source_file="res://assets/sprites/icono.aseprite"
+dest_files=["res://.godot/imported/icono.aseprite-5ecf579f0c567d4bdaa2eed73061eaef.res"]
+
+[params]
+

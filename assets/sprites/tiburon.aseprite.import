@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cgge5oekw7ln"
+path="res://.godot/imported/tiburon.aseprite-5bf3587c246fc715c54ef5d12a1fa9db.res"
+
+[deps]
+
+source_file="res://assets/sprites/tiburon.aseprite"
+dest_files=["res://.godot/imported/tiburon.aseprite-5bf3587c246fc715c54ef5d12a1fa9db.res"]
+
+[params]
+
