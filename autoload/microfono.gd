@@ -20,15 +20,17 @@ const NOMBRE_BUS := &"Microfono"
 # soplo suave −40…−46, soplo fuerte −14…−35 (continuo), voz con picos de −19 pero
 # a golpes (cae a −58 entre sílabas). Para que hablar no mueva el barco se usa el
 # nivel SOSTENIDO: el mínimo de los últimos `ventana_sostenido` segundos.
+# Probado jugando: un soplido normal se mantiene en −25…−36 dB; con db_max −32 llena
+# más de media barra y la voz (picos de −18) no mueve el barco.
 
 ## dB a partir de los cuales empieza a contar el soplido (lo ajusta `calibrar()`).
 @export var db_min := -48.0
 ## dB que equivalen a soplar al máximo.
-@export var db_max := -26.0
+@export var db_max := -32.0
 ## Margen sobre el ruido ambiente al calibrar.
 @export var margen_db := 10.0
 ## Distancia mínima entre db_min y db_max tras calibrar.
-@export var rango_min_db := 18.0
+@export var rango_min_db := 14.0
 ## Segundos que tiene que mantenerse el sonido para contar (filtra la voz).
 @export var ventana_sostenido := 0.5
 ## Velocidad de subida/bajada del nivel suavizado (por segundo).
