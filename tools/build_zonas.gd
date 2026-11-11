@@ -17,6 +17,8 @@ const C := Constructor # para acortar los nombres de tiles
 const DIR := "res://scenes/levels/"
 const SETA := "res://scenes/enemies/seta_bomba.tscn"
 const FLOR := "res://scenes/enemies/flor_falsa.tscn"
+const REMOLINO := "res://scenes/entorno/remolino.tscn"
+const TIBURON := "res://scenes/enemies/tiburon.tscn"
 const ARBOLES := ["pino", "cipres", "pino", "arbol_naranja", "cipres_dorado"]
 const PALMERA := "provisional/palmera"
 const MINI_PALMERA := "provisional/mini_palmera"
@@ -156,28 +158,37 @@ func _playa() -> Constructor:
 	return z
 
 
-# --- Mar ("Barquito"): travesía hacia el sur. Leonidas camina (el barco es otra tarea) --
+# --- Mar ("Barquito"): minijuego del barco hacia el sur (docs/design/plan_minijuego_barco.md)
+# `modo_barco`: Game sustituye a Leonidas por el Barco. Muelles cortos pegados al borde;
+# el barco no navega sobre ellos: la salida está justo delante.
 
 func _mar() -> Constructor:
 	var z := Constructor.new("Mar", "Mar", 48, 90, 23)
-	z.rect([0, 0, 47, 89], C.MAR_NAV, true, C.MAR_NAV_OLA, 0.12)
+	z.raiz.set("modo_barco", true)
+	z.rect([0, 0, 47, 89], C.MAR_NAV, true) # liso: las olas las dibuja el shader del agua
 	for r in [[0, 0, 2, 89], [45, 0, 47, 89], [0, 0, 47, 1], [0, 88, 47, 89]]:
 		z.rect(r, C.ARRECIFE, true)
-	z.rect([22, 0, 25, 3], C.MUELLE, true)
-	z.rect([22, 86, 25, 89], C.MUELLE, true)
+	z.rect([22, 0, 25, 1], C.MUELLE, true)
+	z.rect([22, 88, 25, 89], C.MUELLE, true)
 
-	z.entrada("desde_playa", Vector2(384, 56))
-	z.entrada("desde_isla", Vector2(384, 1384))
-	z.salida("SalidaPlaya", Vector2(384, 8), Vector2(64, 16), "playa", "desde_mar")
-	z.salida("SalidaIsla", Vector2(384, 1432), Vector2(64, 16), "isla_orilla", "desde_mar")
+	z.entrada("desde_playa", Vector2(384, 96))
+	z.entrada("desde_isla", Vector2(384, 1344))
+	z.salida("SalidaPlaya", Vector2(384, 40), Vector2(64, 16), "playa", "desde_mar")
+	z.salida("SalidaIsla", Vector2(384, 1400), Vector2(64, 16), "isla_orilla", "desde_mar")
 
 	var rocas := [Vector2i(10, 10), Vector2i(30, 12), Vector2i(38, 18), Vector2i(18, 20),
 		Vector2i(8, 28), Vector2i(26, 30), Vector2i(36, 34), Vector2i(14, 40), Vector2i(28, 44),
 		Vector2i(40, 48), Vector2i(8, 52), Vector2i(22, 56), Vector2i(34, 60), Vector2i(12, 66),
-		Vector2i(26, 70), Vector2i(38, 74), Vector2i(16, 80), Vector2i(30, 82)]
+		Vector2i(26, 70), Vector2i(38, 74), Vector2i(16, 80), Vector2i(31, 79)]
 	for i in rocas.size():
 		z.deco("Rocas", "provisional/roca_mar_%d" % (i % 3 + 1), _t(rocas[i].x, rocas[i].y), SIN_SOMBRA)
-	z.marcador("PuntoBarco", Vector2(384, 100))
+
+	# Peligros: más juntos hacia el centro; nada en los primeros/últimos 200 px.
+	for p in [Vector2(200, 340), Vector2(520, 470), Vector2(330, 640), Vector2(470, 820),
+			Vector2(260, 1000), Vector2(500, 1150)]:
+		z.instancia("Peligros", REMOLINO, p)
+	for p in [Vector2(384, 560), Vector2(300, 760), Vector2(460, 930), Vector2(384, 1030)]:
+		z.instancia("Peligros", TIBURON, p)
 	return z
 
 
