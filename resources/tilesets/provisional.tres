@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://5qynuptas48g"]
 
 [ext_resource type="Material" path="res://resources/shaders/agua_provisional.tres" id="1_bjpum"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/tiles_provisional.png" id="2_7f5gj"]
+[ext_resource type="Texture2D" uid="uid://m1aoyxmlbexl" path="res://assets/tilesets/tiles_provisional.png" id="2_7f5gj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xmxak"]
 texture = ExtResource("2_7f5gj")

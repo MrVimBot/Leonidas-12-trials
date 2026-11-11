@@ -1,12 +1,12 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://dbs73ip3708gc"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/esconderse.png" id="1_edqgp"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/escondida.png" id="2_odbrn"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/morder.png" id="3_4qlio"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/morder_exito.png" id="4_8fjx2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/quieta.png" id="5_2b5lb"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/recibir_dano.png" id="6_y7brv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/flor_falsa/salir.png" id="7_4sbyx"]
+[ext_resource type="Texture2D" uid="uid://cv3jlps4brw4v" path="res://assets/sprites/strips/flor_falsa/esconderse.png" id="1_edqgp"]
+[ext_resource type="Texture2D" uid="uid://cutvrll7pblwl" path="res://assets/sprites/strips/flor_falsa/escondida.png" id="2_odbrn"]
+[ext_resource type="Texture2D" uid="uid://c23jefcndw0d" path="res://assets/sprites/strips/flor_falsa/morder.png" id="3_4qlio"]
+[ext_resource type="Texture2D" uid="uid://dj5tbvykuoato" path="res://assets/sprites/strips/flor_falsa/morder_exito.png" id="4_8fjx2"]
+[ext_resource type="Texture2D" uid="uid://dd6xagk6owltj" path="res://assets/sprites/strips/flor_falsa/quieta.png" id="5_2b5lb"]
+[ext_resource type="Texture2D" uid="uid://cjaawere5droj" path="res://assets/sprites/strips/flor_falsa/recibir_dano.png" id="6_y7brv"]
+[ext_resource type="Texture2D" uid="uid://ctn6ixs03chli" path="res://assets/sprites/strips/flor_falsa/salir.png" id="7_4sbyx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yb11o"]
 atlas = ExtResource("1_edqgp")
