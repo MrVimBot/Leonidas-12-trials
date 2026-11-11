@@ -24,6 +24,8 @@ enum Estado { QUIETO, CAMINANDO, HABLANDO }
 		_aplicar_aspecto()
 ## Lo que dice al hablar con él (resources/dialogues/*.tres).
 @export var dialogo: Dialogo
+## Si vende algo: un ComponenteTienda hijo del NPC (entonces no usa `dialogo`).
+@export var tienda: ComponenteTienda
 ## Burbuja sobre la cabeza al acercarse: "…" hablar, "!" misión, "$" tienda.
 @export var burbuja: ZonaDialogo.Tipo = ZonaDialogo.Tipo.HABLAR
 ## Punta de la burbuja respecto a los pies (encima de la cabeza).
@@ -60,6 +62,7 @@ func _enter_tree() -> void:
 	var zona := get_node_or_null(^"ZonaDialogo") as ZonaDialogo
 	if zona and not Engine.is_editor_hint():
 		zona.dialogo = dialogo
+		zona.tienda = tienda
 		zona.tipo = burbuja
 		zona.posicion_burbuja = posicion_burbuja
 	_aplicar_aspecto()
@@ -81,6 +84,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	centro = position
+	_zona_dialogo.tienda = tienda # por si la referencia aún no estaba en _enter_tree
 	_rng.randomize()
 	_movimiento.velocidad = velocidad
 	_movimiento.choco.connect(_al_chocar)

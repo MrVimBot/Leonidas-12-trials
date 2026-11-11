@@ -23,6 +23,8 @@ const BURBUJAS := {
 
 ## Recurso Dialogo (resources/dialogues/*.tres).
 @export var dialogo: Dialogo
+## Si tiene tienda, al interactuar atiende la tienda en vez de mostrar `dialogo`.
+@export var tienda: ComponenteTienda
 ## Qué burbuja aparece sobre la cabeza.
 @export var tipo: Tipo = Tipo.HABLAR
 @export var mostrar_burbuja := true
@@ -31,6 +33,7 @@ const BURBUJAS := {
 
 var _burbuja: Sprite2D
 var _jugador_cerca := false
+var _atendiendo := false
 
 
 func _ready() -> void:
@@ -50,13 +53,21 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	_burbuja.visible = mostrar_burbuja and _jugador_cerca and not Dialogos.abierto
+	_burbuja.visible = mostrar_burbuja and _jugador_cerca and not _atendiendo \
+		and not Dialogos.abierto and not Tienda.abierto
 
 
 ## Lo llama ComponenteInteraccion del jugador al pulsar interactuar.
 func interactuar(quien: Node) -> void:
-	if dialogo == null or Dialogos.abierto:
+	if Dialogos.abierto or Tienda.abierto or _atendiendo:
 		return
+	if tienda == null and dialogo == null:
+		return
+	_atendiendo = true
 	empezo.emit(quien)
-	await Dialogos.mostrar(dialogo)
+	if tienda:
+		await tienda.atender(quien)
+	else:
+		await Dialogos.mostrar(dialogo)
+	_atendiendo = false
 	hablado.emit()

@@ -4,6 +4,5 @@
 
 [resource]
 script = ExtResource("1_dia")
-texto = "# TEXTO PROVISIONAL: sustituir por el del guion. (La tienda aún no está hecha.)
-Tendera: ¡Bienvenido a mi puesto, Leonidas!
-Tengo manzanas frescas del bosque. Vuelve cuando tengas monedas y te vendo alguna."
+texto = "# TEXTO PROVISIONAL: saludo de la tienda (se abre el menú al terminar).
+Tendera: ¡Bienvenido a mi puesto, Leonidas! ¿Qué te llevas?"

@@ -23,7 +23,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Menú de ajustes / pausa | Jugabilidad **p. 15** (iconos abajo a la izquierda) | ❌ Pendiente |
 | Menú del inventario | Jugabilidad **p. 17** | ❌ Pendiente |
 | Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ❌ Pendiente (nivel 2) |
-| Tienda del mercader | Ninguna maqueta | ❌ Pendiente: diseñar |
+| Tienda del mercader | Ninguna maqueta | ✅ Hecha (diseño provisional): `scenes/ui/menu_tienda.tscn` |
 | Game over | Jugabilidad p. 8 (solo el texto "game over") | ❌ Pendiente: diseñar |
 | Menú principal / título | Ninguna maqueta | ✅ Hecho (arte provisional: `scenes/ui/menu_principal.tscn`) |
 | Barco: vida del barco | Jugabilidad p. 9, Guión p. 18 (solo el texto) | ❌ Pendiente: diseñar |
@@ -89,6 +89,8 @@ Prioridad para la entrega: la pestaña **Objetos** (comer manzanas es la forma d
 
 ### Tienda del mercader — sin maqueta
 Jugabilidad p. 10 y Guión p. 13 solo dicen que hay NPCs con tienda (burbuja "$") y "tiendas con ítems limitados"; el mercader vende consumibles (manzanas). Propuesta: reutilizar la caja de diálogo con una lista de 2–3 objetos y su precio, y descontar con `EstadoJuego.gastar_monedas()`.
+- **Hecho (2026-11-10):** autoload `Tienda` (`MenuTienda`) sobre `caja_dialogo.png`, en el mismo sitio que el diálogo; pestaña = nombre del vendedor. Renglones 1–2: `> [icono] Manzana (2)   3 mon.` y `Salir` (se desplaza si hay más artículos); renglón 3: descripción o aviso en rojo oscuro (#8a1c12). Las monedas se ven en la placa del HUD, que queda libre a la derecha. Sin monedas para lo más barato, la tendera solo habla (`ComponenteTienda.dialogo_sin_monedas`).
+- Pendiente de la artista: icono de moneda para el precio (ahora "mon.") y, si quiere, un marco propio para la tienda.
 
 ### Game over — sin maqueta
 Jugabilidad p. 8: perder toda la vida = game over; el jugador reaparece en el último punto de control (ya implementado: `Jugador.murio` / `reaparecio`). Falta la pantalla: fundido, texto y "continuar". La animación `morir` de Leonidas ya existe.

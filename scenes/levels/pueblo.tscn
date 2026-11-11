@@ -41,6 +41,11 @@
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera.tres" id="44_dtn"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
+[ext_resource type="Script" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
+[ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
+[ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_sin_monedas.tres" id="50_dsm"]
+[ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
@@ -4402,10 +4407,10 @@ semilla = 8
 [node name="NPCs" type="Node2D" parent="Objetos"]
 y_sort_enabled = true
 
-[node name="Tendedera" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
+[node name="Tendedera" parent="Objetos/NPCs" node_paths=PackedStringArray("tienda") instance=ExtResource("40_npc")]
 position = Vector2(492, 834)
 sprite_frames = ExtResource("41_tnd")
-dialogo = ExtResource("44_dtn")
+tienda = NodePath("Tienda")
 burbuja = 2
 posicion_burbuja = Vector2(0, -36)
 paseo = false
@@ -4423,3 +4428,10 @@ sprite_frames = ExtResource("43_zor")
 dialogo = ExtResource("46_dzo")
 posicion_burbuja = Vector2(0, -42)
 radio_paseo = 40.0
+
+[node name="Tienda" type="Node" parent="Objetos/NPCs/Tendedera"]
+script = ExtResource("47_tie")
+articulos = Array[ExtResource("48_art")]([ExtResource("49_man")])
+dialogo_saludo = ExtResource("44_dtn")
+dialogo_sin_monedas = ExtResource("50_dsm")
+dialogo_despedida = ExtResource("51_dde")

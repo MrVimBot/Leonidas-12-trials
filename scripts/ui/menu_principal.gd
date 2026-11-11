@@ -74,6 +74,7 @@ func _jugar() -> void:
 	t.tween_property(negro, ^"color:a", 1.0, duracion_fundido)
 	await t.finished
 	get_window().content_scale_mode = _modo_original
+	EstadoJuego.reiniciar() # partida nueva: monedas y manzanas a cero
 	get_tree().change_scene_to_file(escena_jugar)
 
 

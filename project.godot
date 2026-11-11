@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 EstadoJuego="*res://autoload/estado_juego.gd"
 Dialogos="*res://scenes/ui/caja_dialogo.tscn"
+Tienda="*res://scenes/ui/menu_tienda.tscn"
 
 [display]
 
