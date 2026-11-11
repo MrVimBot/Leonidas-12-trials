@@ -28,6 +28,8 @@ var barco: Barco = null
 var _cambiando := false
 var _ruta_actual := ""
 var _entrada_actual := ""
+## Zona desde la que se subió al barco: al bajar en la orilla contraria hay premio.
+var _origen_travesia := ""
 
 @onready var mundo: Node2D = $Mundo
 @onready var jugador: Jugador = $Jugador
@@ -50,6 +52,8 @@ func cambiar_zona(ruta: String, entrada: String = "inicio") -> void:
 		return
 	_cambiando = true
 	_bloquear(true)
+	if barco and ruta != _origen_travesia:
+		EstadoJuego.agregar_monedas(floori(barco.vida.vida / 4.0)) # una moneda por corazón entero conservado
 	await _fundir(1.0)
 	_cargar_zona(ruta, entrada)
 	_bloquear(true) # el barco puede ser nuevo
@@ -106,6 +110,8 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 	jugador.global_position = zona_actual.punto_entrada(entrada)
 	jugador.velocity = Vector2.ZERO
 	jugador.punto_control = jugador.global_position # se reaparece al entrar a la zona
+	if zona_actual.modo_barco and ruta != _ruta_actual:
+		_origen_travesia = _ruta_actual
 	_ruta_actual = ruta
 	_entrada_actual = entrada
 
