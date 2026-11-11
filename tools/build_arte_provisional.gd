@@ -28,7 +28,49 @@ func _initialize() -> void:
 	for r in REDUCIR:
 		ok = _reducir(r[0], r[1], r[2], r[3]) and ok
 	ok = _entrada_cueva() and ok
+	ok = _recolorear("roca", "roca_cueva", PALETA_CUEVA) and ok
 	quit(0 if ok else 1)
+
+
+# --- Recoloreados ----------------------------------------------------------------
+
+## Roca de la artista con la paleta de la cueva: sin la hierba ni la sombra verdosa del
+## pasto (no pegan con el suelo #4a4458). Color original → color nuevo (exactos).
+const PALETA_CUEVA := {
+	"cbdbfc": "9a92a8", # luz
+	"a7bbe5": "8a839c", # luz media
+	"b0aeed": "7d7590", # medio
+	"8467c6": "5e566e", # sombra de la roca
+	"3d1695": "2a2438", # contorno
+	"106165": "3b3648", # sombra en el suelo
+	"5fb93b": "5e566e", # hierba clara → sombra de la roca
+	"30914c": "3b3648", # hierba oscura → sombra en el suelo
+}
+
+
+func _recolorear(origen: String, destino: String, paleta: Dictionary) -> bool:
+	var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/entorno/" + origen + ".png"))
+	if img == null or img.is_empty():
+		push_error("No se pudo cargar %s" % origen)
+		return false
+	img.convert(Image.FORMAT_RGBA8)
+	var mapa := {}
+	for k in paleta:
+		mapa[Color(k).to_html(false)] = Color(paleta[k])
+	var sin_cambiar := 0
+	for y in img.get_height():
+		for x in img.get_width():
+			var c := img.get_pixel(x, y)
+			if c.a == 0.0:
+				continue
+			var clave := c.to_html(false)
+			if mapa.has(clave):
+				img.set_pixel(x, y, mapa[clave])
+			else:
+				sin_cambiar += 1
+	if sin_cambiar > 0:
+		push_warning("%s: %d píxeles con colores fuera de la paleta" % [origen, sin_cambiar])
+	return _guardar(img, DIR_SPRITES + destino + ".png")
 
 
 # --- Tiles ---------------------------------------------------------------------

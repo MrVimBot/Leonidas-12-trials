@@ -289,7 +289,7 @@ func _cueva_medusa() -> Constructor:
 	for i in columnas.size():
 		z.deco("Ruinas", "columna_rota_%d" % (i % 3 + 1), _t(columnas[i].x, columnas[i].y), SIN_SOMBRA)
 	for p in [Vector2i(10, 21), Vector2i(44, 8), Vector2i(64, 21)]:
-		z.deco("Ruinas", "roca", _t(p.x, p.y), SIN_SOMBRA)
+		z.deco("Ruinas", "provisional/roca_cueva", _t(p.x, p.y), SIN_SOMBRA)
 	for p in [Vector2i(20, 9), Vector2i(56, 9)]:
 		z.deco("Ruinas", "estatua", _t(p.x, p.y), SIN_SOMBRA)
 
