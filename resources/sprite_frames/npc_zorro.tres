@@ -1,11 +1,11 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://dtlyraqbxnl07"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_espalda.png" id="1_mjub3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_frente.png" id="2_mluml"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/caminar_lado.png" id="3_oynrk"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_espalda.png" id="4_ec40f"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_frente.png" id="5_gj2tx"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_zorro/parado_lado.png" id="6_3jtnu"]
+[ext_resource type="Texture2D" uid="uid://yi0kn5obw7y1" path="res://assets/sprites/strips/npc_zorro/caminar_espalda.png" id="1_mjub3"]
+[ext_resource type="Texture2D" uid="uid://d4frrqmst8323" path="res://assets/sprites/strips/npc_zorro/caminar_frente.png" id="2_mluml"]
+[ext_resource type="Texture2D" uid="uid://8w5ksrt5okcn" path="res://assets/sprites/strips/npc_zorro/caminar_lado.png" id="3_oynrk"]
+[ext_resource type="Texture2D" uid="uid://bcvqo7d1lhbni" path="res://assets/sprites/strips/npc_zorro/parado_espalda.png" id="4_ec40f"]
+[ext_resource type="Texture2D" uid="uid://vypi5tbvlopj" path="res://assets/sprites/strips/npc_zorro/parado_frente.png" id="5_gj2tx"]
+[ext_resource type="Texture2D" uid="uid://bg5vy2jkr2jq7" path="res://assets/sprites/strips/npc_zorro/parado_lado.png" id="6_3jtnu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ui5wk"]
 atlas = ExtResource("1_mjub3")

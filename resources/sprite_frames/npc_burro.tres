@@ -1,11 +1,11 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://vxneqdgclkvq"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_espalda.png" id="1_uv255"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_frente.png" id="2_u6xuo"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/caminar_lado.png" id="3_sjsgh"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_espalda.png" id="4_6321m"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_frente.png" id="5_n5opu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_burro/parado_lado.png" id="6_2ikh8"]
+[ext_resource type="Texture2D" uid="uid://3a72w3ay4ttv" path="res://assets/sprites/strips/npc_burro/caminar_espalda.png" id="1_uv255"]
+[ext_resource type="Texture2D" uid="uid://8xqe3yxuv0i1" path="res://assets/sprites/strips/npc_burro/caminar_frente.png" id="2_u6xuo"]
+[ext_resource type="Texture2D" uid="uid://qbfu8jg46rop" path="res://assets/sprites/strips/npc_burro/caminar_lado.png" id="3_sjsgh"]
+[ext_resource type="Texture2D" uid="uid://drd3srd86n2en" path="res://assets/sprites/strips/npc_burro/parado_espalda.png" id="4_6321m"]
+[ext_resource type="Texture2D" uid="uid://bm7iq55enmsre" path="res://assets/sprites/strips/npc_burro/parado_frente.png" id="5_n5opu"]
+[ext_resource type="Texture2D" uid="uid://cbawhwtegbxld" path="res://assets/sprites/strips/npc_burro/parado_lado.png" id="6_2ikh8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qu1f0"]
 atlas = ExtResource("1_uv255")
