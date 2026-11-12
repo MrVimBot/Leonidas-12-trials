@@ -39,7 +39,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 |---|---|---|---|
 | `Corazones` | (2, 1), arriba a la izquierda | `assets/ui/corazones.png` (61×12, 5 estados cada 12 px: lleno, ¾, ½, ¼, vacío) | Vida en cuartos: `Vida.vida_max = 12` → 3 corazones. Añade corazones solo si sube `vida_max` (un jefe da un corazón extra, Jugabilidad p. 12) |
 | `RanuraObjeto` + `Icono` | (2, 14), debajo de los corazones | `provisional/ranura_objeto.png` 14×14, `provisional/icono_espada.png` | La espada se ve si `jugador.tiene_espada`. En el nivel 2 aquí irá también el **escudo** (Guión p. 24) |
-| `Inventario` | (457, 1), arriba a la derecha | `provisional/bolsa_inventario.png` 17×24, con "[ i ]" | Aún no abre nada (ver menú del inventario) |
+| `Inventario` (el **libro**) | (464, 2), arriba a la derecha | `provisional/icono_libro.png` 14×14 (PROVISIONAL, la artista aún no entrega el sprite) | Solo se ve si `EstadoJuego.tiene_libro` (lo regala Kathita). Aún no abre nada (ver menú del libro). La bolsa de la maqueta (`bolsa_inventario.png`) queda sin uso |
 | `Monedas` (`ContadorMonedas`) | (441, 255), abajo a la derecha | `provisional/placa_dinero.png` 39×12 + dígitos de 4×6 px dibujados en código | Escucha `EstadoJuego.monedas_cambio`, máximo 999 |
 | `BarraEstamina` | Sobre la cabeza de Leonidas (−8, −33 de los pies) | Dibujada en código (16×3) | No sale en la maqueta; solo se ve mientras la estamina no está llena |
 
@@ -73,7 +73,9 @@ Qué contiene cada parte, según el texto de la lámina:
 - **Maldiciones:** facilitan zonas a cambio de un precio. No salen en los niveles 1–2: dejar la pestaña sin contenido o quitarla.
 - **Misiones:** registro de las misiones principales y secundarias (la sirena del nivel 2 da una).
 
-Se abre con la tecla que muestra la bolsa del HUD: **[ i ]** (falta crear la acción `inventario` en el mapa de entradas: I y Select/Back en el mando).
+**El libro de Kathita es este menú:** además de objetos y mapa, debe incluir la función **Guardar partida** (pestaña propia; hoy `EstadoJuego` no se guarda en disco). Solo se abre si `EstadoJuego.tiene_libro`.
+
+Se abre con la tecla [ i ] junto al icono del libro del HUD: (falta crear la acción `inventario` en el mapa de entradas: I y Select/Back en el mando).
 Prioridad para la entrega: la pestaña **Objetos** (comer manzanas es la forma de curarse) y **Misiones**; el mapa puede ser una imagen fija.
 
 ### Vida del jefe (Medusa) — Guión p. 38, Jugabilidad p. 13

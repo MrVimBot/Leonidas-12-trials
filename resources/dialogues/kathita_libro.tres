@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL (lo reescribe el guion). Kathita le regala el libro-inventario.
+Kathita: Casi se me olvida lo más importante. Toma, es un regalo para tu viaje.
+Kathita: Es un libro especial. Ahí podrás guardar lo que recojas por el camino.
+Kathita: También te mostrará el mapa, para que no te pierdas.
+Kathita: Y si escribes en él, quedará anotado hasta dónde has llegado. Así podrás guardar tu partida.
+"

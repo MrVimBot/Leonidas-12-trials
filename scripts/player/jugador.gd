@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal murio
 signal reaparecio
+## Al empezar una voltereta (no si falta estamina).
+signal pirueta_empezada
 
 enum Estado { NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO }
 
@@ -100,6 +102,7 @@ func _pirueta(entrada: Vector2) -> void:
 	# El giro dibujado de "pirueta_lado" va al revés del movimiento: se invierte el espejo.
 	if animador.sufijo() == "lado":
 		animador.sprite.flip_h = not animador.sprite.flip_h
+	pirueta_empezada.emit()
 
 
 func _terminar_pirueta() -> void:

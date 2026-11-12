@@ -41,6 +41,7 @@
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera.tres" id="44_dtn"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
+[ext_resource type="PackedScene" path="res://scenes/cinematics/escena_kathita_libro.tscn" id="46_wvopy"]
 [ext_resource type="Script" uid="uid://bhpbef6aw6ekp" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
 [ext_resource type="Script" uid="uid://c7cvq8uxxjtnx" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
@@ -367,66 +368,66 @@ position = Vector2(1160, 935)
 textura = ExtResource("25_0nbs4")
 sombra = false
 
-[node name="PinoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="PinoNE1" parent="Objetos/Decorados" unique_id=418372542 instance=ExtResource("3_t1f4t")]
 position = Vector2(1480, 452)
 textura = ExtResource("12_aijw0")
 
-[node name="PinoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="PinoNE2" parent="Objetos/Decorados" unique_id=1049408794 instance=ExtResource("3_t1f4t")]
 position = Vector2(1250, 345)
 textura = ExtResource("12_aijw0")
 
-[node name="CipresNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="CipresNE1" parent="Objetos/Decorados" unique_id=130220778 instance=ExtResource("3_t1f4t")]
 position = Vector2(1405, 372)
 textura = ExtResource("14_rqkgi")
 
-[node name="CipresDoradoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="CipresDoradoNE1" parent="Objetos/Decorados" unique_id=1088096748 instance=ExtResource("3_t1f4t")]
 position = Vector2(1525, 425)
 textura = ExtResource("13_xaew7")
 
-[node name="ManzanoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ManzanoNE1" parent="Objetos/Decorados" unique_id=1602178628 instance=ExtResource("3_t1f4t")]
 position = Vector2(1295, 430)
 textura = ExtResource("15_wvopy")
 
-[node name="ManzanoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ManzanoNE2" parent="Objetos/Decorados" unique_id=711584640 instance=ExtResource("3_t1f4t")]
 position = Vector2(1445, 300)
 textura = ExtResource("16_1uqxn")
 
-[node name="ArbustoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ArbustoNE1" parent="Objetos/Decorados" unique_id=47621882 instance=ExtResource("3_t1f4t")]
 position = Vector2(1345, 415)
 textura = ExtResource("23_j5mvb")
 sombra = false
 
-[node name="ArbustoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ArbustoNE2" parent="Objetos/Decorados" unique_id=380236580 instance=ExtResource("3_t1f4t")]
 position = Vector2(1382, 418)
 textura = ExtResource("23_j5mvb")
 sombra = false
 
-[node name="ArbustoNE3" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ArbustoNE3" parent="Objetos/Decorados" unique_id=590551825 instance=ExtResource("3_t1f4t")]
 position = Vector2(1215, 395)
 textura = ExtResource("20_2bgs4")
 sombra = false
 
-[node name="ArbustoNE4" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="ArbustoNE4" parent="Objetos/Decorados" unique_id=597409361 instance=ExtResource("3_t1f4t")]
 position = Vector2(1560, 470)
 textura = ExtResource("20_2bgs4")
 sombra = false
 
-[node name="FloresNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="FloresNE1" parent="Objetos/Decorados" unique_id=853808662 instance=ExtResource("3_t1f4t")]
 position = Vector2(1330, 470)
 textura = ExtResource("24_acfab")
 sombra = false
 
-[node name="FloresNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="FloresNE2" parent="Objetos/Decorados" unique_id=370374885 instance=ExtResource("3_t1f4t")]
 position = Vector2(1430, 435)
 textura = ExtResource("25_0nbs4")
 sombra = false
 
-[node name="FloresNE3" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="FloresNE3" parent="Objetos/Decorados" unique_id=777510447 instance=ExtResource("3_t1f4t")]
 position = Vector2(1255, 440)
 textura = ExtResource("24_acfab")
 sombra = false
 
-[node name="RocaNE" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+[node name="RocaNE" parent="Objetos/Decorados" unique_id=663011324 instance=ExtResource("3_t1f4t")]
 position = Vector2(1500, 360)
 textura = ExtResource("19_374g8")
 sombra = false
@@ -4486,6 +4487,16 @@ dialogo = ExtResource("46_dzo")
 posicion_burbuja = Vector2(0, -42)
 radio_paseo = 40.0
 
+[node name="Eventos" type="Node2D" parent="Objetos" unique_id=694230501]
+
+[node name="EntregaLibro" parent="Objetos/Eventos" unique_id=449316993 instance=ExtResource("46_wvopy")]
+
+[node name="Puerta" parent="Objetos/Eventos/EntregaLibro" index="0"]
+position = Vector2(587, 1113)
+
+[node name="Disparador" parent="Objetos/Eventos/EntregaLibro" index="1"]
+position = Vector2(644, 1156)
+
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0
 
@@ -4538,3 +4549,5 @@ shape = SubResource("RectangleShape2D_sbosq")
 script = ExtResource("34_ymumi")
 capa = NodePath("../Suelo")
 semilla = 8
+
+[editable path="Objetos/Eventos/EntregaLibro"]

@@ -1,10 +1,10 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://bioquihnq3yci"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/cinematica/caminar_sin_nada.png" id="1_so3wp"]
-[ext_resource type="Texture2D" path="res://assets/sprites/cinematica/mama_caminando_con_regalo.png" id="2_i4mvm"]
-[ext_resource type="Texture2D" path="res://assets/sprites/cinematica/dar_regalo.png" id="3_22vax"]
-[ext_resource type="Texture2D" path="res://assets/sprites/cinematica/parada_sin_nada.png" id="4_4bm3x"]
-[ext_resource type="Texture2D" path="res://assets/sprites/cinematica/mama_parada.png" id="5_lan5j"]
+[ext_resource type="Texture2D" uid="uid://cce6j2opwyha5" path="res://assets/sprites/cinematica/caminar_sin_nada.png" id="1_so3wp"]
+[ext_resource type="Texture2D" uid="uid://dui8rvncceb4o" path="res://assets/sprites/cinematica/mama_caminando_con_regalo.png" id="2_i4mvm"]
+[ext_resource type="Texture2D" uid="uid://d0xt5yahl4i3h" path="res://assets/sprites/cinematica/dar_regalo.png" id="3_22vax"]
+[ext_resource type="Texture2D" uid="uid://c6mkmgiucg6jm" path="res://assets/sprites/cinematica/parada_sin_nada.png" id="4_4bm3x"]
+[ext_resource type="Texture2D" uid="uid://da05xjmu4xv3o" path="res://assets/sprites/cinematica/mama_parada.png" id="5_lan5j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dmoh8"]
 atlas = ExtResource("1_so3wp")

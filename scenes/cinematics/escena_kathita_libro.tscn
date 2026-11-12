@@ -1,0 +1,43 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/cinematics/escena_kathita_libro.gd" id="1_esc"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/cinematica_mama.tres" id="3_mam"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_llamada.tres" id="4_lla"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_libro.tres" id="5_lib"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_voltereta.tres" id="6_vol"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_despedida.tres" id="7_des"]
+
+[sub_resource type="RectangleShape2D" id="Forma_disparador"]
+size = Vector2(24, 64)
+
+[node name="EntregaLibro" type="Node2D"]
+script = ExtResource("1_esc")
+dialogo_llamada = ExtResource("4_lla")
+dialogo_libro = ExtResource("5_lib")
+dialogo_voltereta = ExtResource("6_vol")
+dialogo_despedida = ExtResource("7_des")
+
+[node name="Puerta" type="Marker2D" parent="."]
+
+[node name="Disparador" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="Disparador"]
+shape = SubResource("Forma_disparador")
+
+[node name="Kathita" type="Node2D" parent="."]
+visible = false
+
+[node name="Sombra" type="Node2D" parent="Kathita"]
+position = Vector2(0, -1)
+script = ExtResource("2_som")
+tamano = Vector2i(14, 4)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Kathita"]
+sprite_frames = ExtResource("3_mam")
+animation = &"parada"
+centered = false
+offset = Vector2(-25, -50)

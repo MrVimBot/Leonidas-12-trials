@@ -28,6 +28,10 @@ signal termino
 @export var ancho_retrato := 50
 
 var abierto := false
+## Una escena con varios diálogos seguidos lo pone en true para que el jugador no
+## recupere el control entre uno y otro; al acabar, la escena lo vuelve a poner en
+## false y desbloquea al jugador ella misma (`desbloquear_jugador()`).
+var mantener_bloqueo := false
 
 var _paginas: Array[Dictionary] = []
 var _indice := 0
@@ -145,6 +149,13 @@ func _cerrar() -> void:
 	# "interactuar" y volvería a abrir la conversación.
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	if not abierto and not mantener_bloqueo:
+		_bloquear_jugador(false)
+
+
+## Para quien usó `mantener_bloqueo`: devuelve el control al jugador.
+func desbloquear_jugador() -> void:
+	mantener_bloqueo = false
 	if not abierto:
 		_bloquear_jugador(false)
 

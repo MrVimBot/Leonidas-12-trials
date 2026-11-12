@@ -18,6 +18,9 @@ var monedas := 0
 var manzanas := 0
 ## El tutorial del barco (y la calibración del micrófono) sale solo la primera vez.
 var tutorial_barco_visto := false
+## El libro que le regala Kathita al salir de casa: es el inventario (objetos), el mapa
+## y el guardado de la partida. El HUD solo muestra su icono cuando se tiene.
+var tiene_libro := false
 
 
 ## Empieza una partida nueva.
@@ -25,6 +28,7 @@ func reiniciar() -> void:
 	monedas = 0
 	manzanas = 0
 	tutorial_barco_visto = false
+	tiene_libro = false
 	monedas_cambio.emit(monedas)
 	manzanas_cambio.emit(manzanas)
 

@@ -3,7 +3,7 @@ extends CanvasLayer
 ## Interfaz durante el juego (scenes/ui/hud.tscn), según la lámina "Interfaz" de
 ## docs/pdf/Jugabilidad.pdf (p. 16):
 ##   arriba izq.: corazones y, debajo, la ranura del objeto equipado
-##   arriba der.: bolsa del inventario con la tecla [ i ]
+##   arriba der.: icono del libro (inventario + mapa + guardar), solo si se tiene
 ##   abajo der.:  placa de dinero
 ## La estamina no sale en la maqueta: se muestra como una barrita sobre la cabeza de
 ## Leonidas, solo mientras no está llena.
@@ -35,6 +35,7 @@ var _game: Game = null
 @onready var corazones: HBoxContainer = $Corazones
 @onready var icono_objeto: TextureRect = $RanuraObjeto/Icono
 @onready var barra_estamina: BarraEstamina = $BarraEstamina
+@onready var libro: CanvasItem = $Inventario
 @onready var monedas: ContadorMonedas = $Monedas
 @onready var ranura_objeto: Control = $RanuraObjeto
 @onready var medidor_viento: BarraEstamina = $MedidorViento
@@ -101,6 +102,8 @@ func _process(delta: float) -> void:
 		return
 	# Objeto equipado: de momento solo la espada (la dan los sabios).
 	icono_objeto.visible = jugador.tiene_espada
+	# El libro (inventario + mapa + guardar) lo da Kathita al salir de casa.
+	libro.visible = EstadoJuego.tiene_libro
 
 	# Estamina sobre la cabeza de Leonidas; se desvanece un rato después de llenarse.
 	var en_pantalla := jugador.get_global_transform_with_canvas().origin

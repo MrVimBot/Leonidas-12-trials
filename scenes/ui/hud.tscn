@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/ui/contador_monedas.gd" id="3_mon"]
 [ext_resource type="Texture2D" path="res://assets/ui/provisional/ranura_objeto.png" id="4_ran"]
 [ext_resource type="Texture2D" path="res://assets/ui/provisional/icono_espada.png" id="5_esp"]
-[ext_resource type="Texture2D" path="res://assets/ui/provisional/bolsa_inventario.png" id="6_bol"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/icono_libro.png" id="6_bol"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 5
@@ -36,10 +36,11 @@ mouse_filter = 2
 texture = ExtResource("5_esp")
 
 [node name="Inventario" type="TextureRect" parent="."]
-offset_left = 457.0
-offset_top = 1.0
-offset_right = 474.0
-offset_bottom = 25.0
+visible = false
+offset_left = 464.0
+offset_top = 2.0
+offset_right = 478.0
+offset_bottom = 16.0
 mouse_filter = 2
 texture = ExtResource("6_bol")
 

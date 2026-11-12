@@ -142,6 +142,15 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - En el pueblo: `Objetos/NPCs/Tendedera/Tienda` vende manzanas. Comer la manzana (curar) aún no está.
 - Para probar con pulsaciones simuladas (`Input.action_press`): hacer `await process_frame` justo antes de pulsar, o la pulsación cae después del `_process` del diálogo/tienda y no se lee.
 
+## Escena de Kathita: el libro (hecho)
+> Plan: `docs/design/plan_entrega_libro_kathita.md`.
+- Al salir de casa, `scenes/cinematics/escena_kathita_libro.tscn` + `scripts/cinematics/escena_kathita_libro.gd` (`class_name EscenaKathitaLibro`) está instanciada en `pueblo.tscn` (`Objetos/Eventos/EntregaLibro`, con Editable Children para colocar `Puerta` (587, 1113) y `Disparador` (644, 1156); añadida a mano/por MCP: no volver a ejecutar `build_pueblo.gd`). Al cruzar el `Disparador` (Area2D, máscara jugador) Kathita llama a Leonidas, sale por la puerta con `cinematica_mama.tres` (vista lateral, mira a la izquierda: `flip_h` al ir a la derecha), le regala el libro, le enseña la voltereta y espera a su primera (`Jugador.pirueta_empezada`, solo si hay estamina); se despide y vuelve a casa. Si ya `EstadoJuego.tiene_libro`, se libera sola.
+- Textos PROVISIONALES: `resources/dialogues/kathita_{llamada,libro,voltereta,despedida}.tres` y `texto_obtenido` (export). El aviso dice "Pulsa [I]", pero **aún no existe la acción `inventario` ni el menú del libro**.
+- **`EstadoJuego.tiene_libro`**: el libro = inventario + mapa + guardar partida. `reiniciar()` lo pone a false. El HUD (`Inventario`) solo se ve con él; icono PROVISIONAL `assets/ui/provisional/icono_libro.png`.
+- **`Dialogos.mantener_bloqueo`**: una escena con varios diálogos lo pone a true para que `CajaDialogo._cerrar()` no desbloquee al jugador entre uno y otro; al acabar, `Dialogos.desbloquear_jugador()`.
+- Kathita se pasa (reparent) al nodo con `y_sort_enabled` (Objetos) para ordenarse por Y con Leonidas y la casa.
+- Pendiente: menú del libro (objetos, mapa, guardar, misiones), guardado en disco, escena de los sabios (y `Jugador.tiene_espada` a false: hoy `true` para pruebas), sprites cenitales de Kathita, sprite del libro de la artista.
+
 ## Cinemática inicial (hecho)
 - **Se abre desde el menú principal** (Jugar): `scenes/cinematics/cinematica_inicial.tscn` + `scripts/cinematics/cinematica_inicial.gd`. Al terminar (o con **Esc**, `ui_cancel`) carga `escena_siguiente` = `game.tscn`. Sigue el video del prototipo (`Assets_guion_todo/WhatsApp Video 2026-11-05…mp4`, 2:40):
   1. Ilustración del cumpleaños (`assets/backgrounds/cinematica/fondo_2.png`, 1920×1080) + diálogo.
@@ -166,7 +175,7 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - Exportar a macOS (cuando haya `export_presets.cfg`): el preset necesita la descripción de uso del micrófono y el permiso de entrada de audio; en web el micro exige HTTPS y un gesto (la alternativa de teclado lo cubre).
 
 ## Assets que faltan o no se vieron
-Sprite de monedas, ranura/ítem de la espada, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, jefe Medusa. (Remolino y tiburón ya están; las rocas del mar siguen siendo provisionales.) `todos_los_assets.aseprite` (1000×600, 1 frame, 1 capa) tiene: tiles (franja arriba a la izquierda), casas, templo redondo, casa-tocón, puesto de mercado, árboles de manzanas, pinos, cipreses, arbustos, flores, rocas, troncos, columnas, ruinas, estatua, cartel. Las PNG de `assets/sprites/environment/` son ilustraciones grandes (~600 px), no pixel art a escala.
+Sprite de monedas, sprite del libro de Kathita (hoy `icono_libro.png` provisional), ranura/ítem de la espada, arbustos, enemigo Tocotón, ítem de la espada, árbol de manzanas, tiles del pueblo/bosque/playa, jefe Medusa. (Remolino y tiburón ya están; las rocas del mar siguen siendo provisionales.) `todos_los_assets.aseprite` (1000×600, 1 frame, 1 capa) tiene: tiles (franja arriba a la izquierda), casas, templo redondo, casa-tocón, puesto de mercado, árboles de manzanas, pinos, cipreses, arbustos, flores, rocas, troncos, columnas, ruinas, estatua, cartel. Las PNG de `assets/sprites/environment/` son ilustraciones grandes (~600 px), no pixel art a escala.
 
 ## Reglas del repo
 - GitHub rechaza archivos >100 MB. **Fuera del repo** (están en la carpeta externa `Leonidas_12_pruebas/Assets_guion_todo`): el PDF "Guión Multimedia" (146 MB), el video del prototipo (110 MB), `playa entero.png` (16 MB) y los 360 PNG de "Fondo con puesta sol" (~430 MB; el juego usa los fotogramas clave de `atardecer/`, y `assets/backgrounds/cinematica/Untitled_*.png` está en `.gitignore`). Si hacen falta, usar Git LFS.

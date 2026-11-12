@@ -8,6 +8,10 @@ Durante este trayecto aparecen indicaciones breves en pantalla que enseñan prog
 
 La interfaz permanece sencilla durante la exploración. En pantalla se muestra un **indicador de vida**, representado mediante corazones, además de un **contador de monedas** y el objeto o herramienta que Leonidas tenga disponible en ese momento. Si recibe daño de un enemigo o de un peligro ambiental, pierde parte de su vida. Al quedarse sin corazones, el jugador debe reiniciar desde el último punto de control.
 
+### Kathita entrega el libro (decisión del equipo, se añade al diseño del PDF)
+
+Al salir de casa, cuando Leonidas se aleja unos pasos, **su madre Kathita lo llama**, sale y le regala un **libro**. El libro es su **inventario** y reúne tres funciones: **guardar la partida**, **inventario de objetos** y **mapa**. Kathita aprovecha para enseñarle la **voltereta** (tutorial integrado): no sigue hasta que el jugador la hace una vez. La **espada** y la misión siguen dándolas los **sabios** (sin cambios). Implementado en `scenes/cinematics/escena_kathita_libro.tscn` (textos provisionales).
+
 ### Encuentro con los sabios
 
 Una vez aprendido el movimiento y las interacciones básicas, Leonidas llega al lugar donde se encuentran los sabios. Al acercarse a ellos se activa un diálogo/cinemática breve en la que recibe su **primera misión principal: encontrar y derrotar a Medusa**.
