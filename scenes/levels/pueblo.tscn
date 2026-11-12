@@ -367,6 +367,70 @@ position = Vector2(1160, 935)
 textura = ExtResource("25_0nbs4")
 sombra = false
 
+[node name="PinoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1480, 452)
+textura = ExtResource("12_aijw0")
+
+[node name="PinoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1250, 345)
+textura = ExtResource("12_aijw0")
+
+[node name="CipresNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1405, 372)
+textura = ExtResource("14_rqkgi")
+
+[node name="CipresDoradoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1525, 425)
+textura = ExtResource("13_xaew7")
+
+[node name="ManzanoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1295, 430)
+textura = ExtResource("15_wvopy")
+
+[node name="ManzanoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1445, 300)
+textura = ExtResource("16_1uqxn")
+
+[node name="ArbustoNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1345, 415)
+textura = ExtResource("23_j5mvb")
+sombra = false
+
+[node name="ArbustoNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1382, 418)
+textura = ExtResource("23_j5mvb")
+sombra = false
+
+[node name="ArbustoNE3" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1215, 395)
+textura = ExtResource("20_2bgs4")
+sombra = false
+
+[node name="ArbustoNE4" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1560, 470)
+textura = ExtResource("20_2bgs4")
+sombra = false
+
+[node name="FloresNE1" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1330, 470)
+textura = ExtResource("24_acfab")
+sombra = false
+
+[node name="FloresNE2" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1430, 435)
+textura = ExtResource("25_0nbs4")
+sombra = false
+
+[node name="FloresNE3" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1255, 440)
+textura = ExtResource("24_acfab")
+sombra = false
+
+[node name="RocaNE" parent="Objetos/Decorados" instance=ExtResource("3_t1f4t")]
+position = Vector2(1500, 360)
+textura = ExtResource("19_374g8")
+sombra = false
+
 [node name="Cartel" parent="Objetos" unique_id=1103964423 instance=ExtResource("3_t1f4t")]
 position = Vector2(773, 1095)
 textura = ExtResource("26_odgk1")
