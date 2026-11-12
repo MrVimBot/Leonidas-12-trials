@@ -53,7 +53,7 @@ func _ready() -> void:
 	vida.murio.connect(_al_hundirse)
 	movimiento.choco.connect(_al_chocar)
 	animador.mirar(rumbo)
-	animador.reproducir(&"barco_quieto")
+	_reproducir(&"barco_quieto")
 
 
 func _physics_process(delta: float) -> void:
@@ -98,13 +98,21 @@ func _animar() -> void:
 		return
 	var rapidez := velocity.length()
 	if rapidez > 8.0 and estado != Estado.BLOQUEADO:
-		animador.reproducir(&"barco_moviendo")
+		_reproducir(&"barco_moviendo")
 		sprite.speed_scale = lerpf(0.6, 1.6, clampf(rapidez / velocidad_viento, 0.0, 1.0))
 	else:
-		animador.reproducir(&"barco_quieto")
+		_reproducir(&"barco_quieto")
 		sprite.speed_scale = 1.0
 	if estela:
 		estela.emitting = rapidez > 40.0 and estado == Estado.NAVEGANDO
+
+
+## Las vistas laterales del barco están dibujadas mirando a la DERECHA (el resto de
+## `leonidas_mini` mira a la izquierda): se invierte el espejo del animador.
+func _reproducir(base: StringName) -> void:
+	animador.reproducir(base)
+	if animador.sufijo() == "lado":
+		sprite.flip_h = not sprite.flip_h
 
 
 func _al_chocar(colision: KinematicCollision2D) -> void:
@@ -134,7 +142,7 @@ func _al_hundirse() -> void:
 	hurtbox.set_deferred(&"monitorable", false)
 	if estela:
 		estela.emitting = false
-	animador.reproducir(&"barco_quieto")
+	_reproducir(&"barco_quieto")
 	var t := create_tween().set_parallel()
 	t.tween_property(sprite, ^"position:y", sprite.position.y + 6.0, 0.8)
 	t.tween_property(sprite, ^"modulate:a", 0.0, 0.8)
@@ -148,7 +156,7 @@ func set_bloqueado(bloqueado: bool) -> void:
 	estado = Estado.BLOQUEADO if bloqueado else Estado.NAVEGANDO
 	if bloqueado:
 		movimiento.detener()
-		animador.reproducir(&"barco_quieto")
+		_reproducir(&"barco_quieto")
 
 
 ## Fija el rumbo y la orientación inicial (al aparecer en una entrada).
@@ -158,4 +166,4 @@ func mirar(dir: Vector2) -> void:
 	rumbo = dir.normalized()
 	if animador:
 		animador.mirar(dir)
-		animador.reproducir(&"barco_quieto")
+		_reproducir(&"barco_quieto")
