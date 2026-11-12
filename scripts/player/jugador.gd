@@ -97,6 +97,9 @@ func _pirueta(entrada: Vector2) -> void:
 	if atraviesa_obstaculos_bajos:
 		set_collision_mask_value(CAPA_OBSTACULO_BAJO, false)
 	animador.reproducir(&"pirueta", true)
+	# El giro dibujado de "pirueta_lado" va al revés del movimiento: se invierte el espejo.
+	if animador.sufijo() == "lado":
+		animador.sprite.flip_h = not animador.sprite.flip_h
 
 
 func _terminar_pirueta() -> void:
