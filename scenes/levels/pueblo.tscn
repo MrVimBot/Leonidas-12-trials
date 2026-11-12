@@ -35,14 +35,14 @@
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="33_vse4p"]
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="34_ymumi"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/npc.tscn" id="40_npc"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tendedera.tres" id="41_tnd"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/npc_burro.tres" id="42_bur"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/npc_zorro.tres" id="43_zor"]
+[ext_resource type="SpriteFrames" uid="uid://ccgkff3xce42m" path="res://resources/sprite_frames/tendedera.tres" id="41_tnd"]
+[ext_resource type="SpriteFrames" uid="uid://vxneqdgclkvq" path="res://resources/sprite_frames/npc_burro.tres" id="42_bur"]
+[ext_resource type="SpriteFrames" uid="uid://dtlyraqbxnl07" path="res://resources/sprite_frames/npc_zorro.tres" id="43_zor"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera.tres" id="44_dtn"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
-[ext_resource type="Script" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
+[ext_resource type="Script" uid="uid://bhpbef6aw6ekp" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
+[ext_resource type="Script" uid="uid://c7cvq8uxxjtnx" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_sin_monedas.tres" id="50_dsm"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
@@ -51,14 +51,14 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cest"]
+size = Vector2(30, 36)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_amysx"]
 size = Vector2(300, 281)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rayou"]
 size = Vector2(300, 281)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2xvp"]
-size = Vector2(72, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_csuro"]
 size = Vector2(300, 121)
@@ -66,11 +66,11 @@ size = Vector2(300, 121)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_csure"]
 size = Vector2(300, 121)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2xvp"]
+size = Vector2(72, 24)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbosq"]
 size = Vector2(72, 16)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cest"]
-size = Vector2(30, 36)
 
 [node name="Pueblo" type="Node2D" unique_id=287964049 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
@@ -380,16 +380,16 @@ posicion_burbuja = Vector2(0, -42)
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_xr1lb")
 
-[node name="CartelEste" parent="Objetos" instance=ExtResource("3_t1f4t")]
+[node name="CartelEste" parent="Objetos" unique_id=1246115923 instance=ExtResource("3_t1f4t")]
 position = Vector2(1716, 700)
 textura = ExtResource("26_odgk1")
 
-[node name="ZonaDialogo" type="Area2D" parent="Objetos/CartelEste"]
+[node name="ZonaDialogo" type="Area2D" parent="Objetos/CartelEste" unique_id=1965488375]
 script = ExtResource("27_jndu0")
 dialogo = ExtResource("52_ccc")
 posicion_burbuja = Vector2(0, -42)
 
-[node name="Forma" type="CollisionShape2D" parent="Objetos/CartelEste/ZonaDialogo"]
+[node name="Forma" type="CollisionShape2D" parent="Objetos/CartelEste/ZonaDialogo" unique_id=1342514867]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_cest")
 
@@ -4390,6 +4390,38 @@ position = Vector2(1836, 1507)
 textura = ExtResource("12_aijw0")
 solido = false
 
+[node name="NPCs" type="Node2D" parent="Objetos" unique_id=1001258301]
+y_sort_enabled = true
+
+[node name="Tendedera" parent="Objetos/NPCs" unique_id=1196004937 node_paths=PackedStringArray("tienda") instance=ExtResource("40_npc")]
+position = Vector2(492, 834)
+sprite_frames = ExtResource("41_tnd")
+tienda = NodePath("Tienda")
+burbuja = 2
+posicion_burbuja = Vector2(0, -36)
+paseo = false
+mirar_al_hablar = false
+
+[node name="Tienda" type="Node" parent="Objetos/NPCs/Tendedera" unique_id=464857924]
+script = ExtResource("47_tie")
+articulos = Array[ExtResource("48_art")]([ExtResource("49_man")])
+dialogo_saludo = ExtResource("44_dtn")
+dialogo_sin_monedas = ExtResource("50_dsm")
+dialogo_despedida = ExtResource("51_dde")
+
+[node name="Burro" parent="Objetos/NPCs" unique_id=24264177 instance=ExtResource("40_npc")]
+position = Vector2(553, 664)
+sprite_frames = ExtResource("42_bur")
+dialogo = ExtResource("45_dbu")
+radio_paseo = 40.0
+
+[node name="Zorro" parent="Objetos/NPCs" unique_id=492106820 instance=ExtResource("40_npc")]
+position = Vector2(1560, 928)
+sprite_frames = ExtResource("43_zor")
+dialogo = ExtResource("46_dzo")
+posicion_burbuja = Vector2(0, -42)
+radio_paseo = 40.0
+
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0
 
@@ -4401,11 +4433,11 @@ shape = SubResource("RectangleShape2D_amysx")
 position = Vector2(1106, 76.5)
 shape = SubResource("RectangleShape2D_rayou")
 
-[node name="CaminoSurOeste" type="CollisionShape2D" parent="Limites"]
+[node name="CaminoSurOeste" type="CollisionShape2D" parent="Limites" unique_id=1719176859]
 position = Vector2(734, 1475.5)
 shape = SubResource("RectangleShape2D_csuro")
 
-[node name="CaminoSurEste" type="CollisionShape2D" parent="Limites"]
+[node name="CaminoSurEste" type="CollisionShape2D" parent="Limites" unique_id=2065092797]
 position = Vector2(1106, 1475.5)
 shape = SubResource("RectangleShape2D_csure")
 
@@ -4417,7 +4449,7 @@ position = Vector2(586, 1127)
 [node name="desde_casa_arbol" type="Marker2D" parent="Entradas" unique_id=1745217607]
 position = Vector2(920, 40)
 
-[node name="desde_bosque" type="Marker2D" parent="Entradas"]
+[node name="desde_bosque" type="Marker2D" parent="Entradas" unique_id=1599096622]
 position = Vector2(920, 1428)
 
 [node name="SalidaCasaArbol" type="Area2D" parent="." unique_id=161310519]
@@ -4429,48 +4461,16 @@ entrada_destino = "desde_pueblo"
 [node name="Forma" type="CollisionShape2D" parent="SalidaCasaArbol" unique_id=1438352482]
 shape = SubResource("RectangleShape2D_i2xvp")
 
-[node name="SalidaBosque" type="Area2D" parent="."]
+[node name="SalidaBosque" type="Area2D" parent="." unique_id=1981982440]
 position = Vector2(920, 1464)
 script = ExtResource("33_vse4p")
 zona_destino = "res://scenes/levels/bosque.tscn"
 entrada_destino = "desde_pueblo"
 
-[node name="Forma" type="CollisionShape2D" parent="SalidaBosque"]
+[node name="Forma" type="CollisionShape2D" parent="SalidaBosque" unique_id=1192938360]
 shape = SubResource("RectangleShape2D_sbosq")
 
 [node name="VariadorPasto" type="Node" parent="." unique_id=1770927585 node_paths=PackedStringArray("capa")]
 script = ExtResource("34_ymumi")
 capa = NodePath("../Suelo")
 semilla = 8
-
-[node name="NPCs" type="Node2D" parent="Objetos"]
-y_sort_enabled = true
-
-[node name="Tendedera" parent="Objetos/NPCs" node_paths=PackedStringArray("tienda") instance=ExtResource("40_npc")]
-position = Vector2(492, 834)
-sprite_frames = ExtResource("41_tnd")
-tienda = NodePath("Tienda")
-burbuja = 2
-posicion_burbuja = Vector2(0, -36)
-paseo = false
-mirar_al_hablar = false
-
-[node name="Burro" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
-position = Vector2(553, 664)
-sprite_frames = ExtResource("42_bur")
-dialogo = ExtResource("45_dbu")
-radio_paseo = 40.0
-
-[node name="Zorro" parent="Objetos/NPCs" instance=ExtResource("40_npc")]
-position = Vector2(1560, 928)
-sprite_frames = ExtResource("43_zor")
-dialogo = ExtResource("46_dzo")
-posicion_burbuja = Vector2(0, -42)
-radio_paseo = 40.0
-
-[node name="Tienda" type="Node" parent="Objetos/NPCs/Tendedera"]
-script = ExtResource("47_tie")
-articulos = Array[ExtResource("48_art")]([ExtResource("49_man")])
-dialogo_saludo = ExtResource("44_dtn")
-dialogo_sin_monedas = ExtResource("50_dsm")
-dialogo_despedida = ExtResource("51_dde")
