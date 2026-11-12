@@ -42,6 +42,7 @@
 [ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_kathita_libro.tscn" id="46_wvopy"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="47_1uqxn"]
 [ext_resource type="Script" uid="uid://bhpbef6aw6ekp" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
 [ext_resource type="Script" uid="uid://c7cvq8uxxjtnx" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
@@ -4496,6 +4497,13 @@ position = Vector2(587, 1113)
 
 [node name="Disparador" parent="Objetos/Eventos/EntregaLibro" index="1"]
 position = Vector2(644, 1156)
+
+[node name="BarreraNorte" parent="Objetos/Eventos" unique_id=271124792 instance=ExtResource("47_1uqxn")]
+position = Vector2(920, 240)
+
+[node name="BarreraSur" parent="Objetos/Eventos" unique_id=160869627 instance=ExtResource("47_1uqxn")]
+position = Vector2(920, 1300)
+direccion_retroceso = Vector2(0, -1)
 
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0

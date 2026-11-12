@@ -23,6 +23,11 @@ signal modo_cambio(en_barco: bool, vida: ComponenteVida)
 @export var escena_barco: PackedScene = preload("res://scenes/player/barco.tscn")
 @export var dialogo_tutorial_barco: Dialogo = preload("res://resources/dialogues/tutorial_barco.tres")
 
+@export_group("Depuración")
+## Empieza como si los sabios ya hubieran dado la misión (las puertas del pueblo dejan
+## pasar). Para probar el bosque y la playa mientras no exista la escena de los sabios.
+@export var depurar_mision_recibida := false
+
 var zona_actual: Zona = null
 var barco: Barco = null
 var _cambiando := false
@@ -39,6 +44,8 @@ var _origen_travesia := ""
 
 func _ready() -> void:
 	add_to_group(&"game")
+	if depurar_mision_recibida:
+		EstadoJuego.mision_recibida = true
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	_cargar_zona(zona_inicial, entrada_inicial)

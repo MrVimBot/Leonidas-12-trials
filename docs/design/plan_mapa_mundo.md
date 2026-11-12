@@ -383,4 +383,6 @@ CLAUDE.md                                    (sección Mundo)
 
 ## 11. Pendiente para después (no es parte de este plan)
 
+- **Hecho después:** las puertas norte y sur del pueblo tienen una `BarreraMision` (Zeus no deja salir hasta que los sabios den la misión, `EstadoJuego.mision_recibida`). No afecta a `verificar_zonas.gd` (son Area2D).
+
 Minijuego del barco (sprites `barco_*` de `leonidas_mini`, `remolino.aseprite`, `tiburon.aseprite` ya existen), NPC de la playa que explica el barco, sabios y entrega de la espada, mecanismo y cíclopes de la cueva, Medusa, interior de la casa árbol, Tocotón. Pedir a la artista: tiles de cueva, mar navegable, muelle, transiciones arena↔pasto y orillas, palmeras y rocas en pixel art, boca de la cueva.

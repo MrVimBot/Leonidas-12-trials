@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/barrera_mision.gd" id="1_bar"]
+[ext_resource type="Resource" path="res://resources/dialogues/zeus_salida_bloqueada.tres" id="2_zeus"]
+[ext_resource type="Resource" path="res://resources/dialogues/zeus_salida_repetida.tres" id="3_zeus"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bar"]
+size = Vector2(104, 16)
+
+[node name="BarreraMision" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_bar")
+dialogo = ExtResource("2_zeus")
+dialogo_repetido = ExtResource("3_zeus")
+
+[node name="Forma" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bar")

@@ -21,6 +21,11 @@ var tutorial_barco_visto := false
 ## El libro que le regala Kathita al salir de casa: es el inventario (objetos), el mapa
 ## y el guardado de la partida. El HUD solo muestra su icono cuando se tiene.
 var tiene_libro := false
+## La activan los sabios del templo (misión + espada). Hasta entonces Zeus no deja
+## salir del pueblo (`BarreraMision` en sus puertas).
+var mision_recibida := false
+## Cuántas veces ha detenido Zeus a Leonidas en una puerta (la 1.ª, diálogo largo).
+var avisos_zeus := 0
 
 
 ## Empieza una partida nueva.
@@ -29,6 +34,8 @@ func reiniciar() -> void:
 	manzanas = 0
 	tutorial_barco_visto = false
 	tiene_libro = false
+	mision_recibida = false
+	avisos_zeus = 0
 	monedas_cambio.emit(monedas)
 	manzanas_cambio.emit(manzanas)
 
