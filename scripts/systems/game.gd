@@ -46,6 +46,7 @@ func _ready() -> void:
 	add_to_group(&"game")
 	if depurar_mision_recibida:
 		EstadoJuego.mision_recibida = true
+		EstadoJuego.voltereta_aprendida = true
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	_cargar_zona(zona_inicial, entrada_inicial)

@@ -7,7 +7,9 @@ extends Node2D
 ##
 ## Hijos:
 ##   Puerta      Marker2D: de dónde sale y adónde vuelve Kathita (sus pies).
-##   Disparador  Area2D (máscara: jugador): al cruzarlo empieza la escena.
+##   Disparador*  Area2D (máscara: jugador), uno por cada lado por el que Leonidas puede
+##               alejarse de casa (Disparador al este, DisparadorOeste al oeste): al cruzar
+##               cualquiera empieza la escena.
 ##   Kathita     Node2D (oculto) con Sombra y Sprite (cinematica_mama.tres, vista lateral).
 ## No hace nada si ya se tiene el libro (`EstadoJuego.tiene_libro`): se libera sola.
 ## Los textos son PROVISIONALES (resources/dialogues/kathita_*.tres, los edita el guion).
@@ -31,7 +33,6 @@ extends Node2D
 var _en_curso := false
 
 @onready var puerta: Marker2D = $Puerta
-@onready var disparador: Area2D = $Disparador
 @onready var kathita: Node2D = $Kathita
 @onready var sprite: AnimatedSprite2D = $Kathita/Sprite
 
@@ -42,7 +43,9 @@ func _ready() -> void:
 		return
 	kathita.visible = false
 	kathita.modulate.a = 0.0
-	disparador.body_entered.connect(_al_entrar)
+	for h in get_children():
+		if h is Area2D:
+			h.body_entered.connect(_al_entrar)
 
 
 func _al_entrar(cuerpo: Node2D) -> void:
@@ -53,7 +56,9 @@ func _al_entrar(cuerpo: Node2D) -> void:
 
 
 func _reproducir(jugador: Jugador) -> void:
-	disparador.set_deferred(&"monitoring", false)
+	for h in get_children():
+		if h is Area2D:
+			h.set_deferred(&"monitoring", false)
 	Dialogos.mantener_bloqueo = true
 	jugador.animador.mirar(puerta.global_position - jugador.global_position)
 	jugador.set_bloqueado(true)
@@ -93,6 +98,7 @@ func _reproducir(jugador: Jugador) -> void:
 	await get_tree().process_frame # que la pulsación que cerró el cuadro no cuente
 	Dialogos.desbloquear_jugador()
 	await jugador.pirueta_empezada
+	EstadoJuego.voltereta_aprendida = true # abre la barrera del cartel
 	await get_tree().create_timer(0.8).timeout # que termine la voltereta
 	await Dialogos.mostrar(dialogo_despedida)
 

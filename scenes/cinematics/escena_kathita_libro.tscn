@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/cinematics/escena_kathita_libro.gd" id="1_esc"]
 [ext_resource type="Script" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
@@ -9,7 +9,10 @@
 [ext_resource type="Resource" path="res://resources/dialogues/kathita_despedida.tres" id="7_des"]
 
 [sub_resource type="RectangleShape2D" id="Forma_disparador"]
-size = Vector2(24, 64)
+size = Vector2(24, 180)
+
+[sub_resource type="RectangleShape2D" id="Forma_disparador_oeste"]
+size = Vector2(24, 200)
 
 [node name="EntregaLibro" type="Node2D"]
 script = ExtResource("1_esc")
@@ -27,6 +30,14 @@ monitorable = false
 
 [node name="Forma" type="CollisionShape2D" parent="Disparador"]
 shape = SubResource("Forma_disparador")
+
+[node name="DisparadorOeste" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="DisparadorOeste"]
+shape = SubResource("Forma_disparador_oeste")
 
 [node name="Kathita" type="Node2D" parent="."]
 visible = false

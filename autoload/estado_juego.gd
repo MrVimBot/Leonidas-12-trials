@@ -24,6 +24,9 @@ var tiene_libro := false
 ## La activan los sabios del templo (misión + espada). Hasta entonces Zeus no deja
 ## salir del pueblo (`BarreraMision` en sus puertas).
 var mision_recibida := false
+## Kathita le enseña la voltereta al salir de casa; hasta que la hace una vez, una
+## `BarreraMision` (requisito VOLTERETA) no le deja alejarse del cartel.
+var voltereta_aprendida := false
 ## Cuántas veces ha detenido Zeus a Leonidas en una puerta (la 1.ª, diálogo largo).
 var avisos_zeus := 0
 
@@ -35,6 +38,7 @@ func reiniciar() -> void:
 	tutorial_barco_visto = false
 	tiene_libro = false
 	mision_recibida = false
+	voltereta_aprendida = false
 	avisos_zeus = 0
 	monedas_cambio.emit(monedas)
 	manzanas_cambio.emit(manzanas)

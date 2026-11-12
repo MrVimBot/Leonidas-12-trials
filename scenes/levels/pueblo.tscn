@@ -44,7 +44,9 @@
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_kathita_libro.tscn" id="46_wvopy"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="47_1uqxn"]
 [ext_resource type="Script" uid="uid://bhpbef6aw6ekp" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_barrera_voltereta.tres" id="48_1qanc"]
 [ext_resource type="Script" uid="uid://c7cvq8uxxjtnx" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
+[ext_resource type="Resource" path="res://resources/dialogues/kathita_barrera_repetida.tres" id="49_374g8"]
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_sin_monedas.tres" id="50_dsm"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
@@ -55,6 +57,12 @@ size = Vector2(30, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cest"]
 size = Vector2(30, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1qanc"]
+size = Vector2(16, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_374g8"]
+size = Vector2(240, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_amysx"]
 size = Vector2(300, 281)
@@ -4498,12 +4506,38 @@ position = Vector2(587, 1113)
 [node name="Disparador" parent="Objetos/Eventos/EntregaLibro" index="1"]
 position = Vector2(644, 1156)
 
+[node name="DisparadorOeste" parent="Objetos/Eventos/EntregaLibro" index="2"]
+position = Vector2(528, 1140)
+
 [node name="BarreraNorte" parent="Objetos/Eventos" unique_id=271124792 instance=ExtResource("47_1uqxn")]
 position = Vector2(920, 240)
 
 [node name="BarreraSur" parent="Objetos/Eventos" unique_id=160869627 instance=ExtResource("47_1uqxn")]
 position = Vector2(920, 1300)
 direccion_retroceso = Vector2(0, -1)
+
+[node name="BarreraCartel" parent="Objetos/Eventos" unique_id=1223303129 instance=ExtResource("47_1uqxn")]
+position = Vector2(800, 1070)
+requisito = 1
+dialogo = ExtResource("48_1qanc")
+dialogo_repetido = ExtResource("49_374g8")
+direccion_retroceso = Vector2(-1, 0)
+distancia_retroceso = 20.0
+destello = false
+
+[node name="Forma" parent="Objetos/Eventos/BarreraCartel" index="0"]
+shape = SubResource("RectangleShape2D_1qanc")
+
+[node name="BarreraCartelOeste" parent="Objetos/Eventos" unique_id=922442759 instance=ExtResource("47_1uqxn")]
+position = Vector2(233, 1050)
+requisito = 1
+dialogo = ExtResource("48_1qanc")
+dialogo_repetido = ExtResource("49_374g8")
+distancia_retroceso = 20.0
+destello = false
+
+[node name="Forma" parent="Objetos/Eventos/BarreraCartelOeste" index="0"]
+shape = SubResource("RectangleShape2D_374g8")
 
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0
@@ -4559,3 +4593,5 @@ capa = NodePath("../Suelo")
 semilla = 8
 
 [editable path="Objetos/Eventos/EntregaLibro"]
+[editable path="Objetos/Eventos/BarreraCartel"]
+[editable path="Objetos/Eventos/BarreraCartelOeste"]

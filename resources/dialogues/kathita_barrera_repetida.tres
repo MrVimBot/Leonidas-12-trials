@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL (lo reescribe el guion). Si vuelve a intentarlo sin la voltereta.
+Kathita: Una voltereta con Espacio (o K), hijo. ¡Es fácil!
+"

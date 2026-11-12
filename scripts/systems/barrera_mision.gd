@@ -1,12 +1,21 @@
 class_name BarreraMision
 extends Area2D
-## Cierra una salida del pueblo hasta que los sabios del templo den la misión
-## (`EstadoJuego.mision_recibida`). Se pone por DENTRO de la puerta, antes de su
-## SalidaZona: al pisarla, un destello y la voz de Zeus le dicen a Leonidas que aún no
-## puede irse, y él retrocede unos pasos hacia el pueblo.
-## Necesita un CollisionShape2D hijo que tape todo el hueco de la puerta.
-## La primera vez sale `dialogo`; después (en cualquier barrera) `dialogo_repetido`.
-## Textos PROVISIONALES: resources/dialogues/zeus_salida_*.tres.
+## Pared invisible con diálogo: al pisarla, Leonidas se detiene, sale un diálogo y
+## retrocede unos pasos. Según `requisito` se cierra hasta que:
+##   MISION     los sabios del templo den la misión (`EstadoJuego.mision_recibida`).
+##              Se pone por DENTRO de cada puerta del pueblo, antes de su SalidaZona;
+##              con destello y la voz de Zeus (resources/dialogues/zeus_salida_*.tres).
+##   VOLTERETA  Leonidas haga su primera voltereta (`EstadoJuego.voltereta_aprendida`,
+##              la pone la escena de Kathita). Cierra el paso junto al cartel y Kathita
+##              le recuerda que debe hacerla (resources/dialogues/kathita_barrera_*.tres).
+## Necesita un CollisionShape2D hijo que tape todo el hueco por el que se podría pasar.
+## La primera vez sale `dialogo`; después `dialogo_repetido`. Las barreras de MISION
+## comparten el contador `EstadoJuego.avisos_zeus`; las de VOLTERETA cuentan aparte.
+## Textos PROVISIONALES.
+
+enum Requisito { MISION, VOLTERETA }
+
+@export var requisito := Requisito.MISION
 
 @export var dialogo: Dialogo
 @export var dialogo_repetido: Dialogo
@@ -17,6 +26,7 @@ extends Area2D
 @export var destello := true
 
 var _en_curso := false
+var _avisos := 0 # veces que ha parado esta barrera (requisito VOLTERETA)
 
 
 func _ready() -> void:
@@ -27,11 +37,18 @@ func _ready() -> void:
 
 
 func _al_entrar(cuerpo: Node2D) -> void:
-	if _en_curso or EstadoJuego.mision_recibida or not cuerpo is Jugador:
+	if _en_curso or not _cerrada() or not cuerpo is Jugador:
 		return
 	_en_curso = true
 	await _detener(cuerpo as Jugador)
 	_en_curso = false
+
+
+func _cerrada() -> bool:
+	match requisito:
+		Requisito.VOLTERETA:
+			return not EstadoJuego.voltereta_aprendida
+	return not EstadoJuego.mision_recibida
 
 
 func _detener(jugador: Jugador) -> void:
@@ -42,8 +59,12 @@ func _detener(jugador: Jugador) -> void:
 	if destello:
 		await _destellar()
 
-	var d := dialogo if EstadoJuego.avisos_zeus == 0 or dialogo_repetido == null else dialogo_repetido
-	EstadoJuego.avisos_zeus += 1
+	var avisos := EstadoJuego.avisos_zeus if requisito == Requisito.MISION else _avisos
+	var d := dialogo if avisos == 0 or dialogo_repetido == null else dialogo_repetido
+	if requisito == Requisito.MISION:
+		EstadoJuego.avisos_zeus += 1
+	else:
+		_avisos += 1
 	await Dialogos.mostrar(d)
 
 	# Leonidas da media vuelta y vuelve unos pasos hacia el pueblo.
