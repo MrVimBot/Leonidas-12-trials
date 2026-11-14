@@ -47,11 +47,13 @@ var jefes_derrotados := 0
 ## Lo pone Game mientras existe: el menú y la cinemática no cuentan como tiempo jugado.
 var contando_tiempo := false
 
-## Al cargar una partida: zona y entrada donde debe empezar Game (y la vida). Game las
-## consume en su _ready (vuelven a "" / -1).
+## Al cargar una partida: zona y entrada donde debe empezar Game (y la vida y el punto
+## exacto donde se guardó). Game las consume en su _ready (vuelven a "" / -1 / INF).
 var zona_cargada := ""
 var entrada_cargada := ""
 var vida_cargada := -1
+## Posición del jugador al guardar. Vector2.INF = no hay (partidas antiguas): se usa la entrada.
+var posicion_cargada := Vector2.INF
 
 ## El libro que le regala Kathita al salir de casa: es el inventario (objetos), el mapa
 ## y el guardado de la partida. El HUD solo muestra su icono cuando se tiene.
@@ -94,6 +96,7 @@ func reiniciar() -> void:
 	zona_cargada = ""
 	entrada_cargada = ""
 	vida_cargada = -1
+	posicion_cargada = Vector2.INF
 	monedas_cambio.emit(monedas)
 	manzanas_cambio.emit(0)
 	objetos_cambio.emit(&"", 0)
@@ -221,8 +224,8 @@ func hay_partida() -> bool:
 	return FileAccess.file_exists(ARCHIVO_PARTIDA)
 
 
-## Guarda la partida. Zona, entrada y vida las pregunta a Game (`datos_guardado()`).
-## Al cargar se reaparece en la entrada de la zona, no en el punto exacto.
+## Guarda la partida. Zona, entrada, posición y vida las pregunta a Game (`datos_guardado()`).
+## Al cargar se reaparece en el punto exacto donde se guardó.
 func guardar() -> bool:
 	var game := get_tree().get_first_node_in_group(&"game")
 	if game == null or not game.has_method(&"datos_guardado"):
@@ -232,6 +235,8 @@ func guardar() -> bool:
 	var cfg := ConfigFile.new()
 	cfg.set_value("lugar", "zona", datos.zona)
 	cfg.set_value("lugar", "entrada", datos.entrada)
+	if datos.has("posicion"):
+		cfg.set_value("lugar", "posicion", datos.posicion)
 	cfg.set_value("jugador", "vida", datos.vida)
 	cfg.set_value("jugador", "monedas", monedas)
 	cfg.set_value("jugador", "objetos", _a_cadenas(objetos))
@@ -249,7 +254,7 @@ func guardar() -> bool:
 
 
 ## Lee la partida guardada. Después hay que cargar game.tscn: empezará en
-## `zona_cargada` / `entrada_cargada` con `vida_cargada`.
+## `zona_cargada` / `entrada_cargada` (o `posicion_cargada`) con `vida_cargada`.
 func cargar() -> bool:
 	var cfg := ConfigFile.new()
 	if cfg.load(ARCHIVO_PARTIDA) != OK:
@@ -257,6 +262,7 @@ func cargar() -> bool:
 	reiniciar()
 	zona_cargada = cfg.get_value("lugar", "zona", "")
 	entrada_cargada = cfg.get_value("lugar", "entrada", "inicio")
+	posicion_cargada = cfg.get_value("lugar", "posicion", Vector2.INF)
 	vida_cargada = cfg.get_value("jugador", "vida", -1)
 	monedas = cfg.get_value("jugador", "monedas", 0)
 	var objs: Dictionary = cfg.get_value("jugador", "objetos", {})

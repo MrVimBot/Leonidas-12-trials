@@ -65,12 +65,15 @@ func _ready() -> void:
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	jugador.vida.danado.connect(_sacudir_camara)
-	# Partida cargada (Continuar en el menú): su zona, su entrada y su vida.
+	# Partida cargada (Continuar en el menú): su zona, su entrada (o el punto exacto
+	# donde se guardó) y su vida.
 	var zona := zona_inicial
 	var entrada := entrada_inicial
+	var posicion := Vector2.INF
 	if not EstadoJuego.zona_cargada.is_empty():
 		zona = EstadoJuego.zona_cargada
 		entrada = EstadoJuego.entrada_cargada
+		posicion = EstadoJuego.posicion_cargada
 		if EstadoJuego.vida_cargada > 0:
 			var v := jugador.vida
 			v.vida = mini(EstadoJuego.vida_cargada, v.vida_max)
@@ -78,7 +81,10 @@ func _ready() -> void:
 		EstadoJuego.zona_cargada = ""
 		EstadoJuego.entrada_cargada = ""
 		EstadoJuego.vida_cargada = -1
+		EstadoJuego.posicion_cargada = Vector2.INF
 	_cargar_zona(zona, entrada)
+	if posicion.is_finite() and barco == null:
+		_colocar_jugador(posicion)
 	if barco:
 		_tutorial_barco()
 
@@ -88,9 +94,21 @@ func _exit_tree() -> void:
 	Musica.detener()
 
 
-## Lo que EstadoJuego.guardar() necesita saber del mundo.
+## Lo que EstadoJuego.guardar() necesita saber del mundo. La posición solo a pie (en el
+## barco no se abre el libro; si algún día se guarda en el mar, se vuelve a la entrada).
 func datos_guardado() -> Dictionary:
-	return { "zona": _ruta_actual, "entrada": _entrada_actual, "vida": jugador.vida.vida }
+	var datos := { "zona": _ruta_actual, "entrada": _entrada_actual, "vida": jugador.vida.vida }
+	if barco == null:
+		datos.posicion = jugador.global_position
+	return datos
+
+
+## Pone al jugador en `pos` (partida cargada): ahí reaparece si muere y ahí va la cámara.
+func _colocar_jugador(pos: Vector2) -> void:
+	jugador.global_position = pos
+	jugador.velocity = Vector2.ZERO
+	jugador.punto_control = pos
+	camara.saltar_a_objetivo()
 
 
 ## Ruta de la zona actual (res://scenes/levels/<nombre>.tscn).
