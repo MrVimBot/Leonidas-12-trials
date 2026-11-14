@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Mision" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/mision.gd" id="1_mis"]
+
+[resource]
+script = ExtResource("1_mis")
+id = &"derrotar_medusa"
+titulo = "Derrota a Medusa"
+principal = true

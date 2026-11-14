@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Objeto" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/objeto.gd" id="1_obj"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/icono_espada.png" id="2_ico"]
+
+[resource]
+script = ExtResource("1_obj")
+id = &"espada"
+nombre = "Espada"
+descripcion = "Regalo de los sabios. Ataca con J."
+icono = ExtResource("2_ico")
+tipo = 1
+maximo = 1
+cura = 0

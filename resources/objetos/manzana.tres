@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Objeto" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/objeto.gd" id="1_obj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzana.png" id="2_ico"]
+
+[resource]
+script = ExtResource("1_obj")
+id = &"manzana"
+nombre = "Manzana"
+descripcion = "Cura 1 corazón."
+icono = ExtResource("2_ico")
+tipo = 0
+maximo = 9
+cura = 4

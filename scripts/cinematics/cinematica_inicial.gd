@@ -265,5 +265,9 @@ func _saltar() -> void:
 
 
 func _terminar() -> void:
+	# La carta de los sabios va al libro (Objetos Importantes) y abre la primera misión,
+	# también si se salta la cinemática.
+	EstadoJuego.agregar_objeto(&"carta")
+	EstadoJuego.empezar_mision(&"ir_al_templo")
 	get_window().content_scale_mode = _modo_original
 	get_tree().change_scene_to_file(escena_siguiente)

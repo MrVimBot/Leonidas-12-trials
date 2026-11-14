@@ -83,7 +83,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -10.0
-offset_top = -110.0
+offset_top = -126.0
 offset_right = 110.0
 offset_bottom = -40.0
 grow_horizontal = 2
@@ -93,15 +93,19 @@ grow_vertical = 0
 layout_mode = 2
 alignment = 1
 
+[node name="Continuar" type="Button" parent="Panel/Botones"]
+visible = false
+layout_mode = 2
+text = "Continuar"
+alignment = 0
+
 [node name="Jugar" type="Button" parent="Panel/Botones"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../Salir")
 text = "Jugar"
 alignment = 0
 
 [node name="Salir" type="Button" parent="Panel/Botones"]
 layout_mode = 2
-focus_neighbor_bottom = NodePath("../Jugar")
 text = "Salir"
 alignment = 0
 

@@ -1,0 +1,127 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menu_libro.gd" id="1_lib"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/cobertura.png" id="2_cob"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/pag_2y3.png" id="3_pag"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_herramientas.png" id="4_imp"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_objetos.png" id="5_inv"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_mapa.png" id="6_map"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_misiones.png" id="7_mis"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_guardar.png" id="8_gua"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/icono_salir.png" id="9_sal"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/seleccion_casilla.png" id="10_sel"]
+
+[node name="MenuLibro" type="CanvasLayer"]
+layer = 18
+script = ExtResource("1_lib")
+
+[node name="Oscuro" type="ColorRect" parent="."]
+offset_right = 480.0
+offset_bottom = 270.0
+mouse_filter = 2
+color = Color(0.04, 0.04, 0.1, 0.6)
+
+[node name="Libro" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 16.0
+offset_top = 25.0
+offset_right = 464.0
+offset_bottom = 255.0
+mouse_filter = 2
+
+[node name="Cobertura" type="TextureRect" parent="Libro"]
+offset_right = 448.0
+offset_bottom = 230.0
+mouse_filter = 2
+texture = ExtResource("2_cob")
+
+[node name="Pagina" type="TextureRect" parent="Libro"]
+offset_right = 448.0
+offset_bottom = 230.0
+mouse_filter = 2
+texture = ExtResource("3_pag")
+
+[node name="Pestanas" type="Control" parent="Libro"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Importantes" type="TextureRect" parent="Libro/Pestanas"]
+offset_left = 43.0
+offset_top = -2.0
+offset_right = 69.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("4_imp")
+
+[node name="Inventario" type="TextureRect" parent="Libro/Pestanas"]
+offset_left = 74.0
+offset_top = -2.0
+offset_right = 100.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("5_inv")
+
+[node name="Mapa" type="TextureRect" parent="Libro/Pestanas"]
+offset_left = 104.0
+offset_top = -2.0
+offset_right = 130.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_map")
+
+[node name="Misiones" type="TextureRect" parent="Libro/Pestanas"]
+offset_left = 136.0
+offset_top = -2.0
+offset_right = 162.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("7_mis")
+
+[node name="Guardar" type="TextureRect" parent="Libro/Pestanas"]
+offset_left = 166.0
+offset_top = -2.0
+offset_right = 192.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("8_gua")
+
+[node name="Salir" type="TextureRect" parent="Libro"]
+offset_left = 10.0
+offset_top = 182.0
+offset_right = 36.0
+offset_bottom = 204.0
+mouse_filter = 2
+texture = ExtResource("9_sal")
+
+[node name="Contenido" type="Control" parent="Libro"]
+anchors_preset = 0
+offset_right = 448.0
+offset_bottom = 230.0
+mouse_filter = 2
+
+[node name="Importantes" type="Control" parent="Libro/Contenido"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Inventario" type="Control" parent="Libro/Contenido"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Mapa" type="Control" parent="Libro/Contenido"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Misiones" type="Control" parent="Libro/Contenido"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Guardar" type="Control" parent="Libro/Contenido"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Seleccion" type="TextureRect" parent="Libro"]
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("10_sel")

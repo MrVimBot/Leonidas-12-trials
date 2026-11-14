@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8qpkqxtd7wcq"
-path="res://.godot/imported/sin_nombre.png-d42622f217a514356c29e48b6889de90.ctex"
+uid="uid://bg0r51qo0usaa"
+path="res://.godot/imported/comer.png-6c346bd9d8b0f4db126e3e0b90ef4752.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/strips/leonidas_mini/sin_nombre.png"
-dest_files=["res://.godot/imported/sin_nombre.png-d42622f217a514356c29e48b6889de90.ctex"]
+source_file="res://assets/sprites/strips/leonidas_mini/comer.png"
+dest_files=["res://.godot/imported/comer.png-6c346bd9d8b0f4db126e3e0b90ef4752.ctex"]
 
 [params]
 

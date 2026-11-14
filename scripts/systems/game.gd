@@ -27,6 +27,9 @@ signal modo_cambio(en_barco: bool, vida: ComponenteVida)
 ## Empieza como si los sabios ya hubieran dado la misión (las puertas del pueblo dejan
 ## pasar). Para probar el bosque y la playa mientras no exista la escena de los sabios.
 @export var depurar_mision_recibida := false
+## Empieza con la espada (en una partida nueva). PROVISIONAL: quitar cuando exista la
+## escena de los sabios, que es quien la da (`EstadoJuego.tiene_espada = true`).
+@export var depurar_dar_espada := true
 
 var zona_actual: Zona = null
 var barco: Barco = null
@@ -47,12 +50,47 @@ func _ready() -> void:
 	if depurar_mision_recibida:
 		EstadoJuego.mision_recibida = true
 		EstadoJuego.voltereta_aprendida = true
+	if depurar_dar_espada and EstadoJuego.zona_cargada.is_empty():
+		EstadoJuego.tiene_espada = true
+	EstadoJuego.contando_tiempo = true
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	jugador.vida.danado.connect(_sacudir_camara)
-	_cargar_zona(zona_inicial, entrada_inicial)
+	# Partida cargada (Continuar en el menú): su zona, su entrada y su vida.
+	var zona := zona_inicial
+	var entrada := entrada_inicial
+	if not EstadoJuego.zona_cargada.is_empty():
+		zona = EstadoJuego.zona_cargada
+		entrada = EstadoJuego.entrada_cargada
+		if EstadoJuego.vida_cargada > 0:
+			var v := jugador.vida
+			v.vida = mini(EstadoJuego.vida_cargada, v.vida_max)
+			v.cambio.emit.call_deferred(v.vida, v.vida_max) # tras el aviso diferido de Vida
+		EstadoJuego.zona_cargada = ""
+		EstadoJuego.entrada_cargada = ""
+		EstadoJuego.vida_cargada = -1
+	_cargar_zona(zona, entrada)
 	if barco:
 		_tutorial_barco()
+
+
+func _exit_tree() -> void:
+	EstadoJuego.contando_tiempo = false
+
+
+## Lo que EstadoJuego.guardar() necesita saber del mundo.
+func datos_guardado() -> Dictionary:
+	return { "zona": _ruta_actual, "entrada": _entrada_actual, "vida": jugador.vida.vida }
+
+
+## Ruta de la zona actual (res://scenes/levels/<nombre>.tscn).
+func ruta_zona() -> String:
+	return _ruta_actual
+
+
+## ¿Se está cambiando de zona (fundido en curso)?
+func cambiando() -> bool:
+	return _cambiando
 
 
 ## Cambia de zona con fundido a negro. La llaman las SalidaZona.

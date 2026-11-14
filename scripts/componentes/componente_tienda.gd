@@ -53,23 +53,14 @@ func comprar(articulo: ArticuloTienda) -> Resultado:
 
 ## Cuántos tiene el jugador de ese objeto (para "Tienes: N").
 static func cantidad(articulo: ArticuloTienda) -> int:
-	match articulo.id:
-		&"manzana":
-			return EstadoJuego.manzanas
-	return 0
+	return EstadoJuego.cantidad(articulo.id)
 
 
 static func cabe(articulo: ArticuloTienda) -> bool:
-	match articulo.id:
-		&"manzana":
-			return EstadoJuego.manzanas < EstadoJuego.MANZANAS_MAX
-	return true
+	return EstadoJuego.cabe(articulo.id)
 
 
-## Da el objeto al jugador. Para vender algo nuevo: añadir su id aquí y en `cantidad`/`cabe`.
+## Da el objeto al jugador (cualquier `Objeto` de resources/objetos/).
 static func entregar(articulo: ArticuloTienda) -> void:
-	match articulo.id:
-		&"manzana":
-			EstadoJuego.agregar_manzanas(1)
-		_:
-			push_warning("ComponenteTienda: no sé entregar '%s'" % articulo.id)
+	if not EstadoJuego.agregar_objeto(articulo.id):
+		push_warning("ComponenteTienda: no cabe '%s'" % articulo.id)

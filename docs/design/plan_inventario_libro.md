@@ -140,6 +140,24 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
   lados del título pueden quedarse). Hasta entonces se usan los títulos pintados y el juego
   solo escribe lo demás.
 
+## Estado (2026-11-14): fases 1–5 implementadas
+
+Resumen de lo hecho en CLAUDE.md («El libro»). Diferencias con el plan de abajo:
+- Con el libro abierto se pausa todo el árbol (HUD incluido); el reloj de `tiempo_jugado`
+  tampoco avanza.
+- `tiene_libro`, `tiene_espada` y `manzanas` siguen existiendo en `EstadoJuego`, pero son
+  atajos sobre `objetos`. `Game.depurar_dar_espada` (true) da la espada en partida nueva
+  hasta que exista la escena de los sabios.
+- La carta de los sabios y la misión `ir_al_templo` las da la cinemática inicial al acabar
+  (o al saltarla).
+- La X de salir no es seleccionable con el teclado (I/Esc/Espacio ya cierran); sí con el ratón.
+- La animación de comer (`comer`, antes `sin_nombre`) es un solo dibujo con los fotogramas
+  13–15 vacíos: el layout usa `frames = 13` y el Jugador mantiene la pose `duracion_comer`
+  (0,8 s) en vez de esperar al final de la animación.
+- Falta: que alguien sume `jefes_derrotados` (Medusa) y complete/empiece misiones (sabios).
+  Los rótulos pintados de Guardar y los «!» de Misiones se quedan hasta que Lucía entregue
+  las páginas sin texto.
+
 ## Plan técnico
 
 ### Fase 0 — Escala y arte (hecha el 2026-11-14: opción B)
@@ -164,7 +182,7 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
   «Preguntas abiertas»). Cuando entregue PNG/aseprite ya a 448×230, quitar `escala` de los
   recortes y volver a medir.
 
-### Fase 1 — Esqueleto del menú (1 día)
+### Fase 1 — Esqueleto del menú (hecha el 2026-11-14)
 - Autoload **`Libro`** = `scenes/ui/menu_libro.tscn` + `scripts/ui/menu_libro.gd`
   (`class_name MenuLibro`; mismo patrón que `Tienda`/`MenuTienda`). CanvasLayer por encima
   del HUD, `process_mode = ALWAYS`.
@@ -177,7 +195,7 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
 - Navegación entre pestañas y páginas, sin contenido todavía.
 - Quitar el «Pulsa [I]» provisional de la lista de pendientes: ya funcionará.
 
-### Fase 2 — Objetos (1 día)
+### Fase 2 — Objetos (hecha el 2026-11-14)
 - Recurso **`Objeto`** (`scripts/systems/objeto.gd`, en `resources/objetos/*.tres`): `id`,
   `nombre`, `descripcion` (2 renglones de ~20 letras), `icono`, `tipo` (CONSUMIBLE /
   IMPORTANTE), `maximo`. `ArticuloTienda` pasa a apuntar a un `Objeto` + `precio` (hoy
@@ -193,13 +211,13 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
   layout de `leonidas_mini`).
 - Iconos provisionales en `assets/ui/provisional/` hasta que lleguen los de Lucía.
 
-### Fase 3 — Misiones (½ día)
+### Fase 3 — Misiones (hecha el 2026-11-14)
 - Recurso `Mision` (`id`, `titulo` ≤ 25 letras, `principal`) y en `EstadoJuego`
   `misiones: Dictionary` (id → ACTIVA / COMPLETADA) con `empezar_mision` / `completar_mision`.
 - Para la entrega: principal «Habla con los sabios» → «Derrota a Medusa»; secundaria, la de
   la sirena si llega a existir. Los títulos los escribe el equipo de guion.
 
-### Fase 4 — Guardar (1–1½ días)
+### Fase 4 — Guardar (hecha el 2026-11-14)
 - `EstadoJuego.guardar()` / `cargar()` con `ConfigFile` en `user://partida.cfg`: zona y
   entrada (punto de control), vida, monedas, objetos, misiones, banderas (`tiene_libro`,
   `mision_recibida`, `voltereta_aprendida`, `tutorial_barco_visto`, `avisos_zeus`), tiempo
@@ -209,7 +227,7 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
   entrada guardadas.
 - Al cargar se reaparece en la entrada de la zona, no en el punto exacto.
 
-### Fase 5 — Mapa (½ día)
+### Fase 5 — Mapa (hecha el 2026-11-14, esquema provisional)
 - Imagen provisional + marca de «estás aquí» por zona (tabla zona → posición en el mapa) y
   nombre en la cartela. `Game` ya sabe la zona actual.
 

@@ -15,7 +15,7 @@
 | Tiles de transición | atlas + fuente 1 de `naturaleza.tres` | caminos, estanques, plaza | pintarlos en las zonas |
 | Los 4 sabios | 4 layouts, tiras, SpriteFrames | escena de los sabios (espada + misión) | la escena |
 | Gallo y perro | layouts, tiras, SpriteFrames | más NPC del pueblo | colocarlos + diálogos |
-| Libro (inventario) | 4 láminas + 6 iconos + marco de selección, reducidos a ×0,4 | menú del libro | el menú entero (`plan_inventario_libro.md`) |
+| Libro (inventario) | 4 láminas + 6 iconos + marco de selección, reducidos a ×0,4 | **ya se usa** (`menu_libro.tscn`) | arte redibujado a 448×230 sin textos, iconos de objetos 16×16, mapa pintado |
 | `icono.aseprite` | — | icono de la app / retrato pequeño | exportarlo a PNG |
 
 ---

@@ -21,7 +21,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Cuadro de diálogo, nombre, retrato, "pasar" | Jugabilidad **p. 15** + `assets/ui/dialog_box.png` | ✅ Hecho (sin retratos dibujados) |
 | Burbujas sobre los NPC (… ! $) | Jugabilidad **p. 10**, Guión **p. 13** | ✅ Hecho (arte provisional) |
 | Menú de ajustes / pausa | Jugabilidad **p. 15** (iconos abajo a la izquierda) | ❌ Pendiente |
-| Menú del inventario | Jugabilidad **p. 17** | ❌ Pendiente |
+| Menú del inventario | Jugabilidad **p. 17** | ✅ Hecho (autoload `Libro`, ver CLAUDE.md «El libro» y `plan_inventario_libro.md`) |
 | Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ❌ Pendiente (nivel 2) |
 | Tienda del mercader | Ninguna maqueta | ✅ Hecha (diseño provisional): `scenes/ui/menu_tienda.tscn` |
 | Game over | Jugabilidad p. 8 (solo el texto "game over") | ❌ Pendiente: diseñar |
@@ -62,6 +62,8 @@ Autoload `Dialogos` = `scenes/ui/caja_dialogo.tscn` (`scripts/ui/caja_dialogo.gd
 En la maqueta hay tres iconos abajo a la izquierda (engranaje, lista, "?") con la nota "**posiblemente quitar y volver un botón del teclado**". Con la caja de diálogo abajo en el centro no caben bien; la propuesta es **no dibujarlos** y abrir la pausa con **Esc** (`ui_cancel`, que ya usa la cinemática para saltarse) o Start en el mando. Contenido mínimo: continuar, volumen de música/efectos, controles, salir. No hay arte: pedir a la artista un marco/fondo o reutilizar el estilo de la caja de diálogo.
 
 ### Menú del inventario — Jugabilidad p. 17
+
+> **Hecho el 2026-11-14** con el arte de Lucía reducido (`scripts/ui/menu_libro.gd`). Lo de abajo es la propuesta original.
 Boceto ("no hay más presupuesto"):
 - Un panel grande con el título **INVENTARIO en vertical** en el borde izquierdo.
 - Una **rejilla de casillas** (en el boceto, 3 filas: 6, 5 y 2 casillas).
