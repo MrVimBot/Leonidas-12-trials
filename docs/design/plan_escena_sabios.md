@@ -1,5 +1,10 @@
 # Plan: escena de los sabios (espada + misión)
 
+> **Hecho el 2026-11-14** (ver CLAUDE.md, «Escena de los sabios»). Cambios respecto al plan:
+> el disparador cubre solo el pasillo entre los canales (x 868–972), no 200 px; los hablantes
+> son «Toro», «Carnero», «Fauno», «Ave» (la pestaña del nombre solo muestra 8 letras); en vez de
+> `mostrar_burbuja = false`, `ZonaDialogo` no enseña burbuja si no tiene diálogo ni tienda.
+
 > Pensado para ejecutarlo en otra sesión (Opus o Sonnet). Leer antes `CLAUDE.md` (secciones
 > «Escena de Kathita», «NPC», «Jugador», «Interfaz»). Responder y escribir textos en español.
 > **No hacer commits ni push** (los hace Esteban).

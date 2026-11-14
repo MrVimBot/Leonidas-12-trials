@@ -24,12 +24,15 @@ signal modo_cambio(en_barco: bool, vida: ComponenteVida)
 @export var dialogo_tutorial_barco: Dialogo = preload("res://resources/dialogues/tutorial_barco.tres")
 
 @export_group("Depuración")
-## Empieza como si los sabios ya hubieran dado la misión (las puertas del pueblo dejan
-## pasar). Para probar el bosque y la playa mientras no exista la escena de los sabios.
+## Empieza como si Kathita ya hubiera dado el libro y enseñado la voltereta (para probar
+## los sabios sin repetir su escena).
+@export var depurar_saltar_kathita := false
+## Empieza como si los sabios ya hubieran pasado: misión, espada y misiones al día (las
+## puertas del pueblo dejan pasar). Para probar el bosque y la playa.
 @export var depurar_mision_recibida := false
-## Empieza con la espada (en una partida nueva). PROVISIONAL: quitar cuando exista la
-## escena de los sabios, que es quien la da (`EstadoJuego.tiene_espada = true`).
-@export var depurar_dar_espada := true
+## Empieza con la espada (en una partida nueva), sin la misión. Normalmente la dan los
+## sabios (scenes/cinematics/escena_sabios.tscn).
+@export var depurar_dar_espada := false
 
 var zona_actual: Zona = null
 var barco: Barco = null
@@ -47,9 +50,15 @@ var _origen_travesia := ""
 
 func _ready() -> void:
 	add_to_group(&"game")
+	if depurar_saltar_kathita:
+		EstadoJuego.tiene_libro = true
+		EstadoJuego.voltereta_aprendida = true
 	if depurar_mision_recibida:
 		EstadoJuego.mision_recibida = true
 		EstadoJuego.voltereta_aprendida = true
+		EstadoJuego.tiene_espada = true
+		EstadoJuego.completar_mision(&"ir_al_templo")
+		EstadoJuego.empezar_mision(&"derrotar_medusa")
 	if depurar_dar_espada and EstadoJuego.zona_cargada.is_empty():
 		EstadoJuego.tiene_espada = true
 	EstadoJuego.contando_tiempo = true

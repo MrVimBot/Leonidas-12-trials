@@ -154,7 +154,7 @@ Resumen de lo hecho en CLAUDE.md («El libro»). Diferencias con el plan de abaj
 - Con el libro abierto se pausa todo el árbol (HUD incluido); el reloj de `tiempo_jugado`
   tampoco avanza.
 - `tiene_libro`, `tiene_espada` y `manzanas` siguen existiendo en `EstadoJuego`, pero son
-  atajos sobre `objetos`. `Game.depurar_dar_espada` (true) da la espada en partida nueva
+  atajos sobre `objetos`. `Game.depurar_dar_espada` (ahora false: la dan los sabios) da la espada en partida nueva
   hasta que exista la escena de los sabios.
 - La carta de los sabios y la misión `ir_al_templo` las da la cinemática inicial al acabar
   (o al saltarla).

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. El sabio Toro da unos pasos al frente con la espada.
+Toro: Nadie debe partir con las manos vacías.
+Toro: Esta espada acompañó a muchos jóvenes antes que a ti. Es pequeña, pero está bien afilada.
+Toro: Tómala, Leonidas.
+"

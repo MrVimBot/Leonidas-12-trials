@@ -5,6 +5,8 @@ signal murio
 signal reaparecio
 ## Al empezar una voltereta (no si falta estamina).
 signal pirueta_empezada
+## Al empezar un espadazo (lo usa el tutorial de los sabios).
+signal ataque_empezado
 ## Al terminar de comer (después de curarse).
 signal comio(objeto: Objeto)
 
@@ -28,6 +30,9 @@ enum Estado { NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO, 
 ## Dónde se dibuja el objeto que come, respecto a los pies: la pose de la artista no trae
 ## la manzana (en la lámina, Jugabilidad p. 8, va aparte, arriba a la derecha de la mano).
 @export var posicion_objeto_comer := Vector2(11, -18)
+## Dónde va el icono (16×16) de un objeto recién obtenido, con la misma pose: la
+## empuñadura de la espada queda en la mano levantada.
+@export var posicion_objeto_obtenido := Vector2(12, -23)
 
 @export_group("Muerte")
 
@@ -139,6 +144,7 @@ func _atacar() -> void:
 	estado = Estado.ATAQUE
 	velocity *= 0.2
 	ataque.atacar()
+	ataque_empezado.emit()
 
 
 func _interactuar() -> void:
@@ -177,7 +183,7 @@ func comer(objeto: Objeto) -> void:
 	animador.direccion = Vector2.DOWN
 	animador.sprite.flip_h = false
 	animador.sprite.play(ANIM_COMER)
-	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono)
+	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono, posicion_objeto_comer, true)
 	_turno_comer += 1
 	var turno := _turno_comer
 	await get_tree().create_timer(duracion_comer, false).timeout
@@ -186,17 +192,37 @@ func comer(objeto: Objeto) -> void:
 		_terminar_de_comer()
 
 
-func _mostrar_objeto_en_mano(icono: Texture2D) -> void:
+## Pose de objeto obtenido (la de comer, de frente, con el icono en la mano levantada),
+## sin curar ni cambiar de estado: sirve también estando BLOQUEADO (cinemáticas).
+## Con `duracion` > 0 la quita sola al acabar; con 0 se queda hasta
+## `ocultar_objeto_obtenido()` (p. ej. mientras sale el aviso «¡Obtuviste…!»).
+func mostrar_objeto_obtenido(icono: Texture2D, duracion := 1.0) -> void:
+	animador.direccion = Vector2.DOWN
+	animador.sprite.flip_h = false
+	animador.sprite.play(ANIM_COMER)
+	_mostrar_objeto_en_mano(icono, posicion_objeto_obtenido, false)
+	if duracion > 0.0:
+		await get_tree().create_timer(duracion, false).timeout
+		ocultar_objeto_obtenido()
+
+
+func ocultar_objeto_obtenido() -> void:
+	_objeto_en_mano.visible = false
+	if estado == Estado.NORMAL or estado == Estado.BLOQUEADO:
+		animador.reproducir(&"parado", true)
+
+
+func _mostrar_objeto_en_mano(icono: Texture2D, posicion: Vector2, saltito: bool) -> void:
 	_objeto_en_mano.texture = icono
 	_objeto_en_mano.visible = icono != null
+	_objeto_en_mano.position = posicion
 	# Un saltito de 1 px a mitad de la pose, como si lo levantara para morderlo.
-	_objeto_en_mano.position = posicion_objeto_comer
-	if icono:
+	if icono and saltito:
 		var t := create_tween()
 		t.tween_interval(duracion_comer * 0.45)
-		t.tween_property(_objeto_en_mano, ^"position:y", posicion_objeto_comer.y - 1.0, 0.0)
+		t.tween_property(_objeto_en_mano, ^"position:y", posicion.y - 1.0, 0.0)
 		t.tween_interval(duracion_comer * 0.2)
-		t.tween_property(_objeto_en_mano, ^"position:y", posicion_objeto_comer.y, 0.0)
+		t.tween_property(_objeto_en_mano, ^"position:y", posicion.y, 0.0)
 
 
 func _terminar_de_comer() -> void:

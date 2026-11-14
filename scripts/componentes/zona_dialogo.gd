@@ -53,7 +53,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	# Sin diálogo ni tienda no hay nada que hablar (p. ej. los sabios antes de su escena).
 	_burbuja.visible = mostrar_burbuja and _jugador_cerca and not _atendiendo \
+		and (dialogo != null or tienda != null) \
 		and not Dialogos.abierto and not Tienda.abierto
 
 

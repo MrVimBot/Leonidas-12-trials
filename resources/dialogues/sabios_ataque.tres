@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. Segunda parte del tutorial: atacar. La escena espera al primer espadazo.
+Toro: Vamos, pruébala. Golpea el aire con [J] para que veamos de qué eres capaz.
+"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. Si se vuelve a hablar con el sabio Toro.
+Toro: ¿Qué haces aquí todavía? Sal por la puerta sur y cruza el bosque hasta la orilla.
+Toro: Allí te espera la barca que te llevará a la isla de Medusa.
+"

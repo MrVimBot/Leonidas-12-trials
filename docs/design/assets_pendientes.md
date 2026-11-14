@@ -13,7 +13,6 @@
 | Asset | Preparado | Para qué | Falta |
 |---|---|---|---|
 | Tiles de transición | atlas + fuente 1 de `naturaleza.tres` | caminos, estanques, plaza | pintarlos en las zonas |
-| Los 4 sabios | 4 layouts, tiras, SpriteFrames | escena de los sabios (espada + misión) | la escena |
 | Gallo y perro | layouts, tiras, SpriteFrames | más NPC del pueblo | colocarlos + diálogos |
 | Libro (inventario) | piezas de la maqueta de 559×300 sin reescalar (`assets/ui/libro/`) | **ya se usa** (`menu_libro.tscn`, a ×3 de pantalla) | páginas sin textos pintados, icono del libro, mapa pintado |
 | `icono.aseprite` | — | icono de la app / retrato pequeño | exportarlo a PNG |
@@ -37,22 +36,6 @@
   - Opcional: piezas diagonales (dos zonas que se tocan por una esquina) y un **puente** para los
     vados del pueblo.
   - El suelo de **piedra** está preparado pero no se usa en ninguna zona: decidir dónde va.
-
-## Los sabios
-
-- **Ruta:** `assets/sprites/los_sabios.aseprite` (150×140, 8 frames de 100 ms; capas
-  `parados` y `caminando`). Cuatro sabios en fila, **solo de frente**:
-  1 toro (cuernos, túnica roja) · 2 carnero (cuernos enroscados, túnica a rayas) ·
-  3 fauno (corona de laurel, cola) · 4 ave (pico; el más alto).
-- **Preparado:** `tools/sprite_layouts/sabio_{1..4}.lua` → `assets/sprites/strips/sabio_N/`
-  → `resources/sprite_frames/sabio_N.tres` con `parado_frente` (respiran) y `caminar_frente`
-  (andan en el sitio). Celda 48×60, origen (24, 58): en el `AnimatedSprite2D`
-  `offset = (0, −28)` para que la posición sean los pies.
-- **Dónde va:** escena de los sabios en el templo del pueblo (dan la espada y ponen
-  `EstadoJuego.mision_recibida = true`). Se pueden instanciar como `scenes/npcs/npc.tscn`
-  con `sprite_frames = sabio_N.tres`, `paseo = false` y `burbuja = MISION`.
-- **Falta:** la escena y sus diálogos; no hay vistas de lado ni de espalda (el
-  `AnimadorDireccional` usará la de frente); retratos para la caja de diálogo.
 
 ## Gallo y perro
 

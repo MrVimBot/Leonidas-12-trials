@@ -14,6 +14,7 @@ extends CharacterBody2D
 ##
 ## Al hablar con él se para y mira al jugador; sigue paseando al cerrar el diálogo.
 ## `paseo = false` → NPC fijo (tendera, sabios...): no se mueve ni se gira.
+## `dialogo` se puede cambiar en juego (p. ej. la escena de los sabios): pasa a su ZonaDialogo.
 
 enum Estado { QUIETO, CAMINANDO, HABLANDO }
 
@@ -22,14 +23,26 @@ enum Estado { QUIETO, CAMINANDO, HABLANDO }
 	set(valor):
 		sprite_frames = valor
 		_aplicar_aspecto()
-## Lo que dice al hablar con él (resources/dialogues/*.tres).
-@export var dialogo: Dialogo
+## Lo que dice al hablar con él (resources/dialogues/*.tres). Sin diálogo ni tienda no
+## sale burbuja ni se puede hablar con él.
+@export var dialogo: Dialogo:
+	set(valor):
+		dialogo = valor
+		var zona := get_node_or_null(^"ZonaDialogo") as ZonaDialogo
+		if zona and not Engine.is_editor_hint():
+			zona.dialogo = valor
 ## Si vende algo: un ComponenteTienda hijo del NPC (entonces no usa `dialogo`).
 @export var tienda: ComponenteTienda
 ## Burbuja sobre la cabeza al acercarse: "…" hablar, "!" misión, "$" tienda.
 @export var burbuja: ZonaDialogo.Tipo = ZonaDialogo.Tipo.HABLAR
 ## Punta de la burbuja respecto a los pies (encima de la cabeza).
 @export var posicion_burbuja := Vector2(0, -46)
+## `offset` del Sprite para que la posición del nodo sean los pies: (0, −24) para las
+## celdas de 56×52 (burro, zorro...), (0, −28) para los sabios (48×60).
+@export var desplazamiento_sprite := Vector2(0, -24):
+	set(valor):
+		desplazamiento_sprite = valor
+		_aplicar_aspecto()
 
 @export_group("Paseo")
 ## Si es false, el NPC se queda siempre en su sitio.
@@ -73,6 +86,7 @@ func _aplicar_aspecto() -> void:
 	if sprite == null:
 		return
 	sprite.sprite_frames = sprite_frames
+	sprite.offset = desplazamiento_sprite
 	if sprite_frames:
 		for nombre in [&"parado_frente", &"parado"]:
 			if sprite_frames.has_animation(nombre):
@@ -149,6 +163,12 @@ func _al_empezar_dialogo(quien: Node) -> void:
 
 func _al_terminar_dialogo() -> void:
 	_quedarse_quieto()
+
+
+## Para cinemáticas que mueven al NPC por su cuenta (p. ej. la escena de los sabios):
+## reproduce `base` (parado / caminar) en la dirección a la que mira.
+func animar(base: StringName) -> void:
+	_reproducir(base)
 
 
 ## Reproduce `base_<dirección>`; si el sprite no tiene esa dirección, la de frente.

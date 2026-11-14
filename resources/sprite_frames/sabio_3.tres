@@ -1,7 +1,7 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://cwc84710hdigg"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/sabio_3/caminar_frente.png" id="1_t4jr5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/sabio_3/parado_frente.png" id="2_y4v7i"]
+[ext_resource type="Texture2D" uid="uid://nxoo3jrcf1an" path="res://assets/sprites/strips/sabio_3/caminar_frente.png" id="1_t4jr5"]
+[ext_resource type="Texture2D" uid="uid://bd6ufjuxhfydb" path="res://assets/sprites/strips/sabio_3/parado_frente.png" id="2_y4v7i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yecer"]
 atlas = ExtResource("1_t4jr5")

@@ -40,17 +40,22 @@
 [ext_resource type="SpriteFrames" uid="uid://dtlyraqbxnl07" path="res://resources/sprite_frames/npc_zorro.tres" id="43_zor"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera.tres" id="44_dtn"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_burro.tres" id="45_dbu"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/sabio_1.tres" id="46_acfab"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_zorro.tres" id="46_dzo"]
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_kathita_libro.tscn" id="46_wvopy"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/sabio_2.tres" id="47_0nbs4"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="47_1uqxn"]
 [ext_resource type="Script" uid="uid://bhpbef6aw6ekp" path="res://scripts/componentes/componente_tienda.gd" id="47_tie"]
 [ext_resource type="Resource" path="res://resources/dialogues/kathita_barrera_voltereta.tres" id="48_1qanc"]
 [ext_resource type="Script" uid="uid://c7cvq8uxxjtnx" path="res://scripts/systems/articulo_tienda.gd" id="48_art"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/sabio_3.tres" id="48_odgk1"]
 [ext_resource type="Resource" path="res://resources/dialogues/kathita_barrera_repetida.tres" id="49_374g8"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/sabio_4.tres" id="49_jndu0"]
 [ext_resource type="Resource" path="res://resources/tienda/manzana.tres" id="49_man"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_sin_monedas.tres" id="50_dsm"]
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
 [ext_resource type="Resource" path="res://resources/dialogues/cartel_camino_cerrado.tres" id="52_ccc"]
+[ext_resource type="PackedScene" path="res://scenes/cinematics/escena_sabios.tscn" id="54_c4mwa"]
 [ext_resource type="Script" uid="uid://us5dtx7tine7" path="res://scripts/entorno/auto_transiciones.gd" id="60_autotr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
@@ -4497,6 +4502,38 @@ dialogo = ExtResource("46_dzo")
 posicion_burbuja = Vector2(0, -42)
 radio_paseo = 40.0
 
+[node name="Sabio1" parent="Objetos/NPCs" unique_id=689736194 instance=ExtResource("40_npc")]
+position = Vector2(878, 646)
+sprite_frames = ExtResource("46_acfab")
+posicion_burbuja = Vector2(0, -60)
+desplazamiento_sprite = Vector2(0, -28)
+paseo = false
+mirar_al_hablar = false
+
+[node name="Sabio2" parent="Objetos/NPCs" unique_id=1900689292 instance=ExtResource("40_npc")]
+position = Vector2(906, 646)
+sprite_frames = ExtResource("47_0nbs4")
+posicion_burbuja = Vector2(0, -60)
+desplazamiento_sprite = Vector2(0, -28)
+paseo = false
+mirar_al_hablar = false
+
+[node name="Sabio3" parent="Objetos/NPCs" unique_id=1564773868 instance=ExtResource("40_npc")]
+position = Vector2(934, 646)
+sprite_frames = ExtResource("48_odgk1")
+posicion_burbuja = Vector2(0, -60)
+desplazamiento_sprite = Vector2(0, -28)
+paseo = false
+mirar_al_hablar = false
+
+[node name="Sabio4" parent="Objetos/NPCs" unique_id=1521837449 instance=ExtResource("40_npc")]
+position = Vector2(962, 646)
+sprite_frames = ExtResource("49_jndu0")
+posicion_burbuja = Vector2(0, -60)
+desplazamiento_sprite = Vector2(0, -28)
+paseo = false
+mirar_al_hablar = false
+
 [node name="Eventos" type="Node2D" parent="Objetos" unique_id=694230501]
 
 [node name="EntregaLibro" parent="Objetos/Eventos" unique_id=449316993 instance=ExtResource("46_wvopy")]
@@ -4515,7 +4552,6 @@ position = Vector2(920, 240)
 
 [node name="BarreraSur" parent="Objetos/Eventos" unique_id=160869627 instance=ExtResource("47_1uqxn")]
 position = Vector2(920, 1300)
-requisito = 1
 direccion_retroceso = Vector2(0, -1)
 
 [node name="BarreraCartel" parent="Objetos/Eventos" unique_id=1223303129 instance=ExtResource("47_1uqxn")]
@@ -4540,6 +4576,10 @@ destello = false
 
 [node name="Forma" parent="Objetos/Eventos/BarreraCartelOeste" index="0"]
 shape = SubResource("RectangleShape2D_374g8")
+
+[node name="EscenaSabios" parent="Objetos/Eventos" unique_id=394023614 node_paths=PackedStringArray("sabios") instance=ExtResource("54_c4mwa")]
+position = Vector2(920, 646)
+sabios = [NodePath("../../NPCs/Sabio1"), NodePath("../../NPCs/Sabio2"), NodePath("../../NPCs/Sabio3"), NodePath("../../NPCs/Sabio4")]
 
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0

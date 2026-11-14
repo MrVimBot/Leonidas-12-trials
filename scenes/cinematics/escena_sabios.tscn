@@ -1,0 +1,40 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/cinematics/escena_sabios.gd" id="1_esc"]
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="12_dia"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_bienvenida.tres" id="2_bie"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_mision.tres" id="3_mis"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_espada.tres" id="4_esp"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_ataque.tres" id="5_ata"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_despedida.tres" id="6_des"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_toro.tres" id="7_rec"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_carnero.tres" id="9_car"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_fauno.tres" id="10_fau"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_ave.tres" id="11_ave"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_no_te_vayas.tres" id="8_nov"]
+
+[sub_resource type="RectangleShape2D" id="Forma_disparador"]
+size = Vector2(104, 46)
+
+[node name="EscenaSabios" type="Node2D"]
+script = ExtResource("1_esc")
+dialogo_bienvenida = ExtResource("2_bie")
+dialogo_mision = ExtResource("3_mis")
+dialogo_espada = ExtResource("4_esp")
+dialogo_ataque = ExtResource("5_ata")
+dialogo_no_te_vayas = ExtResource("8_nov")
+dialogo_despedida = ExtResource("6_des")
+recordatorios = Array[ExtResource("12_dia")]([ExtResource("7_rec"), ExtResource("9_car"), ExtResource("10_fau"), ExtResource("11_ave")])
+dialogo_recordatorio = ExtResource("7_rec")
+
+[node name="Disparador" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="Disparador"]
+position = Vector2(0, 31)
+shape = SubResource("Forma_disparador")
+
+[node name="PuntoLeonidas" type="Marker2D" parent="."]
+position = Vector2(0, 38)

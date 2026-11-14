@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. La misión: Medusa, ir al sur, la barca, una semana.
+Ave: Más allá del mar, al sur, hay una isla maldita. En ella vive Medusa, la gorgona.
+Ave: Quien cruza su mirada se convierte en piedra. Los pescadores ya no se atreven a acercarse.
+Toro: Tu misión es llegar a esa isla y derrotarla.
+Leonidas: ¿¡A Medusa!? ¿Yo solo?
+Carnero: Sal del pueblo por la puerta sur y cruza el bosque hasta la orilla.
+Carnero: Allí te espera una barca, y alguien que te dirá qué hacer.
+Fauno: Tienes una semana. Y trae una prueba de tu victoria.
+"
