@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://16qabv63hlce"
+path="res://.godot/imported/iconos_de_inventario.aseprite-4718a2e236ccb4f2666b362fa4ba2a95.res"
+
+[deps]
+
+source_file="res://assets/sprites/inventario/iconos_de_inventario.aseprite"
+dest_files=["res://.godot/imported/iconos_de_inventario.aseprite-4718a2e236ccb4f2666b362fa4ba2a95.res"]
+
+[params]
+

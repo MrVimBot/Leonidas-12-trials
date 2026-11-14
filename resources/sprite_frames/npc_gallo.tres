@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_gallo/parado_espalda.png" id="1_5tm6a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_gallo/parado_frente.png" id="2_ut3sp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/npc_gallo/parado_lado.png" id="3_avwxi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6f7a4"]
+atlas = ExtResource("1_5tm6a")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4g8gp"]
+atlas = ExtResource("2_ut3sp")
+region = Rect2(0, 0, 56, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_puiw6"]
+atlas = ExtResource("3_avwxi")
+region = Rect2(0, 0, 56, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6f7a4")
+}],
+"loop": 1,
+"name": &"parado_espalda",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4g8gp")
+}],
+"loop": 1,
+"name": &"parado_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_puiw6")
+}],
+"loop": 1,
+"name": &"parado_lado",
+"speed": 10.0
+}]
+metadata/origin = Vector2(28, 50)
+metadata/cell_size = Vector2i(56, 52)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/npc_gallo.aseprite"

@@ -1,0 +1,42 @@
+{
+  "animations": {
+    "caminar_frente": {
+      "duplicates": [[1, 0], [3, 2], [4, 0], [5, 0], [6, 2], [7, 2]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "caminar_frente.png",
+      "foot": 112,
+      "frame_count": 8,
+      "layer": "caminando",
+      "loop": true,
+      "period": 4,
+      "region": [36, 57, 25, 57],
+      "unique_frames": 2
+    },
+    "parado_frente": {
+      "duplicates": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
+      "durations_ms": [100, 100, 100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "parado_frente.png",
+      "foot": 56,
+      "frame_count": 8,
+      "layer": "parados",
+      "loop": true,
+      "period": 1,
+      "region": [36, 0, 25, 57],
+      "unique_frames": 1
+    }
+  },
+  "cell": {
+    "h": 60,
+    "w": 48
+  },
+  "name": "sabio_2",
+  "origin": {
+    "x": 24,
+    "y": 58
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/los_sabios.aseprite",
+  "warnings": []
+}

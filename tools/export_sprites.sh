@@ -36,7 +36,8 @@ for layout in "${layouts[@]}"; do
     --script tools/export_strips.lua
 done
 
-# Recortes sueltos (objetos de entorno y franjas de tiles): tools/recortes/*.lua
+# Recortes sueltos (objetos de entorno, franjas de tiles y atlas de tiles sueltos):
+# tools/recortes/*.lua
 if [[ $# -eq 0 ]]; then
   for config in tools/recortes/*.lua; do
     src="$(sed -n 's/^[[:space:]]*source[[:space:]]*=[[:space:]]*"\(.*\)".*/\1/p' "$config" | head -1)"

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bfeijxm1qdb8s"
+path="res://.godot/imported/seleccion_de_casilla_de_inventario.aseprite-ef5effdc91f5eed758d860d326f684ff.res"
+
+[deps]
+
+source_file="res://assets/sprites/inventario/seleccion_de_casilla_de_inventario.aseprite"
+dest_files=["res://.godot/imported/seleccion_de_casilla_de_inventario.aseprite-ef5effdc91f5eed758d860d326f684ff.res"]
+
+[params]
+

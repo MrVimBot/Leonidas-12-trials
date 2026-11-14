@@ -73,4 +73,26 @@ for _, r in ipairs(C.recortes) do
   img:saveAs(dir .. "/" .. r.nombre .. ".png")
   total = total + 1
 end
+-- Atlas opcional: tiles sueltos de la hoja empaquetados en una rejilla
+-- (tamano × tamano, `separacion` px entre tiles; una fila del atlas por grupo).
+if C.atlas then
+  local A = C.atlas
+  local t, sep = A.tamano, A.separacion or 0
+  local cols = 0
+  for _, fila in ipairs(A.filas) do cols = math.max(cols, #fila) end
+  local W = cols * t + (cols - 1) * sep
+  local H = #A.filas * t + (#A.filas - 1) * sep
+  local img = Image(W, H, ColorMode.RGB)
+  for r, fila in ipairs(A.filas) do
+    for c, p in ipairs(fila) do
+      local tile = Image(t, t, ColorMode.RGB)
+      tile:drawImage(lienzo, Point(-p[1], -p[2]))
+      img:drawImage(tile, Point((c - 1) * (t + sep), (r - 1) * (t + sep)))
+      total = total + 1
+    end
+  end
+  local dir = root .. "/" .. (A.dir or C.out_dir)
+  app.fs.makeAllDirectories(dir)
+  img:saveAs(dir .. "/" .. A.nombre .. ".png")
+end
 print(string.format("[export_recortes] %d recortes de %s", total, C.source))

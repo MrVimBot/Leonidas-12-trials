@@ -52,6 +52,49 @@ const TILESETS := [
 			"res://resources/shaders/agua_estanque.tres": [Vector2i(16, 0), Vector2i(17, 0), Vector2i(18, 0)],
 			"res://resources/shaders/agua_mar.tres": [Vector2i(19, 0), Vector2i(0, 1), Vector2i(17, 1), Vector2i(18, 1), Vector2i(19, 1)],
 		},
+		# Más fuentes (atlas) dentro del mismo TileSet: id de fuente = 1, 2... en orden.
+		# Mismas claves que arriba. La fuente 0 (arriba) no cambia: las zonas ya pintadas
+		# siguen igual.
+		"fuentes_extra": [
+			{
+				# Fuente 1: transiciones de tiles_y_como_funcionan.aseprite
+				# (tools/recortes/tiles_transiciones.lua explica cada tile).
+				# Fila 0 suelo de piedra · 1 estanque con bordillo · 2 estanque natural ·
+				# 3 camino de tierra.
+				"textura": "res://assets/tilesets/tiles_transiciones.png",
+				"separacion": Vector2i(1, 1),
+				"tiles": [
+					[0, 0, 11],
+					[1, 0, 8],
+					[2, 0, 12],
+					[3, 0, 10],
+				],
+				"volteables": [
+					Vector2i(0, 2),  # agua lisa del estanque natural
+					Vector2i(9, 3),  # tierra con piedras
+					Vector2i(10, 3), # tierra con piedras
+				],
+				# Todo lo que tiene agua bloquea (igual que la orilla 17,0 de la fuente 0).
+				"solidos": [
+					Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1),
+					Vector2i(5, 1), Vector2i(6, 1), Vector2i(7, 1), Vector2i(8, 1),
+					Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2), Vector2i(4, 2),
+					Vector2i(5, 2), Vector2i(6, 2), Vector2i(7, 2), Vector2i(8, 2), Vector2i(9, 2),
+					Vector2i(10, 2), Vector2i(11, 2), Vector2i(12, 2),
+				],
+				"materiales": {
+					"res://resources/shaders/agua_estanque.tres": [
+						Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1),
+						Vector2i(5, 1), Vector2i(6, 1), Vector2i(7, 1), Vector2i(8, 1),
+					],
+					"res://resources/shaders/agua_estanque_natural.tres": [
+						Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2), Vector2i(4, 2),
+						Vector2i(5, 2), Vector2i(6, 2), Vector2i(7, 2), Vector2i(8, 2), Vector2i(9, 2),
+						Vector2i(10, 2), Vector2i(11, 2), Vector2i(12, 2),
+					],
+				},
+			},
+		],
 	},
 	{
 		# PROVISIONAL (tools/build_arte_provisional.gd): cueva, mar navegable, muelle...
@@ -85,23 +128,47 @@ func _init() -> void:
 
 
 func _construir(cfg: Dictionary) -> bool:
-	var textura := load(cfg.textura) as Texture2D
-	if textura == null:
-		push_error("No se pudo cargar %s (¿falta importar?)" % cfg.textura)
-		return false
-
 	var ts := TileSet.new()
 	ts.tile_size = cfg.tamano
 	ts.add_physics_layer()
 	ts.set_physics_layer_collision_layer(0, CAPA_MUNDO)
 	ts.set_physics_layer_collision_mask(0, 0)
 
-	var fuente := TileSetAtlasSource.new()
-	fuente.texture = textura
-	fuente.texture_region_size = cfg.tamano
-	fuente.separation = cfg.separacion
-	ts.add_source(fuente, 0)
+	var n := 0
+	var n_solidos := 0
+	var fuentes: Array = [cfg]
+	fuentes.append_array(cfg.get("fuentes_extra", []))
+	for id in fuentes.size():
+		var f: Dictionary = fuentes[id]
+		var fuente := TileSetAtlasSource.new()
+		var tex := load(f.textura) as Texture2D
+		if tex == null:
+			push_error("No se pudo cargar %s (¿falta importar?)" % f.textura)
+			return false
+		fuente.texture = tex
+		fuente.texture_region_size = cfg.tamano
+		fuente.separation = f.get("separacion", Vector2i.ZERO)
+		ts.add_source(fuente, id)
+		n += _rellenar(fuente, f, cfg.tamano)
+		n_solidos += f.get("solidos", []).size()
+		if not _materiales(fuente, f):
+			return false
 
+	DirAccess.make_dir_recursive_absolute(cfg.salida.get_base_dir())
+	# Conservar el UID del archivo anterior: si cambia, las zonas ya pintadas que lo
+	# referencian por UID dan avisos "invalid UID" hasta volver a guardarlas.
+	var uid_anterior := ResourceLoader.get_resource_uid(cfg.salida) if FileAccess.file_exists(cfg.salida) else ResourceUID.INVALID_ID
+	var err := ResourceSaver.save(ts, cfg.salida)
+	if err != OK:
+		push_error("No se pudo guardar %s (error %d)" % [cfg.salida, err])
+		return false
+	ResourceSaver.set_uid(cfg.salida, uid_anterior if uid_anterior != ResourceUID.INVALID_ID else ResourceUID.create_id())
+	print("[tilesets] %s: %d tiles, %d sólidos, %d fuente(s) -> %s" % [cfg.textura.get_file(), n, n_solidos, fuentes.size(), cfg.salida])
+	return true
+
+
+## Crea los tiles, las alternativas y las colisiones de una fuente. Devuelve cuántos tiles.
+func _rellenar(fuente: TileSetAtlasSource, cfg: Dictionary, tamano: Vector2i) -> int:
 	var n := 0
 	for rango in cfg.tiles:
 		for col in range(rango[1], rango[2] + 1):
@@ -123,13 +190,19 @@ func _construir(cfg: Dictionary) -> bool:
 			datos_alt.flip_v = bits & 2 != 0
 			datos_alt.transpose = bits & 4 != 0
 
-	var m: Vector2 = Vector2(cfg.tamano) / 2.0
+	var m: Vector2 = Vector2(tamano) / 2.0
 	var cuadrado := PackedVector2Array([Vector2(-m.x, -m.y), Vector2(m.x, -m.y), Vector2(m.x, m.y), Vector2(-m.x, m.y)])
-	for coords in cfg.solidos:
-		var datos := fuente.get_tile_data(coords, 0)
-		datos.add_collision_polygon(0)
-		datos.set_collision_polygon_points(0, 0, cuadrado)
+	for coords in cfg.get("solidos", []):
+		# También a las alternativas (volteos), si las hay.
+		for i in fuente.get_alternative_tiles_count(coords):
+			var datos := fuente.get_tile_data(coords, fuente.get_alternative_tile_id(coords, i))
+			datos.add_collision_polygon(0)
+			datos.set_collision_polygon_points(0, 0, cuadrado)
+	return n
 
+
+## Asigna los materiales (agua animada) a los tiles y a sus alternativas.
+func _materiales(fuente: TileSetAtlasSource, cfg: Dictionary) -> bool:
 	var materiales: Dictionary = cfg.get("materiales", {})
 	for ruta in materiales:
 		var material := load(ruta) as Material
@@ -137,18 +210,6 @@ func _construir(cfg: Dictionary) -> bool:
 			push_error("No se pudo cargar el material %s" % ruta)
 			return false
 		for coords in materiales[ruta]:
-			# También a las alternativas (volteos), si las hay.
 			for i in fuente.get_alternative_tiles_count(coords):
 				fuente.get_tile_data(coords, fuente.get_alternative_tile_id(coords, i)).material = material
-
-	DirAccess.make_dir_recursive_absolute(cfg.salida.get_base_dir())
-	# Conservar el UID del archivo anterior: si cambia, las zonas ya pintadas que lo
-	# referencian por UID dan avisos "invalid UID" hasta volver a guardarlas.
-	var uid_anterior := ResourceLoader.get_resource_uid(cfg.salida) if FileAccess.file_exists(cfg.salida) else ResourceUID.INVALID_ID
-	var err := ResourceSaver.save(ts, cfg.salida)
-	if err != OK:
-		push_error("No se pudo guardar %s (error %d)" % [cfg.salida, err])
-		return false
-	ResourceSaver.set_uid(cfg.salida, uid_anterior if uid_anterior != ResourceUID.INVALID_ID else ResourceUID.create_id())
-	print("[tilesets] %s: %d tiles, %d sólidos -> %s" % [cfg.textura.get_file(), n, cfg.solidos.size(), cfg.salida])
 	return true

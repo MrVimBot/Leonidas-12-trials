@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/sabio_3/caminar_frente.png" id="1_t4jr5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/strips/sabio_3/parado_frente.png" id="2_y4v7i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yecer"]
+atlas = ExtResource("1_t4jr5")
+region = Rect2(0, 0, 48, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4jc1"]
+atlas = ExtResource("1_t4jr5")
+region = Rect2(48, 0, 48, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6bxsg"]
+atlas = ExtResource("1_t4jr5")
+region = Rect2(96, 0, 48, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eungu"]
+atlas = ExtResource("1_t4jr5")
+region = Rect2(144, 0, 48, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_knl4w"]
+atlas = ExtResource("2_y4v7i")
+region = Rect2(0, 0, 48, 60)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yecer")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4jc1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6bxsg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eungu")
+}],
+"loop": 1,
+"name": &"caminar_frente",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_knl4w")
+}],
+"loop": 1,
+"name": &"parado_frente",
+"speed": 10.0
+}]
+metadata/origin = Vector2(24, 58)
+metadata/cell_size = Vector2i(48, 60)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/los_sabios.aseprite"

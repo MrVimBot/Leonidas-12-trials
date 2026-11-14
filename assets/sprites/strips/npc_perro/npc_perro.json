@@ -1,0 +1,52 @@
+{
+  "animations": {
+    "parado_espalda": {
+      "duplicates": [],
+      "durations_ms": [100],
+      "empty_frames": [],
+      "file": "parado_espalda.png",
+      "foot": 36,
+      "frame_count": 1,
+      "loop": true,
+      "period": 1,
+      "region": [48, 0, 22, 37],
+      "unique_frames": 1
+    },
+    "parado_frente": {
+      "duplicates": [],
+      "durations_ms": [100],
+      "empty_frames": [],
+      "file": "parado_frente.png",
+      "foot": 36,
+      "frame_count": 1,
+      "loop": true,
+      "period": 1,
+      "region": [0, 0, 22, 37],
+      "unique_frames": 1
+    },
+    "parado_lado": {
+      "duplicates": [],
+      "durations_ms": [100],
+      "empty_frames": [],
+      "file": "parado_lado.png",
+      "foot": 36,
+      "frame_count": 1,
+      "loop": true,
+      "period": 1,
+      "region": [22, 0, 26, 37],
+      "unique_frames": 1
+    }
+  },
+  "cell": {
+    "h": 52,
+    "w": 56
+  },
+  "name": "npc_perro",
+  "origin": {
+    "x": 28,
+    "y": 50
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/npc_perro.aseprite",
+  "warnings": []
+}
