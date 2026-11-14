@@ -23,4 +23,6 @@ var descripcion: String:
 		return objeto.descripcion
 var icono: Texture2D:
 	get:
-		return objeto.icono if objeto else null
+		if objeto == null:
+			return null
+		return objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono

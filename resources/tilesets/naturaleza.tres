@@ -2,9 +2,9 @@
 
 [ext_resource type="Material" path="res://resources/shaders/agua_mar.tres" id="1_s2d4p"]
 [ext_resource type="Material" path="res://resources/shaders/agua_estanque.tres" id="2_v7obl"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/tiles_naturaleza.png" id="3_6ks2a"]
+[ext_resource type="Texture2D" uid="uid://bsnisc17n58kq" path="res://assets/tilesets/tiles_naturaleza.png" id="3_6ks2a"]
 [ext_resource type="Material" path="res://resources/shaders/agua_estanque_natural.tres" id="4_44o1i"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/tiles_transiciones.png" id="5_s44df"]
+[ext_resource type="Texture2D" uid="uid://be25frbq2to8p" path="res://assets/tilesets/tiles_transiciones.png" id="5_s44df"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ad8e3"]
 texture = ExtResource("3_6ks2a")

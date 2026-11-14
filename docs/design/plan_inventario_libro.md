@@ -4,6 +4,14 @@
 > `assets/sprites/inventario/`. Relacionado: `plan_entrega_libro_kathita.md` (cómo se consigue
 > el libro), `guia_interfaz.md` («Menú del inventario») y `assets_pendientes.md` («Libro»).
 
+> **Actualización 2026-11-14 (tarde):** la artista entregó la maqueta por capas a **559×300**.
+> Se usa **tal cual, sin reescalar**: al abrir el libro la ventana pasa a modo
+> `CANVAS_ITEMS` y cada píxel del arte ocupa 3 píxeles de pantalla en 1920×1080 (2 en
+> ventanas menores), con una captura del juego de fondo. Esto sustituye a la opción B
+> (reducir a ×0,4) de abajo, que queda como historia. Las medidas de casillas, pestañas y
+> marco salen de `assets/ui/libro/libro.json` (`tools/export_libro.lua`); las de «Fase 0»
+> ya no valen. Detalle en CLAUDE.md («El libro»).
+
 ## Qué pidió la artista
 
 - El libro abierto ocupa la pantalla. Tres pares de páginas:
@@ -249,13 +257,14 @@ desactivado («Próximamente»); las demás páginas son baratas.
    CLAUDE.md, «Tienda»).
 
 ## Decisiones ya tomadas
-- Escala: **opción B por ahora** (libro reducido a 448×230 por script); **opción C** (redibujado por Lucía a ese tamaño) en cuanto lo entregue todo.
+- Escala: ~~opción B (reducido a 448×230)~~ → desde el 2026-11-14, la maqueta de 559×300 **sin reescalar**, a escala entera de pantalla (×3 en 1920×1080) en modo `CANVAS_ITEMS`.
 - Solo se enciende la pestaña de la página con el cursor.
 - Casilla suelta: icono dentro, texto al lado en el hueco café.
 - Navegación: la propuesta de arriba.
 - Todo el texto lo pone el juego con Gravity.
 
 ## Pendiente de Lucía
-1. Libro a 448×230, pestañas 26×22, marco 32×32, **páginas sin texto** y Misiones sin «!».
-2. Iconos de objetos a 16×16: manzana, espada, libro, carta de los sabios.
+1. ~~Libro a 448×230~~: ya no hace falta (se usa la maqueta de 559×300 tal cual). Sí: las
+   **páginas sin texto** (títulos, rótulos de Guardar) y Misiones sin «!», con la misma rejilla.
+2. Iconos de objetos a 16×16: ~~manzana, espada, carta de los sabios~~ (entregados el 2026-11-14, en uso); falta el **libro**.
 3. ¿Habrá mapa pintado para la zona oscura, o usamos el esquema provisional?

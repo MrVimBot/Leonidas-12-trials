@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b25r3118nipxj"
+path="res://.godot/imported/manzana.aseprite-bc082b826360334f7c88d6f709c1dd50.res"
+
+[deps]
+
+source_file="res://assets/sprites/inventario/objetos/manzana.aseprite"
+dest_files=["res://.godot/imported/manzana.aseprite-bc082b826360334f7c88d6f709c1dd50.res"]
+
+[params]
+

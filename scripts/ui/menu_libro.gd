@@ -6,9 +6,17 @@ extends CanvasLayer
 ## diálogos, tienda, cinemáticas, cambios de zona ni en el barco). Mientras está abierto
 ## el juego está en pausa (`get_tree().paused`).
 ##
-## Plan y medidas: docs/design/plan_inventario_libro.md. El arte es el de la artista
-## reducido a ×0,4 (448×230, assets/ui/inventario/); todas las coordenadas de abajo son
-## del lienzo reducido. Si llega el arte redibujado, volver a medirlas.
+## ARTE Y ESCALA (decidido el 2026-11-14, ver docs/design/plan_inventario_libro.md):
+## el libro es la maqueta por capas de la artista a 559×300 (assets/ui/libro/, la exporta
+## tools/export_libro.lua), que no cabe en los 480×270 del juego. En vez de reducirla, al
+## abrir el libro la ventana pasa a `CONTENT_SCALE_MODE_CANVAS_ITEMS` (como la cinemática)
+## y `Libro` se escala para que cada píxel del arte ocupe un número ENTERO de píxeles de
+## pantalla (×3 en 1920×1080, ×2 en 1440×810). Detrás se ve una captura del último
+## fotograma del juego (así el mundo no cambia de aspecto con el cambio de modo).
+## Todas las coordenadas de este script están en píxeles del lienzo de 559×300. Las de
+## casillas, pestañas, X y marco salen de assets/ui/libro/libro.json; las de los textos
+## (misiones, guardar, mapa) son constantes medidas sobre el arte: si la artista mueve esas
+## páginas, volver a medirlas.
 ##
 ## Páginas (en orden; cada pestaña es una página):
 ##   0 Objetos Importantes (pag_1, derecha)   1 Inventario (pag_2y3, izq.)
@@ -19,7 +27,8 @@ extends CanvasLayer
 ## ↓ o E/J entran). Q/R pasan de página desde cualquier sitio. E/J usa el objeto (comer
 ## la manzana) o guarda. I, Esc, Espacio/K o la X cierran. El ratón también vale para
 ## pestañas, casillas, el botón Guardar y la X.
-## Todo el texto lo escribe el juego con la fuente Gravity (no es de píxeles: Bold ≥ 10 px).
+## Todo el texto lo escribe el juego con la fuente Gravity (no es de píxeles: se dibuja a la
+## resolución de la pantalla, con filtro lineal).
 
 signal abierto_cambio(abierto: bool)
 
@@ -28,36 +37,30 @@ enum Pagina { IMPORTANTES, INVENTARIO, MAPA, MISIONES, GUARDAR }
 const NUM_PAGINAS := 5
 const COLUMNAS := 4
 const FILAS := 3
-## Columnas (x) de las casillas: Inventario (página izquierda) e Importantes (derecha).
-const CASILLAS_X_IZQ: Array[int] = [52, 89, 127, 164]
-const CASILLAS_X_DER: Array[int] = [254, 291, 328, 366]
-const CASILLAS_Y: Array[int] = [58, 94, 129]
-const TAM_CASILLA := 27
-## Casilla suelta (artículo seleccionado) y hueco del texto a su derecha.
-const SUELTA_IZQ := Vector2(53, 174)
-const SUELTA_DER := Vector2(254, 174)
-const TAM_SUELTA := 29
-const ANCHO_TEXTO := 110
-## Pestañas: x de cada una (orden de `Pagina`), y apagada / encendida.
-const PESTANAS_X: Array[int] = [43, 74, 104, 136, 166]
-const PESTANA_Y_OFF := -2
-const PESTANA_Y_ON := -9
-const PESTANA_APAGADA := Color(0.33, 0.33, 0.33)
-const SALIR_POS := Vector2(10, 182)
-const TAM_PESTANA := Vector2(26, 22)
-## Misiones: y (arriba del «!») de cada renglón; el texto va a la derecha del «!».
-const MISIONES_Y_PRINCIPALES: Array[int] = [66, 87, 108]
-const MISIONES_Y_SECUNDARIAS: Array[int] = [142, 163, 184]
-const MISIONES_X := 62
-const MISIONES_ANCHO := 140
-## Guardar: dónde van los valores (a la derecha de los rótulos pintados) y el botón.
-const GUARDAR_TIEMPO := Vector2(313, 121)
-const GUARDAR_JEFES := Vector2(326, 139)
-const GUARDAR_BOTON := Rect2(296, 166, 56, 16)
-const GUARDAR_MENSAJE := Rect2(246, 152, 160, 13)
-## Mapa: zona oscura donde se dibuja el esquema y cartela del nombre de la zona.
-const MAPA_CAJAS := Rect2(258, 58, 80, 140)
-const CARTELA := Rect2(352, 184, 58, 14)
+const DIR_ARTE := "res://assets/ui/libro/"
+const NOMBRES_PAGINA: Array[StringName] = [&"importantes", &"inventario", &"mapa", &"misiones", &"guardar"]
+## Tamaño de la pantalla lógica del juego (project.godot).
+const PANTALLA := Vector2(480, 270)
+
+## Tamaños de letra (px del lienzo; en 1920×1080 cada uno son 3 px de pantalla).
+const LETRA := 9
+const LETRA_CANTIDAD := 8
+## Texto a la derecha de la casilla suelta (artículo elegido).
+const TEXTO_SEPARACION := 6
+const TEXTO_ANCHO := 132
+const TEXTO_ALTO := 44
+## Misiones: renglón (y de la raya pintada) de cada misión; el texto va encima, tras el «!».
+const MISIONES_RAYAS: Array[int] = [113, 139, 166, 208, 234, 261]
+const MISIONES_X := 76
+const MISIONES_ANCHO := 168
+## Guardar: valores a la derecha de los rótulos pintados, botón y mensaje.
+const GUARDAR_TIEMPO := Vector2(401, 166)
+const GUARDAR_JEFES := Vector2(418, 181)
+const GUARDAR_BOTON := Rect2(372, 222, 62, 18)
+const GUARDAR_MENSAJE := Rect2(305, 197, 192, 14)
+## Mapa: columna de cajas dentro de la zona oscura y cartela (entre los laureles).
+const MAPA_CAJAS := Rect2(316, 80, 108, 180)
+const CARTELA := Rect2(457, 246, 38, 14)
 
 const TINTA := Color("1c2254")
 const TINTA_GRIS := Color(0.11, 0.13, 0.33, 0.45)
@@ -78,11 +81,6 @@ const ZONAS := [
 ]
 
 @export var fuente: Font = preload("res://assets/fonts/gravity_bold.otf")
-@export var paginas_arte: Array[Texture2D] = [
-	preload("res://assets/ui/inventario/pag_1.png"),
-	preload("res://assets/ui/inventario/pag_2y3.png"),
-	preload("res://assets/ui/inventario/pag_4y5.png"),
-]
 
 var abierto := false
 
@@ -95,6 +93,18 @@ var _tiempo := 0.0
 var _aviso := ""
 var _tiempo_aviso := 0.0
 var _mensaje_guardar := ""
+var _modo_original: Window.ContentScaleMode
+
+## Medidas de libro.json (px del lienzo).
+var _rejilla := {}          # Pagina → Array[Rect2] (12 casillas)
+var _suelta := {}           # Pagina → Rect2 (casilla del artículo elegido)
+var _pestana_x: Array[int] = []
+var _pestana_y := Vector2i(19, 11) # apagada, encendida
+var _pestana_tam := Vector2(31, 28)
+var _salir := Rect2(11, 239, 31, 28)
+var _sel_desplazamiento := Vector2(-3, -4)
+var _paginas_arte: Array[Texture2D] = []
+var _tex_pestana := {}      # nombre → [encendida, apagada]
 
 ## Nodos creados en _ready.
 var _iconos := { Pagina.IMPORTANTES: [], Pagina.INVENTARIO: [] }
@@ -108,13 +118,17 @@ var _jefes_label: Label
 var _marca_guardar: Label
 var _mensaje_label: Label
 var _cartela: Label
+var _raton_en_salir := false
 
+@onready var fondo: TextureRect = $Fondo
 @onready var libro: Control = $Libro
+@onready var cobertura: TextureRect = $Libro/Cobertura
 @onready var pagina_arte: TextureRect = $Libro/Pagina
 @onready var pestanas: Array[TextureRect] = [
 	$Libro/Pestanas/Importantes, $Libro/Pestanas/Inventario, $Libro/Pestanas/Mapa,
 	$Libro/Pestanas/Misiones, $Libro/Pestanas/Guardar,
 ]
+@onready var salir: TextureRect = $Libro/Salir
 @onready var seleccion: TextureRect = $Libro/Seleccion
 @onready var contenido: Control = $Libro/Contenido
 @onready var mapa: Control = $Libro/Contenido/Mapa
@@ -123,23 +137,70 @@ var _cartela: Label
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
+	_cargar_arte()
 	var tema := Theme.new()
 	tema.default_font = fuente
-	tema.default_font_size = 10
+	tema.default_font_size = LETRA
 	tema.set_color(&"font_color", &"Label", TINTA)
-	tema.set_constant(&"line_spacing", &"Label", -3)
+	tema.set_constant(&"line_spacing", &"Label", -2)
 	libro.theme = tema
-	for i in NUM_PAGINAS:
-		pestanas[i].position = Vector2(PESTANAS_X[i], PESTANA_Y_OFF)
-	_crear_rejilla(Pagina.IMPORTANTES, CASILLAS_X_DER, SUELTA_DER)
-	_crear_rejilla(Pagina.INVENTARIO, CASILLAS_X_IZQ, SUELTA_IZQ)
+	_crear_rejilla(Pagina.IMPORTANTES)
+	_crear_rejilla(Pagina.INVENTARIO)
 	_crear_misiones()
 	_crear_guardar()
-	_cartela = _etiqueta(CARTELA.position, CARTELA.size.x, &"Mapa")
+	_cartela = _etiqueta(CARTELA.position, CARTELA.size.x, &"Mapa", CARTELA.size.y)
 	_cartela.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	mapa.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR # su texto
 	mapa.draw.connect(_dibujar_mapa)
 	EstadoJuego.objetos_cambio.connect(func(_id: StringName, _n: int) -> void: _refrescar())
 	EstadoJuego.misiones_cambio.connect(_refrescar)
+	get_window().size_changed.connect(_colocar)
+
+
+## Texturas y medidas que exporta tools/export_libro.lua.
+func _cargar_arte() -> void:
+	cobertura.texture = load(DIR_ARTE + "cobertura.png")
+	for nombre in ["pag_1", "pag_2y3", "pag_4y5"]:
+		_paginas_arte.append(load(DIR_ARTE + nombre + ".png"))
+	var datos: Dictionary = (load(DIR_ARTE + "libro.json") as JSON).data
+	libro.size = Vector2(datos.lienzo[0], datos.lienzo[1])
+	_pestana_y = Vector2i(datos.pestana_y[0], datos.pestana_y[1])
+	for i in NUM_PAGINAS:
+		var p: Array = datos.pestanas[i]
+		_pestana_x.append(int(p[1]))
+		_pestana_tam = Vector2(p[2], p[3])
+		_tex_pestana[p[0]] = [load(DIR_ARTE + "pestana_%s.png" % p[0]),
+			load(DIR_ARTE + "pestana_%s_apagada.png" % p[0])]
+	_salir = Rect2(datos.salir[0], datos.salir[1], datos.salir[2], datos.salir[3])
+	salir.position = _salir.position
+	_tex_pestana[&"salir"] = [load(DIR_ARTE + "salir.png"), load(DIR_ARTE + "salir_apagada.png")]
+	seleccion.texture = load(DIR_ARTE + "seleccion.png")
+	_sel_desplazamiento = Vector2(datos.seleccion[2], datos.seleccion[3])
+	for p: Pagina in [Pagina.IMPORTANTES, Pagina.INVENTARIO]:
+		var lista: Array = datos.casillas[String(NOMBRES_PAGINA[p])]
+		assert(lista.size() == COLUMNAS * FILAS + 1, "libro.json: faltan casillas en " + NOMBRES_PAGINA[p])
+		var rects: Array[Rect2] = []
+		for c in lista:
+			rects.append(Rect2(c[0], c[1], c[2], c[3]))
+		_suelta[p] = rects.pop_back()
+		_rejilla[p] = rects
+
+
+## Escala entera de pantalla para el libro y lo centra. Se llama al abrir y si cambia la
+## ventana. Con el modo CANVAS_ITEMS una unidad lógica son `f` píxeles de pantalla.
+func _colocar() -> void:
+	if not abierto:
+		return
+	# Con escala entera y aspecto fijo, el juego ocupa PANTALLA × f píxeles de la ventana
+	# (lo demás son bandas negras, donde no se puede dibujar).
+	var ventana := Vector2(get_window().size)
+	var f := maxf(1.0, floorf(minf(ventana.x / PANTALLA.x, ventana.y / PANTALLA.y)))
+	var area := PANTALLA * f
+	var k := maxf(1.0, floorf(minf(area.x / libro.size.x, area.y / libro.size.y)))
+	var escala := k / f
+	libro.scale = Vector2(escala, escala)
+	# Esquina en un píxel entero de pantalla.
+	libro.position = ((PANTALLA - libro.size * escala) / 2.0 * f).round() / f
 
 
 func _etiqueta(pos: Vector2, ancho: float, pagina: StringName, alto := 13.0) -> Label:
@@ -147,13 +208,14 @@ func _etiqueta(pos: Vector2, ancho: float, pagina: StringName, alto := 13.0) -> 
 	l.position = pos
 	l.size = Vector2(ancho, alto)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	contenido.get_node(NodePath(pagina)).add_child(l)
 	return l
 
 
 func _icono(padre: Control) -> TextureRect:
 	var t := TextureRect.new()
-	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	t.stretch_mode = TextureRect.STRETCH_SCALE
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	padre.add_child(t)
@@ -164,42 +226,38 @@ func _nombre_nodo(p: Pagina) -> StringName:
 	return [&"Importantes", &"Inventario", &"Mapa", &"Misiones", &"Guardar"][p]
 
 
-func _crear_rejilla(p: Pagina, columnas: Array[int], suelta: Vector2) -> void:
+func _crear_rejilla(p: Pagina) -> void:
 	var padre := contenido.get_node(NodePath(_nombre_nodo(p))) as Control
-	for fila in FILAS:
-		for col in COLUMNAS:
-			var pos := Vector2(columnas[col], CASILLAS_Y[fila])
-			var ico := _icono(padre)
-			ico.position = pos
-			ico.size = Vector2(TAM_CASILLA, TAM_CASILLA)
-			_iconos[p].append(ico)
-			var n := Label.new()
-			n.position = pos + Vector2(0, TAM_CASILLA - 13)
-			n.size = Vector2(TAM_CASILLA - 1, 13)
-			n.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-			n.add_theme_color_override(&"font_color", Color.WHITE)
-			n.add_theme_color_override(&"font_outline_color", TINTA)
-			n.add_theme_constant_override(&"outline_size", 3)
-			n.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			padre.add_child(n)
-			_cantidades[p].append(n)
-	var s := _icono(padre)
-	s.position = suelta
-	s.size = Vector2(TAM_SUELTA, TAM_SUELTA)
-	_suelta_icono[p] = s
+	for r: Rect2 in _rejilla[p]:
+		_iconos[p].append(_icono(padre))
+		var n := Label.new()
+		n.position = r.position + Vector2(0, r.size.y - 12)
+		n.size = Vector2(r.size.x - 1, 12)
+		n.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		n.add_theme_font_size_override(&"font_size", LETRA_CANTIDAD)
+		n.add_theme_color_override(&"font_color", Color.WHITE)
+		n.add_theme_color_override(&"font_outline_color", TINTA)
+		n.add_theme_constant_override(&"outline_size", 3)
+		n.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		n.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		padre.add_child(n)
+		_cantidades[p].append(n)
+	_suelta_icono[p] = _icono(padre)
+	var s: Rect2 = _suelta[p]
 	var t := Label.new()
-	t.position = suelta + Vector2(TAM_SUELTA + 4, -3)
-	t.size = Vector2(ANCHO_TEXTO, 36)
+	t.position = Vector2(s.end.x + TEXTO_SEPARACION, s.position.y - 2)
+	t.size = Vector2(TEXTO_ANCHO, TEXTO_ALTO)
 	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	t.clip_text = true
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	t.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	padre.add_child(t)
 	_suelta_texto[p] = t
 
 
 func _crear_misiones() -> void:
-	for y in MISIONES_Y_PRINCIPALES + MISIONES_Y_SECUNDARIAS:
-		var l := _etiqueta(Vector2(MISIONES_X, y - 3), MISIONES_ANCHO, &"Misiones")
+	for y in MISIONES_RAYAS:
+		var l := _etiqueta(Vector2(MISIONES_X, y - 14), MISIONES_ANCHO, &"Misiones")
 		l.clip_text = true
 		_misiones.append(l)
 		var raya := ColorRect.new()
@@ -213,9 +271,10 @@ func _crear_misiones() -> void:
 func _crear_guardar() -> void:
 	_tiempo_label = _etiqueta(GUARDAR_TIEMPO, 80, &"Guardar")
 	_jefes_label = _etiqueta(GUARDAR_JEFES, 60, &"Guardar")
-	_marca_guardar = _etiqueta(GUARDAR_BOTON.position + Vector2(-2, 0), 10, &"Guardar")
+	_marca_guardar = _etiqueta(GUARDAR_BOTON.position + Vector2(-8, 1), 10, &"Guardar")
 	_marca_guardar.text = ">"
-	_mensaje_label = _etiqueta(GUARDAR_MENSAJE.position, GUARDAR_MENSAJE.size.x, &"Guardar")
+	_mensaje_label = _etiqueta(GUARDAR_MENSAJE.position, GUARDAR_MENSAJE.size.x, &"Guardar",
+		GUARDAR_MENSAJE.size.y)
 	_mensaje_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 
@@ -238,14 +297,22 @@ func puede_abrir() -> bool:
 func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 	if not puede_abrir():
 		return false
+	# Captura del juego tal como se ve ahora (a 480×270): será el fondo mientras la
+	# ventana está en modo CANVAS_ITEMS.
+	var captura := get_viewport().get_texture().get_image()
+	fondo.texture = ImageTexture.create_from_image(captura) if captura else null
 	abierto = true
 	_frame_apertura = Engine.get_process_frames()
 	_pagina = pagina
 	_en_pestanas = false
 	_aviso = ""
 	_mensaje_guardar = ""
+	_raton_en_salir = false
+	_modo_original = get_window().content_scale_mode
+	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	get_tree().paused = true
 	visible = true
+	_colocar()
 	_refrescar()
 	abierto_cambio.emit(true)
 	return true
@@ -256,6 +323,8 @@ func cerrar() -> void:
 		return
 	abierto = false
 	visible = false
+	fondo.texture = null
+	get_window().content_scale_mode = _modo_original
 	get_tree().paused = false
 	abierto_cambio.emit(false)
 
@@ -394,19 +463,31 @@ func _avisar(t: String) -> void:
 
 # --- Ratón ----------------------------------------------------------------------------
 
+## Posición del ratón en píxeles del lienzo del libro.
+func _en_libro(pos: Vector2) -> Vector2:
+	return libro.get_global_transform().affine_inverse() * pos
+
+
 func _input(event: InputEvent) -> void:
 	if not abierto:
+		return
+	var movimiento := event as InputEventMouseMotion
+	if movimiento:
+		var encima := _salir.has_point(_en_libro(movimiento.position))
+		if encima != _raton_en_salir:
+			_raton_en_salir = encima
+			_refrescar()
 		return
 	var boton := event as InputEventMouseButton
 	if boton == null or not boton.pressed or boton.button_index != MOUSE_BUTTON_LEFT:
 		return
-	var pos := boton.position - libro.position
+	var pos := _en_libro(boton.position)
 	get_viewport().set_input_as_handled()
-	if Rect2(SALIR_POS, TAM_PESTANA).has_point(pos):
+	if _salir.has_point(pos):
 		cerrar()
 		return
 	for i in NUM_PAGINAS:
-		if Rect2(pestanas[i].position, TAM_PESTANA).has_point(pos):
+		if Rect2(pestanas[i].position, _pestana_tam).has_point(pos):
 			_ir_a_pagina(i, true)
 			_en_pestanas = false
 			_refrescar()
@@ -414,22 +495,19 @@ func _input(event: InputEvent) -> void:
 	for p: Pagina in [Pagina.IMPORTANTES, Pagina.INVENTARIO]:
 		if not _pagina_visible(p):
 			continue
-		var cols := CASILLAS_X_DER if p == Pagina.IMPORTANTES else CASILLAS_X_IZQ
-		for fila in FILAS:
-			for col in COLUMNAS:
-				var r := Rect2(cols[col], CASILLAS_Y[fila], TAM_CASILLA, TAM_CASILLA)
-				if r.has_point(pos):
-					var i := fila * COLUMNAS + col
-					var ya: bool = _pagina == p and _casilla[p] == i and not _en_pestanas
-					_pagina = p
-					_en_pestanas = false
-					_casilla[p] = i
-					_aviso = ""
-					if ya: # segundo clic = usar
-						_confirmar()
-					else:
-						_refrescar()
-					return
+		var rects: Array[Rect2] = _rejilla[p]
+		for i in rects.size():
+			if rects[i].has_point(pos):
+				var ya: bool = _pagina == p and _casilla[p] == i and not _en_pestanas
+				_pagina = p
+				_en_pestanas = false
+				_casilla[p] = i
+				_aviso = ""
+				if ya: # segundo clic = usar
+					_confirmar()
+				else:
+					_refrescar()
+				return
 	if _pagina_visible(Pagina.GUARDAR) and GUARDAR_BOTON.has_point(pos):
 		_pagina = Pagina.GUARDAR
 		_en_pestanas = false
@@ -438,7 +516,7 @@ func _input(event: InputEvent) -> void:
 
 # --- Dibujo ---------------------------------------------------------------------------
 
-## Par de páginas que se ve (índice de `paginas_arte`).
+## Par de páginas que se ve (índice de `_paginas_arte`).
 func _pliego(p: Pagina) -> int:
 	return [0, 1, 1, 2, 2][p]
 
@@ -461,11 +539,13 @@ func _objeto_en(p: Pagina, i: int) -> StringName:
 func _refrescar() -> void:
 	if not is_node_ready():
 		return
-	pagina_arte.texture = paginas_arte[_pliego(_pagina)]
+	pagina_arte.texture = _paginas_arte[_pliego(_pagina)]
 	for i in NUM_PAGINAS:
 		var activa := i == _pagina
-		pestanas[i].modulate = Color.WHITE if activa else PESTANA_APAGADA
-		pestanas[i].position.y = PESTANA_Y_ON if activa else PESTANA_Y_OFF
+		pestanas[i].texture = _tex_pestana[NOMBRES_PAGINA[i]][0 if activa else 1]
+		pestanas[i].position = Vector2(_pestana_x[i], _pestana_y.y if activa else _pestana_y.x)
+		pestanas[i].modulate = Color.WHITE
+	salir.texture = _tex_pestana[&"salir"][0 if _raton_en_salir else 1]
 	for p in NUM_PAGINAS:
 		(contenido.get_child(p) as CanvasItem).visible = _pagina_visible(p)
 	for p: Pagina in [Pagina.IMPORTANTES, Pagina.INVENTARIO]:
@@ -476,42 +556,35 @@ func _refrescar() -> void:
 	# Marco de selección: solo en las rejillas y fuera de las pestañas.
 	seleccion.visible = not _en_pestanas and _tiene_rejilla(_pagina)
 	if seleccion.visible:
-		var i: int = _casilla[_pagina]
-		var cols := CASILLAS_X_DER if _pagina == Pagina.IMPORTANTES else CASILLAS_X_IZQ
-		seleccion.position = Vector2(cols[i % COLUMNAS], CASILLAS_Y[i / COLUMNAS]) - Vector2(3, 3)
+		var r: Rect2 = _rejilla[_pagina][_casilla[_pagina]]
+		seleccion.position = r.position + _sel_desplazamiento
 
 
-func _poner_icono(t: TextureRect, tex: Texture2D, caja: float) -> void:
+## Coloca el icono centrado en la caja, a la mayor escala entera (máx. ×2) que quepa.
+func _poner_icono(t: TextureRect, tex: Texture2D, caja: Rect2) -> void:
 	t.texture = tex
 	if tex == null:
 		return
-	# Iconos pequeños a ×2 (escala entera) para que se vean en la casilla.
 	var tam := tex.get_size()
-	var escala := 2.0 if maxf(tam.x, tam.y) * 2.0 <= caja - 4.0 else 1.0
-	var centro := t.position + t.size / 2.0
+	var escala := clampf(floorf(minf(caja.size.x / tam.x, caja.size.y / tam.y)), 1.0, 2.0)
 	t.size = tam * escala
-	t.position = (centro - t.size / 2.0).round()
+	t.position = (caja.get_center() - t.size / 2.0).floor()
 
 
 func _refrescar_rejilla(p: Pagina) -> void:
 	var lista := _objetos_de(p)
-	var cols := CASILLAS_X_DER if p == Pagina.IMPORTANTES else CASILLAS_X_IZQ
-	for i in COLUMNAS * FILAS:
+	var rects: Array[Rect2] = _rejilla[p]
+	for i in rects.size():
 		var ico: TextureRect = _iconos[p][i]
 		var num: Label = _cantidades[p][i]
-		ico.position = Vector2(cols[i % COLUMNAS], CASILLAS_Y[i / COLUMNAS])
-		ico.size = Vector2(TAM_CASILLA, TAM_CASILLA)
 		var id: StringName = lista[i] if i < lista.size() else &""
 		var o := EstadoJuego.objeto(id) if id != &"" else null
-		_poner_icono(ico, o.icono if o else null, TAM_CASILLA)
+		_poner_icono(ico, o.icono if o else null, rects[i])
 		num.text = str(EstadoJuego.cantidad(id)) if o and o.maximo > 1 else ""
 	# Casilla suelta: el elegido (icono + nombre, cantidad y descripción).
 	var elegido := _objeto_en(p, _casilla[p])
 	var obj := EstadoJuego.objeto(elegido) if elegido != &"" else null
-	var s: TextureRect = _suelta_icono[p]
-	s.position = SUELTA_DER if p == Pagina.IMPORTANTES else SUELTA_IZQ
-	s.size = Vector2(TAM_SUELTA, TAM_SUELTA)
-	_poner_icono(s, obj.icono if obj else null, TAM_SUELTA)
+	_poner_icono(_suelta_icono[p], obj.icono if obj else null, _suelta[p])
 	var texto: Label = _suelta_texto[p]
 	texto.remove_theme_color_override(&"font_color")
 	if p == _pagina and not _aviso.is_empty():
@@ -552,7 +625,7 @@ func _refrescar_misiones() -> void:
 			l.remove_theme_color_override(&"font_color")
 		raya.visible = hecha
 		if hecha:
-			var ancho := minf(fuente.get_string_size(l.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x,
+			var ancho := minf(fuente.get_string_size(l.text, HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA).x,
 				MISIONES_ANCHO)
 			raya.position = l.position + Vector2(0, 7)
 			raya.size = Vector2(ancho, 1)
@@ -604,9 +677,10 @@ func _dibujar_mapa() -> void:
 		mapa.draw_rect(r, relleno)
 		mapa.draw_rect(r.grow(-0.5), linea, false, 1.0)
 		var texto_color := TINTA if encendida else Color("e8d2b0")
-		var ancho := fuente.get_string_size(ZONAS[i][1], HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x
-		var pos := Vector2(roundf(r.get_center().x - ancho / 2.0), r.position.y + alto - 2.0)
-		mapa.draw_string(fuente, pos, ZONAS[i][1], HORIZONTAL_ALIGNMENT_LEFT, -1, 10, texto_color)
+		var ancho := fuente.get_string_size(ZONAS[i][1], HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA).x
+		var base := r.position.y + (alto + fuente.get_ascent(LETRA) - fuente.get_descent(LETRA)) / 2.0
+		var pos := Vector2(r.get_center().x - ancho / 2.0, base)
+		mapa.draw_string(fuente, pos, ZONAS[i][1], HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA, texto_color)
 
 
 func _animar() -> void:

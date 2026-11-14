@@ -177,7 +177,7 @@ func comer(objeto: Objeto) -> void:
 	animador.direccion = Vector2.DOWN
 	animador.sprite.flip_h = false
 	animador.sprite.play(ANIM_COMER)
-	_mostrar_objeto_en_mano(objeto.icono)
+	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono)
 	_turno_comer += 1
 	var turno := _turno_comer
 	await get_tree().create_timer(duracion_comer, false).timeout

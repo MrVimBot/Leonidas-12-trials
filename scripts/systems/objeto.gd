@@ -15,6 +15,9 @@ enum Tipo { CONSUMIBLE, IMPORTANTE }
 @export_multiline var descripcion := ""
 ## Icono de 16×16 (como mucho 24×24) para las casillas del libro y la tienda.
 @export var icono: Texture2D
+## Versión pequeña (≤ 10×10) para donde el icono de 16×16 no cabe: en la mano de Leonidas
+## al comerlo (Jugador.comer) y en la lista de la tienda. Vacío = se usa `icono`.
+@export var icono_pequeno: Texture2D
 @export var tipo := Tipo.CONSUMIBLE
 ## Cuántos se pueden llevar a la vez.
 @export_range(1, 99) var maximo := 1

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c483mskm48c3k"
+path="res://.godot/imported/la_nota.aseprite-fd0f6351064be3dafee3d2a5e16242c9.res"
+
+[deps]
+
+source_file="res://assets/sprites/inventario/objetos/la_nota.aseprite"
+dest_files=["res://.godot/imported/la_nota.aseprite-fd0f6351064be3dafee3d2a5e16242c9.res"]
+
+[params]
+

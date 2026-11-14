@@ -15,7 +15,7 @@
 | Tiles de transición | atlas + fuente 1 de `naturaleza.tres` | caminos, estanques, plaza | pintarlos en las zonas |
 | Los 4 sabios | 4 layouts, tiras, SpriteFrames | escena de los sabios (espada + misión) | la escena |
 | Gallo y perro | layouts, tiras, SpriteFrames | más NPC del pueblo | colocarlos + diálogos |
-| Libro (inventario) | 4 láminas + 6 iconos + marco de selección, reducidos a ×0,4 | **ya se usa** (`menu_libro.tscn`) | arte redibujado a 448×230 sin textos, iconos de objetos 16×16, mapa pintado |
+| Libro (inventario) | piezas de la maqueta de 559×300 sin reescalar (`assets/ui/libro/`) | **ya se usa** (`menu_libro.tscn`, a ×3 de pantalla) | páginas sin textos pintados, icono del libro, mapa pintado |
 | `icono.aseprite` | — | icono de la app / retrato pequeño | exportarlo a PNG |
 
 ---
@@ -77,26 +77,35 @@
   - `iconos_de_inventario.aseprite` (270×150): las 6 pestañas.
   - `seleccion_de_casilla_de_inventario.aseprite` (80×80): marco blanco de la casilla elegida.
   - `inventario_y_como_se_debe_de_ver.aseprite`: **maqueta** de cómo se combina todo (render
-    en `docs/reference/inventario_maqueta.png`). No se exporta: es referencia.
-- **Preparado** (recortes en `assets/ui/inventario/`, con `tools/recortes/inventario_*.lua`,
-  **reducidos a ×0,4** con la opción `escala` de `export_recortes.lua`):
-  `cobertura.png`, `pag_1.png`, `pag_2y3.png`, `pag_4y5.png` (lienzo completo 448×230:
-  se superponen en (0, 0) sobre la cobertura), `icono_{salir,herramientas,objetos,mapa,misiones,guardar}.png`
-  (26×22) y `seleccion_casilla.png` (32×32).
-- **Cómo se ve (maqueta):** pestañas arriba a la izquierda sobre el borde del libro; la
-  elegida sube 18 px (7 reducido) y las demás van «apagadas» (= el icono con negro al 67 %
-  encima: en Godot `modulate = Color(0.33, 0.33, 0.33)`). La X (salir) va abajo a la
-  izquierda. En la maqueta la llama es la pestaña de Misiones y el libro abierto la de Guardar.
-- **Escala (decidido 2026-11-14):** el original mide 1119×576 a 1:1 (no agrandado), más del
-  doble que la pantalla (480×270). Se usa reducido a 448×230 en el viewport normal; se pidió
-  a la artista que lo retoque/redibuje a ese tamaño. Medidas de casillas, pestañas y mapa, y
-  el plan del menú: **`plan_inventario_libro.md`**.
+    en `docs/reference/inventario_maqueta.png`). No se exporta: es referencia. Desde el
+    2026-11-14 es la versión de **559×300** (la de 1119×600 a ×0,5, retocada; textos aún
+    pintados; la anterior está en el historial de git).
+  - `objetos/{espada,la_nota,manzana}.aseprite`: iconos de objeto (16×16, 13×12, 16×16) →
+    `assets/ui/inventario/objetos/icono_{espada,carta,manzana}.png`, **ya en uso** en
+    `resources/objetos/`.
+- **En uso** (desde el 2026-11-14): `tools/export_libro.lua` saca de la maqueta de 559×300,
+  por capas y **sin reescalar**, `assets/ui/libro/`: `cobertura.png`, `pag_1.png`,
+  `pag_2y3.png`, `pag_4y5.png` (lienzo completo), `pestana_<pagina>.png` y
+  `pestana_<pagina>_apagada.png` (31×28; la apagada lleva la capa «APAGADO» de la artista,
+  negro al 67 %), `salir[_apagada].png`, `seleccion.png` (39×40) y `libro.json` (posiciones
+  de todo eso y de las 13 casillas de cada rejilla, detectadas en las capas «CASILLAS PARA
+  HERRAMIENTAS»). Las piezas reducidas a ×0,4 de los `.aseprite` de 1119×576 se borraron
+  (están en el historial de git).
+- **Cómo se ve:** pestañas arriba a la izquierda sobre el borde del libro; la elegida sube
+  8 px y se ve encendida, las demás apagadas. La X (salir) va abajo a la izquierda, apagada
+  salvo con el ratón encima. La llama es la pestaña de Misiones y el libro abierto la de Guardar.
+- **Escala (decidido 2026-11-14):** 559×300 no cabe en 480×270; el menú pone la ventana en
+  modo `CANVAS_ITEMS` mientras está abierto y dibuja cada píxel del arte a 3 píxeles de
+  pantalla en 1920×1080 (2 en ventanas menores). Ver CLAUDE.md («El libro») y
+  **`plan_inventario_libro.md`**.
 - **Sustituye a:** `assets/ui/provisional/icono_libro.png` (lo usa `scenes/ui/hud.tscn`) y
   `bolsa_inventario.png` (posible: `icono_guardar.png` o `icono_objetos.png`, aunque a 64×56 son grandes para
   el HUD) y al menú del libro, que aún no existe (ver CLAUDE.md, «Escena de Kathita», y
   `guia_interfaz.md`).
-- **Falta:** todo el menú (acción `inventario`, navegación por pestañas y casillas, mapa,
-  misiones, guardado en disco); iconos de los objetos para las casillas.
+- **Falta:** las páginas sin textos pintados (títulos, rótulos de Guardar, «!» de Misiones)
+  y el icono del libro (objeto y HUD). La
+  espada de 16×16 podría sustituir también a `provisional/icono_espada.png` de la ranura
+  del HUD (14×14): no se ha cambiado.
 
 ## Icono
 

@@ -50,6 +50,12 @@ if [[ $# -eq 0 ]]; then
   done
 fi
 
+# El libro (menú de inventario): piezas por capas de la maqueta, sin reescalar.
+if [[ $# -eq 0 ]]; then
+  cp assets/sprites/inventario/inventario_y_como_se_debe_de_ver.aseprite "$TMP/copia.aseprite"
+  "$ASEPRITE" -b "$TMP/copia.aseprite" --script-param root="$ROOT" --script tools/export_libro.lua
+fi
+
 # Tiras de la cinemática inicial: cada .aseprite tal cual, en una tira horizontal.
 # (Los cortes de cada tira están en tools/build_cinematica.gd.)
 if [[ $# -eq 0 ]]; then
