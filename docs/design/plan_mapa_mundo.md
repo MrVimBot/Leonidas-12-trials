@@ -48,8 +48,8 @@ Dejar **todas las zonas del boceto como escenas jugables y conectadas**: se pued
 | (16,0) | agua de estanque | **sí** |
 | (19,0) | mar | **sí** |
 | (0,1) | mar con orilla **abajo** (mar arriba, tierra abajo) | **sí** |
-| (3,1) | arena / camino de tierra (`CAMINO`) | no |
-| (1,1) | arena con piedras (`CAMINO_PIEDRAS`, variante al 10–15 %) | no |
+| (3,1) | ⚠ es una esquina interior, no relleno (ver `plan_tiles_transiciones.md`); el constructor ya usa `TIERRA` (fuente 1) | no |
+| (1,1) | ⚠ es un borde de tierra, no relleno | no |
 | (6,1) | baldosa | no |
 
 No hay tiles de cueva, de mar navegable, de muelle ni transición arena↔pasto: se resuelven con el tileset provisional (fase 1) y bordes rectos.

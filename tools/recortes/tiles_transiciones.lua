@@ -46,9 +46,18 @@ return {
       --   0–1 borde superior (hierba arriba) · 2 borde inferior
       --   3 borde izquierdo · 4 borde derecho
       --   5–6 esquinas exteriores superiores · 7–8 esquinas exteriores inferiores
-      --   9–10 relleno de tierra con piedras (el liso es 1–3,1 de tiles_naturaleza)
+      --   9–10 esquinas INTERIORES (asoma hierba abajo-izq / abajo-dcha). OJO: no son
+      --   relleno, y 3,1 de tiles_naturaleza tampoco (es otra interior abajo-izq).
       { {181, 194}, {200, 194}, {200, 213}, {220, 194}, {239, 194},
         {261, 194}, {281, 194}, {261, 213}, {281, 213}, {306, 213}, {325, 213} },
+      -- Fila 4: RELLENOS PROVISIONALES (la artista no dibujó relleno de tierra ni de
+      -- piedra). Una esquina interior con su pico de hierba tapado por el mismo trozo de
+      -- otra interior que tiene esa esquina limpia. Sustituir cuando la artista los dibuje.
+      --   0 tierra (9,3 + abajo-izq de 10,3) · 1 tierra (10,3 + abajo-dcha de 9,3)
+      --   2 piedra (8,0 + arriba-izq de 11,0)
+      { {306, 213, parche = {325, 213, 0, 11, 6, 5}},
+        {325, 213, parche = {306, 213, 10, 11, 6, 5}},
+        {236, 4, parche = {254, 22, 0, 0, 8, 7}} },
     },
   },
 }

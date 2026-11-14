@@ -7,6 +7,18 @@
 > Todo lo de la sección 2 se comprobó píxel a píxel contra la hoja de ejemplos de la artista
 > (`docs/reference/tiles_y_como_funcionan.png`) y con pruebas `--headless` en Godot 4.7.2.
 
+> **ESTADO (2026-11-14): IMPLEMENTADO.** Diferencias con lo planeado:
+> - La arena de playa/isla usa la familia tierra **con** bordes hacia la hierba (`une_con` = mar y
+>   celdas vacías, así no sale franja de hierba junto al mar ni bajo el muelle).
+> - Colisión con `margen` (bordillo 4 px, natural 2 px): sin él se podía pisar el bordillo y se
+>   abría un paso entre el canal y `BarreraCartelOeste`, que además se subió 6 px.
+> - En el pueblo, el canal tenía dos celdas sueltas (52,20 y 62,20): pasaron a pasto.
+> - Decidido por Esteban (2026-11-14): la **piedra se queda sin usar** de momento; la **arena con
+>   bordes** de tierra hacia la hierba vale hasta que lleguen los de hierba↔arena; los **rellenos**
+>   se los pide él a la artista.
+> - Probado en el juego: Leonidas se para bajo el bordillo sin pisar el agua y cruza los vados.
+> - Comprobación del pueblo: `tools/verificar_barreras_pueblo.gd`.
+
 ## 1. Objetivo y alcance
 
 Que los caminos y estanques de las zonas dejen de tener **cortes bruscos** y usen las transiciones

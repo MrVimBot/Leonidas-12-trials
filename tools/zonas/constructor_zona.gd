@@ -15,14 +15,24 @@ extends RefCounted
 ## Todo es determinista: misma semilla → misma escena.
 
 # Tiles del atlas naturaleza (fuente 0 de resources/tilesets/naturaleza.tres).
+# Un tile es Vector2i (fuente 0) o Vector3i(fuente, columna, fila).
 const PASTO := Vector2i(0, 0)
 const SETO := Vector2i(12, 0)
-const AGUA := Vector2i(16, 0)
 const MAR := Vector2i(19, 0)
 const MAR_ORILLA := Vector2i(0, 1)
-const ARENA := Vector2i(3, 1)
-const ARENA_PIEDRAS := Vector2i(1, 1)
 const BALDOSA := Vector2i(6, 1)
+# Rellenos de las familias de transiciones (scripts/entorno/transiciones.gd): se pinta el
+# área con el relleno y guardar() pone los bordes y esquinas. Mínimo 2 tiles de ancho.
+const AGUA := Vector2i(16, 0) # estanque con bordillo
+const AGUA_NATURAL := Vector3i(1, 0, 2) # estanque natural (orilla de hierba)
+const TIERRA := Vector3i(1, 0, 4) # camino de tierra (relleno PROVISIONAL)
+const TIERRA_B := Vector3i(1, 1, 4) # otra variante del relleno de tierra
+const PIEDRA := Vector3i(1, 2, 4) # suelo de piedra (relleno PROVISIONAL)
+# Arena de playa/isla: hasta que lleguen las transiciones hierba↔arena es el relleno de
+# tierra SIN bordes (zonas con `transiciones = false`). Antes era 3,1, que es una esquina
+# interior (por eso se veía un pico de hierba cada 16 px).
+const ARENA := TIERRA
+const ARENA_PIEDRAS := TIERRA_B
 # Tiles del atlas provisional (resources/tilesets/provisional.tres).
 const SUELO_CUEVA := Vector2i(0, 0)
 const SUELO_CUEVA_B := Vector2i(1, 0)
@@ -34,9 +44,13 @@ const LOSA_JEFE := Vector2i(6, 0)
 const MUELLE := Vector2i(7, 0)
 const ARRECIFE := Vector2i(8, 0)
 
-## Tiles de naturaleza donde dispersar() no pone nada (caminos, agua, mar, orillas).
-const OCUPADOS := [ARENA, ARENA_PIEDRAS, AGUA, Vector2i(17, 0), Vector2i(18, 0), MAR, MAR_ORILLA,
-	Vector2i(17, 1), Vector2i(18, 1), Vector2i(19, 1), BALDOSA, Vector2i(4, 1), Vector2i(5, 1)]
+## Tiles de la fuente 0 donde dispersar() no pone nada (caminos, agua, mar, orillas). Toda
+## la fuente 1 (transiciones) cuenta también como ocupada.
+const OCUPADOS := [Vector2i(3, 1), Vector2i(1, 1), Vector2i(2, 1), AGUA, Vector2i(17, 0), Vector2i(18, 0),
+	MAR, MAR_ORILLA, Vector2i(17, 1), Vector2i(18, 1), Vector2i(19, 1), BALDOSA, Vector2i(4, 1), Vector2i(5, 1),
+	Vector2i(6, 0), Vector2i(7, 0), Vector2i(8, 0), Vector2i(9, 0), Vector2i(10, 0), Vector2i(11, 0)]
+
+const Transiciones := preload("res://scripts/entorno/transiciones.gd")
 
 const DIR_ENTORNO := "res://assets/sprites/entorno/"
 const DIR_ZONAS := "res://scenes/levels/"
@@ -51,6 +65,9 @@ var limites: StaticBody2D
 var ancho: int
 var alto: int
 var semilla: int
+## Poner bordes y esquinas a caminos y estanques al guardar (Transiciones). false en las
+## zonas cuya arena es el relleno de tierra sin bordes (playa, isla...).
+var transiciones := true
 
 var _rng := RandomNumberGenerator.new()
 var _decorado: PackedScene
@@ -103,14 +120,14 @@ func _init(nodo: String, nombre_zona: String, ancho_tiles: int, alto_tiles: int,
 ## Pinta el rectángulo de tiles `r` con `tile`. Con `prov` pinta en SueloProvisional y
 ## borra esas celdas de Suelo (y al revés), para que nunca quede un tile sólido debajo.
 ## Con `variante`/`prob` cada celda pasa a ser `variante` con esa probabilidad.
-func rect(r: Array, tile: Vector2i, prov := false, variante := Vector2i(-1, -1), prob := 0.0) -> void:
+func rect(r: Array, tile, prov := false, variante = null, prob := 0.0) -> void:
 	for f in range(maxi(r[1], 0), mini(r[3], alto - 1) + 1):
 		for c in range(maxi(r[0], 0), mini(r[2], ancho - 1) + 1):
 			_poner(Vector2i(c, f), tile, prov, variante, prob)
 
 
 ## Rellena las celdas con ((c-cx)/rx)² + ((f-cy)/ry)² ≤ 1.
-func elipse(centro: Vector2i, radios: Vector2, tile: Vector2i, prov := false) -> void:
+func elipse(centro: Vector2i, radios: Vector2, tile, prov := false) -> void:
 	for f in alto:
 		for c in ancho:
 			var d := Vector2((c - centro.x) / radios.x, (f - centro.y) / radios.y)
@@ -119,22 +136,29 @@ func elipse(centro: Vector2i, radios: Vector2, tile: Vector2i, prov := false) ->
 
 
 ## Anillo de `grosor` tiles en el borde del mapa.
-func marco(grosor: int, tile: Vector2i, prov := false) -> void:
+func marco(grosor: int, tile, prov := false) -> void:
 	rect([0, 0, ancho - 1, grosor - 1], tile, prov)
 	rect([0, alto - grosor, ancho - 1, alto - 1], tile, prov)
 	rect([0, 0, grosor - 1, alto - 1], tile, prov)
 	rect([ancho - grosor, 0, ancho - 1, alto - 1], tile, prov)
 
 
-func _poner(celda: Vector2i, tile: Vector2i, prov: bool, variante := Vector2i(-1, -1), prob := 0.0) -> void:
-	var t := tile
-	if variante != Vector2i(-1, -1) and _rng.randf() < prob:
+func _poner(celda: Vector2i, tile, prov: bool, variante = null, prob := 0.0) -> void:
+	var t = tile
+	if variante != null and _rng.randf() < prob:
 		t = variante
+	var fuente := 0
+	var coords: Vector2i
+	if t is Vector3i:
+		fuente = t.x
+		coords = Vector2i(t.y, t.z)
+	else:
+		coords = t
 	if prov:
-		suelo_prov.set_cell(celda, 0, t)
+		suelo_prov.set_cell(celda, fuente, coords)
 		suelo.erase_cell(celda)
 	else:
-		suelo.set_cell(celda, 0, t)
+		suelo.set_cell(celda, fuente, coords)
 		suelo_prov.erase_cell(celda)
 
 
@@ -143,7 +167,10 @@ func suelo_ocupado(pos: Vector2) -> bool:
 	var celda := Vector2i(floori(pos.x / 16.0), floori(pos.y / 16.0))
 	if suelo_prov.get_cell_source_id(celda) != -1:
 		return true
-	return suelo.get_cell_atlas_coords(celda) in OCUPADOS
+	var fuente := suelo.get_cell_source_id(celda)
+	if fuente > 0:
+		return true # transiciones: caminos y estanques
+	return fuente == 0 and suelo.get_cell_atlas_coords(celda) in OCUPADOS
 
 
 # --- Objetos -------------------------------------------------------------------
@@ -292,6 +319,15 @@ func marcador(nombre: String, pos: Vector2) -> void:
 # --- Guardar -------------------------------------------------------------------------
 
 func guardar(ruta: String) -> Error:
+	if transiciones and suelo.get_used_cells().size() > 0:
+		var auto := Node.new()
+		auto.name = "AutoTransiciones"
+		auto.set_script(load("res://scripts/entorno/auto_transiciones.gd"))
+		_agregar(raiz, auto)
+		auto.set("capa", suelo)
+		auto.set("semilla", semilla)
+		for aviso in Transiciones.aplicar(suelo, semilla):
+			push_warning("[%s] %s" % [raiz.name, aviso])
 	if suelo.get_used_cells().size() > 0:
 		var variador := Node.new()
 		variador.name = "VariadorPasto"

@@ -46,7 +46,7 @@ Comparativas (a 1920×1080, como se vería en pantalla):
 `docs/reference/inventario_escala_b_reducido.png` y
 `docs/reference/inventario_escala_b_reducido_misiones.png`.
 
-**Decidido (2026-11-14): B.** Propuesta original: empezar con **B** hecha por script (se regenera sola si Lucía cambia el arte)
+**Decidido (2026-11-14): B de momento, C cuando la artista entregue todo.** El menú se monta ya con el arte reducido por script; al llegar el arte redibujado a 448×230 se sustituye (quitar `escala` de `tools/recortes/inventario_*.lua` y volver a medir casillas y pestañas). Propuesta original: empezar con **B** hecha por script (se regenera sola si Lucía cambia el arte)
 y, si le sobra tiempo, que retoque encima el PNG reducido (casillas, rótulos pequeños) → eso
 ya sería C sin empezar de cero. Enseñarle las comparativas antes de montar nada.
 
@@ -74,7 +74,7 @@ ya sería C sin empezar de cero. Enseñarle las comparativas antes de montar nad
 - Se abre siempre en **Inventario** (la página más usada).
 
 ### Moverse
-Dos niveles, todo con las flechas/WASD y los botones de siempre:
+(Aprobado por el equipo.) Dos niveles, todo con las flechas/WASD y los botones de siempre:
 
 1. **Dentro de una página** (lo normal): las flechas mueven el marco blanco
    (`seleccion_casilla`) por la rejilla. Al salir por un lado de la rejilla se pasa a la
@@ -86,16 +86,15 @@ Dos niveles, todo con las flechas/WASD y los botones de siempre:
 Atajo: **Q / R** (mando L1/R1) pasan de página desde cualquier sitio (acciones
 `pagina_anterior` / `pagina_siguiente`).
 
-**Pestañas:** se encienden y suben 18 px (7 px reducido) las de las dos páginas que se ven
-(así está en las capturas de Lucía: bolsa + mapa juntas, llama + libro juntas); las demás
-apagadas (`modulate` 0,33). Dentro del par, la página activa es la que tiene el cursor.
-*Duda para Lucía:* ¿prefiere que solo se encienda una (la del cursor)?
+**Pestañas (decidido):** solo se enciende y sube (7 px) la pestaña de **la página en la
+que está el cursor**; las otras cuatro, apagadas (`modulate` 0,33), aunque su página se vea
+al lado.
 
-### Casilla suelta = artículo seleccionado
-A 27 px no cabe texto dentro. Propuesta: en la casilla, el **icono** del objeto elegido; a
-su derecha (hueco libre de ~105×30 px) **dos renglones** con la fuente del juego, de unas 11
-letras cada uno: nombre y cantidad («Manzana  x3») y efecto («Cura 1 corazón» → abreviar:
-«+1 corazón»). Casilla vacía → nada. *Confirmar con Lucía que eso es lo que imaginaba.*
+### Casilla suelta = artículo seleccionado (decidido)
+En la casilla va el **icono** del objeto elegido y, a su derecha, en el hueco café libre
+(x 86–195, y 172–204 del lienzo reducido: ~110×32 px), el **texto**: nombre y cantidad
+arriba («Manzana x3») y qué hace debajo («Cura 1 corazón»). Con Gravity Bold a 10 px caben
+unas 20 letras por renglón y 3 renglones. Casilla vacía → nada.
 
 ### Opciones de un objeto
 - **E/J sobre un consumible:** lo usa directamente (manzana → cura y se cierra el libro para
@@ -112,10 +111,34 @@ letras cada uno: nombre y cantidad («Manzana  x3») y efecto («Cura 1 corazón
   Playa, Mar, Isla, Cueva) y una marca parpadeante señala dónde está Leonidas. Sin cursor.
   Arte: no hay → esquema provisional de las 9 zonas (cajas unidas, generado a partir de
   `plan_mapa_mundo.md`) hasta que Lucía pinte el mapa.
-- **Misiones:** hasta 3 principales y 3 secundarias, un renglón cada una (~15 letras). Las
+- **Misiones:** hasta 3 principales y 3 secundarias, un renglón cada una (~25 letras con Gravity Bold 10). Las
   completadas, tachadas o en gris. Sin cursor (solo lectura).
 - **Guardar:** un único botón «Guardar» (E/J) → «¡Partida guardada!». Muestra el tiempo
   jugado («00:42») y los jefes derrotados («0»).
+
+## Textos: fuente Gravity (decidido 2026-11-14)
+
+**Todo el texto del libro lo escribe el juego**, no va pintado en el arte, y usa la fuente
+**Gravity** (`assets/fonts/gravity_regular.otf` y `gravity_bold.otf`; licencia CC BY 4.0, ver
+`gravity_readme.txt`: **hay que nombrar a Vincenzo Vuono en los créditos**). El resto del
+juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
+
+- Tiene todos los caracteres del español, incluidas Á É Í Ó Ú Ñ ¿ ¡ (no hace falta
+  `adaptar_a_fuente()`).
+- **No es una fuente de píxeles.** Probada sobre el libro reducido a 480×270: a **8 px no se
+  lee**; **Bold a 10 px** se lee bien y es el mínimo; Regular solo a partir de 12 px.
+  Propuesta: **Bold 10** para el texto (misiones, descripción, valores), **Bold 12** para
+  los títulos de página. Unos 5,5 px de ancho por letra a 10 px.
+- Importación: **con** antialiasing en grises (sin él las letras salen rotas a 10 px), sin
+  subpíxel (`subpixel_positioning` desactivado) y hinting ligero. Es lo contrario que la
+  fuente DOS. Color de tinta: el azul oscuro de los rótulos, #1c2254.
+- Tema propio dentro de la escena del libro (como el del menú principal), para no tocar
+  `resources/ui/tema.tres`.
+- **Arte:** las páginas actuales traen pintados los títulos («Inventario», «Mapa»,
+  «Misiones», «Principales», «Secundarias», «Guardar», «Objetos Importantes»), los rótulos
+  de Guardar y el botón. Pedir a Lucía las páginas **sin ningún texto** (las líneas a los
+  lados del título pueden quedarse). Hasta entonces se usan los títulos pintados y el juego
+  solo escribe lo demás.
 
 ## Plan técnico
 
@@ -156,7 +179,7 @@ letras cada uno: nombre y cantidad («Manzana  x3») y efecto («Cura 1 corazón
 
 ### Fase 2 — Objetos (1 día)
 - Recurso **`Objeto`** (`scripts/systems/objeto.gd`, en `resources/objetos/*.tres`): `id`,
-  `nombre`, `descripcion` (2 renglones de ~11 letras), `icono`, `tipo` (CONSUMIBLE /
+  `nombre`, `descripcion` (2 renglones de ~20 letras), `icono`, `tipo` (CONSUMIBLE /
   IMPORTANTE), `maximo`. `ArticuloTienda` pasa a apuntar a un `Objeto` + `precio` (hoy
   duplica nombre, descripción e icono).
 - `EstadoJuego.objetos: Dictionary` (id → cantidad) con `agregar_objeto`, `gastar_objeto`,
@@ -171,7 +194,7 @@ letras cada uno: nombre y cantidad («Manzana  x3») y efecto («Cura 1 corazón
 - Iconos provisionales en `assets/ui/provisional/` hasta que lleguen los de Lucía.
 
 ### Fase 3 — Misiones (½ día)
-- Recurso `Mision` (`id`, `titulo` ≤ 15 letras, `principal`) y en `EstadoJuego`
+- Recurso `Mision` (`id`, `titulo` ≤ 25 letras, `principal`) y en `EstadoJuego`
   `misiones: Dictionary` (id → ACTIVA / COMPLETADA) con `empezar_mision` / `completar_mision`.
 - Para la entrega: principal «Habla con los sabios» → «Derrota a Medusa»; secundaria, la de
   la sirena si llega a existir. Los títulos los escribe el equipo de guion.
@@ -207,10 +230,14 @@ desactivado («Próximamente»); las demás páginas son baratas.
 6. Pruebas con pulsaciones simuladas: `await process_frame` antes de cada pulsación (ver
    CLAUDE.md, «Tienda»).
 
-## Preguntas abiertas para Lucía
-1. ¿A, B o C para la escala? (ver comparativas)
-2. ¿Se encienden las dos pestañas del par visible o solo la de la página con el cursor?
-3. ¿La casilla suelta lleva el icono y el texto va al lado, como se propone?
-4. ¿Puede entregar Guardar sin los rótulos pequeños y Misiones sin los «!»?
-5. Iconos de objetos a 16×16: manzana, espada, libro, carta de los sabios.
-6. ¿Habrá mapa pintado para la zona oscura, o usamos el esquema provisional?
+## Decisiones ya tomadas
+- Escala: **opción B por ahora** (libro reducido a 448×230 por script); **opción C** (redibujado por Lucía a ese tamaño) en cuanto lo entregue todo.
+- Solo se enciende la pestaña de la página con el cursor.
+- Casilla suelta: icono dentro, texto al lado en el hueco café.
+- Navegación: la propuesta de arriba.
+- Todo el texto lo pone el juego con Gravity.
+
+## Pendiente de Lucía
+1. Libro a 448×230, pestañas 26×22, marco 32×32, **páginas sin texto** y Misiones sin «!».
+2. Iconos de objetos a 16×16: manzana, espada, libro, carta de los sabios.
+3. ¿Habrá mapa pintado para la zona oscura, o usamos el esquema provisional?

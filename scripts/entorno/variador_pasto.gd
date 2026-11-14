@@ -8,7 +8,8 @@ extends Node
 ##
 ## Uso: añade este nodo a una zona, asigna `capa` (su "Suelo") y pulsa "Variar pasto"
 ## en el Inspector. Cambia `semilla` para probar otra distribución.
-## Solo toca celdas cuyo tile esté en `pesos`: caminos, agua, setos... no se tocan.
+## Solo toca celdas de la fuente 0 cuyo tile esté en `pesos`: caminos, agua, setos y las
+## transiciones (fuente 1, cuyas coordenadas coinciden con las del pasto) no se tocan.
 
 ## Capa de tiles a variar.
 @export var capa: TileMapLayer
@@ -43,7 +44,7 @@ func variar() -> void:
 	var cambiadas := 0
 	for celda in capa.get_used_cells():
 		var fuente_id := capa.get_cell_source_id(celda)
-		if not pesos.has(capa.get_cell_atlas_coords(celda)):
+		if fuente_id != 0 or not pesos.has(capa.get_cell_atlas_coords(celda)):
 			continue
 		var fuente := capa.tile_set.get_source(fuente_id) as TileSetAtlasSource
 		var elegido := _elegir(rng, total)

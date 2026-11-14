@@ -69,9 +69,10 @@ func _t(c: int, f: int) -> Vector2:
 	return Vector2(c * 16 + 8, f * 16 + 8)
 
 
-## Arena de camino con piedras al 12 %.
+## Camino de tierra (o arena provisional): se pinta el relleno y Constructor.guardar() pone
+## los bordes (scripts/entorno/transiciones.gd). Mínimo 2 tiles de ancho.
 func _arena(z: Constructor, r: Array) -> void:
-	z.rect(r, C.ARENA, false, C.ARENA_PIEDRAS, 0.12)
+	z.rect(r, C.TIERRA, false, C.TIERRA_B, 0.5)
 
 
 ## Árboles sin colisión sobre los setos del borde: que parezca bosque y no un muro.
@@ -98,7 +99,7 @@ func _bosque() -> Constructor:
 	_arena(z, [44, 54, 47, 55])
 	for r in [[31, 0, 32, 12], [14, 11, 32, 12], [14, 11, 15, 30], [14, 29, 46, 30], [45, 29, 46, 55]]:
 		_arena(z, r)
-	z.rect([36, 14, 47, 21], C.AGUA)
+	z.rect([36, 14, 47, 21], C.AGUA_NATURAL) # estanque natural (orilla de hierba)
 
 	z.entrada("desde_pueblo", Vector2(512, 40))
 	z.entrada("desde_playa", Vector2(736, 856))

@@ -22,33 +22,21 @@
 
 ## Tiles de transición
 
-- **Ruta:** `assets/sprites/tiles_y_como_funcionan.aseprite` (500×380, 1 capa). Hoja de la
-  artista: tiles sueltos de 16×16 arriba y en medio, y debajo ejemplos de cómo se combinan
-  (render en `docs/reference/tiles_y_como_funcionan.png`).
-- **Qué está preparado:**
-  - De los 69 tiles sueltos, 24 ya estaban en `tiles_naturaleza.png` (iguales o girados/
-    volteados; comprobado píxel a píxel). Los **45 nuevos** se empaquetan en
-    `assets/tilesets/tiles_transiciones.png` (atlas 16×16, 1 px de separación) con
-    `tools/recortes/tiles_transiciones.lua` (ahí está qué es cada tile y de dónde sale).
-  - `tools/build_tilesets.gd` los añade como **fuente 1** de `resources/tilesets/naturaleza.tres`
-    (clave nueva `fuentes_extra`; la fuente 0 no cambia, así que las zonas ya pintadas siguen
-    igual). Filas: 0 suelo de piedra clara · 1 estanque con bordillo · 2 estanque natural ·
-    3 camino de tierra.
-  - Colisión (capa mundo) en todo lo que tiene agua (filas 1 y 2), igual que la orilla 17,0.
-    Agua animada: fila 1 con `agua_estanque.tres`, fila 2 con el material nuevo
-    `resources/shaders/agua_estanque_natural.tres` (su agua es de otro tono, #4db4b9).
-  - Volteos (alternativas 1–3) en el agua lisa del estanque natural (0,2) y la tierra con
-    piedras (9,3 y 10,3).
-- **Dónde va:** suelo del pueblo (caminos de tierra y de piedra, estanques con bordillo de
-  los canales), bosque y playa. Sustituye a los cortes bruscos actuales de los caminos.
-- **Falta:**
-  - Pintarlos: en el TileMapLayer `Suelo` de cada zona, elegir la fuente 1 en el panel de
-    TileSet. `build_pueblo.gd` y `build_zonas.gd` **no** los usan (y sobrescriben las zonas):
-    si se pinta a mano, no volver a ejecutarlos para esa zona.
-  - Opcional: terrains (autotiling) de Godot con estas transiciones.
-  - La colisión es un cuadrado entero: las orillas mixtas (media hierba, medio agua) bloquean
-    también su parte de hierba. Si molesta, poner polígonos parciales en `build_tilesets.gd`.
-  - Siguen faltando las transiciones **hierba↔arena** (playa).
+- **Ruta:** `assets/sprites/tiles_y_como_funcionan.aseprite` (hoja de la artista; render en
+  `docs/reference/tiles_y_como_funcionan.png`) → `assets/tilesets/tiles_transiciones.png`
+  (fuente 1 de `naturaleza.tres`) con `tools/recortes/tiles_transiciones.lua`.
+- **USADOS** desde el 2026-11-14 (ver `docs/design/plan_tiles_transiciones.md` y `CLAUDE.md` →
+  "Transiciones"): autotiler `scripts/entorno/transiciones.gd`, botón `AutoTransiciones` en cada
+  zona. Pueblo (canales con bordillo, caminos de tierra), bosque (estanque natural), casa_arbol,
+  playa e islas.
+- **Falta (pedir a la artista):**
+  - **Rellenos** de *tierra* (liso y con piedras) y de *piedra*, 16×16. No existen: hoy son
+    provisionales (fila 4 del atlas, una esquina interior con el pico de hierba tapado). Cuando
+    lleguen, cambiar las coords de la fila 4 en `tiles_transiciones.lua` (o en la tabla).
+  - Transiciones **hierba↔arena** (playa; hoy la arena es tierra) y **mar↔hierba/arena** completas.
+  - Opcional: piezas diagonales (dos zonas que se tocan por una esquina) y un **puente** para los
+    vados del pueblo.
+  - El suelo de **piedra** está preparado pero no se usa en ninguna zona: decidir dónde va.
 
 ## Los sabios
 

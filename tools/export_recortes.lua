@@ -152,6 +152,15 @@ if C.atlas then
     for c, p in ipairs(fila) do
       local tile = Image(t, t, ColorMode.RGB)
       tile:drawImage(lienzo, Point(-p[1], -p[2]))
+      -- parche = {x, y, rx, ry, w, h}: tapa el rectángulo (rx, ry, w, h) del tile con el
+      -- mismo trozo del tile de la hoja en (x, y). Sirve para fabricar un relleno a partir
+      -- de una esquina interior (tapando su pico de hierba con otra esquina limpia).
+      if p.parche then
+        local q = p.parche
+        local trozo = Image(q[5], q[6], ColorMode.RGB)
+        trozo:drawImage(lienzo, Point(-(q[1] + q[3]), -(q[2] + q[4])))
+        tile:drawImage(trozo, Point(q[3], q[4]))
+      end
       img:drawImage(tile, Point((c - 1) * (t + sep), (r - 1) * (t + sep)))
       total = total + 1
     end

@@ -34,12 +34,11 @@ const TILESETS := [
 			Vector2i(4, 1), # esquina de la greca (plaza)
 			Vector2i(5, 1), # borde de la greca (plaza)
 		],
-		# Tiles que bloquean el paso (capa de física 1 = "mundo").
+		# Tiles que bloquean el paso (capa de física 1 = "mundo"). Los estanques (16–18,0 y la
+		# fuente 1) NO van aquí: su colisión sale de scripts/entorno/transiciones.gd (solo los
+		# cuadrantes con agua, para poder pisar la hierba de las orillas).
 		"solidos": [
 			Vector2i(12, 0), # seto
-			Vector2i(16, 0), # agua de estanque
-			Vector2i(17, 0), # orilla de estanque con bordillo
-			Vector2i(18, 0), # esquina de bordillo
 			Vector2i(19, 0), # mar
 			Vector2i(0, 1),  # mar con orilla abajo
 			Vector2i(17, 1), # mar con orilla
@@ -60,7 +59,8 @@ const TILESETS := [
 				# Fuente 1: transiciones de tiles_y_como_funcionan.aseprite
 				# (tools/recortes/tiles_transiciones.lua explica cada tile).
 				# Fila 0 suelo de piedra · 1 estanque con bordillo · 2 estanque natural ·
-				# 3 camino de tierra.
+				# 3 camino de tierra · 4 rellenos PROVISIONALES de tierra y piedra.
+				# Qué pieza va en cada combinación de esquinas: scripts/entorno/transiciones.gd.
 				"textura": "res://assets/tilesets/tiles_transiciones.png",
 				"separacion": Vector2i(1, 1),
 				"tiles": [
@@ -68,20 +68,15 @@ const TILESETS := [
 					[1, 0, 8],
 					[2, 0, 12],
 					[3, 0, 10],
+					[4, 0, 2],
 				],
 				"volteables": [
-					Vector2i(0, 2),  # agua lisa del estanque natural
-					Vector2i(9, 3),  # tierra con piedras
-					Vector2i(10, 3), # tierra con piedras
+					Vector2i(0, 2), # agua lisa del estanque natural
+					Vector2i(0, 4), # relleno de tierra (provisional)
+					Vector2i(1, 4), # relleno de tierra (provisional)
+					Vector2i(2, 4), # relleno de piedra (provisional)
 				],
-				# Todo lo que tiene agua bloquea (igual que la orilla 17,0 de la fuente 0).
-				"solidos": [
-					Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1),
-					Vector2i(5, 1), Vector2i(6, 1), Vector2i(7, 1), Vector2i(8, 1),
-					Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2), Vector2i(4, 2),
-					Vector2i(5, 2), Vector2i(6, 2), Vector2i(7, 2), Vector2i(8, 2), Vector2i(9, 2),
-					Vector2i(10, 2), Vector2i(11, 2), Vector2i(12, 2),
-				],
+				# Sin "solidos": las colisiones del agua las pone Transiciones (por cuadrantes).
 				"materiales": {
 					"res://resources/shaders/agua_estanque.tres": [
 						Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1),
@@ -118,6 +113,7 @@ const TILESETS := [
 ]
 
 const CAPA_MUNDO := 1
+const Transiciones := preload("res://scripts/entorno/transiciones.gd")
 
 
 func _init() -> void:
@@ -153,6 +149,8 @@ func _construir(cfg: Dictionary) -> bool:
 		n_solidos += f.get("solidos", []).size()
 		if not _materiales(fuente, f):
 			return false
+	if cfg.salida == "res://resources/tilesets/naturaleza.tres":
+		n_solidos += _colisiones_transiciones(ts)
 
 	DirAccess.make_dir_recursive_absolute(cfg.salida.get_base_dir())
 	# Conservar el UID del archivo anterior: si cambia, las zonas ya pintadas que lo
@@ -198,6 +196,35 @@ func _rellenar(fuente: TileSetAtlasSource, cfg: Dictionary, tamano: Vector2i) ->
 			var datos := fuente.get_tile_data(coords, fuente.get_alternative_tile_id(coords, i))
 			datos.add_collision_polygon(0)
 			datos.set_collision_polygon_points(0, 0, cuadrado)
+	return n
+
+
+## Colisión de los estanques (familias sólidas de Transiciones): solo los cuadrantes de
+## las esquinas con agua. Las piezas giradas (banderas FH/FV) no necesitan nada: la
+## bandera gira también la colisión. Devuelve cuántos tiles reciben colisión.
+func _colisiones_transiciones(ts: TileSet) -> int:
+	var n := 0
+	var hechos := {}
+	for familia in Transiciones.FAMILIAS:
+		var def: Dictionary = Transiciones.FAMILIAS[familia]
+		if not def.solido:
+			continue
+		for mascara in def.piezas:
+			for p in def.piezas[mascara]:
+				if p.size() > 2 and p[2] != 0:
+					continue # girada: usa la colisión de su tile base
+				var clave := Vector3i(p[0], p[1].x, p[1].y)
+				if hechos.has(clave):
+					push_error("Transiciones: %s aparece en dos máscaras sin girar" % clave)
+					continue
+				hechos[clave] = true
+				var fuente := ts.get_source(p[0]) as TileSetAtlasSource
+				var puntos := Transiciones.poligono(mascara, ts.tile_size.x, def.get("margen", 0))
+				for i in fuente.get_alternative_tiles_count(p[1]):
+					var datos := fuente.get_tile_data(p[1], fuente.get_alternative_tile_id(p[1], i))
+					datos.add_collision_polygon(0)
+					datos.set_collision_polygon_points(0, datos.get_collision_polygons_count(0) - 1, puntos)
+				n += 1
 	return n
 
 
