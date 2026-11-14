@@ -50,6 +50,23 @@ extends StaticBody2D
 		desplazamiento_sombra = valor
 		_actualizar()
 
+@export_group("Manzanas")
+## Si es true, golpearlo con la espada varias veces suelta manzanas. Por defecto se activa
+## solo en los manzanos (textura `manzano_*`), así que no hay que tocar las zonas.
+@export var da_manzanas := false
+## Golpes necesarios para que caigan: al azar entre estos dos valores (ambos incluidos).
+@export var golpes_min := 3
+@export var golpes_max := 5
+## Manzanas que caen: al azar entre estos dos valores (ambos incluidos).
+@export var manzanas_min := 1
+@export var manzanas_max := 2
+
+const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
+const CAPA_INTERACTUABLE := 6 # la espada (Hitbox del jugador) detecta esta capa
+
+var _golpes_restantes := 0
+var _sin_manzanas := false
+
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _colision: CollisionShape2D = $Colision
 @onready var _sombra: ComponenteSombra = $Sombra
@@ -57,6 +74,39 @@ extends StaticBody2D
 
 func _ready() -> void:
 	_actualizar()
+	if Engine.is_editor_hint():
+		return
+	if textura and textura.resource_path.get_file().begins_with("manzano_"):
+		da_manzanas = true
+	if da_manzanas:
+		_golpes_restantes = randi_range(golpes_min, golpes_max)
+		# Además de la capa del mundo, entra en "interactuable" para recibir los espadazos.
+		set_collision_layer_value(CAPA_INTERACTUABLE, true)
+
+
+## Contrato de daño (lo llama el Hitbox de la espada). Solo el daño del jugador importa:
+## cada espadazo cuenta un golpe, sin mirar cuánto quita.
+func recibir_golpe(_danio: int, _origen: Vector2) -> void:
+	if not da_manzanas:
+		return
+	_sacudir()
+	if _sin_manzanas:
+		return
+	_golpes_restantes -= 1
+	if _golpes_restantes > 0:
+		return
+	_sin_manzanas = true
+	var n := randi_range(manzanas_min, manzanas_max)
+	# Caen delante del tronco (por debajo de la base) para que se puedan recoger.
+	Moneda.soltar_escena(ESCENA_MANZANA, get_parent(), global_position + Vector2(0, 8), n)
+
+
+func _sacudir() -> void:
+	var t := create_tween()
+	t.tween_property(_sprite, ^"position:x", 1.0, 0.04)
+	t.tween_property(_sprite, ^"position:x", -1.0, 0.04)
+	t.tween_property(_sprite, ^"position:x", 1.0, 0.04)
+	t.tween_property(_sprite, ^"position:x", 0.0, 0.04)
 
 
 func _actualizar() -> void:

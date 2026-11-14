@@ -28,15 +28,21 @@ var _en_suelo := false
 var _recogida := false
 var _tiempo := 0.0
 
-@onready var sprite: AnimatedSprite2D = $Sprite
+## Puede ser un AnimatedSprite2D (la moneda) o un Sprite2D (ManzanaSuelta).
+@onready var sprite: Node2D = $Sprite
 
 
 ## Suelta `cantidad` monedas que saltan desde `posicion` (coordenadas globales).
 ## Se añaden diferidas: se puede llamar desde una señal de física.
 static func soltar(padre: Node, posicion: Vector2, cantidad: int) -> void:
+	soltar_escena(ESCENA, padre, posicion, cantidad)
+
+
+## Lo mismo con cualquier escena que herede de Moneda (p. ej. la manzana del árbol).
+static func soltar_escena(escena: PackedScene, padre: Node, posicion: Vector2, cantidad: int) -> void:
 	var angulo_base := randf() * TAU
 	for i in cantidad:
-		var m := ESCENA.instantiate() as Moneda
+		var m := escena.instantiate() as Moneda
 		# Repartidas alrededor; una sola sale casi en vertical.
 		var angulo := angulo_base + TAU * i / cantidad + randf_range(-0.4, 0.4)
 		var rapidez := randf_range(8.0, 16.0) if cantidad == 1 else randf_range(22.0, 38.0)
@@ -48,8 +54,10 @@ static func soltar(padre: Node, posicion: Vector2, cantidad: int) -> void:
 
 
 func _ready() -> void:
-	sprite.play(&"girar")
-	sprite.frame = randi() % sprite.sprite_frames.get_frame_count(&"girar")
+	var animado := sprite as AnimatedSprite2D
+	if animado:
+		animado.play(&"girar")
+		animado.frame = randi() % animado.sprite_frames.get_frame_count(&"girar")
 	_actualizar_sprite()
 
 
@@ -69,7 +77,8 @@ func _physics_process(delta: float) -> void:
 				sprite.visible = fmod(resta, 0.2) > 0.1
 		for cuerpo in get_overlapping_bodies():
 			if cuerpo is Jugador:
-				_recoger()
+				if _dar():
+					_recoger()
 				return
 
 
@@ -102,10 +111,15 @@ func _actualizar_sprite() -> void:
 	sprite.position.y = -roundf(_altura)
 
 
+## Entrega el premio al jugador. Devuelve false si no puede llevarlo (se queda en el suelo).
+func _dar() -> bool:
+	EstadoJuego.agregar_monedas(valor)
+	return true
+
+
 func _recoger() -> void:
 	_recogida = true
 	set_deferred(&"monitoring", false)
-	EstadoJuego.agregar_monedas(valor)
 	# TODO: sonido de moneda cuando haya audio.
 	sprite.visible = true
 	$Sombra.visible = false
