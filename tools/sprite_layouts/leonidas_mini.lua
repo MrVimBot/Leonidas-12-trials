@@ -67,8 +67,8 @@ return {
       columns = {
         frente  = { name = "recibir_dano", x = 0,  w = 36, ax = 16, cut_right = { 26, 36 }, foot = 252 },
         lado    = { name = "morir",        x = 26, w = 40, ax = 49, cut_left = { 26, 36 } },
-        -- PENDIENTE con la artista: pose de frente con el brazo en alto (¿recibir objeto?)
-        espalda = { name = "sin_nombre",   x = 66, w = 34, loop = true, foot = 252 },
+        -- Comer la manzana (Jugabilidad.pdf p. 8): pose de frente con el brazo en alto.
+        espalda = { name = "comer",        x = 66, w = 34, loop = false, foot = 252, frames = 13 }, -- un solo dibujo; 13-15 vacíos
       } },
     -- El barco está ordenado lado / frente / espalda (distinto del resto).
     { name = "barco_moviendo",  y = 255, h = 25, foot = 279, loop = true,
