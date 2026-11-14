@@ -49,6 +49,7 @@ func _ready() -> void:
 		EstadoJuego.voltereta_aprendida = true
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
+	jugador.vida.danado.connect(_sacudir_camara)
 	_cargar_zona(zona_inicial, entrada_inicial)
 	if barco:
 		_tutorial_barco()
@@ -149,10 +150,16 @@ func _subir_al_barco(entrada: String) -> void:
 	var abajo := not limites.has_area() or barco.global_position.y < limites.get_center().y
 	barco.mirar(Vector2.DOWN if abajo else Vector2.UP)
 	barco.hundido.connect(_al_hundirse)
+	barco.vida.danado.connect(_sacudir_camara)
 	jugador.visible = false
 	jugador.process_mode = Node.PROCESS_MODE_DISABLED
 	camara.objetivo = barco
 	Microfono.activar()
+
+
+## Al recibir daño (a pie o en barco) la cámara tiembla.
+func _sacudir_camara(_cantidad: int, _origen: Vector2) -> void:
+	camara.sacudir()
 
 
 func _ajustar_camara() -> void:

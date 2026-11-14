@@ -4514,6 +4514,7 @@ position = Vector2(920, 240)
 
 [node name="BarreraSur" parent="Objetos/Eventos" unique_id=160869627 instance=ExtResource("47_1uqxn")]
 position = Vector2(920, 1300)
+requisito = 1
 direccion_retroceso = Vector2(0, -1)
 
 [node name="BarreraCartel" parent="Objetos/Eventos" unique_id=1223303129 instance=ExtResource("47_1uqxn")]

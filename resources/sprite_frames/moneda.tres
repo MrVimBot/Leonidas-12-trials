@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://ds3nne3o7hv72"]
+
+[ext_resource type="Texture2D" uid="uid://bju8c8bsbepu7" path="res://assets/sprites/strips/moneda/girar.png" id="1_2kig0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7q1ec"]
+atlas = ExtResource("1_2kig0")
+region = Rect2(0, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5yrg"]
+atlas = ExtResource("1_2kig0")
+region = Rect2(14, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhdjt"]
+atlas = ExtResource("1_2kig0")
+region = Rect2(28, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0ec3"]
+atlas = ExtResource("1_2kig0")
+region = Rect2(42, 0, 14, 15)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7q1ec")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5yrg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhdjt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0ec3")
+}],
+"loop": 1,
+"name": &"girar",
+"speed": 10.0
+}]
+metadata/origin = Vector2(7, 14)
+metadata/cell_size = Vector2i(14, 15)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/moneda.aseprite"

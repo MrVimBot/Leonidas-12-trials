@@ -1,7 +1,8 @@
 class_name ComponenteMuerte
 extends Node
 ## Muerte de un enemigo (u objeto con vida) sin animación propia: al recibir `murio`
-## de su `vida`, apaga sus golpes y colisiones, da `monedas`, hace un destello,
+## de su `vida`, apaga sus golpes y colisiones, suelta `monedas` (saltan al suelo
+## y el jugador las recoge: `Moneda`), hace un destello,
 ## se aplasta y se desvanece, y elimina a `cuerpo`.
 
 signal termino
@@ -13,6 +14,7 @@ signal termino
 ## Hitbox y Hurtbox que dejan de funcionar al morir.
 @export var desactivar: Array[Node] = []
 @export var duracion := 0.45
+## Monedas que suelta al morir (cada una vale 1; salen saltando para recogerlas).
 @export var monedas := 0
 
 
@@ -32,10 +34,8 @@ func morir() -> void:
 	if cuerpo is CollisionObject2D:
 		cuerpo.set_deferred(&"collision_layer", 0)
 		cuerpo.set_deferred(&"collision_mask", 0)
-	if monedas > 0:
-		var estado := get_node_or_null(^"/root/EstadoJuego")
-		if estado:
-			estado.agregar_monedas(monedas)
+	if monedas > 0 and cuerpo is Node2D and cuerpo.get_parent():
+		Moneda.soltar(cuerpo.get_parent(), cuerpo.global_position, monedas)
 	if visual == null:
 		_terminar()
 		return

@@ -1,0 +1,28 @@
+{
+  "animations": {
+    "girar": {
+      "duplicates": [],
+      "durations_ms": [100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "girar.png",
+      "foot": 14,
+      "frame_count": 4,
+      "loop": true,
+      "period": 4,
+      "region": [0, 0, 14, 15],
+      "unique_frames": 4
+    }
+  },
+  "cell": {
+    "h": 15,
+    "w": 14
+  },
+  "name": "moneda",
+  "origin": {
+    "x": 7,
+    "y": 14
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/moneda.aseprite",
+  "warnings": []
+}
