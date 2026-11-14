@@ -32,6 +32,9 @@ return {
   -- columns (opcional): sustituye las columnas por defecto en esa fila. Cada columna
   --   admite name (nombre completo de la animación), ax (x del ancla en el lienzo), loop
   --   y cut_left / cut_right = {a, b} (ver export_strips.lua).
+  -- ax: la artista no dibujó a Leonidas en el centro de cada columna; los `ax` de frente y
+  --   espalda (y algunos `foot`) se midieron superponiendo cada animación sobre `parado`
+  --   de esa dirección, para que no salte 1–4 px al cambiar de animación.
   -- fps (opcional): fuerza la velocidad de la fila (si no, la duración de Aseprite).
   -- skip (opcional): direcciones que esa fila no tiene.
   rows = {
@@ -39,19 +42,24 @@ return {
       -- la paleta de colores de la artista está en x 24–27 de esta fila
       columns = { frente = { x = 0, w = 24 }, espalda = { x = 66, w = 34, foot = 27 } } },
     { name = "caminar",         y = 28,  h = 28, foot = 55, loop = true,
-      columns = { lado = { x = 33, w = 33, foot = 54 } } },
+      columns = { frente = { x = 0, w = 33, ax = 12 }, lado = { x = 33, w = 33, foot = 54 },
+                  espalda = { x = 66, w = 34, ax = 84 } } },
     { name = "ataque",          y = 56,  h = 32, foot = 86, loop = false, fps = 20,
-      columns = { frente = { x = 0, w = 32 }, lado = { x = 32, w = 35 }, espalda = { x = 67, w = 33 } } },
+      columns = { frente = { x = 0, w = 32, ax = 18, foot = 84 }, lado = { x = 32, w = 35, foot = 85 },
+                  espalda = { x = 67, w = 33, ax = 80 } } },
     { name = "pirueta",         y = 88,  h = 27, foot = 113, loop = false, fps = 20,
-      columns = { frente = { x = 0, w = 33, foot = 112 } } },
+      columns = { frente = { x = 0, w = 33, foot = 112, ax = 17 }, espalda = { x = 66, w = 34, ax = 79 } } },
     { name = "parado_objeto",   y = 115, h = 27, foot = 139, loop = true,
-      columns = { espalda = { x = 66, w = 34, foot = 141 } } },
+      columns = { frente = { x = 0, w = 33, ax = 12 }, espalda = { x = 66, w = 34, foot = 141 } } },
     { name = "caminar_objeto",  y = 142, h = 28, foot = 169, loop = true,
-      columns = { lado = { x = 33, w = 33, foot = 168 } } },
+      columns = { frente = { x = 0, w = 33, ax = 12 }, lado = { x = 33, w = 33, foot = 168 },
+                  espalda = { x = 66, w = 34, ax = 84 } } },
     { name = "agarrar",         y = 170, h = 28, foot = 197, loop = false, fps = 20,
-      columns = { frente = { x = 0, w = 33, foot = 195 }, lado = { x = 33, w = 33, foot = 196 } } },
+      columns = { frente = { x = 0, w = 33, foot = 195, ax = 14 }, lado = { x = 33, w = 33, foot = 196 },
+                  espalda = { x = 66, w = 34, ax = 84 } } },
     { name = "tirar",           y = 198, h = 28, foot = 225, loop = false, fps = 20,
-      columns = { frente = { x = 0, w = 33, foot = 223 }, lado = { x = 33, w = 33, foot = 224 } } },
+      columns = { frente = { x = 0, w = 33, foot = 223, ax = 14 }, lado = { x = 33, w = 33, foot = 224 },
+                  espalda = { x = 66, w = 34, ax = 84 } } },
     -- Capa "Layer 17": NO son direcciones, son 3 animaciones de frente.
     -- Se solapan en x según el frame (la cola de "morir" llega a x 29 en los frames 5–7,
     -- y "recibir_dano" llega a x 28 en los 0–4): cut_* busca el hueco en cada frame.
