@@ -85,6 +85,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	EstadoJuego.contando_tiempo = false
+	Musica.detener()
 
 
 ## Lo que EstadoJuego.guardar() necesita saber del mundo.
@@ -184,6 +185,7 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 		Microfono.desactivar()
 
 	_ajustar_camara()
+	Musica.para_zona(ruta)
 	zona_cambiada.emit(zona_actual)
 	modo_cambio.emit(barco != null, barco.vida if barco else jugador.vida)
 

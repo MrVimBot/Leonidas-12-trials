@@ -27,6 +27,7 @@ Dialogos="*res://scenes/ui/caja_dialogo.tscn"
 Tienda="*res://scenes/ui/menu_tienda.tscn"
 Microfono="*res://autoload/microfono.gd"
 Libro="*res://scenes/ui/menu_libro.tscn"
+Musica="*res://autoload/musica.gd"
 
 [display]
 
