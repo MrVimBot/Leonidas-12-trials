@@ -8,6 +8,9 @@
 --     --script-param root=$(pwd) \
 --     --script tools/export_recortes.lua
 --
+-- Opciones de cada recorte: `aislar = true` (solo la mancha más grande) y
+-- `escala = 0.4` (reduce por un factor no entero; también vale para toda la tabla).
+--
 -- Normalmente se llama desde tools/export_sprites.sh. Nunca guarda el sprite.
 
 local spr = app.activeSprite
@@ -63,6 +66,66 @@ local function aislar_mayor(img)
   end
 end
 
+-- Reduce (o amplía) la imagen por un factor NO entero promediando el área que cubre
+-- cada píxel de salida (pesos por solape, color premultiplicado por alfa). El alfa
+-- sale binario (opaco si la cobertura es >= 50 %): sin bordes semitransparentes.
+-- Si el original tiene pocos colores (<= 256: iconos, marcos), cada píxel se ajusta
+-- al color más parecido del original para no inventar tonos intermedios.
+-- Para arte que NO viene agrandado y no cabe en pantalla (el libro del inventario);
+-- si viene agrandado ×N exacto, usar tools/reducir_png.lua.
+local function escalar(img, s)
+  local pc = app.pixelColor
+  local W, H = img.width, img.height
+  local w, h = math.floor(W * s + 0.5), math.floor(H * s + 0.5)
+  local paleta, n_paleta = {}, 0
+  for y = 0, H - 1 do
+    for x = 0, W - 1 do
+      local c = img:getPixel(x, y)
+      if pc.rgbaA(c) == 255 and not paleta[c] then
+        paleta[c] = true; n_paleta = n_paleta + 1
+      end
+    end
+    if n_paleta > 256 then break end
+  end
+  local lista = nil
+  if n_paleta <= 256 then
+    lista = {}
+    for c in pairs(paleta) do lista[#lista + 1] = { pc.rgbaR(c), pc.rgbaG(c), pc.rgbaB(c) } end
+  end
+  local out = Image(w, h, ColorMode.RGB)
+  local paso = 1 / s
+  for oy = 0, h - 1 do
+    local y0, y1 = oy * paso, math.min((oy + 1) * paso, H)
+    for ox = 0, w - 1 do
+      local x0, x1 = ox * paso, math.min((ox + 1) * paso, W)
+      local r, g, b, a, area = 0, 0, 0, 0, 0
+      for sy = math.floor(y0), math.ceil(y1) - 1 do
+        local py = math.min(sy + 1, y1) - math.max(sy, y0)
+        for sx = math.floor(x0), math.ceil(x1) - 1 do
+          local p = py * (math.min(sx + 1, x1) - math.max(sx, x0))
+          local c = img:getPixel(sx, sy)
+          local ca = pc.rgbaA(c) / 255 * p
+          r = r + pc.rgbaR(c) * ca; g = g + pc.rgbaG(c) * ca; b = b + pc.rgbaB(c) * ca
+          a = a + ca; area = area + p
+        end
+      end
+      if area > 0 and a / area >= 0.5 then
+        r, g, b = r / a, g / a, b / a
+        if lista then
+          local mejor, dmin = nil, math.huge
+          for _, q in ipairs(lista) do
+            local d = (q[1] - r) ^ 2 + (q[2] - g) ^ 2 + (q[3] - b) ^ 2
+            if d < dmin then mejor, dmin = q, d end
+          end
+          r, g, b = mejor[1], mejor[2], mejor[3]
+        end
+        out:drawPixel(ox, oy, pc.rgba(math.floor(r + 0.5), math.floor(g + 0.5), math.floor(b + 0.5), 255))
+      end
+    end
+  end
+  return out
+end
+
 local total = 0
 for _, r in ipairs(C.recortes) do
   local dir = root .. "/" .. (r.dir or C.out_dir)
@@ -70,6 +133,8 @@ for _, r in ipairs(C.recortes) do
   local img = Image(r.w, r.h, ColorMode.RGB)
   img:drawImage(lienzo, Point(-r.x, -r.y))
   if r.aislar then aislar_mayor(img) end
+  local escala = r.escala or C.escala
+  if escala and escala ~= 1 then img = escalar(img, escala) end
   img:saveAs(dir .. "/" .. r.nombre .. ".png")
   total = total + 1
 end

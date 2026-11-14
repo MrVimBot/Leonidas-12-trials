@@ -6,6 +6,7 @@
 return {
   source = "assets/sprites/inventario/iconos_de_inventario.aseprite",
   out_dir = "assets/ui/inventario",
+  escala = 0.4, -- el libro mide 1119×576 y la pantalla 480×270 (docs/design/plan_inventario_libro.md)
   recortes = {
     { nombre = "icono_salir",        x = 16,  y = 9,  w = 64, h = 56 },
     { nombre = "icono_herramientas", x = 104, y = 9,  w = 64, h = 56 }, -- espada

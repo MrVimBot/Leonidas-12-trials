@@ -24,6 +24,14 @@ const PALMERA := "provisional/palmera"
 const MINI_PALMERA := "provisional/mini_palmera"
 const BASE_PALMERA := Vector2(12, 6)
 const SIN_SOMBRA := {"sombra": false}
+## Rocas del mar de la artista (tools/recortes/piedras_barquito.lua): textura, colisión y
+## su desplazamiento. Traen el agua y la sombra pintadas debajo (6–9 px): la colisión sube
+## hasta la línea del agua para que el barco choque con la piedra y no con su sombra.
+const ROCAS_BARCO := [
+	["roca_barco_pequena", Vector2(30, 8), Vector2(0, -6)],
+	["roca_barco_alta", Vector2(50, 10), Vector2(0, -7)],
+	["roca_barco_grande", Vector2(62, 12), Vector2(0, -8)],
+]
 
 var _zonas := {
 	"bosque": _bosque,
@@ -181,7 +189,9 @@ func _mar() -> Constructor:
 		Vector2i(40, 48), Vector2i(8, 52), Vector2i(22, 56), Vector2i(34, 60), Vector2i(12, 66),
 		Vector2i(26, 70), Vector2i(38, 74), Vector2i(16, 80), Vector2i(31, 79)]
 	for i in rocas.size():
-		z.deco("Rocas", "provisional/roca_mar_%d" % (i % 3 + 1), _t(rocas[i].x, rocas[i].y), SIN_SOMBRA)
+		var roca: Array = ROCAS_BARCO[i % ROCAS_BARCO.size()]
+		z.deco("Rocas", roca[0], _t(rocas[i].x, rocas[i].y),
+			{"sombra": false, "base": roca[1], "desplazamiento_base": roca[2]})
 
 	# Peligros: más juntos hacia el centro; nada en los primeros/últimos 200 px.
 	for p in [Vector2(200, 340), Vector2(520, 470), Vector2(330, 640), Vector2(470, 820),

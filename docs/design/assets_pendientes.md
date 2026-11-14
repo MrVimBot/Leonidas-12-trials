@@ -15,8 +15,7 @@
 | Tiles de transición | atlas + fuente 1 de `naturaleza.tres` | caminos, estanques, plaza | pintarlos en las zonas |
 | Los 4 sabios | 4 layouts, tiras, SpriteFrames | escena de los sabios (espada + misión) | la escena |
 | Gallo y perro | layouts, tiras, SpriteFrames | más NPC del pueblo | colocarlos + diálogos |
-| Rocas del barco | 3 recortes PNG | sustituyen a `roca_mar_*` provisionales | cambiarlas en `mar` |
-| Libro (inventario) | 4 láminas + 6 iconos + marco de selección | menú del libro | el menú entero |
+| Libro (inventario) | 4 láminas + 6 iconos + marco de selección, reducidos a ×0,4 | menú del libro | el menú entero (`plan_inventario_libro.md`) |
 | `icono.aseprite` | — | icono de la app / retrato pequeño | exportarlo a PNG |
 
 ---
@@ -78,19 +77,6 @@
 - **Falta:** no tienen animación de caminar → usar `paseo = false` (o pedir la animación);
   diálogos en `resources/dialogues/npc_*.tres`.
 
-## Rocas del mar (minijuego del barco)
-
-- **Ruta:** `assets/sprites/piedras_barquito.aseprite` (90×90, 1 frame).
-- **Preparado:** `tools/recortes/piedras_barquito.lua` →
-  `assets/sprites/entorno/roca_barco_{pequena,alta,grande}.png` (36×24, 58×47, 70×55).
-  Traen pintadas la línea del agua y la sombra (no poner `ComponenteSombra`).
-- **Sustituye a:** `assets/sprites/entorno/provisional/roca_mar_{1,2,3}.png`, que usa la zona
-  `mar` (generada por `tools/build_zonas.gd`).
-- **Falta:** cambiar `"provisional/roca_mar_%d"` por `"roca_barco_…"` en
-  `tools/build_zonas.gd` (línea de las `Rocas` de `mar`) y regenerar `mar`, o cambiarlas a mano
-  en `mar.tscn`; ajustar la base de colisión de cada `Decorado` a la línea del agua pintada
-  (no medida aún). Después, `verificar_zonas.gd`.
-
 ## Libro (menú de inventario)
 
 - **Rutas** (`.aseprite` en `assets/sprites/inventario/`):
@@ -104,20 +90,19 @@
   - `seleccion_de_casilla_de_inventario.aseprite` (80×80): marco blanco de la casilla elegida.
   - `inventario_y_como_se_debe_de_ver.aseprite`: **maqueta** de cómo se combina todo (render
     en `docs/reference/inventario_maqueta.png`). No se exporta: es referencia.
-- **Preparado** (recortes en `assets/ui/inventario/`, con `tools/recortes/inventario_*.lua`):
-  `cobertura.png`, `pag_1.png`, `pag_2y3.png`, `pag_4y5.png` (lienzo completo 1119×576:
+- **Preparado** (recortes en `assets/ui/inventario/`, con `tools/recortes/inventario_*.lua`,
+  **reducidos a ×0,4** con la opción `escala` de `export_recortes.lua`):
+  `cobertura.png`, `pag_1.png`, `pag_2y3.png`, `pag_4y5.png` (lienzo completo 448×230:
   se superponen en (0, 0) sobre la cobertura), `icono_{salir,herramientas,objetos,mapa,misiones,guardar}.png`
-  (64×56) y `seleccion_casilla.png`.
+  (26×22) y `seleccion_casilla.png` (32×32).
 - **Cómo se ve (maqueta):** pestañas arriba a la izquierda sobre el borde del libro; la
-  elegida sube 18 px y las demás van «apagadas» (= el icono con negro al 67 % encima: en
-  Godot `modulate = Color(0.33, 0.33, 0.33)`). La X (salir) va abajo a la izquierda. En la
-  maqueta la llama es la pestaña de Misiones y el libro abierto la de Guardar.
-- **Escala — ojo:** está dibujado a tamaño real (no agrandado), pero mide 1119×576, más del
-  doble que la pantalla del juego (480×270). Opciones: mostrar el menú con
-  `content_scale_mode = CANVAS_ITEMS` como las pinturas de la cinemática (se ve a la
-  resolución de la ventana, 1119 px ≈ 58 % de 1920), o pedir a la artista una versión a
-  ~460 px. Decidirlo antes de montar el menú. Los textos («Inventario», «Mapa»…) ya vienen
-  pintados.
+  elegida sube 18 px (7 reducido) y las demás van «apagadas» (= el icono con negro al 67 %
+  encima: en Godot `modulate = Color(0.33, 0.33, 0.33)`). La X (salir) va abajo a la
+  izquierda. En la maqueta la llama es la pestaña de Misiones y el libro abierto la de Guardar.
+- **Escala (decidido 2026-11-14):** el original mide 1119×576 a 1:1 (no agrandado), más del
+  doble que la pantalla (480×270). Se usa reducido a 448×230 en el viewport normal; se pidió
+  a la artista que lo retoque/redibuje a ese tamaño. Medidas de casillas, pestañas y mapa, y
+  el plan del menú: **`plan_inventario_libro.md`**.
 - **Sustituye a:** `assets/ui/provisional/icono_libro.png` (lo usa `scenes/ui/hud.tscn`) y
   `bolsa_inventario.png` (posible: `icono_guardar.png` o `icono_objetos.png`, aunque a 64×56 son grandes para
   el HUD) y al menú del libro, que aún no existe (ver CLAUDE.md, «Escena de Kathita», y

@@ -52,7 +52,7 @@ NPC del barquero con guion (no hay sprite ni texto; solo se actualiza el cartel 
 - `Layer 3` (x 3–35, y 60–83): **un** tiburón, 8 frames: salta, abre la boca y se sumerge → es la **mordida**.
 Antes de escribir el layout, expórtalo a una hoja y míralo (`aseprite -b tiburon.aseprite --scale 4 --sheet /ruta/scratchpad/tiburon.png`, sobre una **copia** en el scratchpad) para fijar el `x`/`w` de cada tiburón dentro de las capas 1 y 2.
 
-**Zona `mar` actual** (`tools/build_zonas.gd`, función `_mar()`): 48×90 tiles, todo en `SueloProvisional` (`MAR_NAV` (4,0), `MAR_NAV_OLA` (5,0), `ARRECIFE` (8,0) sólido en los 4 bordes, `MUELLE` (7,0) arriba `[22,0,25,3]` y abajo `[22,86,25,89]`), 18 rocas `provisional/roca_mar_N` sólidas, entradas `desde_playa` (384,56) y `desde_isla` (384,1384), salidas `SalidaPlaya` (384,8) y `SalidaIsla` (384,1432), marcador `PuntoBarco`.
+**Zona `mar` actual** (`tools/build_zonas.gd`, función `_mar()`): 48×90 tiles, todo en `SueloProvisional` (`MAR_NAV` (4,0), `MAR_NAV_OLA` (5,0), `ARRECIFE` (8,0) sólido en los 4 bordes, `MUELLE` (7,0) arriba `[22,0,25,3]` y abajo `[22,86,25,89]`), 18 rocas sólidas de la artista (`roca_barco_{pequena,alta,grande}`, `ROCAS_BARCO`), entradas `desde_playa` (384,56) y `desde_isla` (384,1384), salidas `SalidaPlaya` (384,8) y `SalidaIsla` (384,1432), marcador `PuntoBarco`.
 
 **Capas de física:** 1 mundo · 2 jugador · 5 golpe_enemigo. `Decorado` y los tiles sólidos están en la capa 1. `SalidaZona` usa máscara 2.
 
