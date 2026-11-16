@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/componentes/componente_deteccion.gd" id="9_det"]
 [ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="10_ata"]
 [ext_resource type="Script" path="res://scripts/componentes/componente_muerte.gd" id="11_mue"]
+[ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="moneda_tscn"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(10, 6)
@@ -93,6 +94,7 @@ Vector2(1, 0): Rect2(13, -10, 20, 16)
 
 [node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar")]
 script = ExtResource("11_mue")
+escena_moneda = ExtResource("moneda_tscn")
 vida = NodePath("../Vida")
 visual = NodePath("../Sprite")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Mordisco")]

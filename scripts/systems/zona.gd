@@ -21,6 +21,18 @@ extends Node2D
 @export var musica: AudioStream
 
 
+## La Zona a la que pertenece `nodo` (la primera que aparece subiendo por sus padres), o null
+## si no está dentro de ninguna. Mejor que `owner`, que solo vale si la zona es la raíz de
+## la escena donde se guardó el nodo.
+static func de(nodo: Node) -> Zona:
+	var actual := nodo
+	while actual != null:
+		if actual is Zona:
+			return actual as Zona
+		actual = actual.get_parent()
+	return null
+
+
 ## Rectángulo (en píxeles del mundo) que la cámara no debe sobrepasar.
 func obtener_limites() -> Rect2i:
 	if limites_camara.has_area():

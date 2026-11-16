@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_0o7b6"]
 [ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_a01v2"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_blspt"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_1.png" id="5_03vmk"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_2.png" id="6_efe5w"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_3.png" id="7_w37u8"]
@@ -51,15 +52,15 @@ y_sort_enabled = true
 [node name="Arboles" type="Node2D" parent="Objetos" unique_id=710437417]
 y_sort_enabled = true
 
-[node name="Manzano11" parent="Objetos/Arboles" unique_id=1641067737 instance=ExtResource("4_blspt")]
+[node name="Manzano11" parent="Objetos/Arboles" unique_id=1641067737 instance=ExtResource("manzano_tscn")]
 position = Vector2(296, 536)
 textura = ExtResource("5_03vmk")
 
-[node name="Manzano21" parent="Objetos/Arboles" unique_id=1901562856 instance=ExtResource("4_blspt")]
+[node name="Manzano21" parent="Objetos/Arboles" unique_id=1901562856 instance=ExtResource("manzano_tscn")]
 position = Vector2(664, 632)
 textura = ExtResource("6_efe5w")
 
-[node name="Manzano31" parent="Objetos/Arboles" unique_id=1681308761 instance=ExtResource("4_blspt")]
+[node name="Manzano31" parent="Objetos/Arboles" unique_id=1681308761 instance=ExtResource("manzano_tscn")]
 position = Vector2(440, 664)
 textura = ExtResource("7_w37u8")
 

@@ -127,7 +127,7 @@ func _reaparecer_en_otro_sitio() -> void:
 
 ## ¿Cabe la flor en `p`? Sin chocar con el mundo ni con otros enemigos y sobre suelo de la zona.
 func _sitio_libre(p: Vector2) -> bool:
-	var zona := owner as Zona
+	var zona := Zona.de(self)
 	if zona and zona.suelo:
 		var celda := zona.suelo.local_to_map(zona.suelo.to_local(p))
 		if zona.suelo.get_cell_source_id(celda) == -1:

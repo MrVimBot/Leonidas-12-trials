@@ -74,6 +74,7 @@ var musica := ""
 
 var _rng := RandomNumberGenerator.new()
 var _decorado: PackedScene
+var _manzano: PackedScene
 var _reservas: Array = [] # [Vector2 centro, float radio]
 var _contador := {} # nombre base → último número usado
 
@@ -84,6 +85,7 @@ func _init(nodo: String, nombre_zona: String, ancho_tiles: int, alto_tiles: int,
 	semilla = semilla_zona
 	_rng.seed = semilla_zona
 	_decorado = load("res://scenes/entorno/decorado.tscn")
+	_manzano = load("res://scenes/entorno/manzano.tscn")
 
 	raiz = Node2D.new()
 	raiz.name = nodo
@@ -180,9 +182,12 @@ func suelo_ocupado(pos: Vector2) -> bool:
 
 ## Instancia decorado.tscn bajo Objetos/<grupo>. `textura` es relativa a
 ## assets/sprites/entorno/ sin ".png" (admite "provisional/palmera").
+## Las texturas `manzano_*` usan manzano.tscn (el decorado que suelta manzanas): aquí,
+## al generar, es donde se decide qué se coloca; en el juego no se mira el nombre.
 ## `op`: propiedades del Decorado (solido, sombra, base, desplazamiento_base...).
 func deco(grupo: String, textura: String, pos: Vector2, op := {}) -> Node2D:
-	var d := _decorado.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Node2D
+	var escena := _manzano if textura.get_file().begins_with("manzano_") else _decorado
+	var d := escena.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Node2D
 	d.name = _nombre_nuevo(textura.get_file().to_pascal_case())
 	d.position = pos.round()
 	_agregar(_grupo(grupo), d)

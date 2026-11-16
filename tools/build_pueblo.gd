@@ -140,6 +140,7 @@ const ARBOLES_BAJOS := ["pino", "pino", "arbol_naranja"]
 
 var _rng := RandomNumberGenerator.new()
 var _decorado: PackedScene
+var _manzano: PackedScene
 var _raiz: Node2D
 var _suelo: TileMapLayer
 
@@ -147,6 +148,7 @@ var _suelo: TileMapLayer
 func _initialize() -> void:
 	_rng.seed = 12
 	_decorado = load("res://scenes/entorno/decorado.tscn")
+	_manzano = load("res://scenes/entorno/manzano.tscn")
 	_raiz = Node2D.new()
 	_raiz.name = "Pueblo"
 	_raiz.y_sort_enabled = true
@@ -287,8 +289,10 @@ func _agregar(padre: Node, hijo: Node) -> void:
 	hijo.owner = _raiz
 
 
+## Las texturas `manzano_*` usan manzano.tscn (el decorado que suelta manzanas).
 func _deco(padre: Node, nombre: String, textura: String, pos: Vector2, op: Dictionary = {}) -> Node2D:
-	var d := _decorado.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Node2D
+	var escena := _manzano if textura.get_file().begins_with("manzano_") else _decorado
+	var d := escena.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Node2D
 	d.name = nombre
 	d.position = pos
 	_agregar(padre, d)

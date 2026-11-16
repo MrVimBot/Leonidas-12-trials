@@ -11,7 +11,9 @@
 [ext_resource type="Script" path="res://scripts/componentes/componente_deteccion.gd" id="9_det"]
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="10_par"]
 [ext_resource type="Script" path="res://scripts/componentes/componente_muerte.gd" id="11_mue"]
+[ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="moneda_tscn"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/nube_toxica.tscn" id="12_nub"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_paseo.gd" id="13_pas"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(14, 6)
@@ -73,6 +75,14 @@ velocidad = 60.0
 script = ExtResource("7_ani")
 sprite = NodePath("../Sprite")
 
+[node name="Paseo" type="Node" parent="." node_paths=PackedStringArray("movimiento")]
+script = ExtResource("13_pas")
+movimiento = NodePath("../Movimiento")
+espera = Vector2(0.8, 2)
+reparto = 1
+distancia_minima = 8.0
+margen_tiempo = 0.0
+
 [node name="Vida" type="Node" parent="." node_paths=PackedStringArray("hurtbox")]
 script = ExtResource("8_vid")
 vida_max = 3
@@ -90,6 +100,7 @@ objetivo = NodePath("../Sprite")
 
 [node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar")]
 script = ExtResource("11_mue")
+escena_moneda = ExtResource("moneda_tscn")
 vida = NodePath("../Vida")
 visual = NodePath("../Sprite")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto")]

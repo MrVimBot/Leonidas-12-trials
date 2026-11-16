@@ -111,3 +111,21 @@ shape = SubResource("Shape_alcance")
 [node name="Parpadeo" type="Node" parent="." unique_id=864839979 node_paths=PackedStringArray("objetivo")]
 script = ExtResource("12_par")
 objetivo = NodePath("../Sprite")
+
+[node name="TemporizadorComer" type="Timer" parent="." unique_id=1204301101]
+one_shot = true
+
+[node name="TemporizadorObjeto" type="Timer" parent="." unique_id=1204301102]
+one_shot = true
+
+[node name="TemporizadorMuerte" type="Timer" parent="." unique_id=1204301103]
+wait_time = 1.0
+one_shot = true
+
+[node name="ObjetoEnMano" type="Sprite2D" parent="." unique_id=1204301104]
+visible = false
+position = Vector2(11, -18)
+
+[connection signal="timeout" from="TemporizadorComer" to="." method="_al_terminar_temporizador_comer"]
+[connection signal="timeout" from="TemporizadorObjeto" to="." method="ocultar_objeto_obtenido"]
+[connection signal="timeout" from="TemporizadorMuerte" to="." method="_al_terminar_temporizador_muerte"]

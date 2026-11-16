@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_n1lbk"]
 [ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_7cees"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_10abr"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/casa_tocon.png" id="5_22uvy"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_1.png" id="6_wqf6t"]
 [ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_2.png" id="7_oajdc"]
@@ -61,19 +62,19 @@ sombra = false
 [node name="Decorados" type="Node2D" parent="Objetos" unique_id=530335124]
 y_sort_enabled = true
 
-[node name="Manzano11" parent="Objetos/Decorados" unique_id=310298244 instance=ExtResource("4_10abr")]
+[node name="Manzano11" parent="Objetos/Decorados" unique_id=310298244 instance=ExtResource("manzano_tscn")]
 position = Vector2(120, 200)
 textura = ExtResource("6_wqf6t")
 
-[node name="Manzano21" parent="Objetos/Decorados" unique_id=2110529827 instance=ExtResource("4_10abr")]
+[node name="Manzano21" parent="Objetos/Decorados" unique_id=2110529827 instance=ExtResource("manzano_tscn")]
 position = Vector2(520, 184)
 textura = ExtResource("7_oajdc")
 
-[node name="Manzano31" parent="Objetos/Decorados" unique_id=1416271441 instance=ExtResource("4_10abr")]
+[node name="Manzano31" parent="Objetos/Decorados" unique_id=1416271441 instance=ExtResource("manzano_tscn")]
 position = Vector2(152, 344)
 textura = ExtResource("8_ks2po")
 
-[node name="Manzano41" parent="Objetos/Decorados" unique_id=1083671180 instance=ExtResource("4_10abr")]
+[node name="Manzano41" parent="Objetos/Decorados" unique_id=1083671180 instance=ExtResource("manzano_tscn")]
 position = Vector2(504, 360)
 textura = ExtResource("9_5efnk")
 

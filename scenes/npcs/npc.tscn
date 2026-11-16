@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="3_mov"]
 [ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="4_ani"]
 [ext_resource type="Script" uid="uid://br8btnpahhgfj" path="res://scripts/componentes/zona_dialogo.gd" id="5_dia"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(12, 6)
@@ -24,6 +25,7 @@ script = ExtResource("2_som")
 tamano = Vector2i(14, 4)
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
 offset = Vector2(0, -24)
 
 [node name="Colision" type="CollisionShape2D" parent="."]
@@ -39,7 +41,13 @@ friccion = 600.0
 script = ExtResource("4_ani")
 sprite = NodePath("../Sprite")
 
+[node name="Paseo" type="Node" parent="." node_paths=PackedStringArray("movimiento")]
+script = ExtResource("6_pas")
+movimiento = NodePath("../Movimiento")
+viaje_minimo = 8.0
+
 [node name="ZonaDialogo" type="Area2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("5_dia")
 
 [node name="Forma" type="CollisionShape2D" parent="ZonaDialogo"]

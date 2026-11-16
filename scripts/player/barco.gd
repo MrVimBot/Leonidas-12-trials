@@ -24,6 +24,15 @@ enum Estado { NAVEGANDO, DANO, HUNDIDO, BLOQUEADO }
 ## Por debajo de esto el soplido no cuenta (ruido).
 @export var umbral_soplo := 0.08
 
+@export_group("Animación")
+## Por encima de esta rapidez (px/s) se anima el barco en marcha; por debajo, quieto.
+@export var umbral_movimiento := 8.0
+## Por encima de esta rapidez (px/s) la estela emite espuma.
+@export var umbral_estela := 40.0
+## Velocidad de la animación (`speed_scale`) en el umbral y a máxima velocidad.
+@export var velocidad_anim_min := 0.6
+@export var velocidad_anim_max := 1.6
+
 @export_group("Choques")
 ## Chocar más rápido que esto contra una roca o el arrecife quita vida.
 @export var velocidad_choque := 70.0
@@ -49,7 +58,7 @@ var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 @onready var vida: ComponenteVida = $Vida
 @onready var parpadeo: ComponenteParpadeo = $Parpadeo
 @onready var hurtbox: Hurtbox = $Hurtbox
-@onready var estela: CPUParticles2D = get_node_or_null(^"Estela") as CPUParticles2D
+@onready var estela: CPUParticles2D = $Estela
 
 
 func _ready() -> void:
@@ -102,14 +111,13 @@ func _animar() -> void:
 	if estado == Estado.HUNDIDO:
 		return
 	var rapidez := velocity.length()
-	if rapidez > 8.0 and estado != Estado.BLOQUEADO:
+	if rapidez > umbral_movimiento and estado != Estado.BLOQUEADO:
 		_reproducir(&"barco_moviendo")
-		sprite.speed_scale = lerpf(0.6, 1.6, clampf(rapidez / velocidad_viento, 0.0, 1.0))
+		sprite.speed_scale = lerpf(velocidad_anim_min, velocidad_anim_max, clampf(rapidez / velocidad_viento, 0.0, 1.0))
 	else:
 		_reproducir(&"barco_quieto")
 		sprite.speed_scale = 1.0
-	if estela:
-		estela.emitting = rapidez > 40.0 and estado == Estado.NAVEGANDO
+	estela.emitting = rapidez > umbral_estela and estado == Estado.NAVEGANDO
 
 
 ## Las vistas laterales del barco están dibujadas mirando a la DERECHA (el resto de
@@ -143,8 +151,7 @@ func _al_hundirse() -> void:
 	parpadeo.detener()
 	movimiento.detener()
 	hurtbox.set_deferred(&"monitorable", false)
-	if estela:
-		estela.emitting = false
+	estela.emitting = false
 	_reproducir(&"barco_quieto")
 	var t := create_tween().set_parallel()
 	t.tween_property(sprite, ^"position:y", sprite.position.y + 6.0, 0.8)

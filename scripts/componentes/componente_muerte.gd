@@ -2,10 +2,13 @@ class_name ComponenteMuerte
 extends Node
 ## Muerte de un enemigo (u objeto con vida) sin animación propia: al recibir `murio`
 ## de su `vida`, apaga sus golpes y colisiones, suelta `monedas` (saltan al suelo
-## y el jugador las recoge: `Moneda`), hace un destello,
+## y el jugador las recoge: `ObjetoSuelto`), hace un destello,
 ## se aplasta y se desvanece, y elimina a `cuerpo`.
 
 signal termino
+
+## Respaldo de `escena_moneda` (ver `_escena_moneda()`).
+const RUTA_MONEDA := "res://scenes/items/moneda.tscn"
 
 @export var vida: ComponenteVida
 @export var visual: CanvasItem
@@ -16,6 +19,8 @@ signal termino
 @export var duracion := 0.45
 ## Monedas que suelta al morir (cada una vale 1; salen saltando para recogerlas).
 @export var monedas := 0
+## Escena de la moneda suelta. Vacía = scenes/items/moneda.tscn (ver `_escena_moneda()`).
+@export var escena_moneda: PackedScene
 
 
 func _ready() -> void:
@@ -36,7 +41,7 @@ func morir() -> void:
 		cuerpo.set_deferred(&"collision_mask", 0)
 	var cuerpo_2d := cuerpo as Node2D
 	if monedas > 0 and cuerpo_2d and cuerpo_2d.get_parent():
-		Moneda.soltar(cuerpo_2d.get_parent(), cuerpo_2d.global_position, monedas)
+		ObjetoSuelto.soltar(_escena_moneda(), cuerpo_2d.get_parent(), cuerpo_2d.global_position, monedas)
 	if visual == null:
 		_terminar()
 		return
@@ -47,6 +52,16 @@ func morir() -> void:
 		t.tween_property(visual, ^"scale", Vector2(1.3, 0.3), duracion).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	t.parallel().tween_property(visual, ^"modulate:a", 0.0, duracion)
 	t.tween_callback(_terminar)
+
+
+## Respaldo mientras las escenas de los enemigos no tengan `escena_moneda` asignada en el
+## Inspector: se carga con `load()` la primera vez que hace falta (no con `preload`, que
+## ataría este script a la escena de la moneda al compilarse). Cuando todas la tengan
+## asignada, se puede quitar.
+func _escena_moneda() -> PackedScene:
+	if escena_moneda == null:
+		escena_moneda = load(RUTA_MONEDA) as PackedScene
+	return escena_moneda
 
 
 func _terminar() -> void:

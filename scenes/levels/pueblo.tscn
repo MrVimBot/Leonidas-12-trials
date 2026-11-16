@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_mmgxq"]
 [ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="2_qsyfj"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="3_t1f4t"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 [ext_resource type="Texture2D" uid="uid://bbnqxwtlj5yl8" path="res://assets/sprites/entorno/casa_amarilla_cerrada.png" id="4_73tgj"]
 [ext_resource type="Texture2D" uid="uid://bwtvjw54tujhk" path="res://assets/sprites/entorno/casa_balcon_cerrada.png" id="5_4nflu"]
 [ext_resource type="Texture2D" uid="uid://k42u3mxhqbpb" path="res://assets/sprites/entorno/casa_teja_cerrada.png" id="6_hk6x6"]
@@ -236,15 +237,15 @@ textura = ExtResource("12_aijw0")
 position = Vector2(791, 888)
 textura = ExtResource("12_aijw0")
 
-[node name="Manzano1" parent="Objetos/Decorados" unique_id=931341301 instance=ExtResource("3_t1f4t")]
+[node name="Manzano1" parent="Objetos/Decorados" unique_id=931341301 instance=ExtResource("manzano_tscn")]
 position = Vector2(463, 400)
 textura = ExtResource("15_wvopy")
 
-[node name="Manzano2" parent="Objetos/Decorados" unique_id=984622723 instance=ExtResource("3_t1f4t")]
+[node name="Manzano2" parent="Objetos/Decorados" unique_id=984622723 instance=ExtResource("manzano_tscn")]
 position = Vector2(594, 377)
 textura = ExtResource("16_1uqxn")
 
-[node name="Manzano3" parent="Objetos/Decorados" unique_id=1622995496 instance=ExtResource("3_t1f4t")]
+[node name="Manzano3" parent="Objetos/Decorados" unique_id=1622995496 instance=ExtResource("manzano_tscn")]
 position = Vector2(537, 451)
 textura = ExtResource("17_05cy4")
 
@@ -399,11 +400,11 @@ textura = ExtResource("14_rqkgi")
 position = Vector2(1525, 425)
 textura = ExtResource("13_xaew7")
 
-[node name="ManzanoNE1" parent="Objetos/Decorados" unique_id=1602178628 instance=ExtResource("3_t1f4t")]
+[node name="ManzanoNE1" parent="Objetos/Decorados" unique_id=1602178628 instance=ExtResource("manzano_tscn")]
 position = Vector2(1295, 430)
 textura = ExtResource("15_wvopy")
 
-[node name="ManzanoNE2" parent="Objetos/Decorados" unique_id=711584640 instance=ExtResource("3_t1f4t")]
+[node name="ManzanoNE2" parent="Objetos/Decorados" unique_id=711584640 instance=ExtResource("manzano_tscn")]
 position = Vector2(1445, 300)
 textura = ExtResource("16_1uqxn")
 

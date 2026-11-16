@@ -10,8 +10,12 @@ extends StaticBody2D
 ##
 ## La colisión es un rectángulo en la base: Leonidas choca con el tronco del árbol o la
 ## fachada de la casa, pero puede pasar por detrás de la copa o del tejado.
+##
+## Un manzano es este mismo decorado con un `ComponenteManzano` hijo
+## (scenes/entorno/manzano.tscn): el decorado solo avisa de los golpes con `golpeado`.
 
-const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
+## Le ha dado un golpe (un Hitbox llamó a `recibir_golpe`).
+signal golpeado
 
 ## Imagen del objeto (assets/sprites/entorno/*.png).
 @export var textura: Texture2D:
@@ -52,19 +56,8 @@ const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
 		desplazamiento_sombra = valor
 		_actualizar()
 
-@export_group("Manzanas")
-## Si es true, golpearlo con la espada varias veces suelta manzanas. Por defecto se activa
-## solo en los manzanos (textura `manzano_*`), así que no hay que tocar las zonas.
-@export var da_manzanas := false
-## Golpes necesarios para que caigan: al azar entre estos dos valores (ambos incluidos).
-@export var golpes_min := 3
-@export var golpes_max := 5
-## Manzanas que caen: al azar entre estos dos valores (ambos incluidos).
-@export var manzanas_min := 1
-@export var manzanas_max := 2
-
-var _golpes_restantes := 0
-var _sin_manzanas := false
+var _forma: RectangleShape2D
+var _tween_sacudida: Tween
 
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _colision: CollisionShape2D = $Colision
@@ -73,39 +66,25 @@ var _sin_manzanas := false
 
 func _ready() -> void:
 	_actualizar()
-	if Engine.is_editor_hint():
-		return
-	if textura and textura.resource_path.get_file().begins_with("manzano_"):
-		da_manzanas = true
-	if da_manzanas:
-		_golpes_restantes = randi_range(golpes_min, golpes_max)
-		# Además de la capa del mundo, entra en "interactuable" para recibir los espadazos.
-		set_collision_layer_value(Capas.NUMERO_INTERACTUABLE, true) # la espada (Hitbox del jugador) detecta esta capa
 
 
-## Contrato de daño (lo llama el Hitbox de la espada). Solo el daño del jugador importa:
-## cada espadazo cuenta un golpe, sin mirar cuánto quita.
+## Contrato de daño (lo llama un Hitbox). El decorado no hace nada por sí mismo: solo
+## avisa con `golpeado` a quien quiera reaccionar (p. ej. `ComponenteManzano`). Un Hitbox
+## solo lo encuentra si está en una capa que este mire (el manzano entra en interactuable).
 func recibir_golpe(_danio: int, _origen: Vector2) -> void:
-	if not da_manzanas:
-		return
-	_sacudir()
-	if _sin_manzanas:
-		return
-	_golpes_restantes -= 1
-	if _golpes_restantes > 0:
-		return
-	_sin_manzanas = true
-	var n := randi_range(manzanas_min, manzanas_max)
-	# Caen delante del tronco (por debajo de la base) para que se puedan recoger.
-	Moneda.soltar_escena(ESCENA_MANZANA, get_parent(), global_position + Vector2(0, 8), n)
+	golpeado.emit()
 
 
-func _sacudir() -> void:
-	var t := create_tween()
-	t.tween_property(_sprite, ^"position:x", 1.0, 0.04)
-	t.tween_property(_sprite, ^"position:x", -1.0, 0.04)
-	t.tween_property(_sprite, ^"position:x", 1.0, 0.04)
-	t.tween_property(_sprite, ^"position:x", 0.0, 0.04)
+## Sacude el dibujo a los lados (al golpearlo). Si llega otro golpe antes de acabar,
+## empieza de nuevo en vez de pisarse con la sacudida anterior.
+func sacudir() -> void:
+	if _tween_sacudida:
+		_tween_sacudida.kill()
+	_tween_sacudida = create_tween()
+	_tween_sacudida.tween_property(_sprite, ^"position:x", 1.0, 0.04)
+	_tween_sacudida.tween_property(_sprite, ^"position:x", -1.0, 0.04)
+	_tween_sacudida.tween_property(_sprite, ^"position:x", 1.0, 0.04)
+	_tween_sacudida.tween_property(_sprite, ^"position:x", 0.0, 0.04)
 
 
 func _actualizar() -> void:
@@ -123,11 +102,13 @@ func _actualizar() -> void:
 	# La base de la imagen queda en el origen del nodo.
 	_sprite.centered = false
 	_sprite.offset = Vector2(-floorf(tam.x / 2.0), -tam.y)
-	# Forma propia de cada instancia (si no, todas compartirían el mismo rectángulo).
-	var forma := RectangleShape2D.new()
-	forma.size = base if base != Vector2.ZERO else tamano_base_automatico()
-	_colision.shape = forma
-	_colision.position = Vector2(0, -forma.size.y / 2.0) + desplazamiento_base
+	# Forma propia de cada instancia (si no, todas compartirían el rectángulo de
+	# decorado.tscn). Se crea la primera vez y luego se reutiliza en cada cambio.
+	if _forma == null:
+		_forma = RectangleShape2D.new()
+		_colision.shape = _forma
+	_forma.size = base if base != Vector2.ZERO else tamano_base_automatico()
+	_colision.position = Vector2(0, -_forma.size.y / 2.0) + desplazamiento_base
 
 
 ## 80 % del ancho y una franja baja (entre 6 y 28 px) de alto.

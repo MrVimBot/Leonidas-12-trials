@@ -27,6 +27,10 @@ enum Estado { NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO, 
 
 ## Animación de comer (fila "Layer 17" de leonidas_mini, de frente: ver su layout).
 const ANIM_COMER := &"comer"
+const ANIM_PARADO := &"parado"
+const ANIM_CAMINAR := &"caminar"
+const ANIM_PARADO_OBJETO := &"parado_objeto"
+const ANIM_CAMINAR_OBJETO := &"caminar_objeto"
 
 @export_group("Movimiento")
 ## Velocidad al caminar con un objeto en las manos (px/s).
@@ -71,8 +75,6 @@ var _dir_pirueta := Vector2.DOWN
 ## ejecuta en el siguiente tick de física (ver `_unhandled_input`). Vacía = ninguna.
 var _accion_pendiente: StringName = &""
 var _comiendo: Objeto = null
-var _turno_comer := 0
-var _objeto_en_mano: Sprite2D
 ## Por qué está bloqueado (&"dialogo", &"tienda", &"zona", &"escena"...): cada sistema
 ## pone y quita solo el suyo, así ninguno deshace el bloqueo de otro. Solo se usan las
 ## claves (un conjunto). Vive en este nodo: se vacía solo al recrearse `game.tscn`.
@@ -87,6 +89,12 @@ var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 @onready var interaccion: ComponenteInteraccion = $Interaccion
 @onready var parpadeo: ComponenteParpadeo = $Parpadeo
 @onready var hurtbox: Hurtbox = $Hurtbox
+## Icono del objeto que come / recién obtenido (último hijo: se dibuja encima de Leonidas).
+@onready var _objeto_en_mano: Sprite2D = $ObjetoEnMano
+## Temporizadores de la escena (`timeout` conectado allí). Se paran con la pausa.
+@onready var _temporizador_comer: Timer = $TemporizadorComer
+@onready var _temporizador_objeto: Timer = $TemporizadorObjeto
+@onready var _temporizador_muerte: Timer = $TemporizadorMuerte
 
 
 ## El Jugador de la partida en curso (grupo "jugador", asignado en jugador.tscn), o null.
@@ -103,11 +111,6 @@ func _ready() -> void:
 	ataque.termino.connect(_volver_a_normal)
 	animador.termino.connect(_al_terminar_animacion)
 	animador.reproducir(&"parado")
-	_objeto_en_mano = Sprite2D.new()
-	_objeto_en_mano.name = &"ObjetoEnMano"
-	_objeto_en_mano.position = posicion_objeto_comer
-	_objeto_en_mano.visible = false
-	add_child(_objeto_en_mano) # el último hijo: se dibuja encima de Leonidas
 
 
 ## Las acciones llegan por eventos (no se sondean) para que la pulsación la consuma un
@@ -160,13 +163,13 @@ func _estado_normal(delta: float, accion: StringName) -> void:
 	animador.orientar(entrada)
 	movimiento.mover(entrada, delta, velocidad_cargando if carga.cargando() else -1.0)
 
-	var base := "caminar" if entrada != Vector2.ZERO else "parado"
+	var caminando := entrada != Vector2.ZERO
 	if carga.cargando():
-		animador.reproducir(StringName(base + "_objeto"))
+		animador.reproducir(ANIM_CAMINAR_OBJETO if caminando else ANIM_PARADO_OBJETO)
 		if accion == &"tirar":
 			_tirar()
 		return
-	animador.reproducir(StringName(base))
+	animador.reproducir(ANIM_CAMINAR if caminando else ANIM_PARADO)
 
 	match accion:
 		&"pirueta":
@@ -245,11 +248,13 @@ func comer(objeto: Objeto) -> void:
 	animador.direccion = Vector2.DOWN # la pose es de frente; al acabar sigue mirando abajo
 	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono, posicion_objeto_comer, true)
-	_turno_comer += 1
-	var turno := _turno_comer
-	await get_tree().create_timer(duracion_comer, false).timeout
-	# Si mientras tanto le golpearon (o pasó otra cosa), no se cura.
-	if turno == _turno_comer and estado == Estado.COMER:
+	_temporizador_comer.start(duracion_comer)
+
+
+## `timeout` de `TemporizadorComer` (conectado en la escena). Si mientras tanto le golpearon
+## o le bloquearon, `_salir_del_estado` lo paró y no llega aquí: no se cura.
+func _al_terminar_temporizador_comer() -> void:
+	if estado == Estado.COMER:
 		_terminar_de_comer()
 
 
@@ -262,11 +267,11 @@ func mostrar_objeto_obtenido(icono: Texture2D, duracion := 1.0) -> void:
 	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(icono, posicion_objeto_obtenido, false)
 	if duracion > 0.0:
-		await get_tree().create_timer(duracion, false).timeout
-		ocultar_objeto_obtenido()
+		_temporizador_objeto.start(duracion)
 
 
 func ocultar_objeto_obtenido() -> void:
+	_temporizador_objeto.stop()
 	_objeto_en_mano.visible = false
 	if estado == Estado.NORMAL or estado == Estado.BLOQUEADO:
 		animador.reproducir(&"parado", true)
@@ -309,7 +314,7 @@ func _salir_del_estado(devolver_objeto: bool) -> void:
 			if devolver_objeto and _comiendo:
 				EstadoJuego.agregar_objeto(_comiendo.id)
 			_comiendo = null
-			_turno_comer += 1 # invalida el temporizador de comer() en curso
+			_temporizador_comer.stop() # que el temporizador de comer() en curso no cure
 			_objeto_en_mano.visible = false
 
 
@@ -342,10 +347,14 @@ func _al_terminar_animacion(_anim: StringName) -> void:
 		Estado.AGARRAR, Estado.TIRAR, Estado.DANO:
 			_volver_a_normal()
 		Estado.MUERTO:
-			await get_tree().create_timer(1.0, false).timeout # se para con la pausa
-			murio.emit()
-			if reaparecer_automatico:
-				reaparecer()
+			_temporizador_muerte.start() # 1 s; se para con la pausa
+
+
+## `timeout` de `TemporizadorMuerte` (conectado en la escena).
+func _al_terminar_temporizador_muerte() -> void:
+	murio.emit()
+	if reaparecer_automatico:
+		reaparecer()
 
 
 func _volver_a_normal() -> void:

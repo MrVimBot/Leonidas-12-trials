@@ -7,7 +7,8 @@ extends CharacterBody2D
 ## (resources/sprite_frames/npc_*.tres), `dialogo` y `burbuja`. La posición del nodo
 ## son los pies (como el jugador y los decorados), así el orden por Y funciona solo.
 ##
-## PASEO: el centro es la posición inicial del nodo (colócalo delante de su casa).
+## PASEO: lo hace su componente `Paseo` (ComponentePaseo); aquí se configura desde el
+## Inspector. El centro es la posición inicial del nodo (colócalo delante de su casa).
 ## Elige un punto al azar dentro de `radio_paseo`, camina hasta él, se para un rato y
 ## vuelve a empezar. Nunca se aleja más de `radio_paseo` del centro.
 ## Si choca (con una casa, el agua...) o tarda demasiado, se para y elige otro punto.
@@ -15,8 +16,13 @@ extends CharacterBody2D
 ## Al hablar con él se para y mira al jugador; sigue paseando al cerrar el diálogo.
 ## `paseo = false` → NPC fijo (tendera, sabios...): no se mueve ni se gira.
 ## `dialogo` se puede cambiar en juego (p. ej. la escena de los sabios): pasa a su ZonaDialogo.
+##
+## `dialogo`, `tienda`, `burbuja` y `posicion_burbuja` son una fachada para el Inspector: se
+## copian a su hijo ZonaDialogo en `_enter_tree` (único sitio; antes del `_ready` de los
+## hijos, donde ZonaDialogo crea su burbuja) y `dialogo` además se reenvía al cambiarlo.
 
-enum Estado { QUIETO, CAMINANDO, HABLANDO }
+## QUIETO: fijo (`paseo = false`). PASEANDO: espera o camina, lo decide el componente.
+enum Estado { QUIETO, PASEANDO, HABLANDO }
 
 ## Animaciones del personaje: parado_* y caminar_* (frente / lado / espalda).
 @export var sprite_frames: SpriteFrames:
@@ -28,7 +34,7 @@ enum Estado { QUIETO, CAMINANDO, HABLANDO }
 @export var dialogo: Dialogo:
 	set(valor):
 		dialogo = valor
-		var zona := get_node_or_null(^"ZonaDialogo") as ZonaDialogo
+		var zona := get_node_or_null(^"%ZonaDialogo") as ZonaDialogo
 		if zona and not Engine.is_editor_hint():
 			zona.dialogo = valor
 ## Si vende algo: un ComponenteTienda hijo del NPC (entonces no usa `dialogo`).
@@ -60,19 +66,17 @@ enum Estado { QUIETO, CAMINANDO, HABLANDO }
 @export var mirando := Vector2.DOWN
 
 var estado := Estado.QUIETO
-var centro := Vector2.ZERO
-var _destino := Vector2.ZERO
-var _tiempo := 0.0
-var _rng := RandomNumberGenerator.new()
 
 @onready var _movimiento: ComponenteMovimiento = $Movimiento
 @onready var _animador: AnimadorDireccional = $Animador
-@onready var _zona_dialogo: ZonaDialogo = $ZonaDialogo
+@onready var _paseo: ComponentePaseo = $Paseo
+@onready var _zona_dialogo: ZonaDialogo = %ZonaDialogo
 
 
 func _enter_tree() -> void:
-	# Antes del _ready de los hijos: ZonaDialogo crea su burbuja en su propio _ready.
-	var zona := get_node_or_null(^"ZonaDialogo") as ZonaDialogo
+	# Antes del _ready de los hijos: ZonaDialogo crea su burbuja en su propio _ready. Las
+	# referencias a nodos (`tienda`) ya están resueltas: se asignan al instanciar la escena.
+	var zona := get_node_or_null(^"%ZonaDialogo") as ZonaDialogo
 	if zona and not Engine.is_editor_hint():
 		zona.dialogo = dialogo
 		zona.tienda = tienda
@@ -82,7 +86,7 @@ func _enter_tree() -> void:
 
 
 func _aplicar_aspecto() -> void:
-	var sprite := get_node_or_null(^"Sprite") as AnimatedSprite2D
+	var sprite := get_node_or_null(^"%Sprite") as AnimatedSprite2D
 	if sprite == null:
 		return
 	sprite.sprite_frames = sprite_frames
@@ -97,15 +101,15 @@ func _aplicar_aspecto() -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	centro = position
-	_zona_dialogo.tienda = tienda # por si la referencia aún no estaba en _enter_tree
-	_rng.randomize()
-	_movimiento.velocidad = velocidad
+	_paseo.centro = global_position
+	_paseo.radio = radio_paseo
+	_paseo.velocidad = velocidad
+	_paseo.espera = espera
 	_movimiento.choco.connect(_al_chocar)
 	_zona_dialogo.empezo.connect(_al_empezar_dialogo)
 	_zona_dialogo.hablado.connect(_al_terminar_dialogo)
 	_animador.mirar(mirando)
-	_quedarse_quieto()
+	_reposar()
 
 
 func _physics_process(delta: float) -> void:
@@ -114,44 +118,28 @@ func _physics_process(delta: float) -> void:
 	match estado:
 		Estado.QUIETO:
 			_movimiento.frenar(delta)
-			_tiempo -= delta
-			if paseo and _tiempo <= 0.0:
-				_empezar_paseo()
-		Estado.CAMINANDO:
-			var hacia := _destino - position
-			_tiempo -= delta
-			if hacia.length() < 2.0 or _tiempo <= 0.0:
-				_quedarse_quieto()
-			else:
-				_movimiento.mover(hacia.normalized(), delta)
-				_animador.orientar(hacia)
+		Estado.PASEANDO:
+			_paseo.actualizar(delta)
+			if _paseo.andando:
+				_animador.orientar(_paseo.hacia)
 				_animador.reproducir(&"caminar")
+			else:
+				_animador.reproducir(&"parado")
 		Estado.HABLANDO:
 			_movimiento.frenar(delta, 4.0)
 
 
-func _empezar_paseo() -> void:
-	# Punto al azar dentro del círculo (sqrt → reparto uniforme, no amontonado en el centro).
-	var angulo := _rng.randf() * TAU
-	var distancia := sqrt(_rng.randf()) * radio_paseo
-	_destino = centro + Vector2.from_angle(angulo) * distancia
-	if _destino.distance_to(position) < 8.0:
-		_tiempo = 0.5
-		return
-	# Margen por si algo lo frena: a la velocidad de paseo, el doble de lo necesario.
-	_tiempo = _destino.distance_to(position) / maxf(velocidad, 1.0) * 2.0 + 0.5
-	estado = Estado.CAMINANDO
-
-
-func _quedarse_quieto() -> void:
-	estado = Estado.QUIETO
-	_tiempo = _rng.randf_range(espera.x, espera.y)
+## Parado y mirando como estaba: empieza a pasear (o se queda fijo si `paseo` es false).
+func _reposar() -> void:
+	estado = Estado.PASEANDO if paseo else Estado.QUIETO
+	if paseo:
+		_paseo.activar()
 	_animador.reproducir(&"parado")
 
 
 func _al_chocar(_colision: KinematicCollision2D) -> void:
-	if estado == Estado.CAMINANDO:
-		_quedarse_quieto()
+	if estado == Estado.PASEANDO:
+		_paseo.al_chocar()
 
 
 func _al_empezar_dialogo(quien: Node) -> void:
@@ -162,7 +150,7 @@ func _al_empezar_dialogo(quien: Node) -> void:
 
 
 func _al_terminar_dialogo() -> void:
-	_quedarse_quieto()
+	_reposar()
 
 
 ## Para cinemáticas que mueven al NPC por su cuenta (p. ej. la escena de los sabios):

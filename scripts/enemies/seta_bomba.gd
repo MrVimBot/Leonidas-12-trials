@@ -10,7 +10,7 @@ enum Estado { DEAMBULAR, PERSEGUIR, EXPLOTAR, ESCONDIDA, SALIR, DANO, MUERTA }
 @export_group("Movimiento")
 @export var velocidad_deambular := 30.0
 @export var velocidad_perseguir := 60.0
-## Distancia máxima a su punto de inicio mientras deambula.
+## Distancia máxima a su punto de inicio mientras deambula (se pasa al componente Paseo).
 @export var radio_deambular := 48.0
 
 @export_group("Explosión")
@@ -31,8 +31,6 @@ enum Estado { DEAMBULAR, PERSEGUIR, EXPLOTAR, ESCONDIDA, SALIR, DANO, MUERTA }
 
 var estado: Estado = Estado.DEAMBULAR
 
-var _origen: Vector2
-var _destino: Vector2
 var _espera := 0.0
 var _recarga := 0.0
 
@@ -42,12 +40,14 @@ var _recarga := 0.0
 @onready var deteccion: ComponenteDeteccion = $Deteccion
 @onready var parpadeo: ComponenteParpadeo = $Parpadeo
 @onready var contacto: Hitbox = $Contacto
+@onready var paseo: ComponentePaseo = $Paseo
 
 
 func _ready() -> void:
-	_origen = global_position
-	_destino = _origen
-	_espera = randf_range(0.2, 1.5)
+	paseo.centro = global_position
+	paseo.radio = radio_deambular
+	paseo.velocidad = velocidad_deambular
+	paseo.activar(Vector2(0.2, 1.5)) # parada un momento antes de su primer paseo
 	vida.danado.connect(_al_recibir_danio)
 	vida.murio.connect(_al_morir)
 	animador.termino.connect(_al_terminar_animacion)
@@ -81,22 +81,18 @@ func _deambular(delta: float) -> void:
 	if deteccion.viendo():
 		estado = Estado.PERSEGUIR
 		return
-	if _espera > 0.0:
-		_espera -= delta
-		movimiento.frenar(delta)
+	paseo.actualizar(delta)
+	if paseo.andando:
+		animador.orientar(paseo.hacia.normalized())
+		animador.reproducir(&"caminar")
+	else:
 		animador.reproducir(&"parado")
-		return
-	var hacia := _destino - global_position
-	if hacia.length() < 2.0:
-		_nuevo_destino()
-		return
-	_andar(hacia.normalized(), velocidad_deambular, delta)
 
 
 func _perseguir(delta: float) -> void:
 	if not deteccion.viendo():
 		estado = Estado.DEAMBULAR
-		_destino = _origen
+		paseo.ir_a(paseo.centro)
 		return
 	animador.mirar(deteccion.direccion())
 	if deteccion.distancia() <= distancia_explotar:
@@ -115,14 +111,9 @@ func _andar(dir: Vector2, vel: float, delta: float) -> void:
 	animador.reproducir(&"caminar")
 
 
-func _nuevo_destino() -> void:
-	_espera = randf_range(0.8, 2.0)
-	_destino = _origen + Vector2.from_angle(randf() * TAU) * randf_range(8.0, radio_deambular)
-
-
 func _al_chocar(_colision: KinematicCollision2D) -> void:
-	if estado == Estado.DEAMBULAR and _espera <= 0.0:
-		_nuevo_destino() # contra un árbol: se para y elige otro sitio
+	if estado == Estado.DEAMBULAR:
+		paseo.al_chocar() # contra un árbol: se para y elige otro sitio
 
 
 func _explotar() -> void:
@@ -139,6 +130,8 @@ func _soltar_nube() -> void:
 	var nube_toxica := nube as NubeToxica
 	if nube_toxica:
 		nube_toxica.danio = danio_explosion
+	# Al padre (el contenedor con orden por Y de la zona) y no a la seta: la nube debe
+	# sobrevivir a la seta si la matan y ordenarse por Y con el resto del decorado.
 	get_parent().add_child(nube)
 	nube.global_position = global_position
 
