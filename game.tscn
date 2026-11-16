@@ -4,9 +4,12 @@
 [ext_resource type="Script" uid="uid://c8521nkmoch8j" path="res://scripts/systems/game.gd" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://bo4ak683tshp5" path="res://scripts/systems/camara_pixel.gd" id="3_feb5d"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_fc0e3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/menu_pausa.tscn" id="5_7jktm"]
+[ext_resource type="PackedScene" uid="uid://ca528nsv7o8om" path="res://scenes/ui/menu_pausa.tscn" id="5_7jktm"]
+[ext_resource type="Script" uid="uid://b15cn25lq0xa3" path="res://scripts/systems/modo_barco.gd" id="6_j5wjh"]
+[ext_resource type="PackedScene" path="res://scenes/player/barco.tscn" id="7_vef74"]
+[ext_resource type="Resource" path="res://resources/dialogues/tutorial_barco.tres" id="8_hve3p"]
 
-[node name="Game" type="Node2D" unique_id=194216102]
+[node name="Game" type="Node2D" unique_id=194216102 groups=["game"]]
 y_sort_enabled = true
 script = ExtResource("1_e2o6t")
 
@@ -14,12 +17,8 @@ script = ExtResource("1_e2o6t")
 y_sort_enabled = true
 
 [node name="Jugador" parent="." unique_id=1575559739 instance=ExtResource("1_80nbo")]
-position = Vector2(55.933884, 46.802414)
 
 [node name="Camara" type="Camera2D" parent="." unique_id=1303309162 node_paths=PackedStringArray("objetivo")]
-position = Vector2(55.933884, 34.802414)
-process_callback = 0
-position_smoothing_speed = 6.0
 script = ExtResource("3_feb5d")
 objetivo = NodePath("../Jugador")
 
@@ -33,7 +32,19 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
-[node name="HUD" parent="." unique_id=655721400 node_paths=PackedStringArray("jugador") instance=ExtResource("4_fc0e3")]
+[node name="HUD" parent="." unique_id=655721400 node_paths=PackedStringArray("jugador", "game") instance=ExtResource("4_fc0e3")]
 jugador = NodePath("../Jugador")
+game = NodePath("..")
 
 [node name="MenuPausa" parent="." unique_id=48738397 instance=ExtResource("5_7jktm")]
+
+[node name="ModoBarco" type="Node" parent="." unique_id=1661957421 node_paths=PackedStringArray("contenedor", "jugador", "camara")]
+script = ExtResource("6_j5wjh")
+escena_barco = ExtResource("7_vef74")
+dialogo_tutorial_barco = ExtResource("8_hve3p")
+contenedor = NodePath("..")
+jugador = NodePath("../Jugador")
+camara = NodePath("../Camara")
+
+[connection signal="modo_cambio" from="." to="HUD" method="_al_cambiar_modo"]
+[connection signal="hundido" from="ModoBarco" to="." method="_al_hundirse"]

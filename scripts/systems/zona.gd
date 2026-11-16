@@ -17,6 +17,8 @@ extends Node2D
 @export var suelo: TileMapLayer
 ## En esta zona se viaja en barco (minijuego del mar): Game sustituye a Leonidas por el Barco.
 @export var modo_barco := false
+## Canción de la zona (Game se la pasa a Musica al entrar). Vacío = silencio.
+@export var musica: AudioStream
 
 
 ## Rectángulo (en píxeles del mundo) que la cámara no debe sobrepasar.
@@ -36,4 +38,7 @@ func punto_entrada(nombre: String) -> Vector2:
 	if marcador == null:
 		push_warning("Zona %s: no existe la entrada '%s', uso 'inicio'" % [name, nombre])
 		marcador = get_node_or_null(^"Entradas/inicio") as Node2D
-	return marcador.global_position if marcador else global_position
+	if marcador == null:
+		push_error("Zona %s: tampoco existe la entrada 'inicio'" % name)
+		return global_position
+	return marcador.global_position

@@ -68,6 +68,9 @@ var semilla: int
 ## Poner bordes y esquinas a caminos y estanques al guardar (Transiciones). false en las
 ## zonas cuya arena es el relleno de tierra sin bordes (playa, isla...).
 var transiciones := true
+## Ruta de la canción de la zona ("" = silencio). Se asigna al `musica` de la raíz al guardar,
+## para que regenerar la escena no la pierda.
+var musica := ""
 
 var _rng := RandomNumberGenerator.new()
 var _decorado: PackedScene
@@ -336,6 +339,8 @@ func guardar(ruta: String) -> Error:
 		variador.set("capa", suelo)
 		variador.set("semilla", semilla)
 		variador.call("variar")
+	if not musica.is_empty():
+		raiz.set("musica", load(musica))
 	var escena := PackedScene.new()
 	var err := escena.pack(raiz)
 	if err != OK:

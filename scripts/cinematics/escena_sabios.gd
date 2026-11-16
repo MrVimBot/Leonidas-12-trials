@@ -102,12 +102,12 @@ func _reproducir(jugador: Jugador) -> void:
 	# Todo de golpe, antes de devolver el control: si se guarda a mitad (en el tutorial
 	# de ataque ya se puede abrir el libro), al cargar los sabios ya habrán pasado.
 	EstadoJuego.tiene_espada = true
-	EstadoJuego.completar_mision(&"ir_al_templo")
-	EstadoJuego.empezar_mision(&"derrotar_medusa")
+	EstadoJuego.completar_mision(EstadoJuego.MISION_IR_AL_TEMPLO)
+	EstadoJuego.empezar_mision(EstadoJuego.MISION_DERROTAR_MEDUSA)
 	EstadoJuego.mision_recibida = true # abre las puertas del pueblo (Zeus)
 
 	# Leonidas levanta la espada.
-	var espada := EstadoJuego.objeto(&"espada")
+	var espada := EstadoJuego.objeto(EstadoJuego.OBJ_ESPADA)
 	var icono: Texture2D = espada.icono if espada else null
 	# El diálogo no repinta la pose: el jugador ya está bloqueado por la escena.
 	jugador.mostrar_objeto_obtenido(icono, 0.0)

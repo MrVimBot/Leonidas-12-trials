@@ -15,6 +15,7 @@ const Constructor := preload("res://tools/zonas/constructor_zona.gd")
 const C := Constructor # para acortar los nombres de tiles
 
 const DIR := "res://scenes/levels/"
+const MUSICA := "res://assets/audio/music/"
 const SETA := "res://scenes/enemies/seta_bomba.tscn"
 const FLOR := "res://scenes/enemies/flor_falsa.tscn"
 const REMOLINO := "res://scenes/entorno/remolino.tscn"
@@ -93,6 +94,7 @@ func _rocas_columna(z: Constructor, x: float, y0: float, y1: float) -> void:
 
 func _bosque() -> Constructor:
 	var z := Constructor.new("Bosque", "Bosque", 64, 56, 21)
+	z.musica = MUSICA + "bosque.mp3"
 	z.rect([0, 0, 63, 55], C.PASTO)
 	z.marco(2, C.SETO)
 	_arena(z, [30, 0, 33, 1])
@@ -131,6 +133,7 @@ func _bosque() -> Constructor:
 
 func _playa() -> Constructor:
 	var z := Constructor.new("Playa", "Orilla del mar", 60, 34, 22)
+	z.musica = MUSICA + "playa.mp3"
 	z.rect([0, 0, 59, 9], C.PASTO)
 	z.rect([0, 10, 59, 27], C.ARENA)
 	z.rect([0, 28, 59, 33], C.MAR)
@@ -173,6 +176,7 @@ func _playa() -> Constructor:
 
 func _mar() -> Constructor:
 	var z := Constructor.new("Mar", "Mar", 48, 90, 23)
+	z.musica = MUSICA + "barco.mp3"
 	z.raiz.set("modo_barco", true)
 	z.rect([0, 0, 47, 89], C.MAR_NAV, true) # liso: las olas las dibuja el shader del agua
 	for r in [[0, 0, 2, 89], [45, 0, 47, 89], [0, 0, 47, 1], [0, 88, 47, 89]]:
@@ -325,6 +329,7 @@ func _cueva_medusa() -> Constructor:
 
 func _cueva_jefe() -> Constructor:
 	var z := Constructor.new("CuevaJefe", "Guarida de Medusa", 34, 26, 27)
+	z.musica = MUSICA + "bossfight.mp3"
 	z.rect([0, 0, 33, 25], C.VACIO, true)
 	z.elipse(Vector2i(17, 11), Vector2(14, 10), C.PARED_CUEVA, true)
 	z.elipse(Vector2i(17, 11), Vector2(13, 9), C.LOSA_JEFE, true)

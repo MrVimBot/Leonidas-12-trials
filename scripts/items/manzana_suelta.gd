@@ -12,4 +12,4 @@ static func soltar_manzanas(padre: Node, posicion: Vector2, cantidad: int) -> vo
 
 
 func _dar() -> bool:
-	return EstadoJuego.agregar_objeto(&"manzana", valor)
+	return EstadoJuego.agregar_objeto(EstadoJuego.OBJ_MANZANA, valor)

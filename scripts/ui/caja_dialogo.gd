@@ -170,7 +170,7 @@ func _cerrar() -> void:
 
 
 func _jugador() -> Jugador:
-	return get_tree().get_first_node_in_group(&"jugador") as Jugador
+	return Jugador.actual(self)
 
 
 ## Parte cada línea en páginas que quepan en el área de texto (ancho y nº de líneas).

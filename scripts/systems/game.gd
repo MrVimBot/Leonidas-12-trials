@@ -6,12 +6,16 @@ extends Node2D
 ##   Game (este script, y_sort_enabled)
 ##   ├─ Mundo (Node2D, y_sort)    aquí se instancia la zona actual
 ##   ├─ Jugador
-##   ├─ (Barco)                   solo en zonas con `modo_barco`: lo crea este script
+##   ├─ (Barco)                   solo en zonas con `modo_barco`: lo crea ModoBarco
 ##   ├─ Camara (CamaraPixel)      sigue al jugador o al barco; límites según la zona
-##   └─ Transicion (CanvasLayer)  fundido a negro al cambiar de zona
+##   ├─ Transicion (CanvasLayer)  fundido a negro al cambiar de zona
+##   ├─ HUD, MenuPausa
+##   └─ ModoBarco                 crea/quita el barco, micrófono, premio y tutorial
 ##
-## En una zona con `modo_barco` (el mar) Leonidas viaja en barco: se oculta y desactiva
-## el Jugador, se crea el Barco en la entrada, la cámara lo sigue y se abre el micrófono.
+## En una zona con `modo_barco` (el mar) Leonidas viaja en barco: este script solo carga
+## la zona y avisa a ModoBarco (`subir` / `bajar`), que hace el resto.
+##
+## Está en el grupo "game" (asignado en game.tscn): desde cualquier nodo, `Game.actual(self)`.
 
 signal zona_cambiada(zona: Zona)
 ## Cambia entre ir a pie y en barco; `vida` es la que debe mostrar el HUD.
@@ -20,10 +24,10 @@ signal modo_cambio(en_barco: bool, vida: ComponenteVida)
 @export_file("*.tscn") var zona_inicial := "res://scenes/levels/pueblo.tscn"
 @export var entrada_inicial := "inicio"
 @export var duracion_fundido := 0.25
-@export var escena_barco: PackedScene = preload("res://scenes/player/barco.tscn")
-@export var dialogo_tutorial_barco: Dialogo = preload("res://resources/dialogues/tutorial_barco.tres")
 
 @export_group("Depuración")
+## Estas opciones solo actúan en compilaciones de depuración (editor, exportación debug):
+## si alguien deja una marcada, no llega a la versión exportada.
 ## Empieza como si Kathita ya hubiera dado el libro y enseñado la voltereta (para probar
 ## los sabios sin repetir su escena).
 @export var depurar_saltar_kathita := false
@@ -35,31 +39,49 @@ signal modo_cambio(en_barco: bool, vida: ComponenteVida)
 @export var depurar_dar_espada := false
 
 var zona_actual: Zona = null
-var barco: Barco = null
+## Barco actual (solo lectura; null a pie). Lo lleva ModoBarco.
+var barco: Barco:
+	get:
+		return modo_barco.barco if modo_barco else null
+## Ruta de la zona actual (res://scenes/levels/<nombre>.tscn). Solo lectura.
+var ruta_zona: String:
+	get:
+		return _ruta_actual
+## ¿Se está cambiando de zona (fundido en curso)? Solo lectura.
+var cambiando: bool:
+	get:
+		return _cambiando
+
 var _cambiando := false
 var _ruta_actual := ""
 var _entrada_actual := ""
-## Zona desde la que se subió al barco: al bajar en la orilla contraria hay premio.
-var _origen_travesia := ""
 
 @onready var mundo: Node2D = $Mundo
 @onready var jugador: Jugador = $Jugador
 @onready var camara: CamaraPixel = $Camara
 @onready var fundido: ColorRect = $Transicion/Fundido
+@onready var modo_barco: ModoBarco = $ModoBarco
+
+
+## El Game de la partida en curso (o null, p. ej. en el menú o con una zona suelta).
+static func actual(desde: Node) -> Game:
+	if desde == null or not desde.is_inside_tree():
+		return null
+	return desde.get_tree().get_first_node_in_group(&"game") as Game
 
 
 func _ready() -> void:
-	add_to_group(&"game")
-	if depurar_saltar_kathita:
+	var depurar := OS.is_debug_build()
+	if depurar and depurar_saltar_kathita:
 		EstadoJuego.tiene_libro = true
 		EstadoJuego.voltereta_aprendida = true
-	if depurar_mision_recibida:
+	if depurar and depurar_mision_recibida:
 		EstadoJuego.mision_recibida = true
 		EstadoJuego.voltereta_aprendida = true
 		EstadoJuego.tiene_espada = true
-		EstadoJuego.completar_mision(&"ir_al_templo")
-		EstadoJuego.empezar_mision(&"derrotar_medusa")
-	if depurar_dar_espada and EstadoJuego.zona_cargada.is_empty():
+		EstadoJuego.completar_mision(EstadoJuego.MISION_IR_AL_TEMPLO)
+		EstadoJuego.empezar_mision(EstadoJuego.MISION_DERROTAR_MEDUSA)
+	if depurar and depurar_dar_espada and EstadoJuego.lugar_cargado == null:
 		EstadoJuego.tiene_espada = true
 	EstadoJuego.contando_tiempo = true
 	fundido.color.a = 0.0
@@ -70,21 +92,18 @@ func _ready() -> void:
 	var zona := zona_inicial
 	var entrada := entrada_inicial
 	var posicion := Vector2.INF
-	if not EstadoJuego.zona_cargada.is_empty():
-		zona = EstadoJuego.zona_cargada
-		entrada = EstadoJuego.entrada_cargada
-		posicion = EstadoJuego.posicion_cargada
-		if EstadoJuego.vida_cargada > 0:
-			jugador.vida.fijar(EstadoJuego.vida_cargada) # el HUD ya está conectado: se actualiza
-		EstadoJuego.zona_cargada = ""
-		EstadoJuego.entrada_cargada = ""
-		EstadoJuego.vida_cargada = -1
-		EstadoJuego.posicion_cargada = Vector2.INF
+	var lugar := EstadoJuego.lugar_cargado
+	if lugar != null:
+		zona = lugar.zona
+		entrada = lugar.entrada
+		posicion = lugar.posicion
+		if lugar.vida > 0:
+			jugador.vida.fijar(lugar.vida) # el HUD ya está conectado: se actualiza
+		EstadoJuego.lugar_cargado = null
 	_cargar_zona(zona, entrada)
 	if posicion.is_finite() and barco == null:
 		_colocar_jugador(posicion)
-	if barco:
-		_tutorial_barco()
+	modo_barco.mostrar_tutorial()
 
 
 func _exit_tree() -> void:
@@ -92,10 +111,13 @@ func _exit_tree() -> void:
 	Musica.detener()
 
 
-## Lo que EstadoJuego.guardar() necesita saber del mundo. La posición solo a pie (en el
-## barco no se abre el libro; si algún día se guarda en el mar, se vuelve a la entrada).
-func datos_guardado() -> Dictionary:
-	var datos := { "zona": _ruta_actual, "entrada": _entrada_actual, "vida": jugador.vida.vida }
+## Lo que EstadoJuego.guardar() necesita saber del mundo (lo llama el libro). La posición solo
+## a pie (en el barco no se abre el libro; si algún día se guarda en el mar, se vuelve a la entrada).
+func datos_guardado() -> DatosLugar:
+	var datos := DatosLugar.new()
+	datos.zona = _ruta_actual
+	datos.entrada = _entrada_actual
+	datos.vida = jugador.vida.vida
 	if barco == null:
 		datos.posicion = jugador.global_position
 	return datos
@@ -109,32 +131,26 @@ func _colocar_jugador(pos: Vector2) -> void:
 	camara.saltar_a_objetivo()
 
 
-## Ruta de la zona actual (res://scenes/levels/<nombre>.tscn).
-func ruta_zona() -> String:
-	return _ruta_actual
-
-
-## ¿Se está cambiando de zona (fundido en curso)?
-func cambiando() -> bool:
-	return _cambiando
-
-
 ## Cambia de zona con fundido a negro. La llaman las SalidaZona.
 func cambiar_zona(ruta: String, entrada: String = "inicio") -> void:
 	if _cambiando:
 		return
 	_cambiando = true
 	_bloquear(true)
-	if barco and ruta != _origen_travesia:
-		EstadoJuego.agregar_monedas(floori(barco.vida.vida / 4.0)) # una moneda por corazón entero conservado
+	modo_barco.premiar_travesia(ruta) # solo si se baja del barco en la otra orilla
+	await _transicion(ruta, entrada)
+	modo_barco.mostrar_tutorial() # la primera vez que se sube al barco
+
+
+## Fundido a negro → carga la zona → fundido de vuelta, con los cuerpos bloqueados
+## (motivo &"zona"). Quien llama pone `_cambiando` a true antes; aquí se quita al final.
+func _transicion(ruta: String, entrada: String) -> void:
 	await _fundir(1.0)
 	_cargar_zona(ruta, entrada)
 	_bloquear(true) # el barco puede ser nuevo (al jugador, repetir el motivo no le hace nada)
 	await _fundir(0.0)
 	_bloquear(false)
 	_cambiando = false
-	if barco:
-		_tutorial_barco()
 
 
 ## Bloqueo por cambio de zona (motivo &"zona"): no toca los de diálogos o escenas.
@@ -149,30 +165,13 @@ func _bloquear(b: bool) -> void:
 			barco.desbloquear(&"zona")
 
 
-## Al hundirse: fundido y se vuelve a empezar la travesía por la misma entrada.
+## Al hundirse (señal `ModoBarco.hundido`, conectada en game.tscn): fundido y se vuelve
+## a empezar la travesía por la misma entrada.
 func _al_hundirse() -> void:
 	if _cambiando:
 		return
 	_cambiando = true
-	await _fundir(1.0)
-	_cargar_zona(_ruta_actual, _entrada_actual)
-	_bloquear(true)
-	await _fundir(0.0)
-	_bloquear(false)
-	_cambiando = false
-
-
-## La primera vez que se sube al barco: explica los controles y calibra el micrófono.
-func _tutorial_barco() -> void:
-	if EstadoJuego.tutorial_barco_visto or barco == null:
-		return
-	EstadoJuego.tutorial_barco_visto = true
-	var este_barco := barco
-	este_barco.bloquear(&"escena")
-	await (Dialogos as CajaDialogo).mostrar(dialogo_tutorial_barco)
-	await Microfono.calibrar()
-	if is_instance_valid(este_barco):
-		este_barco.desbloquear(&"escena")
+	await _transicion(_ruta_actual, _entrada_actual)
 
 
 func _cargar_zona(ruta: String, entrada: String) -> void:
@@ -189,46 +188,22 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 	jugador.global_position = zona_actual.punto_entrada(entrada)
 	jugador.velocity = Vector2.ZERO
 	jugador.punto_control = jugador.global_position # se reaparece al entrar a la zona
-	if zona_actual.modo_barco and ruta != _ruta_actual:
-		_origen_travesia = _ruta_actual
+	var desde := _ruta_actual if ruta != _ruta_actual else "" # "" = se recarga la misma
 	_ruta_actual = ruta
 	_entrada_actual = entrada
 
-	if barco:
-		remove_child(barco)
-		barco.queue_free()
-		barco = null
 	if zona_actual.modo_barco:
-		_subir_al_barco(entrada)
+		modo_barco.subir(zona_actual, entrada, desde)
 	else:
-		jugador.visible = true
-		jugador.process_mode = Node.PROCESS_MODE_INHERIT
-		camara.objetivo = jugador
-		Microfono.desactivar()
+		modo_barco.bajar()
 
 	_ajustar_camara()
-	Musica.para_zona(ruta)
+	Musica.reproducir(zona_actual.musica)
 	zona_cambiada.emit(zona_actual)
 	modo_cambio.emit(barco != null, barco.vida if barco else jugador.vida)
 
 
-func _subir_al_barco(entrada: String) -> void:
-	barco = escena_barco.instantiate() as Barco
-	barco.global_position = zona_actual.punto_entrada(entrada)
-	add_child(barco) # hermano del jugador: se ordena por Y con los objetos de la zona
-	# Mira hacia el interior del mapa: abajo si entra por la mitad de arriba.
-	var limites := zona_actual.obtener_limites()
-	var abajo := not limites.has_area() or barco.global_position.y < limites.get_center().y
-	barco.mirar(Vector2.DOWN if abajo else Vector2.UP)
-	barco.hundido.connect(_al_hundirse)
-	barco.vida.danado.connect(_sacudir_camara)
-	jugador.visible = false
-	jugador.process_mode = Node.PROCESS_MODE_DISABLED
-	camara.objetivo = barco
-	Microfono.activar()
-
-
-## Al recibir daño (a pie o en barco) la cámara tiembla.
+## Al recibir daño el jugador, la cámara tiembla (la del barco la conecta ModoBarco).
 func _sacudir_camara(_cantidad: int, _origen: Vector2) -> void:
 	camara.sacudir()
 

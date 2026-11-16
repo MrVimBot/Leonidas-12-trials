@@ -198,4 +198,4 @@ func _cerrar() -> void:
 
 
 func _jugador() -> Jugador:
-	return get_tree().get_first_node_in_group(&"jugador") as Jugador
+	return Jugador.actual(self)

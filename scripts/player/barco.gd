@@ -9,6 +9,8 @@ extends CharacterBody2D
 ## Sin soplar avanza despacio (`velocidad_remo`) para no quedarse nunca atascado.
 ## Sin ataque. Chocar fuerte con rocas, remolinos y tiburones quita vida AL BARCO.
 ## Posición del nodo = base del casco.
+## Está en el grupo "barco" (asignado en barco.tscn): lo ven los tiburones
+## (`ComponenteDeteccion.grupo`). Para el barco actual, `Game.actual(self).barco`.
 
 signal hundido
 
@@ -51,7 +53,6 @@ var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 
 
 func _ready() -> void:
-	add_to_group(&"barco")
 	vida.danado.connect(_al_recibir_danio)
 	vida.murio.connect(_al_hundirse)
 	movimiento.choco.connect(_al_chocar)

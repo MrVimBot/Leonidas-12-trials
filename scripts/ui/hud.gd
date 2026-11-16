@@ -8,9 +8,12 @@ extends CanvasLayer
 ## La estamina no sale en la maqueta: se muestra como una barrita sobre la cabeza de
 ## Leonidas, solo mientras no está llena.
 ##
-## Va dentro de Game; se asigna `jugador` en el Inspector. Solo ESCUCHA señales:
+## Va dentro de Game; se asignan `jugador` y `game` en el Inspector. Solo ESCUCHA señales:
 ##   jugador.vida.cambio, jugador.estamina.cambio, EstadoJuego.monedas_cambio,
-##   Game.modo_cambio (al ir en barco los corazones son los del barco)
+##   Game.modo_cambio → `_al_cambiar_modo` (conectada en game.tscn; al ir en barco los
+##   corazones son los del barco). Como la conexión está en la escena, ya existe cuando
+##   Game emite la primera en su `_ready` (después del de este hijo), también si la
+##   partida empieza en el mar.
 ## En barco: se oculta la ranura del objeto y la estamina, y aparece el `MedidorViento`
 ## (fuerza del soplido) con la pista "[Espacio]" si no llega audio del micrófono.
 ## Vida en CUARTOS de corazón: assets/ui/corazones.png tiene 5 estados cada 12 px
@@ -20,6 +23,8 @@ const CUARTOS_POR_CORAZON := 4
 const ANCHO_CELDA := 12
 
 @export var jugador: Jugador
+## Para leer el soplido del barco actual (`game.barco`) en el medidor de viento.
+@export var game: Game
 @export var textura_corazones: Texture2D = preload("res://assets/ui/corazones.png")
 ## Segundos que la barra de estamina sigue visible después de llenarse.
 @export var ocultar_estamina_tras := 0.6
@@ -30,7 +35,6 @@ var _estados: Array[AtlasTexture] = []
 var _tiempo_estamina_llena := 0.0
 var _vida: ComponenteVida = null
 var _en_barco := false
-var _game: Game = null
 
 @onready var corazones: HBoxContainer = $Corazones
 @onready var icono_objeto: TextureRect = $RanuraObjeto/Icono
@@ -57,17 +61,6 @@ func _ready() -> void:
 	_al_cambiar_monedas(EstadoJuego.monedas)
 	barra_estamina.modulate.a = 0.0
 	medidor_viento.visible = false
-	_conectar_game.call_deferred()
-
-
-## Game puede prepararse después del HUD (y ya haber creado el barco): por eso diferido.
-func _conectar_game() -> void:
-	_game = get_tree().get_first_node_in_group(&"game") as Game
-	if _game == null:
-		return
-	_game.modo_cambio.connect(_al_cambiar_modo)
-	if _game.barco:
-		_al_cambiar_modo(true, _game.barco.vida)
 
 
 ## Los corazones muestran esta vida (la de Leonidas o la del barco).
@@ -88,6 +81,7 @@ func modo_barco(activo: bool) -> void:
 		barra_estamina.modulate.a = 0.0
 
 
+## Conectada en game.tscn a `Game.modo_cambio`.
 func _al_cambiar_modo(en_barco: bool, vida: ComponenteVida) -> void:
 	seguir_vida(vida)
 	modo_barco(en_barco)
@@ -95,7 +89,7 @@ func _al_cambiar_modo(en_barco: bool, vida: ComponenteVida) -> void:
 
 func _process(delta: float) -> void:
 	if _en_barco:
-		var barco := _game.barco if _game else null
+		var barco := game.barco if game else null
 		medidor_viento.valor = barco.soplido() if barco else 0.0
 		pista_viento.visible = not Microfono.disponible
 		return

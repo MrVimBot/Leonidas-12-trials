@@ -5,9 +5,11 @@ extends Node
 ##   await Microfono.calibrar()   # mide el ruido ambiente y ajusta el umbral
 ##   Microfono.desactivar()
 ##
-## Crea por código un bus "Microfono" silenciado con un AudioEffectCapture, y un
-## AudioStreamPlayer con AudioStreamMicrophone que suena en ese bus: el audio se
-## analiza pero no sale por los altavoces.
+## Usa el bus "Microfono" (silenciado, con un AudioEffectCapture) declarado en
+## res://default_bus_layout.tres, y un AudioStreamPlayer con AudioStreamMicrophone que suena
+## en ese bus: el audio se analiza pero no sale por los altavoces. Si el bus falta no se crea
+## por código (en la web silenciaba el Master): se avisa con push_error y el micrófono queda
+## no disponible.
 ## Necesita `audio/driver/enable_input = true` en el proyecto.
 ## Si no llega audio (sin permiso, sin dispositivo, web sin gesto), `disponible`
 ## queda en false y el juego se sigue pudiendo jugar con el teclado (Espacio).
@@ -50,7 +52,7 @@ var _activo := false
 var _tiempo_activo := 0.0
 var _ultimo_db := -80.0
 ## dB sostenido: mínimo de la ventana.
-var db_sostenido := -80.0
+var _db_sostenido := -80.0
 var _historial: Array[Vector2] = [] # (tiempo, dB)
 var _reloj := 0.0
 var _sin_datos := 0.0
@@ -63,11 +65,10 @@ func _ready() -> void:
 	# Godot 4.7.2): el juego se quedaba sin sonido.
 	var idx := AudioServer.get_bus_index(NOMBRE_BUS)
 	if idx == -1:
-		# Respaldo si alguien borra el bus del layout (en la web volvería el problema).
-		push_warning("Microfono: falta el bus '%s' en default_bus_layout.tres" % NOMBRE_BUS)
-		AudioServer.add_bus()
-		idx = AudioServer.bus_count - 1
-		AudioServer.set_bus_name(idx, NOMBRE_BUS)
+		# No se crea por código (ver arriba): sin bus no hay micrófono, pero el juego sigue
+		# siendo jugable con Espacio.
+		push_error("Microfono: falta el bus '%s' en default_bus_layout.tres; micrófono desactivado" % NOMBRE_BUS)
+		return
 	# Mute del bus: el audio no llega a "Master" pero los efectos del bus sí lo reciben.
 	if not AudioServer.is_bus_mute(idx):
 		AudioServer.set_bus_mute(idx, true)
@@ -88,19 +89,20 @@ func _ready() -> void:
 
 
 func activar() -> void:
-	if _activo:
+	if _activo or _captura == null:
 		return
 	_activo = true
 	_tiempo_activo = 0.0
 	_historial.clear()
-	db_sostenido = -80.0
+	_db_sostenido = -80.0
 	_captura.clear_buffer()
 	_reproductor.play()
 
 
 func desactivar() -> void:
 	_activo = false
-	_reproductor.stop()
+	if _reproductor:
+		_reproductor.stop()
 	nivel = 0.0
 
 
@@ -115,7 +117,7 @@ func nivel_efectivo() -> float:
 
 ## Mide el ruido ambiente durante `duracion` s y fija `db_min` por encima de él.
 func calibrar(duracion := 0.5) -> void:
-	if not _activo:
+	if not _activo or _captura == null:
 		return
 	var suma := 0.0
 	var n := 0
@@ -133,7 +135,7 @@ func calibrar(duracion := 0.5) -> void:
 
 
 func _process(delta: float) -> void:
-	if not _activo:
+	if not _activo or _captura == null:
 		return
 	_tiempo_activo += delta
 	_reloj += delta
@@ -155,8 +157,8 @@ func _process(delta: float) -> void:
 		disponible = true
 		disponible_cambio.emit(true)
 	_ultimo_db = linear_to_db(rms) if rms > 0.0 else -80.0
-	db_sostenido = _sostenido(_ultimo_db)
-	_suavizar(clampf(inverse_lerp(db_min, db_max, db_sostenido), 0.0, 1.0), delta)
+	_db_sostenido = _sostenido(_ultimo_db)
+	_suavizar(clampf(inverse_lerp(db_min, db_max, _db_sostenido), 0.0, 1.0), delta)
 
 
 ## Mínimo de los dB de los últimos `ventana_sostenido` s (la voz va a golpes; soplar no).

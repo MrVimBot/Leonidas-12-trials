@@ -153,6 +153,7 @@ func _ready() -> void:
 	mapa.draw.connect(_dibujar_mapa)
 	EstadoJuego.objetos_cambio.connect(func(_id: StringName, _n: int) -> void: _refrescar())
 	EstadoJuego.misiones_cambio.connect(_refrescar)
+	EstadoJuego.estado_restablecido.connect(_refrescar)
 	get_window().size_changed.connect(_colocar)
 
 
@@ -285,8 +286,8 @@ func puede_abrir() -> bool:
 		return false
 	if Dialogos.abierto or Tienda.abierto:
 		return false
-	var game := get_tree().get_first_node_in_group(&"game") as Game
-	if game == null or game.barco != null or game.cambiando():
+	var game := Game.actual(self)
+	if game == null or game.barco != null or game.cambiando:
 		return false
 	var jugador := game.jugador
 	return jugador != null and jugador.puede_usar_objeto()
@@ -451,7 +452,7 @@ func _usar(id: StringName) -> void:
 	var o := EstadoJuego.objeto(id) if id != &"" else null
 	if o == null or o.tipo != Objeto.Tipo.CONSUMIBLE:
 		return
-	var game := get_tree().get_first_node_in_group(&"game") as Game
+	var game := Game.actual(self)
 	var jugador := game.jugador if game else null
 	if jugador == null:
 		return
@@ -466,7 +467,8 @@ func _usar(id: StringName) -> void:
 
 
 func _guardar() -> void:
-	if EstadoJuego.guardar():
+	var game := Game.actual(self)
+	if game != null and EstadoJuego.guardar(game.datos_guardado()):
 		_mensaje_guardar = "¡Partida guardada!"
 	else:
 		_mensaje_guardar = "No se pudo guardar."
@@ -658,10 +660,10 @@ func _refrescar_guardar() -> void:
 
 
 func _zona_actual() -> int:
-	var game := get_tree().get_first_node_in_group(&"game") as Game
+	var game := Game.actual(self)
 	if game == null:
 		return -1
-	var archivo := game.ruta_zona().get_file().get_basename()
+	var archivo := game.ruta_zona.get_file().get_basename()
 	for i in ZONAS.size():
 		if ZONAS[i][0] == archivo:
 			return i

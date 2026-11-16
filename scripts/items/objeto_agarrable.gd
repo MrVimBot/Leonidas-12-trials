@@ -35,7 +35,6 @@ var _altura_inicial := 0.0
 
 
 func _ready() -> void:
-	add_to_group(&"agarrable")
 	_capa_original = collision_layer
 	_mascara_original = collision_mask
 	_visual_y = visual.position.y

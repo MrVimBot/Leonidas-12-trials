@@ -76,7 +76,7 @@ func _al_entrar(cuerpo: Node2D) -> void:
 func _reanudar_tutorial() -> void:
 	# La zona se instancia dentro de Game: el Jugador puede no estar listo aún en _ready.
 	await get_tree().process_frame
-	var jugador := get_tree().get_first_node_in_group(&"jugador") as Jugador
+	var jugador := Jugador.actual(self)
 	if jugador == null:
 		push_warning("EscenaKathitaLibro: no hay Jugador; no se puede reanudar el tutorial.")
 		EstadoJuego.voltereta_aprendida = true # mejor abrir el paso que cerrarlo para siempre

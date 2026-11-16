@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://2mfbdbjsxpvt"]
 
 [ext_resource type="Script" path="res://scripts/systems/zona.gd" id="1_f66hl"]
+[ext_resource type="AudioStream" uid="uid://bhusck3gm5kb2" path="res://assets/audio/music/playa.mp3" id="9_musica"]
 [ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_2ydgf"]
 [ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_6oavy"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_evn6h"]
@@ -42,6 +43,7 @@ script = ExtResource("1_f66hl")
 nombre_zona = "Orilla del mar"
 limites_camara = Rect2i(0, 0, 960, 544)
 suelo = NodePath("Suelo")
+musica = ExtResource("9_musica")
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=1187809619]
 z_index = -1

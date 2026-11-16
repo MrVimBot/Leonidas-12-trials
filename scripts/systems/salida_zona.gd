@@ -25,8 +25,8 @@ func _ready() -> void:
 func _al_entrar(cuerpo: Node2D) -> void:
 	if not (cuerpo is Jugador or cuerpo is Barco) or zona_destino.is_empty():
 		return
-	var game := get_tree().get_first_node_in_group(&"game") as Game
+	var game := Game.actual(self)
 	if game:
 		game.cambiar_zona.call_deferred(zona_destino, entrada_destino)
 	else:
-		push_warning("SalidaZona: no hay ningún nodo en el grupo 'game'")
+		push_warning("SalidaZona: no hay Game (¿zona abierta sola?)")

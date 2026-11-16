@@ -50,8 +50,8 @@ func _puede_abrir() -> bool:
 		return false
 	if Libro.abierto or Tienda.abierto or Dialogos.abierto:
 		return false
-	var game := get_tree().get_first_node_in_group(&"game") as Game
-	return game != null and not game.cambiando()
+	var game := Game.actual(self)
+	return game != null and not game.cambiando
 
 
 func _unhandled_input(event: InputEvent) -> void:

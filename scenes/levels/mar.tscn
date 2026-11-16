@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://cst8vxiuqlyfc"]
 
 [ext_resource type="Script" path="res://scripts/systems/zona.gd" id="1_4jxmh"]
+[ext_resource type="AudioStream" uid="uid://bd66gnuv0emiu" path="res://assets/audio/music/barco.mp3" id="9_musica"]
 [ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_04r1f"]
 [ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_diwel"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_14xmh"]
@@ -24,6 +25,7 @@ nombre_zona = "Mar"
 limites_camara = Rect2i(0, 0, 768, 1440)
 suelo = NodePath("Suelo")
 modo_barco = true
+musica = ExtResource("9_musica")
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=1409836704]
 z_index = -1

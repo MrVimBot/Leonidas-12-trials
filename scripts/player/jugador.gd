@@ -89,6 +89,13 @@ var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 @onready var hurtbox: Hurtbox = $Hurtbox
 
 
+## El Jugador de la partida en curso (grupo "jugador", asignado en jugador.tscn), o null.
+static func actual(desde: Node) -> Jugador:
+	if desde == null or not desde.is_inside_tree():
+		return null
+	return desde.get_tree().get_first_node_in_group(&"jugador") as Jugador
+
+
 func _ready() -> void:
 	punto_control = global_position
 	vida.danado.connect(_al_recibir_danio)

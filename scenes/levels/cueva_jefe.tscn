@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://d4fydc77c5sow"]
 
 [ext_resource type="Script" path="res://scripts/systems/zona.gd" id="1_1mv42"]
+[ext_resource type="AudioStream" uid="uid://bmx7ra61sjk4a" path="res://assets/audio/music/bossfight.mp3" id="9_musica"]
 [ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_717rp"]
 [ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_dse0w"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_wqbmv"]
@@ -17,6 +18,7 @@ script = ExtResource("1_1mv42")
 nombre_zona = "Guarida de Medusa"
 limites_camara = Rect2i(0, 0, 544, 416)
 suelo = NodePath("Suelo")
+musica = ExtResource("9_musica")
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=1537206086]
 z_index = -1
