@@ -37,8 +37,10 @@ var _atendiendo := false
 
 
 func _ready() -> void:
-	collision_layer = 32 # interactuable: lo encuentra ComponenteInteraccion
-	collision_mask = 2 # jugador: para saber cuándo enseñar la burbuja
+	# Capas en código y no en escena: ZonaDialogo se crea como Area2D + este script en
+	# carteles y NPC, sin escena propia.
+	collision_layer = Capas.INTERACTUABLE # lo encuentra ComponenteInteraccion
+	collision_mask = Capas.JUGADOR # para saber cuándo enseñar la burbuja
 	monitoring = true
 	body_entered.connect(_al_entrar_cuerpo)
 	body_exited.connect(_al_salir_cuerpo)

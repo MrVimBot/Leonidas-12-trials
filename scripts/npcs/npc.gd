@@ -125,7 +125,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				_movimiento.mover(hacia.normalized(), delta)
 				_animador.orientar(hacia)
-				_reproducir(&"caminar")
+				_animador.reproducir(&"caminar")
 		Estado.HABLANDO:
 			_movimiento.frenar(delta, 4.0)
 
@@ -146,7 +146,7 @@ func _empezar_paseo() -> void:
 func _quedarse_quieto() -> void:
 	estado = Estado.QUIETO
 	_tiempo = _rng.randf_range(espera.x, espera.y)
-	_reproducir(&"parado")
+	_animador.reproducir(&"parado")
 
 
 func _al_chocar(_colision: KinematicCollision2D) -> void:
@@ -158,7 +158,7 @@ func _al_empezar_dialogo(quien: Node) -> void:
 	estado = Estado.HABLANDO
 	if mirar_al_hablar and quien is Node2D:
 		_animador.mirar((quien as Node2D).global_position - global_position)
-	_reproducir(&"parado")
+	_animador.reproducir(&"parado")
 
 
 func _al_terminar_dialogo() -> void:
@@ -166,19 +166,9 @@ func _al_terminar_dialogo() -> void:
 
 
 ## Para cinemáticas que mueven al NPC por su cuenta (p. ej. la escena de los sabios):
-## reproduce `base` (parado / caminar) en la dirección a la que mira.
+## reproduce `base` (parado / caminar) en la dirección a la que mira. Si el sprite no tiene
+## esa dirección, el animador usa la de frente (sabios, tendedera); si no tiene `base`
+## (gallo y perro no caminan), no hace nada.
 func animar(base: StringName) -> void:
-	_reproducir(base)
+	_animador.reproducir(base)
 
-
-## Reproduce `base_<dirección>`; si el sprite no tiene esa dirección, la de frente.
-func _reproducir(base: StringName) -> void:
-	var frames := _animador.sprite.sprite_frames
-	if frames == null:
-		return
-	if frames.has_animation(StringName("%s_%s" % [base, _animador.sufijo()])):
-		_animador.reproducir(base)
-	elif frames.has_animation(StringName("%s_frente" % base)):
-		_animador.sprite.flip_h = false
-		if _animador.sprite.animation != StringName("%s_frente" % base):
-			_animador.sprite.play(StringName("%s_frente" % base))

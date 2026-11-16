@@ -12,8 +12,14 @@ extends Node2D
 @export var fuerza := 220.0
 
 
+## Barco al que arrastra; solo se vuelve a buscar si se liberó (se recrea al hundirse).
+var _barco: Barco = null
+
+
 func _physics_process(delta: float) -> void:
-	var barco := get_tree().get_first_node_in_group(&"barco") as Barco
+	if not is_instance_valid(_barco) or not _barco.is_inside_tree():
+		_barco = get_tree().get_first_node_in_group(&"barco") as Barco
+	var barco := _barco
 	if barco == null or barco.estado == Barco.Estado.HUNDIDO:
 		return
 	var hacia := global_position - barco.global_position

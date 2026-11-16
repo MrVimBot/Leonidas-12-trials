@@ -5,7 +5,7 @@ extends Node
 ## inmunidad. Si se asigna un `hurtbox`, se conecta solo a su señal `golpeado`.
 ## Emite `murio` al llegar a 0; `restaurar()` la deja llena otra vez (reaparecer).
 
-## Cada vez que cambia la vida (también una vez al empezar, para pintar el HUD).
+## Cada vez que cambia la vida. No se emite al empezar: quien se conecte lee `vida` y `vida_max`.
 signal cambio(vida: int, vida_max: int)
 ## Al recibir daño efectivo (no si era invulnerable): cantidad y posición de origen.
 signal danado(cantidad: int, origen: Vector2)
@@ -35,7 +35,6 @@ func _ready() -> void:
 	vida = vida_max
 	if hurtbox:
 		hurtbox.golpeado.connect(recibir_danio)
-	cambio.emit.call_deferred(vida, vida_max)
 
 
 func _physics_process(delta: float) -> void:
@@ -64,6 +63,15 @@ func curar(cantidad: int) -> void:
 	if vida != antes:
 		cambio.emit(vida, vida_max)
 		curado.emit(vida - antes)
+
+
+## Fija la vida (p. ej. al cargar una partida): la limita a 0..`vida_max` y emite `cambio`.
+## No emite `danado`, `curado` ni `murio`, ni da invulnerabilidad: está pensado para valores
+## > 0; con 0 solo deja `muerto` en true, sin avisar.
+func fijar(valor: int) -> void:
+	vida = clampi(valor, 0, vida_max)
+	muerto = vida == 0
+	cambio.emit(vida, vida_max)
 
 
 func restaurar() -> void:

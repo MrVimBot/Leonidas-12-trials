@@ -4,7 +4,7 @@ extends Node
 ## suficiente; tras `retraso_regeneracion` segundos sin gastar se regenera sola, salvo
 ## mientras `pausada` esté activa (el jugador la pone durante la voltereta).
 
-## Cada vez que cambia la estamina (también una vez al empezar, para que la barra se pinte).
+## Cada vez que cambia la estamina. No se emite al empezar: quien se conecte lee `estamina`.
 signal cambio(estamina: float, estamina_max: float)
 ## Al intentar `gastar()` más de lo que hay.
 signal insuficiente
@@ -26,7 +26,6 @@ var _tiempo_sin_gastar := 0.0
 
 func _ready() -> void:
 	estamina = estamina_max
-	cambio.emit.call_deferred(estamina, estamina_max)
 
 
 func _physics_process(delta: float) -> void:

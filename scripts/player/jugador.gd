@@ -25,8 +25,6 @@ signal comio(objeto: Objeto)
 
 enum Estado { NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO, COMER }
 
-## Capa de física de los obstáculos bajos, que la voltereta atraviesa.
-const CAPA_OBSTACULO_BAJO := 7
 ## Animación de comer (fila "Layer 17" de leonidas_mini, de frente: ver su layout).
 const ANIM_COMER := &"comer"
 
@@ -39,7 +37,7 @@ const ANIM_COMER := &"comer"
 @export var velocidad_pirueta := 150.0
 ## Estamina que gasta una voltereta.
 @export var costo_pirueta := 35.0
-## Si la voltereta atraviesa los obstáculos bajos (capa `CAPA_OBSTACULO_BAJO`).
+## Si la voltereta atraviesa los obstáculos bajos (capa `Capas.OBSTACULO_BAJO`).
 @export var atraviesa_obstaculos_bajos := true
 
 @export_group("Combate")
@@ -182,18 +180,16 @@ func _pirueta(entrada: Vector2) -> void:
 	vida.invulnerable_extra = true
 	estamina.pausada = true
 	if atraviesa_obstaculos_bajos:
-		set_collision_mask_value(CAPA_OBSTACULO_BAJO, false)
-	animador.reproducir(&"pirueta", true)
+		set_collision_mask_value(Capas.NUMERO_OBSTACULO_BAJO, false)
 	# El giro dibujado de "pirueta_lado" va al revés del movimiento: se invierte el espejo.
-	if animador.sufijo() == "lado":
-		animador.sprite.flip_h = not animador.sprite.flip_h
+	animador.reproducir(&"pirueta", true, true)
 	pirueta_empezada.emit()
 
 
 func _terminar_pirueta() -> void:
 	vida.invulnerable_extra = false
 	estamina.pausada = false
-	set_collision_mask_value(CAPA_OBSTACULO_BAJO, true)
+	set_collision_mask_value(Capas.NUMERO_OBSTACULO_BAJO, true)
 	velocity *= 0.3
 
 
@@ -239,9 +235,8 @@ func comer(objeto: Objeto) -> void:
 	_comiendo = objeto
 	estado = Estado.COMER
 	movimiento.detener()
-	animador.direccion = Vector2.DOWN
-	animador.sprite.flip_h = false
-	animador.sprite.play(ANIM_COMER)
+	animador.direccion = Vector2.DOWN # la pose es de frente; al acabar sigue mirando abajo
+	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono, posicion_objeto_comer, true)
 	_turno_comer += 1
 	var turno := _turno_comer
@@ -256,9 +251,8 @@ func comer(objeto: Objeto) -> void:
 ## Con `duracion` > 0 la quita sola al acabar; con 0 se queda hasta
 ## `ocultar_objeto_obtenido()` (p. ej. mientras sale el aviso «¡Obtuviste…!»).
 func mostrar_objeto_obtenido(icono: Texture2D, duracion := 1.0) -> void:
-	animador.direccion = Vector2.DOWN
-	animador.sprite.flip_h = false
-	animador.sprite.play(ANIM_COMER)
+	animador.direccion = Vector2.DOWN # la pose es de frente; al acabar sigue mirando abajo
+	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(icono, posicion_objeto_obtenido, false)
 	if duracion > 0.0:
 		await get_tree().create_timer(duracion, false).timeout

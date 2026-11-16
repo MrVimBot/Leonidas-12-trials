@@ -13,6 +13,10 @@ extends Node
 var _restante := 0.0
 
 
+func _ready() -> void:
+	set_process(false) # solo corre mientras parpadea
+
+
 func _process(delta: float) -> void:
 	if _restante <= 0.0:
 		return
@@ -25,8 +29,10 @@ func _process(delta: float) -> void:
 
 func parpadear(duracion: float) -> void:
 	_restante = duracion
+	set_process(duracion > 0.0)
 
 
 func detener() -> void:
 	_restante = 0.0
+	set_process(false)
 	objetivo.modulate.a = 1.0

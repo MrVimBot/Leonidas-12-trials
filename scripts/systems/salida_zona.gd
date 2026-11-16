@@ -14,8 +14,10 @@ extends Area2D
 
 
 func _ready() -> void:
+	# Capas en código y no en escena: SalidaZona no tiene escena propia (se crea como
+	# Area2D + este script en cada zona y en los generadores), así el valor es único.
 	collision_layer = 0
-	collision_mask = 2 # jugador
+	collision_mask = Capas.JUGADOR
 	monitorable = false
 	body_entered.connect(_al_entrar)
 

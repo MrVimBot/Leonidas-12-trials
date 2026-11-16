@@ -75,9 +75,7 @@ func _ready() -> void:
 		entrada = EstadoJuego.entrada_cargada
 		posicion = EstadoJuego.posicion_cargada
 		if EstadoJuego.vida_cargada > 0:
-			var v := jugador.vida
-			v.vida = mini(EstadoJuego.vida_cargada, v.vida_max)
-			v.cambio.emit.call_deferred(v.vida, v.vida_max) # tras el aviso diferido de Vida
+			jugador.vida.fijar(EstadoJuego.vida_cargada) # el HUD ya está conectado: se actualiza
 		EstadoJuego.zona_cargada = ""
 		EstadoJuego.entrada_cargada = ""
 		EstadoJuego.vida_cargada = -1

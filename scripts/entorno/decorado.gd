@@ -12,7 +12,6 @@ extends StaticBody2D
 ## fachada de la casa, pero puede pasar por detrás de la copa o del tejado.
 
 const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
-const CAPA_INTERACTUABLE := 6 # la espada (Hitbox del jugador) detecta esta capa
 
 ## Imagen del objeto (assets/sprites/entorno/*.png).
 @export var textura: Texture2D:
@@ -81,7 +80,7 @@ func _ready() -> void:
 	if da_manzanas:
 		_golpes_restantes = randi_range(golpes_min, golpes_max)
 		# Además de la capa del mundo, entra en "interactuable" para recibir los espadazos.
-		set_collision_layer_value(CAPA_INTERACTUABLE, true)
+		set_collision_layer_value(Capas.NUMERO_INTERACTUABLE, true) # la espada (Hitbox del jugador) detecta esta capa
 
 
 ## Contrato de daño (lo llama el Hitbox de la espada). Solo el daño del jugador importa:

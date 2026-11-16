@@ -11,7 +11,7 @@ extends SceneTree
 ## Termina con código 1 si algo falla.
 
 const PASO := 4.0
-const MASCARA := 1 | 64
+const MASCARA := Capas.MUNDO | Capas.OBSTACULO_BAJO # como el jugador
 
 var _forma := RectangleShape2D.new()
 var _espacio: PhysicsDirectSpaceState2D

@@ -9,7 +9,6 @@ extends Area2D
 ## Área: capa 0, máscara jugador (2).
 
 const ESCENA := preload("res://scenes/items/moneda.tscn")
-const CAPA_MUNDO := 1
 
 ## Monedas que da al recogerla.
 @export var valor := 1
@@ -86,7 +85,7 @@ func _volar(delta: float) -> void:
 	# Movimiento por el suelo: si algo sólido se interpone, rebota contra ello.
 	var paso := velocidad * delta
 	if paso != Vector2.ZERO:
-		var consulta := PhysicsRayQueryParameters2D.create(global_position, global_position + paso, 1 << (CAPA_MUNDO - 1))
+		var consulta := PhysicsRayQueryParameters2D.create(global_position, global_position + paso, Capas.MUNDO)
 		var choque := get_world_2d().direct_space_state.intersect_ray(consulta)
 		if choque:
 			var normal: Vector2 = choque.normal

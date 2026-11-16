@@ -14,7 +14,7 @@ const DIR := "res://scenes/levels/"
 const INICIO := "res://scenes/levels/pueblo.tscn"
 const FINAL := "res://scenes/levels/cueva_jefe.tscn"
 const PASO := 8.0
-const MASCARA := 1 | 64 # mundo + obstáculo bajo (como el jugador)
+const MASCARA := Capas.MUNDO | Capas.OBSTACULO_BAJO # como el jugador
 const SEPARACION_SALIDA := 24.0
 
 var _forma := RectangleShape2D.new()

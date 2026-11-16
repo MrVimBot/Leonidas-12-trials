@@ -114,9 +114,7 @@ func _animar() -> void:
 ## Las vistas laterales del barco están dibujadas mirando a la DERECHA (el resto de
 ## `leonidas_mini` mira a la izquierda): se invierte el espejo del animador.
 func _reproducir(base: StringName) -> void:
-	animador.reproducir(base)
-	if animador.sufijo() == "lado":
-		sprite.flip_h = not sprite.flip_h
+	animador.reproducir(base, false, true)
 
 
 func _al_chocar(colision: KinematicCollision2D) -> void:

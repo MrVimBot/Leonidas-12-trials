@@ -67,7 +67,7 @@ func lanzar(dir: Vector2, distancia: float, pies: Vector2) -> void:
 	_distancia = maxf(distancia, 1.0)
 	_recorrido = 0.0
 	_volando = true
-	collision_mask = 1 | 4 # mundo + enemigos
+	collision_mask = Capas.MUNDO | Capas.ENEMIGOS
 	golpe.activo = true
 
 

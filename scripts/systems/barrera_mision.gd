@@ -32,8 +32,10 @@ var _avisos := 0 # veces que ha parado esta barrera (requisito VOLTERETA)
 
 
 func _ready() -> void:
+	# Capas en código (de momento): igual que SalidaZona y ZonaDialogo, para no depender
+	# de que cada instancia de la escena las traiga bien puestas.
 	collision_layer = 0
-	collision_mask = 2 # jugador
+	collision_mask = Capas.JUGADOR
 	monitorable = false
 	body_entered.connect(_al_entrar)
 

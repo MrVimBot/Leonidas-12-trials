@@ -15,6 +15,10 @@ signal perdio
 
 var objetivo: Node2D = null
 
+## Último candidato del grupo; solo se vuelve a buscar si se liberó o salió del árbol
+## (el barco se recrea al hundirse).
+var _candidato: Node2D = null
+
 
 func _ready() -> void:
 	if cuerpo == null:
@@ -23,7 +27,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	var candidato := get_tree().get_first_node_in_group(grupo) as Node2D
+	var candidato := _buscar_candidato()
 	if candidato == null or not _vivo(candidato):
 		_perder()
 		return
@@ -33,6 +37,12 @@ func _physics_process(_delta: float) -> void:
 		detecto.emit(candidato)
 	elif objetivo != null and d > radio_perder:
 		_perder()
+
+
+func _buscar_candidato() -> Node2D:
+	if not is_instance_valid(_candidato) or not _candidato.is_inside_tree():
+		_candidato = get_tree().get_first_node_in_group(grupo) as Node2D
+	return _candidato
 
 
 func viendo() -> bool:
@@ -59,5 +69,6 @@ func _perder() -> void:
 
 
 func _vivo(nodo: Node) -> bool:
-	var vida := nodo.get_node_or_null(^"Vida") as ComponenteVida
+	# Jugador y Barco exponen su `vida` como propiedad.
+	var vida := nodo.get(&"vida") as ComponenteVida
 	return vida == null or not vida.muerto

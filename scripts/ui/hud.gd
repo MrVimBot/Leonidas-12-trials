@@ -52,6 +52,7 @@ func _ready() -> void:
 	if jugador:
 		seguir_vida(jugador.vida)
 		jugador.estamina.cambio.connect(_al_cambiar_estamina)
+		_al_cambiar_estamina(jugador.estamina.estamina, jugador.estamina.estamina_max) # valor inicial
 	EstadoJuego.monedas_cambio.connect(_al_cambiar_monedas)
 	_al_cambiar_monedas(EstadoJuego.monedas)
 	barra_estamina.modulate.a = 0.0

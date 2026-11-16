@@ -6,7 +6,8 @@ extends Node
 ## padre se procesa antes que sus hijos, así que la intención y el movimiento ocurren en el
 ## mismo tick. Con `aplicar_movimiento` en false no mueve el cuerpo (lo hace otro).
 
-## Tras `move_and_slide()`, una vez por cada colisión de ese tick.
+## Tras `move_and_slide()`, una vez por cada colisión de ese tick: un cuerpo apoyado en una
+## pared la emite en cada tick de física (120 por segundo). Los oyentes deben tolerarlo.
 signal choco(colision: KinematicCollision2D)
 
 ## Cuerpo que mueve. Si está vacío usa el nodo padre (debe ser un CharacterBody2D).
@@ -25,7 +26,9 @@ func _ready() -> void:
 	if cuerpo == null:
 		cuerpo = get_parent() as CharacterBody2D
 	assert(cuerpo != null, "ComponenteMovimiento necesita un CharacterBody2D")
-	cuerpo.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	# Vista cenital: el cuerpo debe estar en modo flotante (`motion_mode = 1` en su escena).
+	if cuerpo.motion_mode != CharacterBody2D.MOTION_MODE_FLOATING:
+		push_warning("%s: ComponenteMovimiento necesita motion_mode = Floating en su CharacterBody2D." % cuerpo.get_path())
 
 
 func _physics_process(_delta: float) -> void:
