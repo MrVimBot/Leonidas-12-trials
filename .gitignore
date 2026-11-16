@@ -9,3 +9,6 @@ docs/pdf
 # Secuencias de fotogramas sin procesar (los originales están fuera del repo;
 # el juego usa los fotogramas clave de assets/backgrounds/cinematica/atardecer/)
 assets/backgrounds/cinematica/Untitled_*.png
+
+# Planes de saneamiento para modelos de IA (auditoría; no forman parte del juego)
+docs/plan/
