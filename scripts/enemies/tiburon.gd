@@ -80,7 +80,10 @@ func _cansarse() -> void:
 	estado = Estado.CANSADO
 	_tiempo = duracion_cansado
 	animador.reproducir(&"morder", true) # salta, muerde y se sumerge
-	await animador.termino
+	# Esperar a que termine la mordida (no otra animación): CANSADO no vuelve a patrullar
+	# mientras la animación actual sea "morder", así que no se puede salir sin cambiarla.
+	while (await animador.termino) != &"morder":
+		pass
 	if estado == Estado.CANSADO:
 		animador.reproducir(&"nadar")
 

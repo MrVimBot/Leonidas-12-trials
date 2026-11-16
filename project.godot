@@ -17,17 +17,26 @@ config/icon="res://icon.svg"
 
 [audio]
 
+buses/default_bus_layout="uid://d37dva6cy1x8n"
 driver/enable_input=true
 
 [autoload]
 
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 EstadoJuego="*res://autoload/estado_juego.gd"
 Dialogos="*res://scenes/ui/caja_dialogo.tscn"
 Tienda="*res://scenes/ui/menu_tienda.tscn"
 Microfono="*res://autoload/microfono.gd"
 Libro="*res://scenes/ui/menu_libro.tscn"
 Musica="*res://autoload/musica.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/unsafe_property_access=1
+gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_cast=1
+gdscript/warnings/unsafe_call_argument=1
 
 [display]
 

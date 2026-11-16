@@ -1,18 +1,31 @@
 class_name ComponenteVida
 extends Node
+## Vida de una entidad, en cuartos de corazón (4 = un corazón). `recibir_danio()` resta,
+## `curar()` suma, y tras un golpe que no mata da `invulnerabilidad` segundos de
+## inmunidad. Si se asigna un `hurtbox`, se conecta solo a su señal `golpeado`.
+## Emite `murio` al llegar a 0; `restaurar()` la deja llena otra vez (reaparecer).
 
-
+## Cada vez que cambia la vida (también una vez al empezar, para pintar el HUD).
 signal cambio(vida: int, vida_max: int)
+## Al recibir daño efectivo (no si era invulnerable): cantidad y posición de origen.
 signal danado(cantidad: int, origen: Vector2)
+## Al curarse algo: cuánto se curó de verdad.
 signal curado(cantidad: int)
+## Al llegar la vida a 0.
 signal murio
 
+## Vida máxima (y con la que empieza), en cuartos de corazón.
 @export var vida_max: int = 6
+## Segundos de invulnerabilidad tras recibir un golpe que no mata.
 @export var invulnerabilidad: float = 1.0
+## Hurtbox cuyos golpes restan vida (opcional: sin él, se llama a `recibir_danio()` a mano).
 @export var hurtbox: Hurtbox
 
+## Vida actual.
 var vida: int
+## True al llegar a 0 hasta `restaurar()`.
 var muerto := false
+## Invulnerabilidad añadida por quien la controle (voltereta, bloqueo); no caduca sola.
 var invulnerable_extra := false
 
 var _tiempo_invulnerable := 0.0

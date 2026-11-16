@@ -26,6 +26,8 @@ enum Requisito { MISION, VOLTERETA }
 @export var destello := true
 
 var _en_curso := false
+## Jugador al que esta barrera tiene bloqueado (motivo &"escena") mientras lo detiene.
+var _jugador: Jugador = null
 var _avisos := 0 # veces que ha parado esta barrera (requisito VOLTERETA)
 
 
@@ -44,17 +46,22 @@ func _al_entrar(cuerpo: Node2D) -> void:
 	_en_curso = false
 
 
+func _exit_tree() -> void:
+	# Liberada a mitad (p. ej. cambio de zona): soltar su motivo si el jugador sigue vivo.
+	if _en_curso and is_instance_valid(_jugador):
+		_jugador.desbloquear(&"escena")
+
+
 func _cerrada() -> bool:
-	match requisito:
-		Requisito.VOLTERETA:
-			return not EstadoJuego.voltereta_aprendida
+	if requisito == Requisito.VOLTERETA:
+		return not EstadoJuego.voltereta_aprendida
 	return not EstadoJuego.mision_recibida
 
 
 func _detener(jugador: Jugador) -> void:
 	var dir := direccion_retroceso.normalized()
-	Dialogos.mantener_bloqueo = true
-	jugador.set_bloqueado(true)
+	_jugador = jugador
+	jugador.bloquear(&"escena")
 
 	if destello:
 		await _destellar()
@@ -75,7 +82,8 @@ func _detener(jugador: Jugador) -> void:
 		distancia_retroceso / 80.0)
 	await t.finished
 	jugador.animador.reproducir(&"parado")
-	Dialogos.desbloquear_jugador()
+	jugador.desbloquear(&"escena")
+	_jugador = null
 
 
 func _destellar() -> void:

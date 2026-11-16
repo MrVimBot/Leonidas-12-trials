@@ -29,6 +29,7 @@ extends Node
 ## Voltear al azar las celdas (si el TileSet tiene las alternativas).
 @export var voltear := true
 
+@warning_ignore("unused_private_class_variable") # el botón del Inspector no se lee
 @export_tool_button("Variar pasto") var _boton_variar := variar
 
 
@@ -39,10 +40,11 @@ func variar() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = semilla
 	var total := 0
-	for p in pesos.values():
+	# `pesos` sigue sin tipo: ya hay valores guardados en las escenas (ver el @export).
+	for p: int in pesos.values():
 		total += p
 	var cambiadas := 0
-	for celda in capa.get_used_cells():
+	for celda: Vector2i in capa.get_used_cells():
 		var fuente_id := capa.get_cell_source_id(celda)
 		if fuente_id != 0 or not pesos.has(capa.get_cell_atlas_coords(celda)):
 			continue
@@ -58,8 +60,9 @@ func variar() -> void:
 
 func _elegir(rng: RandomNumberGenerator, total: int) -> Vector2i:
 	var tirada := rng.randi_range(1, total)
-	for coords in pesos:
-		tirada -= pesos[coords]
+	for coords: Vector2i in pesos:
+		var peso: int = pesos[coords]
+		tirada -= peso
 		if tirada <= 0:
 			return coords
 	return pesos.keys()[0]

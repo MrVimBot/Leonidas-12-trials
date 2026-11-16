@@ -136,8 +136,9 @@ func _soltar_nube() -> void:
 	if escena_nube == null:
 		return
 	var nube := escena_nube.instantiate() as Node2D
-	if &"danio" in nube:
-		nube.danio = danio_explosion
+	var nube_toxica := nube as NubeToxica
+	if nube_toxica:
+		nube_toxica.danio = danio_explosion
 	get_parent().add_child(nube)
 	nube.global_position = global_position
 

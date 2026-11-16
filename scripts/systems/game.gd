@@ -131,7 +131,7 @@ func cambiar_zona(ruta: String, entrada: String = "inicio") -> void:
 		EstadoJuego.agregar_monedas(floori(barco.vida.vida / 4.0)) # una moneda por corazón entero conservado
 	await _fundir(1.0)
 	_cargar_zona(ruta, entrada)
-	_bloquear(true) # el barco puede ser nuevo
+	_bloquear(true) # el barco puede ser nuevo (al jugador, repetir el motivo no le hace nada)
 	await _fundir(0.0)
 	_bloquear(false)
 	_cambiando = false
@@ -139,10 +139,16 @@ func cambiar_zona(ruta: String, entrada: String = "inicio") -> void:
 		_tutorial_barco()
 
 
+## Bloqueo por cambio de zona (motivo &"zona"): no toca los de diálogos o escenas.
 func _bloquear(b: bool) -> void:
-	jugador.set_bloqueado(b)
-	if barco:
-		barco.set_bloqueado(b)
+	if b:
+		jugador.bloquear(&"zona")
+		if barco:
+			barco.bloquear(&"zona")
+	else:
+		jugador.desbloquear(&"zona")
+		if barco:
+			barco.desbloquear(&"zona")
 
 
 ## Al hundirse: fundido y se vuelve a empezar la travesía por la misma entrada.
@@ -164,11 +170,11 @@ func _tutorial_barco() -> void:
 		return
 	EstadoJuego.tutorial_barco_visto = true
 	var este_barco := barco
-	este_barco.set_bloqueado(true)
-	await Dialogos.mostrar(dialogo_tutorial_barco)
+	este_barco.bloquear(&"escena")
+	await (Dialogos as CajaDialogo).mostrar(dialogo_tutorial_barco)
 	await Microfono.calibrar()
 	if is_instance_valid(este_barco):
-		este_barco.set_bloqueado(false)
+		este_barco.desbloquear(&"escena")
 
 
 func _cargar_zona(ruta: String, entrada: String) -> void:

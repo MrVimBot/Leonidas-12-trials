@@ -89,7 +89,8 @@ func _volar(delta: float) -> void:
 		var consulta := PhysicsRayQueryParameters2D.create(global_position, global_position + paso, 1 << (CAPA_MUNDO - 1))
 		var choque := get_world_2d().direct_space_state.intersect_ray(consulta)
 		if choque:
-			velocidad = velocidad.bounce(choque.normal) * 0.5
+			var normal: Vector2 = choque.normal
+			velocidad = velocidad.bounce(normal) * 0.5
 			paso = Vector2.ZERO
 	global_position += paso
 	# Altura: salto con gravedad y rebotes cada vez más bajos.
@@ -122,7 +123,7 @@ func _recoger() -> void:
 	set_deferred(&"monitoring", false)
 	# TODO: sonido de moneda cuando haya audio.
 	sprite.visible = true
-	$Sombra.visible = false
+	($Sombra as CanvasItem).visible = false
 	var t := create_tween()
 	t.tween_property(sprite, ^"position:y", sprite.position.y - 14.0, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	t.parallel().tween_property(sprite, ^"modulate:a", 0.0, 0.25).set_delay(0.1)

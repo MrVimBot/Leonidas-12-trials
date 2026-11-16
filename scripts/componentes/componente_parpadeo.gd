@@ -1,8 +1,13 @@
 class_name ComponenteParpadeo
 extends Node
+## Parpadeo de un CanvasItem (p. ej. el sprite, tras recibir daño): `parpadear(duracion)`
+## alterna su transparencia durante ese tiempo y la deja en 1 al acabar; `detener()` lo corta.
 
+## Nodo que parpadea (su `modulate.a`).
 @export var objetivo: CanvasItem
+## Segundos que dura cada fase (visible / apagado).
 @export var intervalo := 0.08
+## Opacidad en la fase apagada.
 @export var alfa_apagado := 0.35
 
 var _restante := 0.0

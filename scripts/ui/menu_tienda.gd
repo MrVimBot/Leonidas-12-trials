@@ -10,7 +10,7 @@ extends CanvasLayer
 ## tienes)  precio", y "Salir"; se desplaza si hay más artículos) y 1 renglón de
 ## información (descripción del elegido o el aviso de la última compra).
 ## Controles: arriba/abajo eligen · E/J compran (o salen en "Salir") · Espacio/K/Esc salen.
-## Bloquea al jugador mientras está abierto. Las monedas se ven en el HUD.
+## Bloquea al jugador mientras está abierto (motivo &"tienda"). Las monedas se ven en el HUD.
 ## Diseño PROVISIONAL: no hay maqueta de la tienda en los PDF (ver guia_interfaz.md).
 
 signal cerrado
@@ -28,7 +28,6 @@ var abierto := false
 var _tienda: ComponenteTienda
 var _indice := 0
 var _desplazamiento := 0
-var _frame_apertura := -1
 var _aviso := ""
 var _tiempo_aviso := 0.0
 var _filas: Array[Dictionary] = []
@@ -77,10 +76,11 @@ func abrir(tienda: ComponenteTienda) -> void:
 	_desplazamiento = 0
 	_aviso = ""
 	abierto = true
-	_frame_apertura = Engine.get_process_frames()
 	nombre.text = CajaDialogo.adaptar_a_fuente(tienda.nombre_vendedor)
 	caja.visible = true
-	_bloquear_jugador(true)
+	var jugador := _jugador()
+	if jugador:
+		jugador.bloquear(&"tienda")
 	_refrescar()
 	await cerrado
 
@@ -88,24 +88,39 @@ func abrir(tienda: ComponenteTienda) -> void:
 func _process(delta: float) -> void:
 	if not abierto:
 		return
-	# Otro sistema (el cierre diferido de CajaDialogo) puede haber desbloqueado al jugador.
-	_bloquear_jugador(true)
 	if _tiempo_aviso > 0.0:
 		_tiempo_aviso -= delta
 		if _tiempo_aviso <= 0.0:
 			_aviso = ""
 			_refrescar()
-	# La pulsación que cerró el saludo no debe comprar nada.
-	if Engine.get_process_frames() <= _frame_apertura + 1:
+
+
+## Mientras está abierta se consume toda pulsación de una acción, para que nadie más la
+## vea. Orden de reparto: la escena actual la recibe antes (el Jugador, BLOQUEADO, no la
+## toca; la pausa no se abre con la tienda abierta, así que Esc llega aquí y cierra);
+## después esta tienda y luego `Dialogos`. Así la pulsación que cierra el saludo la
+## consume la caja (la tienda aún no estaba abierta) y no compra, y la que cierra la
+## tienda no avanza la despedida que se abre en ese mismo momento.
+func _unhandled_input(event: InputEvent) -> void:
+	if not abierto:
 		return
-	if Input.is_action_just_pressed(&"mover_arriba"):
+	if _pulsada(event, &"mover_arriba"):
 		_mover(-1)
-	elif Input.is_action_just_pressed(&"mover_abajo"):
+	elif _pulsada(event, &"mover_abajo"):
 		_mover(1)
-	elif Input.is_action_just_pressed(&"interactuar") or Input.is_action_just_pressed(&"atacar"):
+	elif event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar"):
 		_elegir()
-	elif Input.is_action_just_pressed(&"pirueta") or Input.is_action_just_pressed(&"ui_cancel"):
+	elif event.is_action_pressed(&"pirueta") or event.is_action_pressed(&"ui_cancel"):
 		_cerrar()
+	if event.is_action_type():
+		get_viewport().set_input_as_handled()
+
+
+## ¿`event` empieza a pulsar `accion`? Para las de mover, que también van con el stick:
+## cada movimiento del stick más allá de la zona muerta es un evento "pulsado", así que
+## solo cuenta el primero (`is_action_just_pressed_by_event`), como un botón.
+static func _pulsada(event: InputEvent, accion: StringName) -> bool:
+	return event.is_action_pressed(accion) and Input.is_action_just_pressed_by_event(accion, event)
 
 
 ## Número de opciones: los artículos + "Salir".
@@ -172,18 +187,15 @@ func _cerrar() -> void:
 	abierto = false
 	caja.visible = false
 	_tienda = null
+	# Se emite antes de quitar el motivo: quien esperaba `cerrado` sigue en el acto y abre
+	# la despedida (motivo &"dialogo"), así el jugador no pasa por NORMAL entre medias.
+	# La pulsación ya está consumida.
 	cerrado.emit()
-	# Como CajaDialogo: que la misma pulsación no vuelva a abrir la conversación.
-	await get_tree().process_frame
-	await get_tree().physics_frame
-	if not abierto and not Dialogos.abierto:
-		_bloquear_jugador(false)
+	if not abierto:
+		var jugador := _jugador()
+		if jugador:
+			jugador.desbloquear(&"tienda")
 
 
-func _bloquear_jugador(bloquear: bool) -> void:
-	var jugador := get_tree().get_first_node_in_group(&"jugador") as Jugador
-	if jugador == null:
-		return
-	var esta_bloqueado := jugador.estado == Jugador.Estado.BLOQUEADO
-	if bloquear != esta_bloqueado:
-		jugador.set_bloqueado(bloquear)
+func _jugador() -> Jugador:
+	return get_tree().get_first_node_in_group(&"jugador") as Jugador

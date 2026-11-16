@@ -20,6 +20,7 @@ extends Node
 ## hierba↔arena de la artista); llega al mar sin franja de hierba (`une_con`).
 @export var familias: Array[StringName] = []
 
+@warning_ignore("unused_private_class_variable") # el botón del Inspector no se lee
 @export_tool_button("Aplicar transiciones") var _boton_aplicar := aplicar
 
 

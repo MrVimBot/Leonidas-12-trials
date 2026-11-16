@@ -7,7 +7,8 @@ extends CanvasLayer
 ##   await Dialogos.mostrar_texto("Kathita: ¡Leonidas, despierta!")
 ##
 ## `await` espera a que el jugador termine de leer. Mientras está abierto, el jugador
-## queda bloqueado. E / J (o B / X en mando) avanzan; si el texto aún se está
+## queda bloqueado (motivo &"dialogo"; una escena con varios diálogos seguidos pone además
+## el suyo, &"escena", para que no recupere el control entre uno y otro). E / J (o B / X en mando) avanzan; si el texto aún se está
 ## escribiendo, la primera pulsación lo completa.
 ##
 ## Retratos (lámina "Interfaz interacción con NPCs" de Jugabilidad.pdf): solo los
@@ -17,6 +18,10 @@ extends CanvasLayer
 
 signal empezo
 signal termino
+
+## La fuente DOS (perfect_dos_vga_437_win.ttf) no tiene Á Í Ó Ú mayúsculas:
+## se muestran sin tilde, como se hacía en mayúsculas antes.
+const SIN_GLIFO := { "Á": "A", "Í": "I", "Ó": "O", "Ú": "U" }
 
 ## Velocidad del efecto máquina de escribir.
 @export var letras_por_segundo := 40.0
@@ -28,16 +33,11 @@ signal termino
 @export var ancho_retrato := 50
 
 var abierto := false
-## Una escena con varios diálogos seguidos lo pone en true para que el jugador no
-## recupere el control entre uno y otro; al acabar, la escena lo vuelve a poner en
-## false y desbloquea al jugador ella misma (`desbloquear_jugador()`).
-var mantener_bloqueo := false
 
 var _paginas: Array[Dictionary] = []
 var _indice := 0
 var _escribiendo := false
 var _letras := 0.0
-var _frame_apertura := -1
 
 @onready var caja: Control = $Caja
 @onready var nombre: Label = $Caja/Nombre
@@ -66,13 +66,19 @@ func mostrar_texto(t: String) -> void:
 
 ## Muestra una lista de {nombre, texto} y espera a que termine.
 func mostrar_lineas(lineas: Array[Dictionary]) -> void:
-	if abierto or lineas.is_empty():
+	if lineas.is_empty():
 		return
+	# Si ya hay un diálogo abierto, esperar a que termine en vez de perder este. Se
+	# vuelve a comprobar `abierto` tras cada espera: si dos esperan a la vez, el
+	# primero en despertar abre su cuadro y el otro sigue esperando.
+	while abierto:
+		await termino
 	_paginas = _paginar(lineas)
 	_indice = 0
 	abierto = true
-	_frame_apertura = Engine.get_process_frames()
-	_bloquear_jugador(true)
+	var jugador := _jugador()
+	if jugador:
+		jugador.bloquear(&"dialogo")
 	caja.visible = true
 	_mostrar_pagina()
 	empezo.emit()
@@ -90,18 +96,27 @@ func _process(delta: float) -> void:
 	else:
 		flecha.visible = int(Time.get_ticks_msec() / (parpadeo_flecha * 1000.0)) % 2 == 0
 
-	# La misma pulsación que abrió el diálogo (hablar con alguien) no debe avanzarlo.
-	if Engine.get_process_frames() == _frame_apertura:
+
+## E/J avanzan. Mientras está abierto se consumen siempre, para que nadie más las vea.
+## Orden de reparto: la escena actual recibe el evento antes que este autoload, pero el
+## Jugador está BLOQUEADO y no lo toca. La pulsación que ABRE el diálogo la consumió el
+## Jugador al interactuar, así que no llega aquí; la que lo CIERRA ya ha pasado por el
+## Jugador (aún bloqueado) y se consume aquí: no reabre la conversación ni ataca.
+## `is_action_pressed` ignora las repeticiones de tecla: mantener E/J no salta páginas.
+func _unhandled_input(event: InputEvent) -> void:
+	if not abierto:
 		return
-	if Input.is_action_just_pressed(&"interactuar") or Input.is_action_just_pressed(&"atacar"):
-		if _escribiendo:
-			_terminar_escritura()
+	if not (event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar")):
+		return
+	get_viewport().set_input_as_handled()
+	if _escribiendo:
+		_terminar_escritura()
+	else:
+		_indice += 1
+		if _indice >= _paginas.size():
+			_cerrar()
 		else:
-			_indice += 1
-			if _indice >= _paginas.size():
-				_cerrar()
-			else:
-				_mostrar_pagina()
+			_mostrar_pagina()
 
 
 ## Cierra el diálogo abierto de inmediato (p. ej. al saltar una cinemática).
@@ -110,26 +125,24 @@ func cerrar() -> void:
 		_cerrar()
 
 
-## La fuente DOS (perfect_dos_vga_437_win.ttf) no tiene Á Í Ó Ú mayúsculas:
-## se muestran sin tilde, como se hacía en mayúsculas antes.
-const SIN_GLIFO := { "Á": "A", "Í": "I", "Ó": "O", "Ú": "U" }
-
-
 static func adaptar_a_fuente(t: String) -> String:
-	for c in SIN_GLIFO:
-		t = t.replace(c, SIN_GLIFO[c])
+	for c: String in SIN_GLIFO:
+		var sustituto: String = SIN_GLIFO[c]
+		t = t.replace(c, sustituto)
 	return t
 
 
 func _mostrar_pagina() -> void:
-	var p := _paginas[_indice]
-	var cara: Texture2D = retratos.get(p.nombre)
+	var p: Dictionary = _paginas[_indice]
+	var p_nombre: String = p.nombre
+	var p_texto: String = p.texto
+	var cara: Texture2D = retratos.get(p_nombre)
 	retrato.texture = cara
 	retrato.visible = cara != null
 	texto.position.x = _texto_x + (ancho_retrato if cara else 0)
 	texto.size.x = _texto_ancho - (ancho_retrato if cara else 0)
-	nombre.text = adaptar_a_fuente(p.nombre)
-	texto.text = adaptar_a_fuente(p.texto)
+	nombre.text = adaptar_a_fuente(p_nombre)
+	texto.text = adaptar_a_fuente(p_texto)
 	texto.visible_characters = 0
 	_letras = 0.0
 	_escribiendo = true
@@ -144,26 +157,20 @@ func _terminar_escritura() -> void:
 func _cerrar() -> void:
 	abierto = false
 	caja.visible = false
+	# Se emite ANTES de quitar el motivo: quien esperaba `termino` sigue en el acto (dentro
+	# de emit) y, si abre otro diálogo o la tienda (saludo → tienda), pone su motivo
+	# mientras el de este aún está; así el jugador no llega a pasar por NORMAL ni se le
+	# repinta la pose. Si lo que se abrió es otro diálogo, el motivo &"dialogo" es ya el
+	# suyo y se queda. No hace falta esperar a que "pase" la pulsación: ya está consumida.
 	termino.emit()
-	# Esperar a que pase la pulsación de cerrar: si no, el jugador la leería como
-	# "interactuar" y volvería a abrir la conversación.
-	await get_tree().process_frame
-	await get_tree().physics_frame
-	if not abierto and not mantener_bloqueo:
-		_bloquear_jugador(false)
-
-
-## Para quien usó `mantener_bloqueo`: devuelve el control al jugador.
-func desbloquear_jugador() -> void:
-	mantener_bloqueo = false
 	if not abierto:
-		_bloquear_jugador(false)
+		var jugador := _jugador()
+		if jugador:
+			jugador.desbloquear(&"dialogo")
 
 
-func _bloquear_jugador(bloquear: bool) -> void:
-	var jugador := get_tree().get_first_node_in_group(&"jugador")
-	if jugador and jugador.has_method(&"set_bloqueado"):
-		jugador.set_bloqueado(bloquear)
+func _jugador() -> Jugador:
+	return get_tree().get_first_node_in_group(&"jugador") as Jugador
 
 
 ## Parte cada línea en páginas que quepan en el área de texto (ancho y nº de líneas).
@@ -174,8 +181,9 @@ func _paginar(lineas: Array[Dictionary]) -> Array[Dictionary]:
 	var max_lineas := maxi(1, floori(texto.size.y / fuente.get_height(tam)))
 	var paginas: Array[Dictionary] = []
 	for l in lineas:
+		var l_texto: String = l.texto
 		var ancho := ancho_base - (ancho_retrato if retratos.has(l.nombre) else 0)
-		var renglones := _partir_en_renglones(l.texto, fuente, tam, ancho)
+		var renglones := _partir_en_renglones(l_texto, fuente, tam, ancho)
 		for i in range(0, renglones.size(), max_lineas):
 			var trozo := renglones.slice(i, i + max_lineas)
 			paginas.append({ "nombre": l.nombre, "texto": "\n".join(trozo) })

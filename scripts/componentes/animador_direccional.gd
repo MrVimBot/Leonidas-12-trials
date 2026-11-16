@@ -1,12 +1,25 @@
 class_name AnimadorDireccional
 extends Node
+## Elige la animación según hacia dónde mira la entidad. Las animaciones del SpriteFrames se
+## llaman `<base>_frente`, `<base>_lado` y `<base>_espalda` (abajo, izquierda/derecha, arriba);
+## `reproducir(base)` escoge el sufijo y espeja el sprite para el lado que no está dibujado
+## (`lado_mira` dice a cuál mira el dibujo). Sin vista lateral usa la de frente; sin
+## direcciones, la animación `base` tal cual.
+## `direccion` es siempre cardinal. `orientar(entrada)` aplica la regla de diagonales tipo
+## Zelda: al moverse en diagonal conserva la dirección actual si sigue siendo parte de la
+## diagonal, y solo gira si no; `mirar(hacia)` gira sin esa regla.
 
+## Al terminar una animación sin bucle.
 signal termino(animacion: StringName)
+## Al cambiar el frame del sprite.
 signal frame_cambio(frame: int)
+## Al cambiar la dirección cardinal.
 signal direccion_cambio(direccion: Vector2)
 
+## Sprite que se controla.
 @export var sprite: AnimatedSprite2D
-
+## Hacia qué lado está dibujada la animación lateral (se espeja para el otro). Si el
+## SpriteFrames tiene el meta `side_faces`, manda ese valor.
 @export_enum("izquierda", "derecha") var lado_mira := "izquierda"
 ## Para sprites sin direcciones (p. ej. la flor falsa): las animaciones sin sufijo
 ## también se espejan según hacia qué lado (izquierda/derecha) se mira por última vez.

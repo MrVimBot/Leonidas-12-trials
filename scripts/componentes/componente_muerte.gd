@@ -34,8 +34,9 @@ func morir() -> void:
 	if cuerpo is CollisionObject2D:
 		cuerpo.set_deferred(&"collision_layer", 0)
 		cuerpo.set_deferred(&"collision_mask", 0)
-	if monedas > 0 and cuerpo is Node2D and cuerpo.get_parent():
-		Moneda.soltar(cuerpo.get_parent(), cuerpo.global_position, monedas)
+	var cuerpo_2d := cuerpo as Node2D
+	if monedas > 0 and cuerpo_2d and cuerpo_2d.get_parent():
+		Moneda.soltar(cuerpo_2d.get_parent(), cuerpo_2d.global_position, monedas)
 	if visual == null:
 		_terminar()
 		return

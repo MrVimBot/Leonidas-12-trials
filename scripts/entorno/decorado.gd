@@ -11,6 +11,9 @@ extends StaticBody2D
 ## La colisión es un rectángulo en la base: Leonidas choca con el tronco del árbol o la
 ## fachada de la casa, pero puede pasar por detrás de la copa o del tejado.
 
+const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
+const CAPA_INTERACTUABLE := 6 # la espada (Hitbox del jugador) detecta esta capa
+
 ## Imagen del objeto (assets/sprites/entorno/*.png).
 @export var textura: Texture2D:
 	set(valor):
@@ -60,9 +63,6 @@ extends StaticBody2D
 ## Manzanas que caen: al azar entre estos dos valores (ambos incluidos).
 @export var manzanas_min := 1
 @export var manzanas_max := 2
-
-const ESCENA_MANZANA := preload("res://scenes/items/manzana_suelta.tscn")
-const CAPA_INTERACTUABLE := 6 # la espada (Hitbox del jugador) detecta esta capa
 
 var _golpes_restantes := 0
 var _sin_manzanas := false

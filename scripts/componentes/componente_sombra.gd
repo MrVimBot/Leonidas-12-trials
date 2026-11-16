@@ -9,17 +9,19 @@ extends Node2D
 ## Debe ir ANTES que el sprite en el árbol para dibujarse debajo.
 ## Sirve para decorados, el jugador, enemigos, NPC...
 
+## Proporción alto/ancho de la sombra de la artista (9/29).
+const PROPORCION := 9.0 / 29.0
+
+## Tamaño del óvalo en píxeles (ancho, alto).
 @export var tamano := Vector2i(29, 9):
 	set(valor):
 		tamano = valor
 		queue_redraw()
+## Color de la sombra (#106165, el de la artista).
 @export var color := Color("106165"):
 	set(valor):
 		color = valor
 		queue_redraw()
-
-## Proporción alto/ancho de la sombra de la artista (9/29).
-const PROPORCION := 9.0 / 29.0
 
 
 ## Tamaño con la proporción de la artista para un ancho dado.

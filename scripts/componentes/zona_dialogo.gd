@@ -40,8 +40,8 @@ func _ready() -> void:
 	collision_layer = 32 # interactuable: lo encuentra ComponenteInteraccion
 	collision_mask = 2 # jugador: para saber cuándo enseñar la burbuja
 	monitoring = true
-	body_entered.connect(func(b: Node2D) -> void: if b is Jugador: _jugador_cerca = true)
-	body_exited.connect(func(b: Node2D) -> void: if b is Jugador: _jugador_cerca = false)
+	body_entered.connect(_al_entrar_cuerpo)
+	body_exited.connect(_al_salir_cuerpo)
 	_burbuja = Sprite2D.new()
 	_burbuja.texture = BURBUJAS[tipo]
 	_burbuja.centered = false
@@ -73,3 +73,13 @@ func interactuar(quien: Node) -> void:
 		await Dialogos.mostrar(dialogo)
 	_atendiendo = false
 	hablado.emit()
+
+
+func _al_entrar_cuerpo(cuerpo: Node2D) -> void:
+	if cuerpo is Jugador:
+		_jugador_cerca = true
+
+
+func _al_salir_cuerpo(cuerpo: Node2D) -> void:
+	if cuerpo is Jugador:
+		_jugador_cerca = false

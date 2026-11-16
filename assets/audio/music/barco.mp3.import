@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/barco.mp3-ee58d94a7a5c691565e4b3d8418fdfd4.mp
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

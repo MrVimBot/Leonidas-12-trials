@@ -8,6 +8,7 @@ extends StaticBody2D
 ## un hijo "Visual" (Sprite2D/Node2D), su CollisionShape2D y un hijo "Golpe" (Hitbox,
 ## capa golpe_jugador, máscara enemigos + interactuable).
 
+## Al romperse.
 signal roto
 
 ## Se rompe al aterrizar. Si es false, vuelve a quedar en el suelo.
@@ -20,9 +21,6 @@ signal roto
 @export var botin: PackedScene
 @export_range(0.0, 1.0) var probabilidad_botin := 0.0
 
-@onready var visual: Node2D = $Visual
-@onready var golpe: Hitbox = $Golpe
-
 var _capa_original: int
 var _mascara_original: int
 var _visual_y: float
@@ -31,6 +29,9 @@ var _dir := Vector2.ZERO
 var _distancia := 0.0
 var _recorrido := 0.0
 var _altura_inicial := 0.0
+
+@onready var visual: Node2D = $Visual
+@onready var golpe: Hitbox = $Golpe
 
 
 func _ready() -> void:

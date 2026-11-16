@@ -1,17 +1,27 @@
 class_name Hitbox
 extends Area2D
+## Zona que HACE daño: cada tick de física, mientras está `activo`, busca qué toca y llama a
+## `recibir_golpe(danio, origen)` en cada objetivo que lo implemente (Hurtbox, vasijas,
+## arbustos...); `origen` es la posición global del Hitbox. Ignora a su `owner`.
+## Por defecto golpea una sola vez a cada objetivo por activación (`continuo` = false: la
+## espada); con `continuo` = true repite cada tick (contacto de un enemigo, nube tóxica).
+## No usa `get_overlapping_bodies()` porque un Area2D no detecta StaticBody2D (arbustos,
+## vasijas): `consultar()` pregunta directamente al espacio físico con las formas
+## del área; también la usa `ComponenteInteraccion`. El daño va en cuartos de corazón.
+## Capa y máscara: en la capa golpe_jugador/golpe_enemigo, con máscara de lo que puede golpear.
 
+## Al golpear a un objetivo (una vez por objetivo, salvo `continuo`).
 signal golpeo(objetivo: Node)
 
+## Daño en cuartos de corazón (4 = un corazón).
 @export var danio: int = 1
-
-
+## Si está activo busca objetivos; al pasar de false a true olvida a quién golpeó ya.
 @export var activo: bool = true:
 	set(valor):
 		if valor and not activo:
 			_golpeados.clear() # nueva activación = puede volver a golpear a todos
 		activo = valor
-
+## Si es true golpea en cada tick mientras haya contacto, en vez de una vez por activación.
 @export var continuo: bool = false
 
 var _golpeados: Array[Node] = []
@@ -35,7 +45,8 @@ func _golpear(objetivo: Node) -> void:
 		if objetivo in _golpeados:
 			return
 		_golpeados.append(objetivo)
-	objetivo.recibir_golpe(danio, global_position)
+	# Duck typing a propósito: Hurtbox, ObjetoAgarrable, Decorado y arbustos lo implementan.
+	objetivo.call(&"recibir_golpe", danio, global_position)
 	golpeo.emit(objetivo)
 
 

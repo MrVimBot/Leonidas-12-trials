@@ -50,6 +50,8 @@ var _en_curso := false
 ## Tutorial de ataque: Leonidas se mueve libre pero no puede salir del Disparador.
 var _esperando_ataque := false
 var _devolviendo := false
+## Jugador al que esta escena tiene bloqueado (motivo &"escena"); null si no.
+var _bloqueado: Jugador = null
 
 @onready var disparador: Area2D = $Disparador
 @onready var punto_leonidas: Marker2D = $PuntoLeonidas
@@ -64,6 +66,13 @@ func _ready() -> void:
 	disparador.body_exited.connect(_al_salir)
 
 
+func _exit_tree() -> void:
+	# Liberada a mitad de la escena (p. ej. cambio de zona): soltar su motivo si el
+	# jugador sigue vivo (al salir al menú se libera con todo Game).
+	if is_instance_valid(_bloqueado):
+		_bloqueado.desbloquear(&"escena")
+
+
 func _al_entrar(cuerpo: Node2D) -> void:
 	if _en_curso or EstadoJuego.mision_recibida or not cuerpo is Jugador:
 		return
@@ -73,8 +82,7 @@ func _al_entrar(cuerpo: Node2D) -> void:
 
 func _reproducir(jugador: Jugador) -> void:
 	# El Disparador sigue vigilando: en el tutorial de ataque hace de perímetro.
-	Dialogos.mantener_bloqueo = true
-	jugador.set_bloqueado(true)
+	_bloquear(jugador)
 
 	# Leonidas se coloca delante de los sabios.
 	await _caminar(jugador, punto_leonidas.global_position)
@@ -101,21 +109,17 @@ func _reproducir(jugador: Jugador) -> void:
 	# Leonidas levanta la espada.
 	var espada := EstadoJuego.objeto(&"espada")
 	var icono: Texture2D = espada.icono if espada else null
+	# El diálogo no repinta la pose: el jugador ya está bloqueado por la escena.
 	jugador.mostrar_objeto_obtenido(icono, 0.0)
 	await get_tree().create_timer(0.5).timeout
-	Dialogos.mostrar_texto(texto_obtenido) # sin await: abre la caja ya...
-	jugador.mostrar_objeto_obtenido(icono, 0.0) # ...que lo pone en `parado`: repetir la pose
-	await Dialogos.termino
+	await Dialogos.mostrar_texto(texto_obtenido)
 	jugador.ocultar_objeto_obtenido()
 	_mirar_a_los_sabios(jugador)
 
 	# Tutorial: no sigue hasta el primer espadazo.
+	# J también cierra el cuadro, pero esa pulsación la consume la caja: no es el espadazo.
 	await Dialogos.mostrar(dialogo_ataque)
-	await get_tree().process_frame
-	# J también cierra el cuadro: que esa pulsación no cuente como el espadazo.
-	while Input.is_action_pressed(&"atacar"):
-		await get_tree().process_frame
-	Dialogos.desbloquear_jugador()
+	_desbloquear(jugador)
 	_esperando_ataque = true
 	await jugador.ataque_empezado
 	_esperando_ataque = false
@@ -136,15 +140,11 @@ func _al_salir(cuerpo: Node2D) -> void:
 		return
 	_devolviendo = true
 	var jugador := cuerpo as Jugador
-	Dialogos.mantener_bloqueo = true
-	jugador.set_bloqueado(true)
+	_bloquear(jugador)
 	await Dialogos.mostrar(dialogo_no_te_vayas)
 	await _caminar(jugador, punto_leonidas.global_position)
 	_mirar_a_los_sabios(jugador)
-	await get_tree().process_frame
-	while Input.is_action_pressed(&"atacar"):
-		await get_tree().process_frame
-	Dialogos.desbloquear_jugador()
+	_desbloquear(jugador)
 	_devolviendo = false
 
 
@@ -163,8 +163,17 @@ func _sabio_que_entrega() -> NPC:
 
 
 func _mirar_a_los_sabios(jugador: Jugador) -> void:
-	jugador.animador.mirar(Vector2.UP)
-	jugador.animador.reproducir(&"parado")
+	jugador.mirar_hacia(Vector2.UP)
+
+
+func _bloquear(jugador: Jugador) -> void:
+	_bloqueado = jugador
+	jugador.bloquear(&"escena")
+
+
+func _desbloquear(jugador: Jugador) -> void:
+	jugador.desbloquear(&"escena")
+	_bloqueado = null
 
 
 ## Camina en línea recta (tween: el jugador está bloqueado y no se mueve solo).

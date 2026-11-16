@@ -37,6 +37,9 @@ var rumbo := Vector2.DOWN
 
 var _vel_previa := Vector2.ZERO
 var _tiempo_dano := 0.0
+## Motivos de bloqueo (&"zona", &"escena"...), como en `Jugador`: cada sistema quita solo
+## el suyo. Solo se usan las claves (un conjunto).
+var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var movimiento: ComponenteMovimiento = $Movimiento
@@ -64,7 +67,8 @@ func _physics_process(delta: float) -> void:
 			movimiento.frenar(delta, 0.6)
 			_tiempo_dano -= delta
 			if _tiempo_dano <= 0.0:
-				estado = Estado.NAVEGANDO
+				# Golpeado estando bloqueado (no es invulnerable): vuelve a quedarse quieto.
+				estado = Estado.BLOQUEADO if esta_bloqueado() else Estado.NAVEGANDO
 		Estado.HUNDIDO, Estado.BLOQUEADO:
 			movimiento.detener()
 	_animar()
@@ -150,13 +154,27 @@ func _al_hundirse() -> void:
 	hundido.emit()
 
 
-func set_bloqueado(bloqueado: bool) -> void:
-	if estado == Estado.HUNDIDO:
+## Bloquea el barco por `motivo` (quieto) hasta que se quite el último motivo. Repetir
+## un motivo no hace nada. Hundido, solo se apunta (HUNDIDO tiene prioridad).
+func bloquear(motivo: StringName) -> void:
+	_motivos_bloqueo[motivo] = true
+	if estado == Estado.HUNDIDO or estado == Estado.BLOQUEADO:
 		return
-	estado = Estado.BLOQUEADO if bloqueado else Estado.NAVEGANDO
-	if bloqueado:
-		movimiento.detener()
-		_reproducir(&"barco_quieto")
+	estado = Estado.BLOQUEADO
+	movimiento.detener()
+	_reproducir(&"barco_quieto")
+
+
+## Quita `motivo`; al quitar el último vuelve a navegar.
+func desbloquear(motivo: StringName) -> void:
+	if not _motivos_bloqueo.erase(motivo):
+		return
+	if not esta_bloqueado() and estado == Estado.BLOQUEADO:
+		estado = Estado.NAVEGANDO
+
+
+func esta_bloqueado() -> bool:
+	return not _motivos_bloqueo.is_empty()
 
 
 ## Fija el rumbo y la orientación inicial (al aparecer en una entrada).

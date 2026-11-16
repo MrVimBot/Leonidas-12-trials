@@ -1,14 +1,21 @@
 class_name ComponenteCarga
 extends Node
+## Cargar y lanzar `ObjetoAgarrable` (vasijas...): `levantar()` lo sube a `punto_carga`,
+## `lanzar()` lo manda en una dirección a una distancia (o `soltar()` lo deja caer a los pies).
+## Decidir cuándo hacerlo es cosa del cerebro; quién se acerca a qué objeto lo busca
+## `ComponenteInteraccion`.
 
-signal cambio(objeto: ObjetoAgarrable) 
+## Al levantar un objeto (con él) o al lanzarlo/soltarlo (con `null`).
+signal cambio(objeto: ObjetoAgarrable)
 
-
+## Punto sobre el que se coloca el objeto cargado (obligatorio, p. ej. sobre la cabeza).
 @export var punto_carga: Node2D
-
+## Quien carga, de donde sale el objeto al lanzarlo. Si está vacío usa el nodo padre.
 @export var portador: Node2D
+## Distancia (px) a la que cae un objeto lanzado con `lanzar()` sin distancia propia.
 @export var distancia_lanzamiento := 72.0
 
+## Objeto que se carga ahora, o null.
 var objeto: ObjetoAgarrable = null
 
 

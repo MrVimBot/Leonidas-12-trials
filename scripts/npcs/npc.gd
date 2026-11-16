@@ -59,15 +59,15 @@ enum Estado { QUIETO, CAMINANDO, HABLANDO }
 ## Hacia dónde mira al empezar.
 @export var mirando := Vector2.DOWN
 
-@onready var _movimiento: ComponenteMovimiento = $Movimiento
-@onready var _animador: AnimadorDireccional = $Animador
-@onready var _zona_dialogo: ZonaDialogo = $ZonaDialogo
-
 var estado := Estado.QUIETO
 var centro := Vector2.ZERO
 var _destino := Vector2.ZERO
 var _tiempo := 0.0
 var _rng := RandomNumberGenerator.new()
+
+@onready var _movimiento: ComponenteMovimiento = $Movimiento
+@onready var _animador: AnimadorDireccional = $Animador
+@onready var _zona_dialogo: ZonaDialogo = $ZonaDialogo
 
 
 func _enter_tree() -> void:
@@ -88,7 +88,7 @@ func _aplicar_aspecto() -> void:
 	sprite.sprite_frames = sprite_frames
 	sprite.offset = desplazamiento_sprite
 	if sprite_frames:
-		for nombre in [&"parado_frente", &"parado"]:
+		for nombre: StringName in [&"parado_frente", &"parado"]:
 			if sprite_frames.has_animation(nombre):
 				sprite.animation = nombre
 				break

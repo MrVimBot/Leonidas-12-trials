@@ -17,11 +17,11 @@ extends Control
 ## Teclado/mando: arriba/abajo eligen, Enter/Espacio/E/J (o A/B/X) confirman.
 ## El ratón también funciona (pasar por encima = seleccionar).
 
+const MARCA := "> "
+
 @export_file("*.tscn") var escena_jugar := "res://scenes/cinematics/cinematica_inicial.tscn"
 @export_file("*.tscn") var escena_continuar := "res://game.tscn"
 @export var duracion_fundido := 0.5
-
-const MARCA := "> "
 
 var _eligiendo := true
 var _modo_original: Window.ContentScaleMode

@@ -88,7 +88,6 @@ var _pagina: Pagina = Pagina.INVENTARIO
 var _en_pestanas := false
 ## Casilla elegida en cada página con rejilla (índice = fila * COLUMNAS + columna).
 var _casilla := { Pagina.IMPORTANTES: 0, Pagina.INVENTARIO: 0 }
-var _frame_apertura := -1
 var _tiempo := 0.0
 var _aviso := ""
 var _tiempo_aviso := 0.0
@@ -160,7 +159,7 @@ func _ready() -> void:
 ## Texturas y medidas que exporta tools/export_libro.lua.
 func _cargar_arte() -> void:
 	cobertura.texture = load(DIR_ARTE + "cobertura.png")
-	for nombre in ["pag_1", "pag_2y3", "pag_4y5"]:
+	for nombre: String in ["pag_1", "pag_2y3", "pag_4y5"]:
 		_paginas_arte.append(load(DIR_ARTE + nombre + ".png"))
 	var datos: Dictionary = (load(DIR_ARTE + "libro.json") as JSON).data
 	libro.size = Vector2(datos.lienzo[0], datos.lienzo[1])
@@ -180,7 +179,7 @@ func _cargar_arte() -> void:
 		var lista: Array = datos.casillas[String(NOMBRES_PAGINA[p])]
 		assert(lista.size() == COLUMNAS * FILAS + 1, "libro.json: faltan casillas en " + NOMBRES_PAGINA[p])
 		var rects: Array[Rect2] = []
-		for c in lista:
+		for c: Array in lista:
 			rects.append(Rect2(c[0], c[1], c[2], c[3]))
 		_suelta[p] = rects.pop_back()
 		_rejilla[p] = rects
@@ -302,7 +301,6 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 	var captura := get_viewport().get_texture().get_image()
 	fondo.texture = ImageTexture.create_from_image(captura) if captura else null
 	abierto = true
-	_frame_apertura = Engine.get_process_frames()
 	_pagina = pagina
 	_en_pestanas = false
 	_aviso = ""
@@ -331,8 +329,6 @@ func cerrar() -> void:
 
 func _process(delta: float) -> void:
 	if not abierto:
-		if Input.is_action_just_pressed(&"inventario"):
-			abrir()
 		return
 	_tiempo += delta
 	if _tiempo_aviso > 0.0:
@@ -342,25 +338,47 @@ func _process(delta: float) -> void:
 			_mensaje_guardar = ""
 			_refrescar()
 	_animar()
-	if Engine.get_process_frames() <= _frame_apertura:
+
+
+## Teclado y mando (el ratón va en `_input`). Cerrado: solo abre con `inventario`.
+## Abierto (árbol en pausa; este autoload sigue recibiendo eventos) consume toda pulsación
+## de una acción. Orden de reparto: la escena actual recibe antes; `MenuPausa` no se abre
+## con el libro abierto ni consume el Esc, que llega aquí y cierra el libro. La pulsación
+## que cierra el libro se consume aquí mismo, así que no lo vuelve a abrir.
+func _unhandled_input(event: InputEvent) -> void:
+	if not abierto:
+		if event.is_action_pressed(&"inventario") and puede_abrir():
+			get_viewport().set_input_as_handled()
+			abrir()
 		return
-	if Input.is_action_just_pressed(&"inventario") or Input.is_action_just_pressed(&"ui_cancel") \
-			or Input.is_action_just_pressed(&"pirueta"):
+	if event.is_action_pressed(&"inventario") or event.is_action_pressed(&"ui_cancel") \
+			or event.is_action_pressed(&"pirueta"):
 		cerrar()
-	elif Input.is_action_just_pressed(&"pagina_anterior"):
+	elif event.is_action_pressed(&"pagina_anterior"):
 		_ir_a_pagina(_pagina - 1, false)
-	elif Input.is_action_just_pressed(&"pagina_siguiente"):
+	elif event.is_action_pressed(&"pagina_siguiente"):
 		_ir_a_pagina(_pagina + 1, true)
-	elif Input.is_action_just_pressed(&"mover_izquierda"):
+	elif _mover_pulsado(event, &"mover_izquierda"):
 		_mover(Vector2i.LEFT)
-	elif Input.is_action_just_pressed(&"mover_derecha"):
+	elif _mover_pulsado(event, &"mover_derecha"):
 		_mover(Vector2i.RIGHT)
-	elif Input.is_action_just_pressed(&"mover_arriba"):
+	elif _mover_pulsado(event, &"mover_arriba"):
 		_mover(Vector2i.UP)
-	elif Input.is_action_just_pressed(&"mover_abajo"):
+	elif _mover_pulsado(event, &"mover_abajo"):
 		_mover(Vector2i.DOWN)
-	elif Input.is_action_just_pressed(&"interactuar") or Input.is_action_just_pressed(&"atacar"):
+	elif event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar"):
 		_confirmar()
+	if event.is_action_type():
+		get_viewport().set_input_as_handled()
+
+
+## ¿`event` mueve el marco con `accion`? Las teclas mantenidas se repiten (eventos `echo`);
+## del stick solo cuenta el evento que empieza la pulsación: cada movimiento más allá de
+## la zona muerta es otro evento "pulsado" y el marco saldría disparado.
+static func _mover_pulsado(event: InputEvent, accion: StringName) -> bool:
+	if event.is_echo():
+		return event.is_action_pressed(accion, true)
+	return event.is_action_pressed(accion) and Input.is_action_just_pressed_by_event(accion, event)
 
 
 # --- Navegación -----------------------------------------------------------------------
@@ -399,6 +417,7 @@ func _mover(d: Vector2i) -> void:
 		return
 	var i: int = _casilla[_pagina]
 	var col := i % COLUMNAS + d.x
+	@warning_ignore("integer_division") # índice de casilla → fila
 	var fila := i / COLUMNAS + d.y
 	if fila < 0:
 		_en_pestanas = true

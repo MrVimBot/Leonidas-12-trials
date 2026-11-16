@@ -16,15 +16,15 @@ extends CanvasLayer
 ## Vida en CUARTOS de corazón: assets/ui/corazones.png tiene 5 estados cada 12 px
 ## (lleno, 3/4, 1/2, 1/4, vacío).
 
+const CUARTOS_POR_CORAZON := 4
+const ANCHO_CELDA := 12
+
 @export var jugador: Jugador
 @export var textura_corazones: Texture2D = preload("res://assets/ui/corazones.png")
 ## Segundos que la barra de estamina sigue visible después de llenarse.
 @export var ocultar_estamina_tras := 0.6
 ## Dónde va la barra de estamina respecto a los pies de Leonidas (en pantalla).
 @export var posicion_estamina := Vector2(-8, -33)
-
-const CUARTOS_POR_CORAZON := 4
-const ANCHO_CELDA := 12
 
 var _estados: Array[AtlasTexture] = []
 var _tiempo_estamina_llena := 0.0

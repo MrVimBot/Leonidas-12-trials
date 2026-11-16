@@ -9,7 +9,8 @@ extends Node
 ##      golpe, recibe la carta de los sabios y la lee.
 ##   4. Fundido a negro y se carga `escena_siguiente` (game.tscn).
 ##
-## Esc (ui_cancel) salta la cinemática.
+## Esc (ui_cancel) salta la cinemática. E/J avanzan los diálogos (los lee `Dialogos`) y,
+## con la carta abierta, bajan una página o la cierran (los lee esta escena).
 ## Los textos están en resources/dialogues/cinematica_*.tres (los edita el guion).
 ##
 ## Las ilustraciones pintadas se ven a la resolución real de la ventana: mientras
@@ -47,9 +48,10 @@ extends Node
 @export var velocidad_carta := 60.0
 
 var _saltando := false
-## Pulsación de avanzar leída en _process (más fiable que dentro de la corrutina).
+## La carta está abierta y acepta E/J (solo entonces esta escena los lee).
+var _leyendo_carta := false
+## E/J pulsado con la carta abierta; lo pone `_unhandled_input` y lo gasta `_leer_carta`.
 var _pulsado := false
-signal _avanzo_frame
 var _modo_original: Window.ContentScaleMode
 
 @onready var pintura: TextureRect = $Ilustracion/Pintura
@@ -79,17 +81,15 @@ func _ready() -> void:
 	_reproducir()
 
 
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed(&"interactuar") or Input.is_action_just_pressed(&"atacar"):
-		_pulsado = true
-	_avanzo_frame.emit()
-	_pulsado = false
-
-
+## Esta escena recibe los eventos ANTES que el autoload `Dialogos`: E/J solo se leen (y
+## consumen) con la carta abierta; con un diálogo abierto pasan de largo hasta la caja.
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_saltar()
+	elif _leyendo_carta and (event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar")):
+		get_viewport().set_input_as_handled()
+		_pulsado = true
 
 
 func _reproducir() -> void:
@@ -109,7 +109,7 @@ func _reproducir() -> void:
 	if not await _fundir(1.0): return
 
 	# 3. Cuarto
-	$Ilustracion.visible = false
+	($Ilustracion as CanvasLayer).visible = false
 	_modo_pintura(false)
 	cuarto.visible = true
 	cama.play(&"dormido")
@@ -204,7 +204,8 @@ func _leer_carta() -> bool:
 	var parrafos := PackedStringArray()
 	if texto_carta:
 		for l in texto_carta.lineas():
-			parrafos.append(l.texto)
+			var parrafo: String = l.texto
+			parrafos.append(parrafo)
 	texto.text = CajaDialogo.adaptar_a_fuente("\n\n".join(parrafos))
 	texto.position.y = 0.0
 
@@ -220,9 +221,12 @@ func _leer_carta() -> bool:
 	var maximo := maxf(0.0, texto.get_line_count() * alto_linea - recorte.size.y)
 	var y := 0.0
 	var objetivo := -1.0 # página a la que se está desplazando con E
+	_pulsado = false
+	_leyendo_carta = true
 	while true:
-		await _avanzo_frame
+		await get_tree().process_frame
 		if _saltando:
+			_leyendo_carta = false
 			return false
 		var delta := get_process_delta_time()
 		var eje := Input.get_axis(&"mover_arriba", &"mover_abajo")
@@ -236,6 +240,7 @@ func _leer_carta() -> bool:
 		y = clampf(y, 0.0, maximo)
 		texto.position.y = -roundf(y * 4.0) / 4.0 # cuartos de píxel = píxeles reales a ×4
 		var al_final := y >= maximo - 0.5
+		@warning_ignore("integer_division") # parpadeo: medio segundo entero a propósito
 		flecha_carta.visible = int(Time.get_ticks_msec() / 400) % 2 == 0
 		if _pulsado:
 			_pulsado = false
@@ -243,13 +248,13 @@ func _leer_carta() -> bool:
 				break
 			objetivo = minf(maximo, y + recorte.size.y - alto_linea)
 
+	# La pulsación que la cierra ya está consumida: no avanzará el diálogo siguiente.
+	_leyendo_carta = false
 	t = create_tween()
 	t.tween_property(papel, ^"modulate:a", 0.0, 0.3)
 	await t.finished
 	carta.visible = false
 	_modo_pintura(false)
-	# Que la misma pulsación no avance el siguiente diálogo.
-	await get_tree().process_frame
 	return not _saltando
 
 

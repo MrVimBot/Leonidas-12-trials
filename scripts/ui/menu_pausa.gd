@@ -7,9 +7,10 @@ extends CanvasLayer
 ##
 ## Se abre y cierra con la acción `pausa` (Esc / Start). Abierto =
 ## `get_tree().paused`. En la pantalla de controles, `pausa` o E/J vuelven al menú.
-## El Esc se lee en `_unhandled_input`: los eventos se reparten antes de los
-## `_process` del fotograma, así que si el libro o la tienda están abiertos aquí
-## todavía constan como abiertos (y son ellos los que se cierran con ese Esc).
+## El Esc se lee en `_unhandled_input`. Esta escena (dentro de Game) lo recibe antes que
+## los autoload `Libro`, `Tienda` y `Dialogos`: con alguno de ellos abierto la pausa ni se
+## abre ni consume el evento (`_puede_abrir`), así que sigue hasta él y es él quien se
+## cierra con ese Esc.
 ##
 ## «Filtro de daltonismo» todavía no hace nada (pendiente).
 ## «Salir» vuelve al menú principal (sin guardar: se guarda desde el libro).
@@ -115,4 +116,5 @@ func _filtro_daltonismo() -> void:
 func _salir() -> void:
 	abierto = false
 	get_tree().paused = false
-	get_tree().change_scene_to_file(ProjectSettings.get_setting("application/run/main_scene"))
+	var escena_principal: String = ProjectSettings.get_setting("application/run/main_scene")
+	get_tree().change_scene_to_file(escena_principal)

@@ -8,19 +8,6 @@ extends Control
 ## de dígitos están diseñados con el mismo tamaño y estilo. PROVISIONAL hasta tener el
 ## PNG de la artista.
 
-@export var placa: Texture2D = preload("res://assets/ui/provisional/placa_dinero.png"):
-	set(v):
-		placa = v
-		queue_redraw()
-@export_range(0, 999) var valor := 0:
-	set(v):
-		valor = clampi(v, 0, 999)
-		queue_redraw()
-@export var color_digito := Color("391310")
-## Posición del primer dígito y separación (en píxeles de la placa).
-@export var origen_digitos := Vector2i(17, 3)
-@export var paso := 7
-
 const DIGITOS := [
 	[".##.", "#..#", "#..#", "#..#", "#..#", ".##."], # 0 (el de la maqueta)
 	[".#..", "##..", ".#..", ".#..", ".#..", "###."], # 1
@@ -33,6 +20,19 @@ const DIGITOS := [
 	[".##.", "#..#", ".##.", "#..#", "#..#", ".##."], # 8
 	[".##.", "#..#", "#..#", ".###", "...#", ".##."], # 9
 ]
+
+@export var placa: Texture2D = preload("res://assets/ui/provisional/placa_dinero.png"):
+	set(v):
+		placa = v
+		queue_redraw()
+@export_range(0, 999) var valor := 0:
+	set(v):
+		valor = clampi(v, 0, 999)
+		queue_redraw()
+@export var color_digito := Color("391310")
+## Posición del primer dígito y separación (en píxeles de la placa).
+@export var origen_digitos := Vector2i(17, 3)
+@export var paso := 7
 
 
 func _draw() -> void:

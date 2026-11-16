@@ -1,13 +1,23 @@
 class_name ComponenteMovimiento
 extends Node
+## Mueve el CharacterBody2D padre (modo flotante, vista cenital): el cerebro de la entidad
+## fija su intención con `mover()`, `frenar()`, `impulsar()`, `empujar_desde()` o `detener()` y
+## este componente llama a `move_and_slide()` en su `_physics_process`. Funciona porque el
+## padre se procesa antes que sus hijos, así que la intención y el movimiento ocurren en el
+## mismo tick. Con `aplicar_movimiento` en false no mueve el cuerpo (lo hace otro).
 
-
+## Tras `move_and_slide()`, una vez por cada colisión de ese tick.
 signal choco(colision: KinematicCollision2D)
 
+## Cuerpo que mueve. Si está vacío usa el nodo padre (debe ser un CharacterBody2D).
 @export var cuerpo: CharacterBody2D
+## Velocidad máxima por defecto (px/s). Conviene un múltiplo de 60 (la física va a 120 ticks/s).
 @export var velocidad := 80.0
+## Lo que acelera hacia la velocidad objetivo (px/s²).
 @export var aceleracion := 900.0
+## Lo que frena al soltar el movimiento (px/s²).
 @export var friccion := 1100.0
+## Si es false no llama a `move_and_slide()` (el cuerpo lo mueve otra cosa).
 @export var aplicar_movimiento := true
 
 

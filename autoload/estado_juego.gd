@@ -18,13 +18,13 @@ signal manzanas_cambio(manzanas: int)
 signal objetos_cambio(id: StringName, cantidad: int)
 signal misiones_cambio
 
+enum EstadoMision { ACTIVA, COMPLETADA }
+
 const MONEDAS_MAX := 999
 const MANZANAS_MAX := 9
 const RUTA_OBJETOS := "res://resources/objetos/%s.tres"
 const RUTA_MISIONES := "res://resources/misiones/%s.tres"
 const ARCHIVO_PARTIDA := "user://partida.cfg"
-
-enum EstadoMision { ACTIVA, COMPLETADA }
 
 var monedas := 0
 ## id → cantidad (solo los que se tienen; en el orden en que se consiguieron).
@@ -227,8 +227,8 @@ func hay_partida() -> bool:
 ## Guarda la partida. Zona, entrada, posición y vida las pregunta a Game (`datos_guardado()`).
 ## Al cargar se reaparece en el punto exacto donde se guardó.
 func guardar() -> bool:
-	var game := get_tree().get_first_node_in_group(&"game")
-	if game == null or not game.has_method(&"datos_guardado"):
+	var game := get_tree().get_first_node_in_group(&"game") as Game
+	if game == null:
 		push_warning("EstadoJuego.guardar: no hay Game")
 		return false
 	var datos: Dictionary = game.datos_guardado()
@@ -266,10 +266,12 @@ func cargar() -> bool:
 	vida_cargada = cfg.get_value("jugador", "vida", -1)
 	monedas = cfg.get_value("jugador", "monedas", 0)
 	var objs: Dictionary = cfg.get_value("jugador", "objetos", {})
-	for id in objs:
+	for id: Variant in objs:
+		@warning_ignore("unsafe_call_argument") # claves/valores de ConfigFile: Variant
 		objetos[StringName(id)] = int(objs[id])
 	var mis: Dictionary = cfg.get_value("progreso", "misiones", {})
-	for id in mis:
+	for id: Variant in mis:
+		@warning_ignore("unsafe_call_argument") # claves/valores de ConfigFile: Variant
 		misiones[StringName(id)] = int(mis[id])
 	tutorial_barco_visto = cfg.get_value("progreso", "tutorial_barco_visto", false)
 	mision_recibida = cfg.get_value("progreso", "mision_recibida", false)
@@ -288,13 +290,16 @@ func cargar() -> bool:
 func tiempo_texto() -> String:
 	var s := int(tiempo_jugado)
 	if s >= 3600:
+		@warning_ignore("integer_division")
 		return "%d:%02d:%02d" % [s / 3600, (s / 60) % 60, s % 60]
+	@warning_ignore("integer_division")
 	return "%02d:%02d" % [s / 60, s % 60]
 
 
 ## ConfigFile guarda StringName como texto con & : mejor claves String.
 static func _a_cadenas(d: Dictionary) -> Dictionary:
 	var r := {}
-	for k in d:
+	for k: Variant in d:
+		@warning_ignore("unsafe_call_argument") # claves de un Dictionary sin tipo
 		r[String(k)] = d[k]
 	return r

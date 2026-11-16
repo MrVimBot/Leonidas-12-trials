@@ -8,17 +8,22 @@ extends Node
 ##   - si te alcanza → `dialogo_saludo`, se abre el menú (autoload Tienda)
 ##     y al cerrarlo, `dialogo_despedida`.
 
+## Al completar una compra.
 signal compro(articulo: ArticuloTienda)
+
+## Resultado de `comprar()`.
+enum Resultado { COMPRADO, SIN_MONEDAS, LLENO }
 
 ## Lo que vende, en el orden de la lista.
 @export var articulos: Array[ArticuloTienda] = []
 ## Nombre en la pestaña del menú de la tienda.
 @export var nombre_vendedor := "Tendera"
+## Lo que dice al hablarle, si hay monedas para lo más barato.
 @export var dialogo_saludo: Dialogo
+## Lo que dice (y todo lo que hace) si no hay monedas para lo más barato.
 @export var dialogo_sin_monedas: Dialogo
+## Lo que dice al cerrar el menú.
 @export var dialogo_despedida: Dialogo
-
-enum Resultado { COMPRADO, SIN_MONEDAS, LLENO }
 
 
 func precio_minimo() -> int:
@@ -35,7 +40,7 @@ func atender(_quien: Node) -> void:
 		await Dialogos.mostrar(dialogo_sin_monedas)
 		return
 	await Dialogos.mostrar(dialogo_saludo)
-	await Tienda.abrir(self)
+	await (Tienda as MenuTienda).abrir(self)
 	await Dialogos.mostrar(dialogo_despedida)
 
 

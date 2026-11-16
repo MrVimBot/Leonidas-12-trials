@@ -142,10 +142,14 @@ static var _miembros_cache := {}
 ## Vector3i(fuente, x, y) → familia, con todas las piezas de todas las familias.
 static func miembros() -> Dictionary:
 	if _miembros_cache.is_empty():
-		for f in FAMILIAS:
-			for mascara in FAMILIAS[f].piezas:
-				for p in FAMILIAS[f].piezas[mascara]:
-					_miembros_cache[Vector3i(p[0], p[1].x, p[1].y)] = f
+		for f: StringName in FAMILIAS:
+			var piezas_familia: Dictionary = FAMILIAS[f].piezas
+			for mascara: int in piezas_familia:
+				var lista: Array = piezas_familia[mascara]
+				for p: Array in lista:
+					var fuente: int = p[0]
+					var coords: Vector2i = p[1]
+					_miembros_cache[Vector3i(fuente, coords.x, coords.y)] = f
 	return _miembros_cache
 
 
@@ -172,7 +176,7 @@ static func poligono(mascara: int, tamano := 16.0, margen := 0.0) -> PackedVecto
 		BD: [Rect2(0, 0, m, m), BI, AD, -1, -1],
 	}
 	var union := PackedVector2Array()
-	for bit in cuadrantes:
+	for bit: int in cuadrantes:
 		if mascara & bit == 0:
 			continue
 		var q: Array = cuadrantes[bit]
@@ -220,7 +224,7 @@ static func aplicar(capa: TileMapLayer, semilla := 1, familias: Array = []) -> P
 	# Foto del estado inicial: celda → familia, y celdas que "unen".
 	var fam := {}
 	var une := {}
-	for celda in capa.get_used_cells():
+	for celda: Vector2i in capa.get_used_cells():
 		var f := familia_de(capa, celda)
 		if f != &"":
 			fam[celda] = f
@@ -228,25 +232,30 @@ static func aplicar(capa: TileMapLayer, semilla := 1, familias: Array = []) -> P
 		var c := capa.get_cell_atlas_coords(celda)
 		une[celda] = Vector3i(fuente, c.x, c.y)
 	var cambiadas := 0
-	for celda in fam:
+	for celda: Vector2i in fam:
 		var f: StringName = fam[celda]
 		if not familias.is_empty() and not f in familias:
 			continue
 		var def: Dictionary = FAMILIAS[f]
 		var une_con := {}
-		for u in def.une_con:
-			une_con[Vector3i(u[0], u[1].x, u[1].y)] = true
+		var lista_une: Array = def.une_con
+		for u: Array in lista_une:
+			var u_fuente: int = u[0]
+			var u_coords: Vector2i = u[1]
+			une_con[Vector3i(u_fuente, u_coords.x, u_coords.y)] = true
 		var mascara := 0
-		for bit in _ESQUINAS:
+		for bit: int in _ESQUINAS:
 			var todas := true
-			for d in _ESQUINAS[bit]:
+			var vecinas: Array = _ESQUINAS[bit]
+			for d: Vector2i in vecinas:
 				var v := _dentro(celda + d, usado)
 				if fam.get(v, &"") != f and not une_con.has(une.get(v, Vector3i(-1, -1, -1))):
 					todas = false
 					break
 			if todas:
 				mascara |= bit
-		var piezas: Array = def.piezas.get(mascara, [])
+		var piezas_def: Dictionary = def.piezas
+		var piezas: Array = piezas_def.get(mascara, [])
 		if mascara == 0:
 			avisos.append("%s: celda %s suelta o franja de 1 tile → pasto" % [f, celda])
 			capa.set_cell(celda, 0, PASTO)
@@ -255,12 +264,14 @@ static func aplicar(capa: TileMapLayer, semilla := 1, familias: Array = []) -> P
 		if piezas.is_empty():
 			# Diagonal (6 o 9): no hay dibujo. Se deja relleno para no cambiar a los vecinos.
 			avisos.append("%s: celda %s en diagonal (esquinas %d), no hay tile → relleno" % [f, celda, mascara])
-			piezas = def.piezas[15]
+			piezas = piezas_def[15]
 		var p: Array = piezas[absi(hash(Vector3i(celda.x, celda.y, semilla))) % piezas.size()]
 		var alt: int = p[2] if p.size() > 2 else 0
-		if capa.get_cell_source_id(celda) != p[0] or capa.get_cell_atlas_coords(celda) != p[1] \
+		var p_fuente: int = p[0]
+		var p_coords: Vector2i = p[1]
+		if capa.get_cell_source_id(celda) != p_fuente or capa.get_cell_atlas_coords(celda) != p_coords \
 				or capa.get_cell_alternative_tile(celda) != alt:
-			capa.set_cell(celda, p[0], p[1], alt)
+			capa.set_cell(celda, p_fuente, p_coords, alt)
 			cambiadas += 1
 	print("[Transiciones] %s: %d celdas cambiadas, %d avisos" % [capa.name, cambiadas, avisos.size()])
 	return avisos
