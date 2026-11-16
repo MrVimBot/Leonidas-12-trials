@@ -240,7 +240,7 @@ Resumen de lo hecho en CLAUDE.md («El libro»). Diferencias con el plan de abaj
   nombre en la cartela. `Game` ya sabe la zona actual.
 
 ### Orden y prioridad
-Quedan ~12 días para la entrega (2026-11-26) y aún faltan sabios, Tocotón y Medusa. Orden
+Quedan ~12 días para la entrega (2026-11-26) y aún faltan sabios y Medusa. Orden
 propuesto: **1 → 2** (imprescindible: comer manzanas es la única forma de curarse) →
 **3** → **5** → **4**. Si falta tiempo, Guardar puede quedar como página visible con el botón
 desactivado («Próximamente»); las demás páginas son baratas.

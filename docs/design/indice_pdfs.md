@@ -41,7 +41,7 @@ Ojo: las maquetas "in game" son montajes (la p. 15 lo dice: "captura in game que
 | 8 | **Vida**: game over al perder toda la vida; daño de enemigos y trampas (espinas); recuperar vida con frutas de cada bioma (manzana, coco, pitahaya…) o pagando en posadas. Sprites: daño, morir, trampa de espinas, **comer manzana** | Vida, daño, consumibles |
 | 9 | **Barco**: sin ataque, solo moverse; esquivar remolinos y tiburones que hunden el barco; llegar con toda la salud posible. Idea: soplar para ir más rápido. Sprites: barco en 4 direcciones, remolino, tiburón | Minijuego del barco |
 | 10 | **NPCs** + las **3 burbujas** sobre la cabeza (diálogo "…", misión "!", tienda). NPC para hablar (cabra), NPC que vende mapas (serpiente), uno de los sabios (toro) | `ZonaDialogo` (hecho); NPCs |
-| 11 | **Enemigos** del primer bioma: seta bomba, falsa flor, montón Tocotón (sprites). Algunos solo mueren con objetos especiales o en su punto débil | Enemigos nivel 1 |
+| 11 | **Enemigos** del primer bioma: seta bomba, falsa flor, montón Tocotón (sprites; **el Tocotón está descartado**). Algunos solo mueren con objetos especiales o en su punto débil | Enemigos nivel 1 |
 | 12 | **Jefes**: patrón propio; al vencerlo dan un objeto y **un corazón extra**. Medusa (estilo provisional) | Jefes, vida máxima |
 | 13 | Dirección estética: cada nivel con su estética; **la interfaz del jefe de cada nivel tiene estética propia conservando la disposición del primer nivel**. Ilustraciones de jefes | UI de jefe |
 | 14 | Ilustraciones de jefes (Hidra, Minotauro, Ares, Cancerbero…) | Fuera de alcance |
@@ -81,7 +81,7 @@ Ojo: las maquetas "in game" son montajes (la p. 15 lo dice: "captura in game que
 | 14 | **Manzanas**: en los árboles fuera de la ciudad; se golpea el árbol con la espada, cae una y se recoge al acercarse (va al inventario); el árbol no da más hasta visitar otro bioma (sin farmeo). Sprites de manzana y manzanos |
 | 15 | **Seta bomba**: camina, al acercarse "explota" (daño en área); luego queda quieta e inofensiva un rato → momento de atacarla. Esquivar con voltereta |
 | 16 | **Falsa flor**: camuflada como flor; al acercarse sale, se estira y ataca, se queda fuera un rato; si no se la mata, se esconde y reaparece en otro sitio |
-| 17 | **Montón Tocotón**: obstáculo/tanque (mucha vida) que bloquea caminos; es una pila: al derrotar al de abajo baja el siguiente; persigue un poco pero vuelve a bloquear su sitio. Ataques físicos simples. **Es el único arte del Tocotón que hay** |
+| 17 | ~~**Montón Tocotón**~~ — **DESCARTADO, no se implementa.** Era: obstáculo/tanque (mucha vida) que bloquea caminos; es una pila: al derrotar al de abajo baja el siguiente; persigue un poco pero vuelve a bloquear su sitio. Ataques físicos simples. **Es el único arte del Tocotón que hay** |
 | 18 | **Barco**: minijuego, solo moverse, esquivar obstáculos y enemigos que quitan vida al barco. Sprites del barco, remolino, tiburón |
 | 19 | **Mapa** (boceto a mano, "no es la versión final"): corto y lineal; cofres con consumibles, NPCs con misiones; bajar hasta el NPC del barco |
 

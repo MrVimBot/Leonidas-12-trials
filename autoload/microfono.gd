@@ -57,16 +57,28 @@ var _sin_datos := 0.0
 
 
 func _ready() -> void:
+	# El bus "Microfono" (silenciado, con un AudioEffectCapture) está declarado en
+	# res://default_bus_layout.tres, así existe desde que arranca el motor. En la web,
+	# crearlo y silenciarlo aquí por código silenciaba el bus MASTER (comprobado con
+	# Godot 4.7.2): el juego se quedaba sin sonido.
 	var idx := AudioServer.get_bus_index(NOMBRE_BUS)
 	if idx == -1:
+		# Respaldo si alguien borra el bus del layout (en la web volvería el problema).
+		push_warning("Microfono: falta el bus '%s' en default_bus_layout.tres" % NOMBRE_BUS)
 		AudioServer.add_bus()
 		idx = AudioServer.bus_count - 1
 		AudioServer.set_bus_name(idx, NOMBRE_BUS)
 	# Mute del bus: el audio no llega a "Master" pero los efectos del bus sí lo reciben.
-	AudioServer.set_bus_mute(idx, true)
-	_captura = AudioEffectCapture.new()
-	_captura.buffer_length = buffer_captura
-	AudioServer.add_bus_effect(idx, _captura)
+	if not AudioServer.is_bus_mute(idx):
+		AudioServer.set_bus_mute(idx, true)
+	for i in AudioServer.get_bus_effect_count(idx):
+		if AudioServer.get_bus_effect(idx, i) is AudioEffectCapture:
+			_captura = AudioServer.get_bus_effect(idx, i)
+			break
+	if _captura == null:
+		_captura = AudioEffectCapture.new()
+		_captura.buffer_length = buffer_captura
+		AudioServer.add_bus_effect(idx, _captura)
 
 	_reproductor = AudioStreamPlayer.new()
 	_reproductor.name = "Entrada"
