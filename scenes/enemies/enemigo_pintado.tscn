@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="1_som"]
+[ext_resource type="Script" uid="uid://coo3mjwfps0kv" path="res://scripts/componentes/hurtbox.gd" id="2_hur"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
+[ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="4_mov"]
+[ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="5_ani"]
+[ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="6_vid"]
+[ext_resource type="Script" uid="uid://d07orbyj36vnr" path="res://scripts/componentes/componente_deteccion.gd" id="7_det"]
+[ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="8_par"]
+[ext_resource type="Script" uid="uid://dkeawtwro5ajv" path="res://scripts/componentes/componente_muerte.gd" id="9_mue"]
+[ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="10_mon"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(20, 8)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(24, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_contacto"]
+size = Vector2(18, 14)
+
+[node name="EnemigoPintado" type="CharacterBody2D" groups=["enemigos"]]
+collision_layer = 4
+collision_mask = 1
+motion_mode = 1
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, -1)
+script = ExtResource("1_som")
+tamano = Vector2i(24, 7)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 4
+scale = Vector2(0.5, 0.5)
+
+[node name="Colision" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_cuerpo")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_hur")
+
+[node name="Forma" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -10)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Contacto" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("3_hit")
+continuo = true
+
+[node name="Forma" type="CollisionShape2D" parent="Contacto"]
+position = Vector2(0, -8)
+shape = SubResource("Shape_contacto")
+
+[node name="Movimiento" type="Node" parent="."]
+script = ExtResource("4_mov")
+
+[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("5_ani")
+sprite = NodePath("../Sprite")
+espejar_sin_direccion = true
+
+[node name="Vida" type="Node" parent="." node_paths=PackedStringArray("hurtbox")]
+script = ExtResource("6_vid")
+hurtbox = NodePath("../Hurtbox")
+
+[node name="Deteccion" type="Node" parent="."]
+script = ExtResource("7_det")
+
+[node name="Parpadeo" type="Node" parent="." node_paths=PackedStringArray("objetivo")]
+script = ExtResource("8_par")
+objetivo = NodePath("../Sprite")
+
+[node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar")]
+script = ExtResource("9_mue")
+escena_moneda = ExtResource("10_mon")
+vida = NodePath("../Vida")
+visual = NodePath("../Sprite")
+desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto")]

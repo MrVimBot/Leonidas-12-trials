@@ -75,7 +75,7 @@ func ejecutar() -> void:
 	var vida_antes := j.vida.vida
 	j.comer(manzana)
 	await ticks(20)
-	var en_mano := j.get_node(^"ObjetoEnMano") as Sprite2D
+	var en_mano := j.get_node(^"Visual/ObjetoEnMano") as Sprite2D
 	ok("a) (precondición) comiendo con el objeto en la mano", j.estado == Jugador.Estado.COMER and en_mano.visible)
 	j.bloquear(&"prueba")
 	j.bloquear(&"prueba")

@@ -89,8 +89,9 @@ var _motivos_bloqueo: Dictionary[StringName, bool] = {}
 @onready var interaccion: ComponenteInteraccion = $Interaccion
 @onready var parpadeo: ComponenteParpadeo = $Parpadeo
 @onready var hurtbox: Hurtbox = $Hurtbox
-## Icono del objeto que come / recién obtenido (último hijo: se dibuja encima de Leonidas).
-@onready var _objeto_en_mano: Sprite2D = $ObjetoEnMano
+## Icono del objeto que come / recién obtenido (último hijo de `Visual`: se dibuja encima de
+## Leonidas). `Visual` agrupa sombra, sprite e icono para alinearlos a la rejilla (`AjustePixel`).
+@onready var _objeto_en_mano: Sprite2D = $Visual/ObjetoEnMano
 ## Temporizadores de la escena (`timeout` conectado allí). Se paran con la pausa.
 @onready var _temporizador_comer: Timer = $TemporizadorComer
 @onready var _temporizador_objeto: Timer = $TemporizadorObjeto

@@ -64,7 +64,9 @@ func morir() -> void:
 	# Sin destello blanco: Color(3, 3, 3) no se ve con GL Compatibility (los valores > 1
 	# se recortan). Para tener destello haría falta un shader. Decidido el 2026-11-17.
 	if visual is Node2D:
-		t.tween_property(visual, ^"scale", Vector2(1.3, 0.3), duracion).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		# Relativo a la escala de partida: el arte pintado del nivel 2 va a 0,5 y un
+		# (1.3, 0.3) absoluto lo haría crecer al morir.
+		t.tween_property(visual, ^"scale", (visual as Node2D).scale * Vector2(1.3, 0.3), duracion).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	t.parallel().tween_property(visual, ^"modulate:a", 0.0, duracion)
 	t.tween_callback(_terminar)
 

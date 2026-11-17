@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/pantalla_game_over.gd" id="1_pgo"]
+[ext_resource type="Script" uid="uid://ch12voe2bdn5m" path="res://scripts/ui/pantalla_game_over.gd" id="1_pgo"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_over/arte_game_over.tscn" id="3_arte"]
 

@@ -16,15 +16,16 @@ func _nuevo() -> void:
 
 
 func _en_mano() -> Sprite2D:
-	return j.get_node(^"ObjetoEnMano") as Sprite2D
+	return j.get_node(^"Visual/ObjetoEnMano") as Sprite2D
 
 
 func ejecutar() -> void:
 	manzana = load("res://resources/objetos/manzana.tres") as Objeto
 	var comidas := [0]
 	await _nuevo()
-	var ultimo := j.get_child(j.get_child_count() - 1)
-	ok("ObjetoEnMano es el último hijo y está oculto", ultimo.name == &"ObjetoEnMano" and not (ultimo as Sprite2D).visible)
+	var visual := j.get_node(^"Visual")
+	var ultimo := visual.get_child(visual.get_child_count() - 1)
+	ok("ObjetoEnMano es el último hijo de Visual y está oculto", ultimo.name == &"ObjetoEnMano" and not (ultimo as Sprite2D).visible)
 
 	# Comer completo
 	j.comio.connect(func(_o: Objeto) -> void: comidas[0] += 1)

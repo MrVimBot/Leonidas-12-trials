@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cj5lnwstvysut" path="res://scripts/componentes/componente_carga.gd" id="10_car"]
 [ext_resource type="Script" uid="uid://co5jka0synv8f" path="res://scripts/componentes/componente_interaccion.gd" id="11_int"]
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="12_par"]
+[ext_resource type="Script" uid="uid://dpfh2bktlkqyf" path="res://scripts/componentes/componente_ajuste_pixel.gd" id="14_2hwye"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(10, 6)
@@ -41,15 +42,21 @@ collision_mask = 65
 motion_mode = 1
 script = ExtResource("1_jug")
 
-[node name="Sombra" type="Node2D" parent="." unique_id=526539022]
+[node name="Visual" type="Node2D" parent="." unique_id=2015405644]
+
+[node name="Sombra" type="Node2D" parent="Visual" unique_id=526539022]
 position = Vector2(0, -1)
 script = ExtResource("2_xxoxl")
 tamano = Vector2i(12, 4)
 
-[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1901057979]
+[node name="Sprite" type="AnimatedSprite2D" parent="Visual" unique_id=1901057979]
 sprite_frames = ExtResource("2_spr")
 animation = &"parado_frente"
 offset = Vector2(0, -14)
+
+[node name="ObjetoEnMano" type="Sprite2D" parent="Visual" unique_id=1204301104]
+visible = false
+position = Vector2(11, -18)
 
 [node name="Colision" type="CollisionShape2D" parent="." unique_id=1163450284]
 position = Vector2(0, -3)
@@ -97,7 +104,7 @@ script = ExtResource("5_mov")
 
 [node name="Animador" type="Node" parent="." unique_id=1592302876 node_paths=PackedStringArray("sprite")]
 script = ExtResource("6_ani")
-sprite = NodePath("../Sprite")
+sprite = NodePath("../Visual/Sprite")
 
 [node name="Vida" type="Node" parent="." unique_id=1561587931 node_paths=PackedStringArray("hurtbox")]
 script = ExtResource("7_vid")
@@ -135,7 +142,7 @@ shape = SubResource("Shape_alcance")
 
 [node name="Parpadeo" type="Node" parent="." unique_id=864839979 node_paths=PackedStringArray("objetivo")]
 script = ExtResource("12_par")
-objetivo = NodePath("../Sprite")
+objetivo = NodePath("../Visual/Sprite")
 
 [node name="TemporizadorComer" type="Timer" parent="." unique_id=1204301101]
 one_shot = true
@@ -144,12 +151,11 @@ one_shot = true
 one_shot = true
 
 [node name="TemporizadorMuerte" type="Timer" parent="." unique_id=1204301103]
-wait_time = 1.0
 one_shot = true
 
-[node name="ObjetoEnMano" type="Sprite2D" parent="." unique_id=1204301104]
-visible = false
-position = Vector2(11, -18)
+[node name="AjustePixel" type="Node" parent="." unique_id=486234319 node_paths=PackedStringArray("objetivo")]
+script = ExtResource("14_2hwye")
+objetivo = NodePath("../Visual")
 
 [connection signal="timeout" from="TemporizadorComer" to="." method="_al_terminar_temporizador_comer"]
 [connection signal="timeout" from="TemporizadorObjeto" to="." method="ocultar_objeto_obtenido"]

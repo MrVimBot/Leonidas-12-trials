@@ -17,6 +17,10 @@ extends Node2D
 @export var suelo: TileMapLayer
 ## En esta zona se viaja en barco (minijuego del mar): Game sustituye a Leonidas por el Barco.
 @export var modo_barco := false
+## Zona con arte pintado (nivel 2, "lineless"): Game pone la ventana en modo pintura
+## (CANVAS_ITEMS) mientras se está aquí, para que los sprites pintados se vean nítidos en vez
+## de reducidos a 480×270. Ver docs/design/arte_pintado.md ("Modo de dibujo").
+@export var pintada := false
 ## Canción de la zona (Game se la pasa a Musica al entrar). Vacío = silencio.
 @export var musica: AudioStream
 ## Arte de la pantalla de Game Over al morir aquí (escena con raíz Control, como

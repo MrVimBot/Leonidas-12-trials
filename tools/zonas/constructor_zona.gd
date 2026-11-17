@@ -38,6 +38,9 @@ var transiciones := true
 ## Ruta de la canción de la zona ("" = silencio). Se asigna al `musica` de la raíz al guardar,
 ## para que regenerar la escena no la pierda.
 var musica := ""
+## Zona con arte pintado (nivel 2): `guardar` pone `pintada = true` en la raíz y Game la dibuja
+## en modo pintura (CANVAS_ITEMS). Ver docs/design/arte_pintado.md.
+var pintada := false
 
 var _rng := RandomNumberGenerator.new()
 var _decorado: PackedScene
@@ -320,6 +323,8 @@ func guardar(ruta: String) -> Error:
 		variador.call("variar")
 	if not musica.is_empty():
 		raiz.set("musica", load(musica))
+	if pintada:
+		raiz.set("pintada", true)
 	var escena := PackedScene.new()
 	var err := escena.pack(raiz)
 	if err != OK:

@@ -90,17 +90,38 @@ Así la **posición del nodo es el punto de apoyo** (como los pies de Leonidas) 
 funciona igual que con el resto. Metadatos del `.tres`: `offset`, `escala`, `densidad`,
 `lienzo`, `ancla`, `mira`, `alto_mundo`.
 
-**Ojo:** quien anime la escala del sprite (p. ej. `ComponenteMuerte`, que aplasta el `visual`
-a (1.3, 0.3)) debe multiplicar la escala que ya tiene, o apuntar a un nodo padre `Visual` con
-escala 1. Ver `docs/plan/nivel2/02_base_enemigo_pintado.md`.
+**Ojo:** quien anime la escala del sprite debe multiplicar la que ya tiene (o apuntar a un padre `Visual` con escala 1). `ComponenteMuerte` ya lo hace (aplasta relativo a la escala de partida). Para enemigos, heredar de `scenes/enemies/enemigo_pintado.tscn` (ya trae escala 0,5 y filtro lineal con mipmaps).
 
 ## Modo de dibujo
 
 En el modo normal del juego (`viewport` de 480×270) todo se rasteriza a 480×270 y el arte
 pintado se ve borroso/pixelado. En la vista previa se usa `Pantalla.modo_pintura(self, true)`
 (CANVAS_ITEMS, como el libro y la cinemática): el arte pintado se dibuja a la resolución de la
-ventana y el pixel art sigue nítido (Nearest a ×4). Las zonas del nivel 2 tendrán que dibujarse
-así: plan `docs/plan/nivel2/01_modo_pintado.md`.
+ventana y el pixel art sigue nítido (Nearest a ×4).
+
+**Hecho (plan 01, 2026-11-17):** `Zona.pintada = true` en `isla_orilla`, `isla`, `cueva_medusa` y
+`cueva_jefe` (desde `tools/build_zonas.gd`); Game llama a `Pantalla.restaurar()` al cargar cada
+zona, y el libro y el Game Over lo usan al cerrarse (vuelven al modo de la zona). El `Visual` de
+Leonidas lo alinea a píxeles enteros `ComponenteAjustePixel`. Prueba: `prueba_modo_pintado.gd`.
+
+Revisado con capturas a 1920×1080 en `isla_orilla` (todos los bordes de color caen en la
+rejilla de 4 px de pantalla, como en el viewport):
+- Leonidas caminando en diagonal (posición con decimales), arena, agua animada (el shader ya
+  trabaja en coordenadas de mundo: las olas van a saltos de píxel de mundo) y HUD: igual que en
+  el pueblo.
+- Caja de diálogo: nítida, solo 2 colores en el texto, en la rejilla.
+- Libro: la captura del fondo (ahora a resolución de ventana) es la correcta y al cerrar la zona
+  sigue nítida. Al salir al `mar` el fotograma vuelve a 480×270 (VIEWPORT).
+- Game Over → Continuar y los cambios de zona: comprobados solo por la prueba (el modo), no a ojo.
+
+Pendiente / no cubierto:
+- Fundido de zona y destello de las barreras: no se miraron a ojo en una zona pintada (son
+  `ColorRect` a pantalla completa en un CanvasLayer, como el HUD, así que deberían cubrir igual).
+- Lo que Leonidas lleva en brazos (`PuntoCarga`) y los objetos lanzados no tienen
+  `AjustePixel`: en una zona pintada podrían verse a medio píxel. Igual cualquier NPC o
+  enemigo de pixel art que se ponga en la isla (añadirle el componente con su propio `Visual`).
+- En CANVAS_ITEMS la captura del libro es de la ventana entera (1920×1080 ≈ 8 MB) en vez de
+  480×270; no se notó, pero es más memoria mientras está abierto.
 
 ## Fotogramas clave medidos (para las hitbox)
 

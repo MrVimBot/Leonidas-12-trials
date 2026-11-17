@@ -3,13 +3,22 @@ extends RefCounted
 ## Modo de escala de la ventana. El juego va en "viewport" (480×270 a píxel entero, como
 ## fija project.godot: display/window/stretch/mode); las pinturas, la carta y el libro
 ## se dibujan a la resolución real con "canvas_items".
+## Las zonas con `Zona.pintada` (nivel 2) también van en "canvas_items".
 ## Sin estado: no se recuerda "el modo anterior", así que un fallo en una pantalla no se
-## propaga a la siguiente. `Game._ready()` lo vuelve a poner por si acaso.
+## propaga a la siguiente. Quien cierra una pantalla dentro de la partida (libro, Game Over)
+## usa `restaurar()`, que deduce el modo de la zona actual.
 
 ## Pone la ventana de `nodo` en modo pintura (`activo`) o en el modo normal del juego.
 static func modo_pintura(nodo: Node, activo: bool) -> void:
 	nodo.get_window().content_scale_mode = (
 		Window.CONTENT_SCALE_MODE_CANVAS_ITEMS if activo else Window.CONTENT_SCALE_MODE_VIEWPORT)
+
+
+## Pone la ventana en el modo que corresponde a lo que hay en pantalla: el de la zona actual
+## de Game (pintada → CANVAS_ITEMS) o el normal si no hay Game (menús, cinemática).
+static func restaurar(nodo: Node) -> void:
+	var game := Game.actual(nodo)
+	modo_pintura(nodo, game != null and game.zona_actual != null and game.zona_actual.pintada)
 
 
 ## Escala y centra `control` (arte de `control.size` px, en un CanvasLayer y en modo pintura)

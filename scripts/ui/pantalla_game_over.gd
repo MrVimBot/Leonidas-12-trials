@@ -74,7 +74,7 @@ func _cerrar() -> void:
 		_tween.kill()
 	abierta = false
 	visible = false
-	Pantalla.modo_pintura(self, false)
+	Pantalla.restaurar(self) # vuelve al modo de la zona (pintada o no)
 	get_tree().paused = false
 
 

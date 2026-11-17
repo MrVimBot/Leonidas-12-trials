@@ -19,7 +19,7 @@ func _aviso_abierto() -> bool:
 func _process(_delta: float) -> void:
 	if j and _aviso_abierto():
 		_pose_muestras += 1
-		var en_mano := j.get_node(^"ObjetoEnMano") as Sprite2D
+		var en_mano := j.get_node(^"Visual/ObjetoEnMano") as Sprite2D
 		if j.animador.animacion_actual() != &"comer" or not en_mano.visible or j.estado != Jugador.Estado.BLOQUEADO:
 			_pose_ok = false
 
@@ -67,7 +67,7 @@ func ejecutar() -> void:
 			await pulsar(&"atacar")
 	ok("llega al tutorial de ataque", _escena._esperando_ataque)
 	ok("pose con la espada (comer + ObjetoEnMano, BLOQUEADO) mientras sale el aviso (%d fotogramas)" % _pose_muestras, vio_aviso and _pose_ok and _pose_muestras > 20)
-	var en_mano := j.get_node(^"ObjetoEnMano") as Sprite2D
+	var en_mano := j.get_node(^"Visual/ObjetoEnMano") as Sprite2D
 	ok("al cerrar el aviso se quita la espada de la mano", not en_mano.visible)
 	await ticks(10)
 	ok("la J que cerró el último cuadro no es el espadazo", ataques[0] == 0, "ataques=%d" % ataques[0])

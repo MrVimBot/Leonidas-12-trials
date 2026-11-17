@@ -55,7 +55,7 @@ func _jugador() -> void:
 	var j := (load("res://scenes/player/jugador.tscn") as PackedScene).instantiate() as Jugador
 	raiz.add_child(j)
 	var a := j.animador
-	var s := a.get_node(^"../Sprite") as AnimatedSprite2D
+	var s := a.sprite
 	registrar("jugador inicial", s, a)
 	var manzana := load("res://resources/objetos/manzana.tres") as Objeto
 	for k: String in DIRS:

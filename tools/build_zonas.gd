@@ -223,6 +223,7 @@ func _mar() -> Constructor:
 
 func _isla_orilla() -> Constructor:
 	var z := Constructor.new("IslaOrilla", "Orilla de la isla", 60, 34, 24)
+	z.pintada = true # nivel 2: arte pintado, modo pintura
 	z.rect([0, 0, 59, 5], C.MAR)
 	z.rect([0, 6, 59, 6], C.MAR_ORILLA)
 	z.rect([0, 7, 59, 24], C.ARENA)
@@ -262,6 +263,7 @@ func _isla_orilla() -> Constructor:
 
 func _isla() -> Constructor:
 	var z := Constructor.new("Isla", "Isla de Medusa", 72, 56, 25)
+	z.pintada = true # nivel 2: arte pintado, modo pintura
 	z.rect([0, 0, 71, 55], C.MAR)
 	z.elipse(Vector2i(34, 30), Vector2(28, 20), C.ARENA)
 	z.elipse(Vector2i(36, 8), Vector2(5, 9), C.ARENA)
@@ -310,6 +312,7 @@ func _isla() -> Constructor:
 
 func _cueva_medusa() -> Constructor:
 	var z := Constructor.new("CuevaMedusa", "Cueva de Medusa", 72, 30, 26)
+	z.pintada = true # nivel 2: arte pintado, modo pintura
 	z.rect([0, 0, 71, 29], C.VACIO, true)
 	z.rect([2, 5, 69, 24], C.PARED_CUEVA, true)
 	z.rect([3, 6, 68, 23], C.SUELO_CUEVA, true, C.SUELO_CUEVA_B, 0.15)
@@ -341,6 +344,7 @@ func _cueva_medusa() -> Constructor:
 
 func _cueva_jefe() -> Constructor:
 	var z := Constructor.new("CuevaJefe", "Guarida de Medusa", 34, 26, 27)
+	z.pintada = true # nivel 2: arte pintado, modo pintura
 	z.musica = MUSICA + "bossfight.mp3"
 	z.rect([0, 0, 33, 25], C.VACIO, true)
 	z.elipse(Vector2i(17, 11), Vector2(14, 10), C.PARED_CUEVA, true)

@@ -73,7 +73,7 @@ static func actual(desde: Node) -> Game:
 
 
 func _ready() -> void:
-	Pantalla.modo_pintura(self, false) # red de seguridad: el juego va en el modo normal
+	Pantalla.modo_pintura(self, false) # red de seguridad; `_cargar_zona` pone el de la zona
 	var depurar := OS.is_debug_build()
 	if depurar and depurar_saltar_kathita:
 		EstadoJuego.tiene_libro = true
@@ -226,6 +226,9 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 	else:
 		modo_barco.bajar()
 
+	# Cada zona decide su modo de dibujo (las pintadas, CANVAS_ITEMS). Aquí, dentro del negro
+	# del fundido (o antes del primer fotograma), para que el cambio no se vea.
+	Pantalla.restaurar(self)
 	_ajustar_camara()
 	Musica.reproducir(zona_actual.musica)
 	zona_cambiada.emit(zona_actual)

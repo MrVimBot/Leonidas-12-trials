@@ -203,7 +203,7 @@ func cerrar() -> void:
 	abierto = false
 	visible = false
 	fondo.texture = null
-	Pantalla.modo_pintura(self, false)
+	Pantalla.restaurar(self) # vuelve al modo de la zona (pintada o no)
 	get_tree().paused = false
 	abierto_cambio.emit(false)
 
