@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_bas"]
+[ext_resource type="Script" path="res://scripts/enemies/pez_espada.gd" id="2_cer"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/pez_espada.tres" id="3_spr"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
+[ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
+[ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(26, 6)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(36, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_contacto"]
+size = Vector2(30, 12)
+
+[sub_resource type="RectangleShape2D" id="Shape_estocada_izquierda"]
+size = Vector2(28, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_estocada_derecha"]
+size = Vector2(28, 10)
+
+[node name="PezEspada" instance=ExtResource("1_bas")]
+script = ExtResource("2_cer")
+
+[node name="Sombra" parent="." index="0"]
+tamano = Vector2i(44, 6)
+
+[node name="Sprite" parent="." index="1"]
+sprite_frames = ExtResource("3_spr")
+animation = &"parado"
+offset = Vector2(0, -16)
+
+[node name="Colision" parent="." index="2"]
+position = Vector2(0, -3)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Hurtbox" parent="." index="3"]
+
+[node name="Forma" parent="Hurtbox" index="0"]
+position = Vector2(0, -11)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Contacto" parent="." index="4"]
+danio = 2
+
+[node name="Forma" parent="Contacto" index="0"]
+position = Vector2(0, -9)
+shape = SubResource("Shape_contacto")
+
+[node name="Vida" parent="." index="7"]
+vida_max = 4
+invulnerabilidad = 0.3
+
+[node name="Deteccion" parent="." index="8"]
+radio_vision = 110.0
+radio_perder = 170.0
+
+[node name="Muerte" parent="." index="10" node_paths=PackedStringArray("desactivar")]
+desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto"), NodePath("../Estocada")]
+monedas = 2
+
+[node name="Estocada" type="Area2D" parent="." index="11"]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("4_hit")
+activo = false
+
+[node name="Izquierda" type="CollisionShape2D" parent="Estocada" index="0"]
+position = Vector2(-23, -14)
+shape = SubResource("Shape_estocada_izquierda")
+
+[node name="Derecha" type="CollisionShape2D" parent="Estocada" index="1"]
+position = Vector2(23, -14)
+shape = SubResource("Shape_estocada_derecha")
+
+[node name="Ataque" type="Node" parent="." index="12" node_paths=PackedStringArray("hitbox", "animador", "forma_izquierda", "forma_derecha")]
+script = ExtResource("5_ata")
+hitbox = NodePath("../Estocada")
+animador = NodePath("../Animador")
+animacion = &"atacar"
+frames_golpe = Vector2i(8, 24)
+danio = 3
+forma_izquierda = NodePath("../Estocada/Izquierda")
+forma_derecha = NodePath("../Estocada/Derecha")
+solo_lados = true
+
+[node name="Paseo" type="Node" parent="." index="13" node_paths=PackedStringArray("movimiento")]
+script = ExtResource("6_pas")
+movimiento = NodePath("../Movimiento")
+espera = Vector2(1, 2.5)
+reparto = 1
+distancia_minima = 8.0
+margen_tiempo = 0.0

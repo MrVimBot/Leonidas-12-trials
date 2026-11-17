@@ -28,7 +28,11 @@ Salida de cada prueba: líneas `PASA` / `FALLA`, `COMPROBACIONES: N` y `RESULTAD
 `prueba_transiciones`, `prueba_jugador_bloqueo`, `prueba_jugador_estados`, `prueba_entrada`,
 `prueba_libro_{raton,navegacion,barco}`, `prueba_escena_{zeus,kathita,sabios}`,
 `prueba_caminar_hasta`, `prueba_cinematica`, `prueba_pantalla`, `prueba_combate`, `prueba_npc`,
-`prueba_objetos_sueltos`, `prueba_ataque_formas` (forma del golpe por dirección: área exacta, una sola forma, sondas), `prueba_avisos_componentes` (avisos de configuración del editor), `prueba_barco`, `prueba_musica`, `prueba_microfono`, `prueba_modo_pintado` (zonas pintadas en CANVAS_ITEMS, libro y Game Over vuelven al modo de la zona, `AjustePixel`) y
+`prueba_objetos_sueltos`, `prueba_ataque_formas` (forma del golpe por dirección: área exacta, una sola forma, sondas), `prueba_avisos_componentes` (avisos de configuración del editor), `prueba_barco`, `prueba_musica`, `prueba_microfono`, `prueba_modo_pintado` (zonas pintadas en CANVAS_ITEMS, libro y Game Over vuelven al modo de la zona, `AjustePixel`),
+`prueba_gamba` (persigue, muerde 2 cuartos, muere a dos espadazos con 1 moneda; tres gambas no se apilan),
+`prueba_pez_espada` (aviso, carrera recta, invulnerable corriendo, estocada, enfriamiento, esquiva, pared, muerte),
+`prueba_ciclope` (disparo del rayo, daño, voltereta que lo esquiva, enfriamiento, disparo cancelado por un golpe,
+rayo contra pared y alcance, invocación `invocado`/`aparecer()`/`derrotado`) y
 `prueba_animaciones` (compara con `referencias/animaciones.txt`; si la artista cambia sprites,
 regenerarla a propósito con `... -- prueba_animaciones generar`).
 
