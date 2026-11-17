@@ -1,4 +1,17 @@
 extends SceneTree
+## ============================================================================
+## ARCHIVADO — NO EJECUTAR  (2026-11-16)
+## ============================================================================
+## Este generador YA NO SE PUEDE USAR: scenes/levels/pueblo.tscn se edita a mano desde
+## 2026-11 (NPC, sabios, barreras de misión y de la voltereta, escenas guiadas de Kathita y
+## de los sabios, manzanos...) y ejecutarlo SOBRESCRIBE todo eso con el trazado original.
+## Se conserva solo como referencia de cómo se montó el pueblo (plano de la artista, muralla,
+## canales, casas). Para zonas nuevas usa tools/zonas/constructor_zona.gd.
+##
+## Protección: sin el argumento `--forzar` el script se niega y termina con código 1:
+##   godot --headless --path . --script res://tools/build_pueblo.gd -- --forzar
+##
+## Descripción original:
 ## CLI: godot --headless --path . --script res://tools/build_pueblo.gd
 ## Genera scenes/levels/pueblo.tscn a partir del plano de la artista (pueblo amurallado
 ## ovalado con el templo arriba, la plaza de la estatua en el centro y dos puertas).
@@ -26,15 +39,16 @@ const SEMIEJE := Vector2(857, 607)
 const MEDIA_PUERTA := 36.0 # la puerta mide 72 px de ancho
 const ANCHO_MURO := 32.0
 
-# Tiles (columna, fila) del atlas naturaleza.
-const PASTO := Vector2i(0, 0)
-const AGUA := Vector2i(16, 0)
-const MAR := Vector2i(19, 0)
-const CAMINO := Vector2i(3, 1)
-const CAMINO_PIEDRAS := Vector2i(1, 1)
-const GRECA_ESQUINA := Vector2i(4, 1)
-const GRECA_BORDE := Vector2i(5, 1)
-const BALDOSA := Vector2i(6, 1)
+# Tiles del atlas naturaleza: sus coordenadas están en tools/zonas/tiles.gd.
+const Tiles := preload("res://tools/zonas/tiles.gd")
+const PASTO := Tiles.PASTO
+const AGUA := Tiles.AGUA
+const MAR := Tiles.MAR
+const CAMINO := Tiles.CAMINO
+const CAMINO_PIEDRAS := Tiles.CAMINO_PIEDRAS
+const GRECA_ESQUINA := Tiles.GRECA_ESQUINA
+const GRECA_BORDE := Tiles.GRECA_BORDE
+const BALDOSA := Tiles.BALDOSA
 # Alternativas de los tiles "transformables" (ver build_tilesets.gd): H 1 + V 2 + transponer 4.
 const H := 1
 const V := 2
@@ -146,6 +160,13 @@ var _suelo: TileMapLayer
 
 
 func _initialize() -> void:
+	if not "--forzar" in OS.get_cmdline_user_args():
+		push_error("build_pueblo.gd está ARCHIVADO: sobrescribiría %s, que se edita a mano "
+				% RUTA + "(NPC, barreras, escenas guiadas, manzanos). No se ha hecho nada. "
+				+ "Si de verdad lo quieres, añade «-- --forzar» (y haz copia antes).")
+		print("ARCHIVADO: build_pueblo.gd no se ejecuta sin `-- --forzar`.")
+		quit(1)
+		return
 	_rng.seed = 12
 	_decorado = load("res://scenes/entorno/decorado.tscn")
 	_manzano = load("res://scenes/entorno/manzano.tscn")

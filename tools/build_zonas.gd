@@ -12,7 +12,8 @@ extends SceneTree
 ## Después: godot --headless --path . --script res://tools/verificar_zonas.gd
 
 const Constructor := preload("res://tools/zonas/constructor_zona.gd")
-const C := Constructor # para acortar los nombres de tiles
+const Tiles := preload("res://tools/zonas/tiles.gd")
+const C := Tiles # para acortar los nombres de tiles
 
 const DIR := "res://scenes/levels/"
 const MUSICA := "res://assets/audio/music/"

@@ -10,15 +10,14 @@ extends SceneTree
 ##   C. Sin muros se llega a todas (nada se ha cerrado de más).
 ## Termina con código 1 si algo falla.
 
-const PASO := 4.0
-const MASCARA := Capas.MUNDO | Capas.OBSTACULO_BAJO # como el jugador
+const Explorador := preload("res://tools/zonas/explorador.gd")
 
-var _forma := RectangleShape2D.new()
-var _espacio: PhysicsDirectSpaceState2D
+const PASO := 4.0
+
+var _explorador: Explorador
 
 
 func _initialize() -> void:
-	_forma.size = Vector2(10, 6)
 	_correr.call_deferred()
 
 
@@ -26,11 +25,11 @@ func _correr() -> void:
 	var args := OS.get_cmdline_user_args()
 	var ruta := args[0] if args.size() > 0 else "res://scenes/levels/pueblo.tscn"
 	var zona := (load(ruta) as PackedScene).instantiate()
-	_quitar_cuerpos(zona)
+	Explorador.quitar_cuerpos(zona)
 	root.add_child(zona)
 	await physics_frame
 	await physics_frame
-	_espacio = root.get_world_2d().direct_space_state
+	_explorador = Explorador.new(root.get_world_2d().direct_space_state)
 	var limites := Rect2(zona.call("obtener_limites"))
 	var inicio: Vector2 = (zona.get_node("Entradas/inicio") as Node2D).global_position
 
@@ -84,41 +83,11 @@ func _rects(n: Node) -> Array:
 	return res
 
 
-func _quitar_cuerpos(n: Node) -> void:
-	for h in n.get_children():
-		if h is CharacterBody2D:
-			n.remove_child(h)
-			h.free()
-		else:
-			_quitar_cuerpos(h)
-
-
-func _choca(p: Vector2) -> bool:
-	var q := PhysicsShapeQueryParameters2D.new()
-	q.shape = _forma
-	q.transform = Transform2D(0.0, p + Vector2(0, -3))
-	q.collision_mask = MASCARA
-	return not _espacio.intersect_shape(q, 1).is_empty()
-
-
 ## Posiciones de los pies alcanzables; `muros` = rectángulos que no se pueden pisar.
 func _bfs(inicio: Vector2, limites: Rect2, muros: Array) -> Array:
-	var vistos := {Vector2i.ZERO: true}
-	var cola: Array[Vector2i] = [Vector2i.ZERO]
 	var puntos := []
-	var dirs := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
-	var i := 0
-	while i < cola.size():
-		var c := cola[i]
-		i += 1
-		puntos.append(inicio + Vector2(c) * PASO)
-		for d in dirs:
-			var n: Vector2i = c + d
-			if vistos.has(n):
-				continue
-			vistos[n] = true
-			var p := inicio + Vector2(n) * PASO
-			if not limites.has_point(p) or _choca(p) or _toca([p], muros):
-				continue
-			cola.append(n)
+	_explorador.recorrer(inicio, limites, PASO, func(p: Vector2) -> bool:
+		puntos.append(p)
+		return false
+	, func(p: Vector2) -> bool: return _toca([p], muros))
 	return puntos

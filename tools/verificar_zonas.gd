@@ -10,21 +10,21 @@ extends SceneTree
 ##      existe) se vuelve al pueblo.
 ## Termina con código 1 si algo falla.
 
+const Explorador := preload("res://tools/zonas/explorador.gd")
+
 const DIR := "res://scenes/levels/"
 const INICIO := "res://scenes/levels/pueblo.tscn"
 const FINAL := "res://scenes/levels/cueva_jefe.tscn"
 const PASO := 8.0
-const MASCARA := Capas.MUNDO | Capas.OBSTACULO_BAJO # como el jugador
 const SEPARACION_SALIDA := 24.0
 
-var _forma := RectangleShape2D.new()
+var _explorador: Explorador
 var _fallos := 0
 # ruta → {entradas: [nombres], salidas: [[nombre, destino, entrada]]}
 var _zonas := {}
 
 
 func _initialize() -> void:
-	_forma.size = Vector2(10, 6)
 	_correr.call_deferred()
 
 
@@ -92,11 +92,11 @@ func _enlaces(ruta: String, motivos: Array[String]) -> void:
 func _fisica(ruta: String, motivos: Array[String]) -> void:
 	var zona := (load(ruta) as PackedScene).instantiate()
 	# Enemigos y NPC se mueven: no cuentan como obstáculo fijo (y así no corre su IA).
-	_quitar_cuerpos(zona)
+	Explorador.quitar_cuerpos(zona)
 	root.add_child(zona)
 	await physics_frame
 	await physics_frame
-	var espacio := root.get_world_2d().direct_space_state
+	_explorador = Explorador.new(root.get_world_2d().direct_space_state)
 
 	var limites: Rect2 = Rect2(zona.call("obtener_limites"))
 	var salidas: Array = []
@@ -110,28 +110,19 @@ func _fisica(ruta: String, motivos: Array[String]) -> void:
 			motivos.append("falta la entrada 'inicio'")
 		for m in nodo_entradas.get_children():
 			var p: Vector2 = (m as Node2D).global_position
-			if _choca(espacio, p):
+			if _explorador.choca(p):
 				motivos.append("entrada %s %s: el jugador choca con algo" % [m.name, p])
 				continue
 			for s in salidas:
 				var r: Rect2 = s[1]
 				if _distancia_rect(p, r) < SEPARACION_SALIDA:
 					motivos.append("entrada %s está a < %d px de %s" % [m.name, SEPARACION_SALIDA, s[0]])
-			var alcanzadas := _bfs(espacio, p, limites, salidas)
+			var alcanzadas := _alcanzadas(p, limites, salidas)
 			for s in salidas:
 				if not s[0] in alcanzadas:
 					motivos.append("desde %s no se llega a %s" % [m.name, s[0]])
 	root.remove_child(zona)
 	zona.free()
-
-
-func _quitar_cuerpos(n: Node) -> void:
-	for h in n.get_children():
-		if h is CharacterBody2D:
-			n.remove_child(h)
-			h.free()
-		else:
-			_quitar_cuerpos(h)
 
 
 func _salidas(zona: Node) -> Array:
@@ -155,46 +146,16 @@ func _distancia_rect(p: Vector2, r: Rect2) -> float:
 	return p.distance_to(q)
 
 
-## La forma del jugador (10×6 en (0, −3) respecto a los pies) en los pies `p`.
-func _choca(espacio: PhysicsDirectSpaceState2D, p: Vector2) -> bool:
-	var q := PhysicsShapeQueryParameters2D.new()
-	q.shape = _forma
-	q.transform = Transform2D(0.0, p + Vector2(0, -3))
-	q.collision_mask = MASCARA
-	q.collide_with_bodies = true
-	q.collide_with_areas = false
-	return not espacio.intersect_shape(q, 1).is_empty()
-
-
-## Búsqueda en anchura (4 vecinos, paso 8 px) desde `inicio`. Devuelve los nombres de
-## las salidas que contienen alguna celda alcanzada.
-func _bfs(espacio: PhysicsDirectSpaceState2D, inicio: Vector2, limites: Rect2, salidas: Array) -> Array:
+## Nombres de las salidas que contienen alguna celda alcanzada desde `inicio` (búsqueda en
+## anchura sobre una rejilla de PASO px con la forma del jugador, ver Explorador).
+func _alcanzadas(inicio: Vector2, limites: Rect2, salidas: Array) -> Array:
 	var alcanzadas := []
-	var vistos := {Vector2i.ZERO: true}
-	var cola: Array[Vector2i] = [Vector2i.ZERO]
-	var dirs := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
-	var i := 0
-	while i < cola.size():
-		var c := cola[i]
-		i += 1
-		var p := inicio + Vector2(c) * PASO
+	_explorador.recorrer(inicio, limites, PASO, func(p: Vector2) -> bool:
 		for s in salidas:
 			if not s[0] in alcanzadas and (s[1] as Rect2).grow(0.01).has_point(p):
 				alcanzadas.append(s[0])
-		if alcanzadas.size() == salidas.size():
-			break
-		for d in dirs:
-			var n: Vector2i = c + d
-			if vistos.has(n):
-				continue
-			vistos[n] = true
-			var pn := inicio + Vector2(n) * PASO
-			if pn.x < limites.position.x or pn.y < limites.position.y \
-					or pn.x > limites.end.x or pn.y > limites.end.y:
-				continue
-			if _choca(espacio, pn):
-				continue
-			cola.append(n)
+		return alcanzadas.size() == salidas.size()
+	, Callable(), true)
 	return alcanzadas
 
 

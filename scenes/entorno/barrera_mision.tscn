@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://scripts/systems/barrera_mision.gd" id="1_bar"]
+[ext_resource type="Script" uid="uid://tomhmwytdf78" path="res://scripts/systems/barrera_mision.gd" id="1_bar"]
 [ext_resource type="Resource" path="res://resources/dialogues/zeus_salida_bloqueada.tres" id="2_zeus"]
 [ext_resource type="Resource" path="res://resources/dialogues/zeus_salida_repetida.tres" id="3_zeus"]
 

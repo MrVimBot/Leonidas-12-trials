@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ca528nsv7o8om"]
 
 [ext_resource type="Script" uid="uid://byxl57yte0473" path="res://scripts/ui/menu_pausa.gd" id="1_pau"]
-[ext_resource type="Script" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
+[ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vacio"]
 

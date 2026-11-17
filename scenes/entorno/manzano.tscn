@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="1_dec"]
-[ext_resource type="Texture2D" path="res://assets/sprites/entorno/manzano_1.png" id="2_tex"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_manzano.gd" id="3_man"]
+[ext_resource type="Texture2D" uid="uid://b50emni8xr7q5" path="res://assets/sprites/entorno/manzano_1.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://tlshi1x5eo06" path="res://scripts/componentes/componente_manzano.gd" id="3_man"]
 [ext_resource type="PackedScene" path="res://scenes/items/manzana_suelta.tscn" id="4_esc"]
 
 [node name="Manzano" instance=ExtResource("1_dec")]

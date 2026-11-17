@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" path="res://scripts/entorno/decorado.gd" id="1_dec"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+[ext_resource type="Script" uid="uid://ct5vled8xg2sk" path="res://scripts/entorno/decorado.gd" id="1_dec"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 
 [sub_resource type="RectangleShape2D" id="Shape_base"]
 size = Vector2(16, 8)

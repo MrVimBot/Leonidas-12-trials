@@ -20,10 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://b6asnsy12yf2d" path="res://assets/ui/libro/pestana_misiones_apagada.png" id="18_pestana_misiones_apagada"]
 [ext_resource type="Texture2D" uid="uid://de60k5y5cm4vc" path="res://assets/ui/libro/pestana_guardar.png" id="19_pestana_guardar"]
 [ext_resource type="Texture2D" uid="uid://bmcq6ll13t6pn" path="res://assets/ui/libro/pestana_guardar_apagada.png" id="20_pestana_guardar_apagada"]
-[ext_resource type="Script" path="res://scripts/ui/libro/pagina_inventario.gd" id="21_pag_inv"]
-[ext_resource type="Script" path="res://scripts/ui/libro/pagina_mapa.gd" id="22_pag_mapa"]
-[ext_resource type="Script" path="res://scripts/ui/libro/pagina_misiones.gd" id="23_pag_mis"]
-[ext_resource type="Script" path="res://scripts/ui/libro/pagina_guardar.gd" id="24_pag_gua"]
+[ext_resource type="Script" uid="uid://csgpch3b1nlky" path="res://scripts/ui/libro/pagina_inventario.gd" id="21_pag_inv"]
+[ext_resource type="Script" uid="uid://csa1g7vwp36ed" path="res://scripts/ui/libro/pagina_mapa.gd" id="22_pag_mapa"]
+[ext_resource type="Script" uid="uid://cebgyc5aqg75c" path="res://scripts/ui/libro/pagina_misiones.gd" id="23_pag_mis"]
+[ext_resource type="Script" uid="uid://2lcoutp8xivs" path="res://scripts/ui/libro/pagina_guardar.gd" id="24_pag_gua"]
 
 [node name="MenuLibro" type="CanvasLayer"]
 process_mode = 3

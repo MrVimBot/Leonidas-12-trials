@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://d4fydc77c5sow"]
 
-[ext_resource type="Script" path="res://scripts/systems/zona.gd" id="1_1mv42"]
+[ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_1mv42"]
 [ext_resource type="AudioStream" uid="uid://bmx7ra61sjk4a" path="res://assets/audio/music/bossfight.mp3" id="9_musica"]
-[ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="2_717rp"]
-[ext_resource type="TileSet" path="res://resources/tilesets/provisional.tres" id="3_dse0w"]
+[ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="2_717rp"]
+[ext_resource type="TileSet" uid="uid://5qynuptas48g" path="res://resources/tilesets/provisional.tres" id="3_dse0w"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_wqbmv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/entorno/estatua.png" id="5_q3ql0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/entorno/columna_rota_2.png" id="6_4vwxl"]
-[ext_resource type="Script" path="res://scripts/systems/salida_zona.gd" id="7_1jt5x"]
+[ext_resource type="Texture2D" uid="uid://cy5fssglxaq6o" path="res://assets/sprites/entorno/estatua.png" id="5_q3ql0"]
+[ext_resource type="Texture2D" uid="uid://bblh7onlgjcvn" path="res://assets/sprites/entorno/columna_rota_2.png" id="6_4vwxl"]
+[ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="7_1jt5x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hilgt"]
 size = Vector2(32, 16)

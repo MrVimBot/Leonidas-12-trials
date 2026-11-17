@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/enemies/nube_toxica.gd" id="1_nub"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/seta_bomba.tres" id="2_spr"]
+[ext_resource type="Script" uid="uid://cq7uw41cumseu" path="res://scripts/enemies/nube_toxica.gd" id="1_nub"]
+[ext_resource type="SpriteFrames" uid="uid://bj8bc8tean7ji" path="res://resources/sprite_frames/seta_bomba.tres" id="2_spr"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
 
 [sub_resource type="CircleShape2D" id="Shape_nube"]

@@ -1,11 +1,11 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/npcs/npc.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://kn36ic47wbu8" path="res://scripts/npcs/npc.gd" id="1_npc"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 [ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="3_mov"]
 [ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="4_ani"]
-[ext_resource type="PackedScene" path="res://scenes/entorno/zona_dialogo.tscn" id="5_dia"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
+[ext_resource type="PackedScene" uid="uid://c7k2m9xq4ndpa" path="res://scenes/entorno/zona_dialogo.tscn" id="5_dia"]
+[ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(12, 6)

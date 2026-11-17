@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cuoulennrh5wl" path="res://scripts/items/objeto_suelto.gd" id="1_obj"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/moneda.tres" id="3_spr"]
+[ext_resource type="SpriteFrames" uid="uid://ds3nne3o7hv72" path="res://resources/sprite_frames/moneda.tres" id="3_spr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mon"]
 radius = 6.0

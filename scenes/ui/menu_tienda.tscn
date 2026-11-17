@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/menu_tienda.gd" id="1_tie"]
-[ext_resource type="Texture2D" path="res://assets/ui/caja_dialogo.png" id="2_box"]
+[ext_resource type="Script" uid="uid://dy02g5wejpq3e" path="res://scripts/ui/menu_tienda.gd" id="1_tie"]
+[ext_resource type="Texture2D" uid="uid://bf46avnhs25kn" path="res://assets/ui/caja_dialogo.png" id="2_box"]
 
 [node name="MenuTienda" type="CanvasLayer"]
 layer = 20

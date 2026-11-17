@@ -5,8 +5,9 @@ extends RefCounted
 ##
 ## Uso:
 ##   const Constructor := preload("res://tools/zonas/constructor_zona.gd")
+##   const Tiles := preload("res://tools/zonas/tiles.gd")
 ##   var z := Constructor.new("Bosque", "Bosque", 64, 56, 21)
-##   z.rect([0, 0, 63, 55], Constructor.PASTO)
+##   z.rect([0, 0, 63, 55], Tiles.PASTO)
 ##   ...
 ##   z.guardar("res://scenes/levels/bosque.tscn")
 ##
@@ -14,42 +15,8 @@ extends RefCounted
 ## objetos en píxeles del mundo (la base del objeto, como los pies del jugador).
 ## Todo es determinista: misma semilla → misma escena.
 
-# Tiles del atlas naturaleza (fuente 0 de resources/tilesets/naturaleza.tres).
-# Un tile es Vector2i (fuente 0) o Vector3i(fuente, columna, fila).
-const PASTO := Vector2i(0, 0)
-const SETO := Vector2i(12, 0)
-const MAR := Vector2i(19, 0)
-const MAR_ORILLA := Vector2i(0, 1)
-const BALDOSA := Vector2i(6, 1)
-# Rellenos de las familias de transiciones (scripts/entorno/transiciones.gd): se pinta el
-# área con el relleno y guardar() pone los bordes y esquinas. Mínimo 2 tiles de ancho.
-const AGUA := Vector2i(16, 0) # estanque con bordillo
-const AGUA_NATURAL := Vector3i(1, 0, 2) # estanque natural (orilla de hierba)
-const TIERRA := Vector3i(1, 0, 4) # camino de tierra (relleno PROVISIONAL)
-const TIERRA_B := Vector3i(1, 1, 4) # otra variante del relleno de tierra
-const PIEDRA := Vector3i(1, 2, 4) # suelo de piedra (relleno PROVISIONAL)
-# Arena de playa/isla: hasta que lleguen las transiciones hierba↔arena es el relleno de
-# tierra SIN bordes (zonas con `transiciones = false`). Antes era 3,1, que es una esquina
-# interior (por eso se veía un pico de hierba cada 16 px).
-const ARENA := TIERRA
-const ARENA_PIEDRAS := TIERRA_B
-# Tiles del atlas provisional (resources/tilesets/provisional.tres).
-const SUELO_CUEVA := Vector2i(0, 0)
-const SUELO_CUEVA_B := Vector2i(1, 0)
-const PARED_CUEVA := Vector2i(2, 0)
-const VACIO := Vector2i(3, 0)
-const MAR_NAV := Vector2i(4, 0)
-const MAR_NAV_OLA := Vector2i(5, 0)
-const LOSA_JEFE := Vector2i(6, 0)
-const MUELLE := Vector2i(7, 0)
-const ARRECIFE := Vector2i(8, 0)
-
-## Tiles de la fuente 0 donde dispersar() no pone nada (caminos, agua, mar, orillas). Toda
-## la fuente 1 (transiciones) cuenta también como ocupada.
-const OCUPADOS := [Vector2i(3, 1), Vector2i(1, 1), Vector2i(2, 1), AGUA, Vector2i(17, 0), Vector2i(18, 0),
-	MAR, MAR_ORILLA, Vector2i(17, 1), Vector2i(18, 1), Vector2i(19, 1), BALDOSA, Vector2i(4, 1), Vector2i(5, 1),
-	Vector2i(6, 0), Vector2i(7, 0), Vector2i(8, 0), Vector2i(9, 0), Vector2i(10, 0), Vector2i(11, 0)]
-
+# Las coordenadas de los tiles (PASTO, SETO, TIERRA...) están en tools/zonas/tiles.gd.
+const Tiles := preload("res://tools/zonas/tiles.gd")
 const Transiciones := preload("res://scripts/entorno/transiciones.gd")
 
 const DIR_ENTORNO := "res://assets/sprites/entorno/"
@@ -175,7 +142,7 @@ func suelo_ocupado(pos: Vector2) -> bool:
 	var fuente := suelo.get_cell_source_id(celda)
 	if fuente > 0:
 		return true # transiciones: caminos y estanques
-	return fuente == 0 and suelo.get_cell_atlas_coords(celda) in OCUPADOS
+	return fuente == 0 and suelo.get_cell_atlas_coords(celda) in Tiles.OCUPADOS
 
 
 # --- Objetos -------------------------------------------------------------------
@@ -324,7 +291,16 @@ func marcador(nombre: String, pos: Vector2) -> void:
 
 # --- Guardar -------------------------------------------------------------------------
 
+## Guarda la zona en `ruta`. Se NIEGA (devuelve ERR_LOCKED) si ya existe una escena allí cuya
+## raíz tenga el metadato `editada_a_mano = true` (retocada a mano: sobrescribirla perdería
+## el trabajo). Para protegerla: abrirla en el editor, seleccionar la raíz y, en el
+## Inspector → Metadatos, añadir `editada_a_mano` de tipo bool y marcarlo.
 func guardar(ruta: String) -> Error:
+	if _editada_a_mano(ruta):
+		push_error("[%s] %s tiene el metadato editada_a_mano = true: NO se sobrescribe. " % [raiz.name, ruta]
+				+ "Quita el metadato (Inspector de la raíz → Metadatos) o la zona de su generador.")
+		raiz.free()
+		return ERR_LOCKED
 	if transiciones and suelo.get_used_cells().size() > 0:
 		var auto := Node.new()
 		auto.name = "AutoTransiciones"
@@ -362,6 +338,23 @@ func guardar(ruta: String) -> Error:
 
 
 # --- Internos ------------------------------------------------------------------------
+
+## true si la escena existente en `ruta` tiene `editada_a_mano = true` en su raíz. Se lee del
+## estado empaquetado (sin instanciar: no corre ningún script) y sin usar la caché.
+func _editada_a_mano(ruta: String) -> bool:
+	if not FileAccess.file_exists(ruta):
+		return false
+	var existente := ResourceLoader.load(ruta, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+	if existente == null:
+		return false
+	var estado := existente.get_state()
+	if estado.get_node_count() == 0:
+		return false
+	for i in estado.get_node_property_count(0):
+		if estado.get_node_property_name(0, i) == &"metadata/editada_a_mano":
+			return estado.get_node_property_value(0, i) == true
+	return false
+
 
 func _agregar(padre: Node, hijo: Node) -> void:
 	padre.add_child(hijo, true)

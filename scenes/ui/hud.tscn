@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
-[ext_resource type="Script" path="res://scripts/ui/barra_estamina.gd" id="2_bar"]
-[ext_resource type="Script" path="res://scripts/ui/contador_monedas.gd" id="3_mon"]
-[ext_resource type="Texture2D" path="res://assets/ui/provisional/ranura_objeto.png" id="4_ran"]
-[ext_resource type="Texture2D" path="res://assets/ui/provisional/icono_espada.png" id="5_esp"]
-[ext_resource type="Texture2D" path="res://assets/ui/provisional/icono_libro.png" id="6_bol"]
+[ext_resource type="Script" uid="uid://j6swil82lpwk" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://cb4kjpjmb27xe" path="res://scripts/ui/barra_estamina.gd" id="2_bar"]
+[ext_resource type="Script" uid="uid://q4s1jgbslxg3" path="res://scripts/ui/contador_monedas.gd" id="3_mon"]
+[ext_resource type="Texture2D" uid="uid://d30qfhyo3tefp" path="res://assets/ui/provisional/ranura_objeto.png" id="4_ran"]
+[ext_resource type="Texture2D" uid="uid://ies4vs6m3fbn" path="res://assets/ui/provisional/icono_espada.png" id="5_esp"]
+[ext_resource type="Texture2D" uid="uid://dvf0vpwivckdg" path="res://assets/ui/provisional/icono_libro.png" id="6_bol"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 5

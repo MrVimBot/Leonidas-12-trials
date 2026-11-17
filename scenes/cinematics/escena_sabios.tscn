@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3]
 
-[ext_resource type="Script" path="res://scripts/cinematics/escena_sabios.gd" id="1_esc"]
-[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="12_dia"]
+[ext_resource type="Script" uid="uid://by8j7fi76vjkj" path="res://scripts/cinematics/escena_sabios.gd" id="1_esc"]
+[ext_resource type="Script" uid="uid://bwo4r65ndogtj" path="res://scripts/systems/dialogo.gd" id="12_dia"]
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_bienvenida.tres" id="2_bie"]
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_mision.tres" id="3_mis"]
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_espada.tres" id="4_esp"]

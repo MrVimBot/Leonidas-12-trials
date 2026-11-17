@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/menu_principal.gd" id="1_men"]
+[ext_resource type="Script" uid="uid://cfwcu04p8suux" path="res://scripts/ui/menu_principal.gd" id="1_men"]
 [ext_resource type="Texture2D" uid="uid://clo0w4gh4oba1" path="res://assets/backgrounds/cinematica/fondo_1.png" id="2_fon"]
-[ext_resource type="Script" path="res://scripts/ui/botones_con_marca.gd" id="3_bot"]
+[ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="3_bot"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 16.0

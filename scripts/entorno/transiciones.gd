@@ -12,6 +12,10 @@ extends RefCounted
 ## aplicar dos veces da lo mismo. Cualquier tile de la familia sirve para pintar el área.
 ## Anchura mínima: 2 tiles (una franja de 1 tile no tiene dibujo y se queda en pasto).
 ##
+## Las coordenadas de FAMILIAS se repiten a propósito respecto a tools/zonas/tiles.gd (este
+## archivo es código del juego/editor y no puede depender de tools/, que no se exporta): si la
+## artista mueve un tile, cambiar los dos.
+##
 ## Lo usan tools/build_tilesets.gd (colisiones), tools/zonas/constructor_zona.gd y la
 ## herramienta del editor AutoTransiciones.
 
