@@ -1,10 +1,38 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=25 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/menu_libro.gd" id="1_lib"]
+[ext_resource type="Script" uid="uid://cvt7jxiwxaamc" path="res://scripts/ui/menu_libro.gd" id="1_lib"]
+[ext_resource type="Theme" path="res://resources/ui/tema_libro.tres" id="2_tema"]
+[ext_resource type="PackedScene" path="res://scenes/ui/libro/casilla_libro.tscn" id="3_cas"]
+[ext_resource type="Texture2D" uid="uid://cx5qphhblhut" path="res://assets/ui/libro/cobertura.png" id="4_cobertura"]
+[ext_resource type="Texture2D" uid="uid://dp51mjatjq58h" path="res://assets/ui/libro/seleccion.png" id="5_seleccion"]
+[ext_resource type="Texture2D" uid="uid://cn572qrilh65k" path="res://assets/ui/libro/pag_1.png" id="6_pag_1"]
+[ext_resource type="Texture2D" uid="uid://wsbwdonyf06p" path="res://assets/ui/libro/pag_2y3.png" id="7_pag_2y3"]
+[ext_resource type="Texture2D" uid="uid://b6a4gcjppq7sj" path="res://assets/ui/libro/pag_4y5.png" id="8_pag_4y5"]
+[ext_resource type="Texture2D" uid="uid://bqexosdu7sc5y" path="res://assets/ui/libro/salir.png" id="9_salir"]
+[ext_resource type="Texture2D" uid="uid://qhnoskhjq5e8" path="res://assets/ui/libro/salir_apagada.png" id="10_salir_apagada"]
+[ext_resource type="Texture2D" uid="uid://c32dk2h8ynrc3" path="res://assets/ui/libro/pestana_importantes.png" id="11_pestana_importantes"]
+[ext_resource type="Texture2D" uid="uid://kgi3o383ae77" path="res://assets/ui/libro/pestana_importantes_apagada.png" id="12_pestana_importantes_apagada"]
+[ext_resource type="Texture2D" uid="uid://cljijaihb58ly" path="res://assets/ui/libro/pestana_inventario.png" id="13_pestana_inventario"]
+[ext_resource type="Texture2D" uid="uid://dlkiff14us4ss" path="res://assets/ui/libro/pestana_inventario_apagada.png" id="14_pestana_inventario_apagada"]
+[ext_resource type="Texture2D" uid="uid://ccckt0xc2wh3b" path="res://assets/ui/libro/pestana_mapa.png" id="15_pestana_mapa"]
+[ext_resource type="Texture2D" uid="uid://0003noardjgb" path="res://assets/ui/libro/pestana_mapa_apagada.png" id="16_pestana_mapa_apagada"]
+[ext_resource type="Texture2D" uid="uid://cp0dplqkmrtr7" path="res://assets/ui/libro/pestana_misiones.png" id="17_pestana_misiones"]
+[ext_resource type="Texture2D" uid="uid://b6asnsy12yf2d" path="res://assets/ui/libro/pestana_misiones_apagada.png" id="18_pestana_misiones_apagada"]
+[ext_resource type="Texture2D" uid="uid://de60k5y5cm4vc" path="res://assets/ui/libro/pestana_guardar.png" id="19_pestana_guardar"]
+[ext_resource type="Texture2D" uid="uid://bmcq6ll13t6pn" path="res://assets/ui/libro/pestana_guardar_apagada.png" id="20_pestana_guardar_apagada"]
+[ext_resource type="Script" path="res://scripts/ui/libro/pagina_inventario.gd" id="21_pag_inv"]
+[ext_resource type="Script" path="res://scripts/ui/libro/pagina_mapa.gd" id="22_pag_mapa"]
+[ext_resource type="Script" path="res://scripts/ui/libro/pagina_misiones.gd" id="23_pag_mis"]
+[ext_resource type="Script" path="res://scripts/ui/libro/pagina_guardar.gd" id="24_pag_gua"]
 
 [node name="MenuLibro" type="CanvasLayer"]
+process_mode = 3
 layer = 18
+visible = false
 script = ExtResource("1_lib")
+pliegos = Array[Texture2D]([ExtResource("6_pag_1"), ExtResource("7_pag_2y3"), ExtResource("8_pag_4y5")])
+pestanas_encendidas = Array[Texture2D]([ExtResource("11_pestana_importantes"), ExtResource("13_pestana_inventario"), ExtResource("15_pestana_mapa"), ExtResource("17_pestana_misiones"), ExtResource("19_pestana_guardar")])
+pestanas_apagadas = Array[Texture2D]([ExtResource("12_pestana_importantes_apagada"), ExtResource("14_pestana_inventario_apagada"), ExtResource("16_pestana_mapa_apagada"), ExtResource("18_pestana_misiones_apagada"), ExtResource("20_pestana_guardar_apagada")])
 
 [node name="Fondo" type="TextureRect" parent="."]
 texture_filter = 1
@@ -16,7 +44,6 @@ expand_mode = 1
 [node name="Oscuro" type="ColorRect" parent="."]
 offset_right = 480.0
 offset_bottom = 270.0
-mouse_filter = 2
 color = Color(0.04, 0.04, 0.1, 0.6)
 
 [node name="Libro" type="Control" parent="."]
@@ -25,38 +52,78 @@ anchors_preset = 0
 offset_right = 559.0
 offset_bottom = 300.0
 mouse_filter = 2
+theme = ExtResource("2_tema")
 
 [node name="Cobertura" type="TextureRect" parent="Libro"]
 offset_right = 559.0
 offset_bottom = 300.0
 mouse_filter = 2
+texture = ExtResource("4_cobertura")
 
 [node name="Pagina" type="TextureRect" parent="Libro"]
 offset_right = 559.0
 offset_bottom = 300.0
 mouse_filter = 2
+texture = ExtResource("7_pag_2y3")
 
 [node name="Pestanas" type="Control" parent="Libro"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Importantes" type="TextureRect" parent="Libro/Pestanas"]
-mouse_filter = 2
+[node name="Importantes" type="TextureButton" parent="Libro/Pestanas"]
+offset_left = 52.0
+offset_top = 19.0
+offset_right = 83.0
+offset_bottom = 47.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("12_pestana_importantes_apagada")
 
-[node name="Inventario" type="TextureRect" parent="Libro/Pestanas"]
-mouse_filter = 2
+[node name="Inventario" type="TextureButton" parent="Libro/Pestanas"]
+offset_left = 91.0
+offset_top = 11.0
+offset_right = 122.0
+offset_bottom = 39.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("13_pestana_inventario")
 
-[node name="Mapa" type="TextureRect" parent="Libro/Pestanas"]
-mouse_filter = 2
+[node name="Mapa" type="TextureButton" parent="Libro/Pestanas"]
+offset_left = 129.0
+offset_top = 19.0
+offset_right = 160.0
+offset_bottom = 47.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("16_pestana_mapa_apagada")
 
-[node name="Misiones" type="TextureRect" parent="Libro/Pestanas"]
-mouse_filter = 2
+[node name="Misiones" type="TextureButton" parent="Libro/Pestanas"]
+offset_left = 168.0
+offset_top = 19.0
+offset_right = 199.0
+offset_bottom = 47.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("18_pestana_misiones_apagada")
 
-[node name="Guardar" type="TextureRect" parent="Libro/Pestanas"]
-mouse_filter = 2
+[node name="Guardar" type="TextureButton" parent="Libro/Pestanas"]
+offset_left = 206.0
+offset_top = 19.0
+offset_right = 237.0
+offset_bottom = 47.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("20_pestana_guardar_apagada")
 
-[node name="Salir" type="TextureRect" parent="Libro"]
-mouse_filter = 2
+[node name="Salir" type="TextureButton" parent="Libro"]
+offset_left = 11.0
+offset_top = 239.0
+offset_right = 42.0
+offset_bottom = 267.0
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("10_salir_apagada")
+texture_hover = ExtResource("9_salir")
 
 [node name="Contenido" type="Control" parent="Libro"]
 anchors_preset = 0
@@ -64,25 +131,429 @@ offset_right = 559.0
 offset_bottom = 300.0
 mouse_filter = 2
 
-[node name="Importantes" type="Control" parent="Libro/Contenido"]
+[node name="Importantes" type="Control" parent="Libro/Contenido" node_paths=PackedStringArray("casillas", "suelta", "texto")]
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("21_pag_inv")
+tipo = 1
+casillas = NodePath("CasillasImportantes")
+suelta = NodePath("SueltaImportantes")
+texto = NodePath("TextoImportantes")
+
+[node name="CasillasImportantes" type="Control" parent="Libro/Contenido/Importantes"]
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Inventario" type="Control" parent="Libro/Contenido"]
+[node name="Casilla1" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 316.0
+offset_top = 85.0
+offset_right = 350.0
+offset_bottom = 119.0
+
+[node name="Casilla2" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 362.0
+offset_top = 85.0
+offset_right = 396.0
+offset_bottom = 119.0
+
+[node name="Casilla3" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 409.0
+offset_top = 85.0
+offset_right = 443.0
+offset_bottom = 119.0
+
+[node name="Casilla4" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 456.0
+offset_top = 85.0
+offset_right = 490.0
+offset_bottom = 119.0
+
+[node name="Casilla5" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 316.0
+offset_top = 129.0
+offset_right = 350.0
+offset_bottom = 163.0
+
+[node name="Casilla6" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 362.0
+offset_top = 129.0
+offset_right = 396.0
+offset_bottom = 163.0
+
+[node name="Casilla7" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 409.0
+offset_top = 129.0
+offset_right = 443.0
+offset_bottom = 163.0
+
+[node name="Casilla8" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 456.0
+offset_top = 129.0
+offset_right = 490.0
+offset_bottom = 163.0
+
+[node name="Casilla9" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 316.0
+offset_top = 173.0
+offset_right = 350.0
+offset_bottom = 207.0
+
+[node name="Casilla10" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 362.0
+offset_top = 173.0
+offset_right = 396.0
+offset_bottom = 207.0
+
+[node name="Casilla11" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 409.0
+offset_top = 173.0
+offset_right = 443.0
+offset_bottom = 207.0
+
+[node name="Casilla12" parent="Libro/Contenido/Importantes/CasillasImportantes" instance=ExtResource("3_cas")]
+offset_left = 456.0
+offset_top = 173.0
+offset_right = 490.0
+offset_bottom = 207.0
+
+[node name="SueltaImportantes" parent="Libro/Contenido/Importantes" instance=ExtResource("3_cas")]
+offset_left = 317.0
+offset_top = 229.0
+offset_right = 354.0
+offset_bottom = 266.0
+mouse_filter = 2
+con_cantidad = false
+
+[node name="TextoImportantes" type="Label" parent="Libro/Contenido/Importantes"]
+texture_filter = 2
+offset_left = 360.0
+offset_top = 227.0
+offset_right = 492.0
+offset_bottom = 271.0
+mouse_filter = 2
+autowrap_mode = 3
+clip_text = true
+
+[node name="Inventario" type="Control" parent="Libro/Contenido" node_paths=PackedStringArray("casillas", "suelta", "texto")]
 anchors_preset = 0
 mouse_filter = 2
+script = ExtResource("21_pag_inv")
+casillas = NodePath("CasillasInventario")
+suelta = NodePath("SueltaInventario")
+texto = NodePath("TextoInventario")
+
+[node name="CasillasInventario" type="Control" parent="Libro/Contenido/Inventario"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Casilla1" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 74.0
+offset_top = 85.0
+offset_right = 108.0
+offset_bottom = 119.0
+
+[node name="Casilla2" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 120.0
+offset_top = 85.0
+offset_right = 154.0
+offset_bottom = 119.0
+
+[node name="Casilla3" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 167.0
+offset_top = 85.0
+offset_right = 201.0
+offset_bottom = 119.0
+
+[node name="Casilla4" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 214.0
+offset_top = 85.0
+offset_right = 248.0
+offset_bottom = 119.0
+
+[node name="Casilla5" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 74.0
+offset_top = 129.0
+offset_right = 108.0
+offset_bottom = 163.0
+
+[node name="Casilla6" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 120.0
+offset_top = 129.0
+offset_right = 154.0
+offset_bottom = 163.0
+
+[node name="Casilla7" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 167.0
+offset_top = 129.0
+offset_right = 201.0
+offset_bottom = 163.0
+
+[node name="Casilla8" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 214.0
+offset_top = 129.0
+offset_right = 248.0
+offset_bottom = 163.0
+
+[node name="Casilla9" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 74.0
+offset_top = 173.0
+offset_right = 108.0
+offset_bottom = 207.0
+
+[node name="Casilla10" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 120.0
+offset_top = 173.0
+offset_right = 154.0
+offset_bottom = 207.0
+
+[node name="Casilla11" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 167.0
+offset_top = 173.0
+offset_right = 201.0
+offset_bottom = 207.0
+
+[node name="Casilla12" parent="Libro/Contenido/Inventario/CasillasInventario" instance=ExtResource("3_cas")]
+offset_left = 214.0
+offset_top = 173.0
+offset_right = 248.0
+offset_bottom = 207.0
+
+[node name="SueltaInventario" parent="Libro/Contenido/Inventario" instance=ExtResource("3_cas")]
+offset_left = 75.0
+offset_top = 229.0
+offset_right = 112.0
+offset_bottom = 266.0
+mouse_filter = 2
+con_cantidad = false
+
+[node name="TextoInventario" type="Label" parent="Libro/Contenido/Inventario"]
+texture_filter = 2
+offset_left = 118.0
+offset_top = 227.0
+offset_right = 250.0
+offset_bottom = 271.0
+mouse_filter = 2
+autowrap_mode = 3
+clip_text = true
 
 [node name="Mapa" type="Control" parent="Libro/Contenido"]
+texture_filter = 2
 anchors_preset = 0
 mouse_filter = 2
+script = ExtResource("22_pag_mapa")
+
+[node name="Cartela" type="Label" parent="Libro/Contenido/Mapa"]
+unique_name_in_owner = true
+texture_filter = 2
+offset_left = 457.0
+offset_top = 246.0
+offset_right = 495.0
+offset_bottom = 262.0
+mouse_filter = 2
+text = "Pueblo"
+horizontal_alignment = 1
 
 [node name="Misiones" type="Control" parent="Libro/Contenido"]
 anchors_preset = 0
 mouse_filter = 2
+script = ExtResource("23_pag_mis")
+
+[node name="Renglones" type="Control" parent="Libro/Contenido/Misiones"]
+unique_name_in_owner = true
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Principal1" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 99.0
+offset_right = 244.0
+offset_bottom = 115.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Principal1"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
+
+[node name="Principal2" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 125.0
+offset_right = 244.0
+offset_bottom = 141.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Principal2"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
+
+[node name="Principal3" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 152.0
+offset_right = 244.0
+offset_bottom = 168.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Principal3"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
+
+[node name="Secundaria1" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 194.0
+offset_right = 244.0
+offset_bottom = 210.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Secundaria1"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
+
+[node name="Secundaria2" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 220.0
+offset_right = 244.0
+offset_bottom = 236.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Secundaria2"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
+
+[node name="Secundaria3" type="Label" parent="Libro/Contenido/Misiones/Renglones"]
+texture_filter = 2
+offset_left = 76.0
+offset_top = 247.0
+offset_right = 244.0
+offset_bottom = 263.0
+mouse_filter = 2
+clip_text = true
+
+[node name="Tachado" type="ColorRect" parent="Libro/Contenido/Misiones/Renglones/Secundaria3"]
+visible = false
+offset_top = 7.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.33, 0.45)
 
 [node name="Guardar" type="Control" parent="Libro/Contenido"]
 anchors_preset = 0
 mouse_filter = 2
+script = ExtResource("24_pag_gua")
+
+[node name="TiempoJugado" type="Label" parent="Libro/Contenido/Guardar"]
+unique_name_in_owner = true
+texture_filter = 2
+offset_left = 401.0
+offset_top = 166.0
+offset_right = 481.0
+offset_bottom = 182.0
+mouse_filter = 2
+text = "0:00"
+
+[node name="JefesDerrotados" type="Label" parent="Libro/Contenido/Guardar"]
+unique_name_in_owner = true
+texture_filter = 2
+offset_left = 418.0
+offset_top = 181.0
+offset_right = 478.0
+offset_bottom = 197.0
+mouse_filter = 2
+text = "0"
+
+[node name="BotonGuardar" type="TextureButton" parent="Libro/Contenido/Guardar"]
+offset_left = 372.0
+offset_top = 222.0
+offset_right = 434.0
+offset_bottom = 240.0
+focus_mode = 0
+action_mode = 0
+
+[node name="MarcaGuardar" type="Label" parent="Libro/Contenido/Guardar/BotonGuardar"]
+unique_name_in_owner = true
+texture_filter = 2
+offset_left = -8.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = 17.0
+mouse_filter = 2
+text = ">"
+
+[node name="MensajeGuardar" type="Label" parent="Libro/Contenido/Guardar"]
+unique_name_in_owner = true
+texture_filter = 2
+offset_left = 305.0
+offset_top = 197.0
+offset_right = 497.0
+offset_bottom = 213.0
+mouse_filter = 2
+horizontal_alignment = 1
 
 [node name="Seleccion" type="TextureRect" parent="Libro"]
+offset_left = 71.0
+offset_top = 81.0
+offset_right = 110.0
+offset_bottom = 121.0
 mouse_filter = 2
+texture = ExtResource("5_seleccion")
+
+[connection signal="pressed" from="Libro/Pestanas/Importantes" to="." method="_on_pestana_pressed" binds= [0]]
+[connection signal="pressed" from="Libro/Pestanas/Inventario" to="." method="_on_pestana_pressed" binds= [1]]
+[connection signal="pressed" from="Libro/Pestanas/Mapa" to="." method="_on_pestana_pressed" binds= [2]]
+[connection signal="pressed" from="Libro/Pestanas/Misiones" to="." method="_on_pestana_pressed" binds= [3]]
+[connection signal="pressed" from="Libro/Pestanas/Guardar" to="." method="_on_pestana_pressed" binds= [4]]
+[connection signal="pressed" from="Libro/Salir" to="." method="cerrar"]
+[connection signal="cursor_pedido" from="Libro/Contenido/Importantes" to="." method="_on_pagina_cursor_pedido"]
+[connection signal="usar_objeto" from="Libro/Contenido/Importantes" to="." method="_usar"]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla1" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [0]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla2" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [1]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla3" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [2]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla4" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [3]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla5" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [4]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla6" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [5]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla7" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [6]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla8" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [7]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla9" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [8]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla10" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [9]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla11" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [10]]
+[connection signal="pressed" from="Libro/Contenido/Importantes/CasillasImportantes/Casilla12" to="Libro/Contenido/Importantes" method="_on_casilla_pressed" binds= [11]]
+[connection signal="cursor_pedido" from="Libro/Contenido/Inventario" to="." method="_on_pagina_cursor_pedido"]
+[connection signal="usar_objeto" from="Libro/Contenido/Inventario" to="." method="_usar"]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla1" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [0]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla2" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [1]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla3" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [2]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla4" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [3]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla5" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [4]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla6" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [5]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla7" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [6]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla8" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [7]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla9" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [8]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla10" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [9]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla11" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [10]]
+[connection signal="pressed" from="Libro/Contenido/Inventario/CasillasInventario/Casilla12" to="Libro/Contenido/Inventario" method="_on_casilla_pressed" binds= [11]]
+[connection signal="cursor_pedido" from="Libro/Contenido/Guardar" to="." method="_on_pagina_cursor_pedido"]
+[connection signal="pide_guardar" from="Libro/Contenido/Guardar" to="." method="_guardar"]
+[connection signal="pressed" from="Libro/Contenido/Guardar/BotonGuardar" to="Libro/Contenido/Guardar" method="_on_boton_guardar_pressed"]

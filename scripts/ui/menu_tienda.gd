@@ -13,10 +13,10 @@ extends CanvasLayer
 ## Bloquea al jugador mientras está abierto (motivo &"tienda"). Las monedas se ven en el HUD.
 ## Diseño PROVISIONAL: no hay maqueta de la tienda en los PDF (ver guia_interfaz.md).
 
+## Justo después de abrirse (para que, p. ej., las burbujas de los NPC se escondan).
+signal se_abrio
 signal cerrado
 
-const FILAS_VISIBLES := 2
-const ALTO_FILA := 16
 const MARCA := "> "
 ## Segundos que se ve un aviso ("¡Gracias!", "No te alcanza") antes de volver a la descripción.
 const DURACION_AVISO := 1.4
@@ -30,7 +30,9 @@ var _indice := 0
 var _desplazamiento := 0
 var _aviso := ""
 var _tiempo_aviso := 0.0
-var _filas: Array[Dictionary] = []
+## Las filas de la lista (hijos de Caja/Lista en la escena). Si hay más artículos que filas,
+## la lista se desplaza.
+var _filas: Array[Fila] = []
 
 @onready var caja: Control = $Caja
 @onready var nombre: Label = $Caja/Nombre
@@ -42,29 +44,14 @@ var _filas: Array[Dictionary] = []
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	caja.visible = false
-	# Cada fila: "> " · icono · nombre (cuántos tienes) · precio a la derecha.
-	for i in FILAS_VISIBLES:
-		var y := i * ALTO_FILA
-		var marca := _etiqueta(Vector2(0, y), 18)
-		var icono := TextureRect.new()
-		icono.position = Vector2(18, y + 3)
-		icono.size = Vector2(10, 10)
-		icono.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
-		icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		lista.add_child(icono)
-		var texto := _etiqueta(Vector2(30, y), 150)
-		var precio := _etiqueta(Vector2(180, y), 60)
-		precio.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		_filas.append({ "marca": marca, "icono": icono, "texto": texto, "precio": precio })
-
-
-func _etiqueta(pos: Vector2, ancho: float) -> Label:
-	var l := Label.new()
-	l.position = pos
-	l.size = Vector2(ancho, ALTO_FILA)
-	l.clip_text = true
-	lista.add_child(l)
-	return l
+	# Cada fila de la escena: "> " · icono · nombre (cuántos tienes) · precio a la derecha.
+	for nodo in lista.get_children():
+		var fila := Fila.new()
+		fila.marca = nodo.get_node(^"Marca") as Label
+		fila.icono = nodo.get_node(^"Icono") as TextureRect
+		fila.texto = nodo.get_node(^"Texto") as Label
+		fila.precio = nodo.get_node(^"Precio") as Label
+		_filas.append(fila)
 
 
 ## Abre el menú con los artículos de `tienda` y espera a que se cierre.
@@ -76,6 +63,7 @@ func abrir(tienda: ComponenteTienda) -> void:
 	_desplazamiento = 0
 	_aviso = ""
 	abierto = true
+	se_abrio.emit()
 	nombre.text = CajaDialogo.adaptar_a_fuente(tienda.nombre_vendedor)
 	caja.visible = true
 	var jugador := _jugador()
@@ -132,8 +120,8 @@ func _mover(paso: int) -> void:
 	_indice = wrapi(_indice + paso, 0, _opciones())
 	if _indice < _desplazamiento:
 		_desplazamiento = _indice
-	elif _indice >= _desplazamiento + FILAS_VISIBLES:
-		_desplazamiento = _indice - FILAS_VISIBLES + 1
+	elif _indice >= _desplazamiento + _filas.size():
+		_desplazamiento = _indice - _filas.size() + 1
 	_aviso = ""
 	_refrescar()
 
@@ -160,7 +148,7 @@ func _avisar(t: String) -> void:
 
 func _refrescar() -> void:
 	var n := _tienda.articulos.size()
-	for i in FILAS_VISIBLES:
+	for i in _filas.size():
 		var fila := _filas[i]
 		var opcion := _desplazamiento + i
 		fila.marca.text = MARCA if opcion == _indice else ""
@@ -199,3 +187,11 @@ func _cerrar() -> void:
 
 func _jugador() -> Jugador:
 	return Jugador.actual(self)
+
+
+## Los cuatro nodos de una fila de la lista.
+class Fila:
+	var marca: Label
+	var icono: TextureRect
+	var texto: Label
+	var precio: Label

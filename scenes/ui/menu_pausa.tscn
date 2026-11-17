@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ca528nsv7o8om"]
 
 [ext_resource type="Script" uid="uid://byxl57yte0473" path="res://scripts/ui/menu_pausa.gd" id="1_pau"]
+[ext_resource type="Script" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vacio"]
 
@@ -84,6 +85,7 @@ horizontal_alignment = 1
 [node name="Botones" type="VBoxContainer" parent="Raiz/Centro/PanelMenu/VBox" unique_id=1444493561]
 unique_name_in_owner = true
 layout_mode = 2
+script = ExtResource("2_bot")
 
 [node name="Continuar" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=537532698]
 unique_name_in_owner = true

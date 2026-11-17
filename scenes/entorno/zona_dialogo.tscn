@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c7k2m9xq4ndpa"]
+
+[ext_resource type="Script" uid="uid://br8btnpahhgfj" path="res://scripts/componentes/zona_dialogo.gd" id="1_dia"]
+
+[node name="ZonaDialogo" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_dia")
+
+[node name="Burbuja" type="Sprite2D" parent="."]
+visible = false
+z_index = 10
+centered = false

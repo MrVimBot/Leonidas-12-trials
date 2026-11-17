@@ -2,6 +2,8 @@
 class_name BarraEstamina
 extends Control
 ## Barra pixelada de estamina (sin arte todavía: se dibuja con rectángulos).
+## Es una barra genérica: además de la estamina, el HUD la usa como medidor de viento del
+## barco (`MedidorViento`, con otros colores). No se renombra la clase para no tocar escenas.
 ## Colores sacados de la paleta del juego (borde de la caja de diálogo, hierba clara).
 
 ## 0..1

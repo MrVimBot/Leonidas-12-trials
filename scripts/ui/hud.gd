@@ -10,6 +10,7 @@ extends CanvasLayer
 ##
 ## Va dentro de Game; se asignan `jugador` y `game` en el Inspector. Solo ESCUCHA señales:
 ##   jugador.vida.cambio, jugador.estamina.cambio, EstadoJuego.monedas_cambio,
+##   EstadoJuego.objetos_cambio y estado_restablecido (espada y libro),
 ##   Game.modo_cambio → `_al_cambiar_modo` (conectada en game.tscn; al ir en barco los
 ##   corazones son los del barco). Como la conexión está en la escena, ya existe cuando
 ##   Game emite la primera en su `_ready` (después del de este hijo), también si la
@@ -36,14 +37,15 @@ var _tiempo_estamina_llena := 0.0
 var _vida: ComponenteVida = null
 var _en_barco := false
 
-@onready var corazones: HBoxContainer = $Corazones
-@onready var icono_objeto: TextureRect = $RanuraObjeto/Icono
-@onready var barra_estamina: BarraEstamina = $BarraEstamina
-@onready var libro: CanvasItem = $Inventario
-@onready var monedas: ContadorMonedas = $Monedas
-@onready var ranura_objeto: Control = $RanuraObjeto
-@onready var medidor_viento: BarraEstamina = $MedidorViento
-@onready var pista_viento: Label = $MedidorViento/Pista
+@onready var corazones: HBoxContainer = %Corazones
+@onready var icono_objeto: TextureRect = %Icono
+@onready var barra_estamina: BarraEstamina = %BarraEstamina
+@onready var libro: CanvasItem = %Inventario
+@onready var monedas: ContadorMonedas = %Monedas
+@onready var ranura_objeto: Control = %RanuraObjeto
+## Es una `BarraEstamina` (barra genérica) usada aquí como medidor de viento.
+@onready var medidor_viento: BarraEstamina = %MedidorViento
+@onready var pista_viento: Label = %Pista
 
 
 func _ready() -> void:
@@ -59,6 +61,9 @@ func _ready() -> void:
 		_al_cambiar_estamina(jugador.estamina.estamina, jugador.estamina.estamina_max) # valor inicial
 	EstadoJuego.monedas_cambio.connect(_al_cambiar_monedas)
 	_al_cambiar_monedas(EstadoJuego.monedas)
+	EstadoJuego.objetos_cambio.connect(_al_cambiar_objetos)
+	EstadoJuego.estado_restablecido.connect(_actualizar_objetos)
+	_actualizar_objetos()
 	barra_estamina.modulate.a = 0.0
 	medidor_viento.visible = false
 
@@ -95,11 +100,6 @@ func _process(delta: float) -> void:
 		return
 	if jugador == null:
 		return
-	# Objeto equipado: de momento solo la espada (la dan los sabios).
-	icono_objeto.visible = jugador.tiene_espada
-	# El libro (inventario + mapa + guardar) lo da Kathita al salir de casa.
-	libro.visible = EstadoJuego.tiene_libro
-
 	# Estamina sobre la cabeza de Leonidas; se desvanece un rato después de llenarse.
 	var en_pantalla := jugador.get_global_transform_with_canvas().origin
 	barra_estamina.position = (en_pantalla + posicion_estamina).round()
@@ -110,6 +110,19 @@ func _process(delta: float) -> void:
 	else:
 		_tiempo_estamina_llena = 0.0
 		barra_estamina.modulate.a = 1.0
+
+
+func _al_cambiar_objetos(_id: StringName, _cantidad: int) -> void:
+	_actualizar_objetos()
+
+
+## Objeto equipado y libro: solo cambian al ganar/perder objetos o al reiniciar/cargar la
+## partida (señales de EstadoJuego), no hace falta mirarlos cada fotograma.
+func _actualizar_objetos() -> void:
+	# Objeto equipado: de momento solo la espada (la dan los sabios).
+	icono_objeto.visible = EstadoJuego.tiene_espada
+	# El libro (inventario + mapa + guardar) lo da Kathita al salir de casa.
+	libro.visible = EstadoJuego.tiene_libro
 
 
 func _al_cambiar_vida(vida: int, vida_max: int) -> void:

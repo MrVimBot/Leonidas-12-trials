@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=2 format=3]
+
+[ext_resource type="FontFile" uid="uid://b7xb34lqyqhxs" path="res://assets/fonts/gravity_bold.otf" id="1_fnt"]
+
+[resource]
+default_font = ExtResource("1_fnt")
+default_font_size = 9
+Label/colors/font_color = Color(0.10980392, 0.13333334, 0.32941177, 1)
+Label/constants/line_spacing = -2

@@ -18,8 +18,9 @@ extends CharacterBody2D
 ## `dialogo` se puede cambiar en juego (p. ej. la escena de los sabios): pasa a su ZonaDialogo.
 ##
 ## `dialogo`, `tienda`, `burbuja` y `posicion_burbuja` son una fachada para el Inspector: se
-## copian a su hijo ZonaDialogo en `_enter_tree` (único sitio; antes del `_ready` de los
-## hijos, donde ZonaDialogo crea su burbuja) y `dialogo` además se reenvía al cambiarlo.
+## copian a su hijo ZonaDialogo (instancia de scenes/entorno/zona_dialogo.tscn) en
+## `_enter_tree` (único sitio; antes del `_ready` de los hijos, donde ZonaDialogo aplica su
+## burbuja) y `dialogo` además se reenvía al cambiarlo.
 
 ## QUIETO: fijo (`paseo = false`). PASEANDO: espera o camina, lo decide el componente.
 enum Estado { QUIETO, PASEANDO, HABLANDO }
@@ -74,7 +75,7 @@ var estado := Estado.QUIETO
 
 
 func _enter_tree() -> void:
-	# Antes del _ready de los hijos: ZonaDialogo crea su burbuja en su propio _ready. Las
+	# Antes del _ready de los hijos: ZonaDialogo pone su burbuja en su propio _ready. Las
 	# referencias a nodos (`tienda`) ya están resueltas: se asignan al instanciar la escena.
 	var zona := get_node_or_null(^"%ZonaDialogo") as ZonaDialogo
 	if zona and not Engine.is_editor_hint():

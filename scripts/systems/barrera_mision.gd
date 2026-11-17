@@ -22,6 +22,8 @@ enum Requisito { MISION, VOLTERETA }
 ## Hacia dónde retrocede Leonidas (hacia dentro del pueblo).
 @export var direccion_retroceso := Vector2.DOWN
 @export var distancia_retroceso := 24.0
+## Velocidad (px/s) a la que Leonidas retrocede.
+@export var velocidad_retroceso := 80.0
 ## Destello blanco (el "rayo" de Zeus) antes de hablar.
 @export var destello := true
 
@@ -30,14 +32,8 @@ var _en_curso := false
 var _jugador: Jugador = null
 var _avisos := 0 # veces que ha parado esta barrera (requisito VOLTERETA)
 
-
-func _ready() -> void:
-	# Capas en código (de momento): igual que SalidaZona y ZonaDialogo, para no depender
-	# de que cada instancia de la escena las traiga bien puestas.
-	collision_layer = 0
-	collision_mask = Capas.JUGADOR
-	monitorable = false
-	body_entered.connect(_al_entrar)
+## Rectángulo blanco a pantalla completa del destello (en la escena, con alfa 0).
+@onready var _destello: ColorRect = %Destello
 
 
 func _al_entrar(cuerpo: Node2D) -> void:
@@ -77,22 +73,13 @@ func _detener(jugador: Jugador) -> void:
 	await Dialogos.mostrar(d)
 
 	# Leonidas da media vuelta y vuelve unos pasos hacia el pueblo.
-	await jugador.caminar_hasta(jugador.global_position + dir * distancia_retroceso, 80.0)
+	await jugador.caminar_hasta(jugador.global_position + dir * distancia_retroceso, velocidad_retroceso)
 	jugador.desbloquear(&"escena")
 	_jugador = null
 
 
 func _destellar() -> void:
-	var capa := CanvasLayer.new()
-	capa.layer = 50
-	var rect := ColorRect.new()
-	rect.color = Color(1, 1, 1, 0)
-	rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	capa.add_child(rect)
-	add_child(capa)
 	var t := create_tween()
-	t.tween_property(rect, ^"color:a", 0.8, 0.08)
-	t.tween_property(rect, ^"color:a", 0.0, 0.35)
+	t.tween_property(_destello, ^"color:a", 0.8, 0.08)
+	t.tween_property(_destello, ^"color:a", 0.0, 0.35)
 	await t.finished
-	capa.queue_free()

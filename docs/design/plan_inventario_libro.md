@@ -140,8 +140,8 @@ juego (diálogos, tienda, menú) sigue con Perfect DOS VGA.
 - Importación: **con** antialiasing en grises (sin él las letras salen rotas a 10 px), sin
   subpíxel (`subpixel_positioning` desactivado) y hinting ligero. Es lo contrario que la
   fuente DOS. Color de tinta: el azul oscuro de los rótulos, #1c2254.
-- Tema propio dentro de la escena del libro (como el del menú principal), para no tocar
-  `resources/ui/tema.tres`.
+- Tema propio del libro (`resources/ui/tema_libro.tres`, asignado al nodo `Libro` de la
+  escena), para no tocar `resources/ui/tema.tres`.
 - **Arte:** las páginas actuales traen pintados los títulos («Inventario», «Mapa»,
   «Misiones», «Principales», «Secundarias», «Guardar», «Objetos Importantes»), los rótulos
   de Guardar y el botón. Pedir a Lucía las páginas **sin ningún texto** (las líneas a los
@@ -194,7 +194,7 @@ Resumen de lo hecho en CLAUDE.md («El libro»). Diferencias con el plan de abaj
 - Autoload **`Libro`** = `scenes/ui/menu_libro.tscn` + `scripts/ui/menu_libro.gd`
   (`class_name MenuLibro`; mismo patrón que `Tienda`/`MenuTienda`). CanvasLayer por encima
   del HUD, `process_mode = ALWAYS`.
-- Nodos: `Cobertura`, `Pagina` (cambia de textura según el par), `Pestanas` (5 TextureRect),
+- Nodos: `Cobertura`, `Pagina` (cambia de textura según el par), `Pestanas` (5 TextureButton),
   `Salir`, `Seleccion`, y un nodo por página con su contenido.
 - Acciones `inventario`, `pagina_anterior`, `pagina_siguiente` en el mapa de entradas (por
   MCP si el editor está abierto).

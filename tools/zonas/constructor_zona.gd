@@ -262,9 +262,7 @@ func instancia(grupo: String, ruta_escena: String, pos: Vector2) -> Node:
 ## Cartel con ZonaDialogo (como _poner_cartel de build_pueblo.gd).
 func cartel(pos: Vector2, ruta_dialogo: String) -> Node2D:
 	var c := deco("Carteles", "cartel", pos)
-	var zona := Area2D.new()
-	zona.name = "ZonaDialogo"
-	zona.set_script(load("res://scripts/componentes/zona_dialogo.gd"))
+	var zona := (load("res://scenes/entorno/zona_dialogo.tscn") as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Area2D
 	_agregar(c, zona)
 	zona.set("dialogo", load(ruta_dialogo))
 	zona.set("posicion_burbuja", Vector2(0, -42))

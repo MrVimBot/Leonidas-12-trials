@@ -321,9 +321,7 @@ func _poner_objetos(padre: Node) -> void:
 
 func _poner_cartel(padre: Node) -> void:
 	var cartel := _deco(padre, "Cartel", "cartel", _p(676, 958))
-	var zona := Area2D.new()
-	zona.name = "ZonaDialogo"
-	zona.set_script(load("res://scripts/componentes/zona_dialogo.gd"))
+	var zona := (load("res://scenes/entorno/zona_dialogo.tscn") as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Area2D
 	_agregar(cartel, zona)
 	zona.set("dialogo", load("res://resources/dialogues/cartel_pueblo.tres"))
 	zona.set("posicion_burbuja", Vector2(0, -42))

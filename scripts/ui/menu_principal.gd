@@ -17,19 +17,17 @@ extends Control
 ## Teclado/mando: arriba/abajo eligen, Enter/Espacio/E/J (o A/B/X) confirman.
 ## El ratón también funciona (pasar por encima = seleccionar).
 
-const MARCA := "> "
-
 @export_file("*.tscn") var escena_jugar := "res://scenes/cinematics/cinematica_inicial.tscn"
 @export_file("*.tscn") var escena_continuar := "res://game.tscn"
 @export var duracion_fundido := 0.5
 
 var _eligiendo := true
 
-@onready var botones: VBoxContainer = $Panel/Botones
-@onready var boton_continuar: Button = $Panel/Botones/Continuar
-@onready var boton_jugar: Button = $Panel/Botones/Jugar
-@onready var boton_salir: Button = $Panel/Botones/Salir
-@onready var negro: ColorRect = $Fundido/Negro
+@onready var botones: BotonesConMarca = %Botones
+@onready var boton_continuar: Button = %Continuar
+@onready var boton_jugar: Button = %Jugar
+@onready var boton_salir: Button = %Salir
+@onready var negro: ColorRect = %Negro
 
 
 func _ready() -> void:
@@ -44,15 +42,8 @@ func _ready() -> void:
 			visibles.append(b)
 	visibles[0].focus_neighbor_top = visibles[0].get_path_to(visibles[-1])
 	visibles[-1].focus_neighbor_bottom = visibles[-1].get_path_to(visibles[0])
-	for b: Button in botones.get_children():
-		b.set_meta(&"texto", b.text)
-		b.focus_entered.connect(_actualizar_marcas)
-		b.mouse_entered.connect(b.grab_focus)
-	boton_continuar.pressed.connect(_continuar)
-	boton_jugar.pressed.connect(_jugar)
-	boton_salir.pressed.connect(_salir)
 	(boton_continuar if boton_continuar.visible else boton_jugar).grab_focus()
-	_actualizar_marcas()
+	botones.actualizar_marcas()
 	negro.color.a = 1.0
 	create_tween().tween_property(negro, ^"color:a", 0.0, duracion_fundido)
 
@@ -68,15 +59,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			b.pressed.emit()
 
 
-## Pone "> " delante del botón seleccionado.
-func _actualizar_marcas() -> void:
-	var foco := get_viewport().gui_get_focus_owner()
-	for b: Button in botones.get_children():
-		var base: String = b.get_meta(&"texto", b.text)
-		b.text = (MARCA + base) if b == foco else base
-
-
-func _jugar() -> void:
+## Fundido a negro y, al terminar, `accion`. Ignora pulsaciones mientras tanto.
+func _fundir_y(accion: Callable) -> void:
 	if not _eligiendo:
 		return
 	_eligiendo = false
@@ -85,23 +69,26 @@ func _jugar() -> void:
 	t.tween_property(negro, ^"color:a", 1.0, duracion_fundido)
 	await t.finished
 	Pantalla.modo_pintura(self, false)
+	accion.call()
+
+
+func _jugar() -> void:
+	_fundir_y(_empezar_partida)
+
+
+func _continuar() -> void:
+	_fundir_y(_cargar_partida)
+
+
+func _empezar_partida() -> void:
 	EstadoJuego.reiniciar() # partida nueva: monedas y manzanas a cero
 	get_tree().change_scene_to_file(escena_jugar)
 
 
-func _continuar() -> void:
-	if not _eligiendo:
-		return
-	_eligiendo = false
-	_bloquear_botones()
-	var t := create_tween()
-	t.tween_property(negro, ^"color:a", 1.0, duracion_fundido)
-	await t.finished
-	Pantalla.modo_pintura(self, false)
+func _cargar_partida() -> void:
 	if not EstadoJuego.cargar():
 		push_warning("MenuPrincipal: no se pudo leer la partida; se empieza una nueva")
-		EstadoJuego.reiniciar()
-		get_tree().change_scene_to_file(escena_jugar)
+		_empezar_partida()
 		return
 	get_tree().change_scene_to_file(escena_continuar)
 

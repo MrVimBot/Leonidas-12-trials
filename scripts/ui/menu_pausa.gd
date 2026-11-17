@@ -15,32 +15,19 @@ extends CanvasLayer
 ## «Filtro de daltonismo» todavía no hace nada (pendiente).
 ## «Salir» vuelve al menú principal (sin guardar: se guarda desde el libro).
 
-const MARCA := "> "
-
 var abierto := false
 
 var _viendo_controles := false
 
 @onready var _panel_menu: Control = %PanelMenu
 @onready var _panel_controles: Control = %PanelControles
-@onready var _botones: VBoxContainer = %Botones
+@onready var _botones: BotonesConMarca = %Botones
 @onready var _boton_continuar: Button = %Continuar
 @onready var _boton_controles: Button = %Controles
 
 
 func _ready() -> void:
 	visible = false
-	for b: Button in _botones.get_children():
-		b.set_meta(&"texto", b.text)
-		b.focus_entered.connect(_actualizar_marcas)
-		b.mouse_entered.connect(b.grab_focus)
-
-
-func _actualizar_marcas() -> void:
-	var foco := get_viewport().gui_get_focus_owner()
-	for b: Button in _botones.get_children():
-		var base: String = b.get_meta(&"texto")
-		b.text = (MARCA + base) if b == foco else base
 
 
 ## ¿Se puede abrir ahora? No con el libro, la tienda o un diálogo abiertos, ni
@@ -87,7 +74,7 @@ func _abrir() -> void:
 	visible = true
 	get_tree().paused = true
 	_boton_continuar.grab_focus()
-	_actualizar_marcas()
+	_botones.actualizar_marcas()
 
 
 func _cerrar() -> void:
