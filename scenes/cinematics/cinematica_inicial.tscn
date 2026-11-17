@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene format=3 uid="uid://dddg0cyenpcvn"]
 
 [ext_resource type="Script" uid="uid://30yhr4uyongo" path="res://scripts/cinematics/cinematica_inicial.gd" id="1_cin"]
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_cumpleanos.tres" id="2_cum"]
@@ -9,10 +9,11 @@
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_final.tres" id="7_fin"]
 [ext_resource type="Texture2D" uid="uid://dj5hxr2x8vgor" path="res://assets/backgrounds/cinematica/fondo_2.png" id="8_fon"]
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/cinematica_cama.tres" id="9_cam"]
+[ext_resource type="Texture2D" uid="uid://omdwfhs6gy1t" path="res://assets/backgrounds/cinematica/cuarto_leonidas.png" id="9_eyli5"]
 [ext_resource type="SpriteFrames" uid="uid://bioquihnq3yci" path="res://resources/sprite_frames/cinematica_mama.tres" id="10_mam"]
 [ext_resource type="Texture2D" uid="uid://tw5hy0hjo2o4" path="res://assets/sprites/cinematica/carta.png" id="11_pap"]
 
-[node name="CinematicaInicial" type="Node"]
+[node name="CinematicaInicial" type="Node" unique_id=626548038]
 script = ExtResource("1_cin")
 fondo_cumpleanos = ExtResource("8_fon")
 dialogo_cumpleanos = ExtResource("2_cum")
@@ -21,11 +22,13 @@ dialogo_mision = ExtResource("4_mis")
 dialogo_entrega = ExtResource("5_ent")
 texto_carta = ExtResource("6_car")
 dialogo_final = ExtResource("7_fin")
+fondo_cuarto = ExtResource("9_eyli5")
+mama_destino_x = 214.0
 
-[node name="Ilustracion" type="CanvasLayer" parent="."]
+[node name="Ilustracion" type="CanvasLayer" parent="." unique_id=356551264]
 layer = 0
 
-[node name="Pintura" type="TextureRect" parent="Ilustracion"]
+[node name="Pintura" type="TextureRect" parent="Ilustracion" unique_id=181552543]
 texture_filter = 2
 offset_right = 480.0
 offset_bottom = 270.0
@@ -33,28 +36,29 @@ mouse_filter = 2
 texture = ExtResource("8_fon")
 expand_mode = 1
 
-[node name="PinturaEncima" type="TextureRect" parent="Ilustracion"]
+[node name="PinturaEncima" type="TextureRect" parent="Ilustracion" unique_id=1085026360]
 texture_filter = 2
 offset_right = 480.0
 offset_bottom = 270.0
 mouse_filter = 2
 expand_mode = 1
 
-[node name="Cuarto" type="Node2D" parent="."]
-scale = Vector2(2, 2)
+[node name="Cuarto" type="Node2D" parent="." unique_id=1076412687]
 
-[node name="Oscuro" type="ColorRect" parent="Cuarto"]
-offset_right = 240.0
-offset_bottom = 135.0
+[node name="Oscuro" type="ColorRect" parent="Cuarto" unique_id=1049775685]
+offset_right = 480.0
+offset_bottom = 270.0
 mouse_filter = 2
 color = Color(0.227, 0.188, 0.204, 1)
 
-[node name="Fondo" type="Sprite2D" parent="Cuarto"]
-position = Vector2(120, 50)
+[node name="Fondo" type="Sprite2D" parent="Cuarto" unique_id=604994619]
+position = Vector2(241, 81)
+texture = ExtResource("9_eyli5")
 
-[node name="Provisional" type="Node2D" parent="Cuarto"]
+[node name="Provisional" type="Node2D" parent="Cuarto" unique_id=1834481800]
+visible = false
 
-[node name="Pared" type="ColorRect" parent="Cuarto/Provisional"]
+[node name="Pared" type="ColorRect" parent="Cuarto/Provisional" unique_id=2021983682]
 offset_left = 56.0
 offset_top = 14.0
 offset_right = 184.0
@@ -62,7 +66,7 @@ offset_bottom = 46.0
 mouse_filter = 2
 color = Color(0.42, 0.302, 0.235, 1)
 
-[node name="Suelo" type="ColorRect" parent="Cuarto/Provisional"]
+[node name="Suelo" type="ColorRect" parent="Cuarto/Provisional" unique_id=1847244719]
 offset_left = 56.0
 offset_top = 46.0
 offset_right = 184.0
@@ -70,24 +74,24 @@ offset_bottom = 84.0
 mouse_filter = 2
 color = Color(0.557, 0.416, 0.302, 1)
 
-[node name="Cama" type="AnimatedSprite2D" parent="Cuarto"]
-position = Vector2(92, 80)
+[node name="Cama" type="AnimatedSprite2D" parent="Cuarto" unique_id=1086336961]
+position = Vector2(172, 124)
 sprite_frames = ExtResource("9_cam")
 animation = &"dormido"
 centered = false
 offset = Vector2(-19, -47)
 
-[node name="Mama" type="AnimatedSprite2D" parent="Cuarto"]
-position = Vector2(200, 80)
+[node name="Mama" type="AnimatedSprite2D" parent="Cuarto" unique_id=1335959937]
+position = Vector2(315, 124)
 sprite_frames = ExtResource("10_mam")
 animation = &"caminar_regalo"
 centered = false
 offset = Vector2(-25, -50)
 
-[node name="Carta" type="CanvasLayer" parent="."]
+[node name="Carta" type="CanvasLayer" parent="." unique_id=1275037973]
 layer = 15
 
-[node name="Papel" type="TextureRect" parent="Carta"]
+[node name="Papel" type="TextureRect" parent="Carta" unique_id=721098291]
 texture_filter = 2
 offset_left = 162.0
 offset_top = 10.0
@@ -97,9 +101,8 @@ mouse_filter = 2
 texture = ExtResource("11_pap")
 expand_mode = 1
 
-[node name="Recorte" type="Control" parent="Carta/Papel"]
+[node name="Recorte" type="Control" parent="Carta/Papel" unique_id=2068940022]
 clip_contents = true
-layout_mode = 3
 anchors_preset = 0
 offset_left = 14.0
 offset_top = 22.0
@@ -107,22 +110,22 @@ offset_right = 139.0
 offset_bottom = 226.0
 mouse_filter = 2
 
-[node name="Texto" type="Label" parent="Carta/Papel/Recorte"]
+[node name="Texto" type="Label" parent="Carta/Papel/Recorte" unique_id=466573427]
 layout_mode = 0
 offset_right = 125.0
 offset_bottom = 8.0
 theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
 
-[node name="Flecha" type="Polygon2D" parent="Carta/Papel"]
+[node name="Flecha" type="Polygon2D" parent="Carta/Papel" unique_id=1970638768]
 position = Vector2(139, 236)
 color = Color(0.224, 0.075, 0.063, 1)
 polygon = PackedVector2Array(0, 0, 6, 0, 3, 4)
 
-[node name="Fundido" type="CanvasLayer" parent="."]
+[node name="Fundido" type="CanvasLayer" parent="." unique_id=1218236128]
 layer = 30
 
-[node name="Negro" type="ColorRect" parent="Fundido"]
+[node name="Negro" type="ColorRect" parent="Fundido" unique_id=529186450]
 offset_right = 480.0
 offset_bottom = 270.0
 mouse_filter = 2
