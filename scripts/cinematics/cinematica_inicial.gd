@@ -16,10 +16,12 @@ extends Node
 ## Las ilustraciones pintadas se ven a la resolución real de la ventana: mientras
 ## salen, la ventana pasa a content_scale_mode = CANVAS_ITEMS (en el modo normal
 ## "viewport" todo se dibuja a 480×270 y una pintura se vería pixelada). El cuarto
-## vuelve al modo normal, como el resto del juego.
+## vuelve al modo normal, como el resto del juego (`Pantalla.modo_pintura`).
 
 @export_file("*.tscn") var escena_siguiente := "res://game.tscn"
 @export var duracion_fundido := 0.6
+## Ilustración del cumpleaños (paso 1).
+@export var fondo_cumpleanos: Texture2D
 
 @export_group("Diálogos")
 @export var dialogo_cumpleanos: Dialogo
@@ -33,6 +35,10 @@ extends Node
 ## Fotogramas clave: <carpeta>/atardecer_00.jpg ... (se funden entre sí).
 @export_dir var carpeta_atardecer := "res://assets/backgrounds/cinematica/atardecer"
 @export var cuadros_atardecer := 39
+## Cuántos fotogramas clave se piden por adelantado (en hilo) mientras se funden los
+## actuales. Cada JPG ocupa ~8 MB ya descomprimido: precargar los 39 (~320 MB) es mucho
+## para la web, así que se mantiene solo una ventana deslizante.
+@export var cuadros_por_adelantado := 2
 @export var duracion_atardecer := 6.5
 @export var espera_antes_atardecer := 1.2
 @export var espera_despues_atardecer := 1.5
@@ -48,12 +54,17 @@ extends Node
 @export var velocidad_carta := 60.0
 
 var _saltando := false
+## `_terminar()` ya se ejecutó (por el final normal o por Esc): no se repite.
+var _terminada := false
+## Fotogramas clave del atardecer ya cargados (índice → textura) y pedidos al cargador.
+var _cuadros: Dictionary[int, Texture2D] = {}
+var _pedidos: Dictionary[int, bool] = {}
 ## La carta está abierta y acepta E/J (solo entonces esta escena los lee).
 var _leyendo_carta := false
 ## E/J pulsado con la carta abierta; lo pone `_unhandled_input` y lo gasta `_leer_carta`.
 var _pulsado := false
-var _modo_original: Window.ContentScaleMode
 
+@onready var ilustracion: CanvasLayer = $Ilustracion
 @onready var pintura: TextureRect = $Ilustracion/Pintura
 @onready var pintura_encima: TextureRect = $Ilustracion/PinturaEncima
 @onready var cuarto: Node2D = $Cuarto
@@ -70,7 +81,6 @@ var _modo_original: Window.ContentScaleMode
 
 
 func _ready() -> void:
-	_modo_original = get_window().content_scale_mode
 	negro.color.a = 1.0
 	cuarto.visible = false
 	carta.visible = false
@@ -94,8 +104,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _reproducir() -> void:
 	# 1. Cumpleaños
-	_modo_pintura(true)
-	pintura.texture = preload("res://assets/backgrounds/cinematica/fondo_2.png")
+	Pantalla.modo_pintura(self, true)
+	# Los primeros fotogramas del atardecer se cargan en hilo mientras sale el diálogo.
+	for i in cuadros_por_adelantado + 1:
+		_pedir_cuadro(i)
+	pintura.texture = fondo_cumpleanos
 	await _fundir(0.0)
 	if not await _dialogo(dialogo_cumpleanos): return
 	if not await _fundir(1.0): return
@@ -109,8 +122,8 @@ func _reproducir() -> void:
 	if not await _fundir(1.0): return
 
 	# 3. Cuarto
-	($Ilustracion as CanvasLayer).visible = false
-	_modo_pintura(false)
+	ilustracion.visible = false
+	Pantalla.modo_pintura(self, false)
 	cuarto.visible = true
 	cama.play(&"dormido")
 	mama.play(&"caminar_regalo")
@@ -160,12 +173,25 @@ func _fundir(alfa: float) -> bool:
 	return not _saltando
 
 
-func _modo_pintura(activo: bool) -> void:
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS if activo else _modo_original
+func _ruta_cuadro(i: int) -> String:
+	return "%s/atardecer_%02d.jpg" % [carpeta_atardecer, i]
 
 
+## Pide en hilo el fotograma clave `i` (si existe y no se había pedido).
+func _pedir_cuadro(i: int) -> void:
+	if i < 0 or i >= cuadros_atardecer or _pedidos.has(i):
+		return
+	_pedidos[i] = true
+	ResourceLoader.load_threaded_request(_ruta_cuadro(i))
+
+
+## Devuelve el fotograma clave `i`. Si aún no ha terminado de cargarse espera a que acabe
+## (en el peor caso, igual que un `load()`).
 func _cuadro_atardecer(i: int) -> Texture2D:
-	return load("%s/atardecer_%02d.jpg" % [carpeta_atardecer, i]) as Texture2D
+	if not _cuadros.has(i):
+		_pedir_cuadro(i)
+		_cuadros[i] = ResourceLoader.load_threaded_get(_ruta_cuadro(i)) as Texture2D
+	return _cuadros[i]
 
 
 ## Funde un fotograma clave con el siguiente: `pintura` lleva el actual y
@@ -185,6 +211,12 @@ func _atardecer() -> bool:
 			actual = i
 			pintura.texture = _cuadro_atardecer(i)
 			pintura_encima.texture = _cuadro_atardecer(i + 1)
+			# Ventana deslizante: se piden los siguientes y se sueltan los ya pasados.
+			for k in range(i + 2, i + 2 + cuadros_por_adelantado):
+				_pedir_cuadro(k)
+			for k in _cuadros.keys():
+				if k < i:
+					_cuadros.erase(k)
 		pintura_encima.modulate.a = pos - i
 	pintura.texture = _cuadro_atardecer(tramos)
 	pintura_encima.modulate.a = 0.0
@@ -209,7 +241,7 @@ func _leer_carta() -> bool:
 	texto.text = CajaDialogo.adaptar_a_fuente("\n\n".join(parrafos))
 	texto.position.y = 0.0
 
-	_modo_pintura(true) # el texto de la carta es pequeño: necesita la resolución real
+	Pantalla.modo_pintura(self, true) # el texto de la carta es pequeño: necesita la resolución real
 	carta.visible = true
 	papel.modulate.a = 0.0
 	var t := create_tween()
@@ -254,7 +286,7 @@ func _leer_carta() -> bool:
 	t.tween_property(papel, ^"modulate:a", 0.0, 0.3)
 	await t.finished
 	carta.visible = false
-	_modo_pintura(false)
+	Pantalla.modo_pintura(self, false)
 	return not _saltando
 
 
@@ -270,9 +302,12 @@ func _saltar() -> void:
 
 
 func _terminar() -> void:
+	if _terminada:
+		return
+	_terminada = true
 	# La carta de los sabios va al libro (Objetos Importantes) y abre la primera misión,
 	# también si se salta la cinemática.
 	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_CARTA)
 	EstadoJuego.empezar_mision(EstadoJuego.MISION_IR_AL_TEMPLO)
-	get_window().content_scale_mode = _modo_original
+	Pantalla.modo_pintura(self, false)
 	get_tree().change_scene_to_file(escena_siguiente)

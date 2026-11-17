@@ -411,6 +411,24 @@ func mirar_hacia(hacia: Vector2) -> void:
 	animador.reproducir(&"parado_objeto" if carga.cargando() else &"parado")
 
 
+## Para cinemáticas, estando bloqueado: camina en línea recta hasta `destino` a `velocidad`
+## px/s, mirando hacia allí con la animación `caminar`, y espera a llegar (`await`); al
+## terminar queda en `parado`. Si ya está a menos de 1 px, no hace nada.
+## OJO: mueve la posición con un tween, no con física: ATRAVIESA colisiones, así que el
+## destino debe ser alcanzable en línea recta. Solo vale con el jugador bloqueado (si no,
+## el cerebro y el movimiento pelearían con el tween).
+func caminar_hasta(destino: Vector2, velocidad := 60.0) -> void:
+	var distancia := global_position.distance_to(destino)
+	if distancia < 1.0:
+		return
+	animador.mirar(destino - global_position)
+	animador.reproducir(&"caminar")
+	var t := create_tween()
+	t.tween_property(self, ^"global_position", destino, distancia / velocidad)
+	await t.finished
+	animador.reproducir(&"parado")
+
+
 ## Bloqueado = quieto e invulnerable: si le golpearan, el daño lo pasaría a DANO y al
 ## acabar la animación volvería a NORMAL con el diálogo abierto.
 func _entrar_en_bloqueo() -> void:

@@ -18,6 +18,10 @@ extends Node2D
 ## Antes de la escena no tienen diálogo (ni burbuja). Al acabar, o si al cargar la zona
 ## ya se tiene la misión (`EstadoJuego.mision_recibida`), todos dicen `dialogo_recordatorio`.
 ## Textos PROVISIONALES (resources/dialogues/sabios_*.tres, los edita el guion).
+## Regla de las escenas guiadas: todo lo que se guarda se concede antes de devolver el
+## control (aquí, espada, misiones y `mision_recibida` de golpe, antes del tutorial de
+## ataque); lo que queda después debe poder reanudarse o no ser necesario (al cargar con
+## la misión, los sabios ya empiezan en su modo de recordatorio).
 
 @export var sabios: Array[NPC] = []
 ## Índice en `sabios` del que da unos pasos al frente y entrega la espada.
@@ -85,9 +89,9 @@ func _reproducir(jugador: Jugador) -> void:
 	_bloquear(jugador)
 
 	# Leonidas se coloca delante de los sabios.
-	await _caminar(jugador, punto_leonidas.global_position)
+	await jugador.caminar_hasta(punto_leonidas.global_position, velocidad)
 	_mirar_a_los_sabios(jugador)
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 
 	await Dialogos.mostrar(dialogo_bienvenida)
 	await Dialogos.mostrar(dialogo_mision)
@@ -96,7 +100,7 @@ func _reproducir(jugador: Jugador) -> void:
 	var sabio := _sabio_que_entrega()
 	var sitio := sabio.global_position if sabio else Vector2.ZERO
 	if sabio:
-		await _mover_sabio(sabio, sitio + Vector2(0, pasos_sabio))
+		await sabio.caminar_hasta(sitio + Vector2(0, pasos_sabio), velocidad)
 	await Dialogos.mostrar(dialogo_espada)
 
 	# Todo de golpe, antes de devolver el control: si se guarda a mitad (en el tutorial
@@ -111,7 +115,7 @@ func _reproducir(jugador: Jugador) -> void:
 	var icono: Texture2D = espada.icono if espada else null
 	# El diálogo no repinta la pose: el jugador ya está bloqueado por la escena.
 	jugador.mostrar_objeto_obtenido(icono, 0.0)
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	await Dialogos.mostrar_texto(texto_obtenido)
 	jugador.ocultar_objeto_obtenido()
 	_mirar_a_los_sabios(jugador)
@@ -124,11 +128,11 @@ func _reproducir(jugador: Jugador) -> void:
 	await jugador.ataque_empezado
 	_esperando_ataque = false
 	disparador.set_deferred(&"monitoring", false)
-	await get_tree().create_timer(espera_tras_ataque).timeout
+	await get_tree().create_timer(espera_tras_ataque, false).timeout
 	await Dialogos.mostrar(dialogo_despedida)
 
 	if sabio:
-		await _mover_sabio(sabio, sitio)
+		await sabio.caminar_hasta(sitio, velocidad)
 	_modo_despues()
 	queue_free()
 
@@ -142,7 +146,7 @@ func _al_salir(cuerpo: Node2D) -> void:
 	var jugador := cuerpo as Jugador
 	_bloquear(jugador)
 	await Dialogos.mostrar(dialogo_no_te_vayas)
-	await _caminar(jugador, punto_leonidas.global_position)
+	await jugador.caminar_hasta(punto_leonidas.global_position, velocidad)
 	_mirar_a_los_sabios(jugador)
 	_desbloquear(jugador)
 	_devolviendo = false
@@ -174,25 +178,3 @@ func _bloquear(jugador: Jugador) -> void:
 func _desbloquear(jugador: Jugador) -> void:
 	jugador.desbloquear(&"escena")
 	_bloqueado = null
-
-
-## Camina en línea recta (tween: el jugador está bloqueado y no se mueve solo).
-func _caminar(jugador: Jugador, destino: Vector2) -> void:
-	var distancia := jugador.global_position.distance_to(destino)
-	if distancia < 1.0:
-		return
-	jugador.animador.mirar(destino - jugador.global_position)
-	jugador.animador.reproducir(&"caminar")
-	var t := create_tween()
-	t.tween_property(jugador, ^"global_position", destino, distancia / velocidad)
-	await t.finished
-	jugador.animador.reproducir(&"parado")
-
-
-## Los sabios solo tienen vista de frente: caminan de frente también al volver.
-func _mover_sabio(sabio: NPC, destino: Vector2) -> void:
-	sabio.animar(&"caminar")
-	var t := create_tween()
-	t.tween_property(sabio, ^"global_position", destino, sabio.global_position.distance_to(destino) / velocidad)
-	await t.finished
-	sabio.animar(&"parado")

@@ -71,6 +71,7 @@ static func actual(desde: Node) -> Game:
 
 
 func _ready() -> void:
+	Pantalla.modo_pintura(self, false) # red de seguridad: el juego va en el modo normal
 	var depurar := OS.is_debug_build()
 	if depurar and depurar_saltar_kathita:
 		EstadoJuego.tiene_libro = true

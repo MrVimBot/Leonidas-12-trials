@@ -18,6 +18,9 @@ extends Node2D
 ## Los textos son PROVISIONALES (resources/dialogues/kathita_*.tres, los edita el guion).
 ## La escena bloquea al jugador con su propio motivo (&"escena") para que no se mueva
 ## entre un diálogo y otro; solo se le devuelve el control para probar la voltereta.
+## Regla de las escenas guiadas: todo lo que se guarda se concede antes de devolver el
+## control; lo que queda después debe poder reanudarse (`_reanudar_tutorial`) o no ser
+## necesario. Si la escena se libera a mitad, `_exit_tree` suelta el bloqueo y a Kathita.
 
 @export_group("Diálogos")
 @export var dialogo_llamada: Dialogo
@@ -62,6 +65,10 @@ func _exit_tree() -> void:
 	# jugador sigue vivo (al salir al menú se libera con todo Game).
 	if is_instance_valid(_bloqueado):
 		_bloqueado.desbloquear(&"escena")
+	# Kathita se pasó (reparent) al nodo con orden por Y: si la escena muere antes de
+	# devolverla, quedaría huérfana allí. Si sigue siendo hija nuestra, cae con nosotros.
+	if is_instance_valid(kathita) and kathita.get_parent() != self:
+		kathita.queue_free()
 
 
 func _al_entrar(cuerpo: Node2D) -> void:
@@ -121,7 +128,7 @@ func _entregar_libro(jugador: Jugador) -> void:
 	await _mover(destino)
 	sprite.play(&"parada_regalo")
 	jugador.mirar_hacia(kathita.global_position - jugador.global_position)
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 
 	# El libro.
 	await Dialogos.mostrar(dialogo_libro)
@@ -141,7 +148,7 @@ func _tutorial_voltereta(jugador: Jugador) -> void:
 	_bloqueado = null
 	await jugador.pirueta_empezada
 	EstadoJuego.voltereta_aprendida = true # abre la barrera del cartel
-	await get_tree().create_timer(0.8).timeout # que termine la voltereta
+	await get_tree().create_timer(0.8, false).timeout # que termine la voltereta
 
 
 ## Despedida de Kathita, vuelve a casa y la escena se libera.

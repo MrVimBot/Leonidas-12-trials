@@ -7,13 +7,14 @@
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_entrega.tres" id="5_ent"]
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_carta.tres" id="6_car"]
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_final.tres" id="7_fin"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/cinematica/fondo_2.png" id="8_fon"]
+[ext_resource type="Texture2D" uid="uid://dj5hxr2x8vgor" path="res://assets/backgrounds/cinematica/fondo_2.png" id="8_fon"]
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/cinematica_cama.tres" id="9_cam"]
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/cinematica_mama.tres" id="10_mam"]
 [ext_resource type="Texture2D" path="res://assets/sprites/cinematica/carta.png" id="11_pap"]
 
 [node name="CinematicaInicial" type="Node"]
 script = ExtResource("1_cin")
+fondo_cumpleanos = ExtResource("8_fon")
 dialogo_cumpleanos = ExtResource("2_cum")
 dialogo_despertar = ExtResource("3_des")
 dialogo_mision = ExtResource("4_mis")

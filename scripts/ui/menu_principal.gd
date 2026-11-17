@@ -24,7 +24,6 @@ const MARCA := "> "
 @export var duracion_fundido := 0.5
 
 var _eligiendo := true
-var _modo_original: Window.ContentScaleMode
 
 @onready var botones: VBoxContainer = $Panel/Botones
 @onready var boton_continuar: Button = $Panel/Botones/Continuar
@@ -34,8 +33,7 @@ var _modo_original: Window.ContentScaleMode
 
 
 func _ready() -> void:
-	_modo_original = get_window().content_scale_mode
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	Pantalla.modo_pintura(self, true)
 	# En la web no se puede cerrar la ventana: Salir no pinta nada.
 	boton_salir.visible = not OS.has_feature("web")
 	boton_continuar.visible = EstadoJuego.hay_partida()
@@ -86,7 +84,7 @@ func _jugar() -> void:
 	var t := create_tween()
 	t.tween_property(negro, ^"color:a", 1.0, duracion_fundido)
 	await t.finished
-	get_window().content_scale_mode = _modo_original
+	Pantalla.modo_pintura(self, false)
 	EstadoJuego.reiniciar() # partida nueva: monedas y manzanas a cero
 	get_tree().change_scene_to_file(escena_jugar)
 
@@ -99,7 +97,7 @@ func _continuar() -> void:
 	var t := create_tween()
 	t.tween_property(negro, ^"color:a", 1.0, duracion_fundido)
 	await t.finished
-	get_window().content_scale_mode = _modo_original
+	Pantalla.modo_pintura(self, false)
 	if not EstadoJuego.cargar():
 		push_warning("MenuPrincipal: no se pudo leer la partida; se empieza una nueva")
 		EstadoJuego.reiniciar()

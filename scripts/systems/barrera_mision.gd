@@ -77,13 +77,7 @@ func _detener(jugador: Jugador) -> void:
 	await Dialogos.mostrar(d)
 
 	# Leonidas da media vuelta y vuelve unos pasos hacia el pueblo.
-	jugador.animador.mirar(dir)
-	jugador.animador.reproducir(&"caminar")
-	var t := create_tween()
-	t.tween_property(jugador, ^"global_position", jugador.global_position + dir * distancia_retroceso,
-		distancia_retroceso / 80.0)
-	await t.finished
-	jugador.animador.reproducir(&"parado")
+	await jugador.caminar_hasta(jugador.global_position + dir * distancia_retroceso, 80.0)
 	jugador.desbloquear(&"escena")
 	_jugador = null
 

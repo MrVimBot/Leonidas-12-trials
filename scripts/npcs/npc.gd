@@ -160,3 +160,18 @@ func _al_terminar_dialogo() -> void:
 func animar(base: StringName) -> void:
 	_animador.reproducir(base)
 
+
+## Para cinemáticas: camina en línea recta hasta `destino` a `velocidad` px/s con la
+## animación `caminar` y espera a llegar (`await`); al terminar queda en `parado`. Si ya
+## está a menos de 1 px, no hace nada. Usar con el NPC quieto (`paseo = false` o hablando):
+## mueve por tween, así que atraviesa colisiones y el destino debe ser alcanzable en línea
+## recta. En NPC de una sola vista (sabios) camina de frente (ver `animar`).
+func caminar_hasta(destino: Vector2, velocidad := 60.0) -> void:
+	var distancia := global_position.distance_to(destino)
+	if distancia < 1.0:
+		return
+	animar(&"caminar")
+	var t := create_tween()
+	t.tween_property(self, ^"global_position", destino, distancia / velocidad)
+	await t.finished
+	animar(&"parado")

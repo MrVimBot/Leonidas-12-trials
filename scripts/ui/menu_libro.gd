@@ -92,7 +92,6 @@ var _tiempo := 0.0
 var _aviso := ""
 var _tiempo_aviso := 0.0
 var _mensaje_guardar := ""
-var _modo_original: Window.ContentScaleMode
 
 ## Medidas de libro.json (px del lienzo).
 var _rejilla := {}          # Pagina → Array[Rect2] (12 casillas)
@@ -307,8 +306,7 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 	_aviso = ""
 	_mensaje_guardar = ""
 	_raton_en_salir = false
-	_modo_original = get_window().content_scale_mode
-	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	Pantalla.modo_pintura(self, true)
 	get_tree().paused = true
 	visible = true
 	_colocar()
@@ -323,7 +321,7 @@ func cerrar() -> void:
 	abierto = false
 	visible = false
 	fondo.texture = null
-	get_window().content_scale_mode = _modo_original
+	Pantalla.modo_pintura(self, false)
 	get_tree().paused = false
 	abierto_cambio.emit(false)
 
