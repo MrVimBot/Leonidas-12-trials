@@ -1,0 +1,171 @@
+extends "res://tools/pruebas/base_prueba.gd"
+## Menús con botones (principal y pausa) con eventos REALES (InputEventKey / InputEventJoypadButton):
+##  a) `ui_accept` lleva las teclas del juego (E, L, J) y los botones 0, 1 y 2 del mando además de
+##     Enter, Enter numérico y Espacio;
+##  b) menú principal: cada tecla de aceptar pulsa el botón con foco UNA sola vez (la GUI de Godot lo
+##     hace sola; no hay reenvío manual), arriba/abajo mueven el foco y dan la vuelta;
+##  c) pausa: Continuar con E y con Enter, Controles con J y volver con E/J/Enter/Espacio/Esc, Salir;
+##  d) el libro abierto no se ve afectado (Enter no hace nada, Espacio lo cierra, nadie tiene foco)
+##     y a pie E/J siguen interactuando/atacando.
+## Los botones de Jugar/Salir se desconectan de su acción real (cambiarían de escena o cerrarían
+## el juego) y se cuentan las pulsaciones.
+
+const MENU_PRINCIPAL := preload("res://scenes/ui/menu_principal.tscn")
+
+## Cada forma de aceptar: [nombre, keycode (0 = mando), botón del mando].
+const ACEPTAR := [
+	["Enter", KEY_ENTER, -1], ["Enter numérico", KEY_KP_ENTER, -1], ["Espacio", KEY_SPACE, -1],
+	["E", KEY_E, -1], ["L", KEY_L, -1], ["J", KEY_J, -1],
+	["mando 0", 0, 0], ["mando 1", 0, 1], ["mando 2", 0, 2],
+]
+
+
+func ejecutar() -> void:
+	_caso_a()
+	await _caso_b()
+	await crear_game(true, true)
+	await _caso_c()
+	await _caso_d()
+
+
+## Pulsa y suelta una de las formas de ACEPTAR con eventos reales.
+func _aceptar(forma: Array) -> void:
+	if forma[2] >= 0:
+		await _boton_mando(forma[2] as int)
+	else:
+		await pulsar_tecla(forma[1] as Key)
+
+
+func _boton_mando(boton: int) -> void:
+	for pulsado in [true, false]:
+		var e := InputEventJoypadButton.new()
+		e.button_index = boton as JoyButton
+		e.pressed = pulsado
+		Input.parse_input_event(e)
+		await ticks(2)
+
+
+# --- a) Mapa de entradas ------------------------------------------------------------------------
+
+func _caso_a() -> void:
+	for forma: Array in ACEPTAR:
+		var e: InputEvent
+		if forma[2] >= 0:
+			var m := InputEventJoypadButton.new()
+			m.button_index = forma[2] as JoyButton
+			m.pressed = true
+			e = m
+		else:
+			var k := InputEventKey.new()
+			k.keycode = forma[1] as Key
+			k.physical_keycode = forma[1] as Key
+			k.pressed = true
+			e = k
+		ok("a) ui_accept incluye %s" % forma[0], e.is_action(&"ui_accept"))
+
+
+# --- b) Menú principal --------------------------------------------------------------------------
+
+func _caso_b() -> void:
+	var menu := MENU_PRINCIPAL.instantiate() as MenuPrincipal
+	get_tree().root.add_child(menu)
+	await ticks(3)
+	menu.boton_continuar.visible = true # no hay partida guardada en la prueba
+	var cuenta := {}
+	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_salir]:
+		for c: Dictionary in b.pressed.get_connections():
+			b.pressed.disconnect(c["callable"] as Callable)
+		cuenta[b] = 0
+		b.pressed.connect(func() -> void: cuenta[b] += 1)
+	ok("b) arranca con foco en un botón", get_viewport().gui_get_focus_owner() is Button)
+	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_salir]:
+		for forma: Array in ACEPTAR:
+			b.grab_focus()
+			await ticks(1)
+			cuenta[b] = 0
+			await _aceptar(forma)
+			ok("b) %s con foco + %s → 1 pulsación" % [b.name, forma[0]], cuenta[b] == 1, str(cuenta[b]))
+	# Arriba y abajo.
+	menu.boton_jugar.grab_focus()
+	await ticks(1)
+	await pulsar_tecla(KEY_DOWN)
+	ok("b) abajo: Jugar → Salir", get_viewport().gui_get_focus_owner() == menu.boton_salir)
+	await pulsar_tecla(KEY_UP)
+	ok("b) arriba: Salir → Jugar", get_viewport().gui_get_focus_owner() == menu.boton_jugar)
+	menu.boton_continuar.visible = false
+	menu.boton_jugar.grab_focus()
+	await pulsar_tecla(KEY_UP)
+	ok("b) arriba desde el primero da la vuelta", get_viewport().gui_get_focus_owner() == menu.boton_salir)
+	await pulsar_tecla(KEY_DOWN)
+	ok("b) abajo desde el último da la vuelta", get_viewport().gui_get_focus_owner() == menu.boton_jugar)
+	menu.free()
+	await ticks(2)
+
+
+# --- c) Pausa -----------------------------------------------------------------------------------
+
+func _caso_c() -> void:
+	var pausa := game.find_child("MenuPausa", true, false) as MenuPausa
+	var salir := pausa.find_child("Salir", true, false) as Button
+	var cuenta_salir := [0]
+	for c: Dictionary in salir.pressed.get_connections():
+		salir.pressed.disconnect(c["callable"] as Callable)
+	salir.pressed.connect(func() -> void: cuenta_salir[0] += 1)
+	# Continuar con cada forma de aceptar.
+	for forma: Array in ACEPTAR:
+		await pulsar(&"pausa")
+		var abierta := pausa.abierto and get_tree().paused
+		await _aceptar(forma)
+		ok("c) pausa + Continuar con %s" % forma[0],
+			abierta and not pausa.abierto and not get_tree().paused)
+	# Controles con cada forma y vuelta con cada una (más Esc).
+	var controles := pausa.find_child("Controles", true, false) as Button
+	var panel_controles := pausa.find_child("PanelControles", true, false) as Control
+	for entrada: Array in ACEPTAR:
+		for vuelta: Array in ACEPTAR + [["Esc", KEY_ESCAPE, -1]]:
+			await pulsar(&"pausa")
+			controles.grab_focus()
+			await ticks(1)
+			await _aceptar(entrada)
+			var viendo := panel_controles.visible
+			await _aceptar(vuelta)
+			var de_vuelta := not panel_controles.visible and pausa.abierto \
+				and get_viewport().gui_get_focus_owner() == controles
+			ok("c) Controles con %s y volver con %s" % [entrada[0], vuelta[0]], viendo and de_vuelta)
+			await pulsar(&"pausa") # cierra la pausa
+			if pausa.abierto:
+				ok("c) la pausa se cierra con Esc", false)
+				return
+	# Salir.
+	for forma: Array in ACEPTAR:
+		await pulsar(&"pausa")
+		salir.grab_focus()
+		await ticks(1)
+		cuenta_salir[0] = 0
+		await _aceptar(forma)
+		ok("c) Salir con %s → 1 pulsación" % forma[0], cuenta_salir[0] == 1, str(cuenta_salir[0]))
+		await pulsar(&"pausa")
+	ok("c) la pausa acaba cerrada", not pausa.abierto and not get_tree().paused)
+
+
+# --- d) El resto del juego sigue igual ---------------------------------------------------------
+
+func _caso_d() -> void:
+	# A pie: J ataca (la GUI no se lo come).
+	await ticks(5)
+	tecla(KEY_J, true)
+	await ticks(2)
+	ok("d) a pie J ataca", j.estado == Jugador.Estado.ATAQUE, str(j.estado))
+	tecla(KEY_J, false)
+	await esperar_normal()
+	await ticks(5)
+	# Libro: Enter no hace nada, E/J no abren foco, Espacio cierra.
+	var libro := Libro
+	await pulsar(&"inventario")
+	ok("d) el libro se abre", libro.abierto)
+	ok("d) con el libro abierto nadie tiene foco", get_viewport().gui_get_focus_owner() == null)
+	await pulsar_tecla(KEY_ENTER)
+	ok("d) Enter no cierra el libro", libro.abierto)
+	await pulsar_tecla(KEY_SPACE)
+	ok("d) Espacio cierra el libro", not libro.abierto)
+	await ticks(5)

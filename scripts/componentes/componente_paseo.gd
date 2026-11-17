@@ -1,3 +1,4 @@
+@tool
 class_name ComponentePaseo
 extends Node
 ## Deambular: la entidad espera un rato, elige un punto al azar alrededor de `centro`, camina
@@ -17,6 +18,8 @@ extends Node
 ## "Elección del destino": el NPC reparte uniforme por el área del círculo, no se mueve si el
 ## viaje sería menor de 8 px y se rinde si tarda el doble de lo previsto; la seta reparte
 ## uniforme por la distancia (entre 8 px y el radio), sin tiempo límite.
+##
+## `@tool` solo para avisar en el editor de lo que falta; en el editor no hace nada más.
 
 enum Reparto {
 	AREA, ## Uniforme por superficie (sqrt): los puntos no se amontonan en el centro.
@@ -24,7 +27,10 @@ enum Reparto {
 }
 
 ## Quien aplica el movimiento. El cuerpo es el suyo (`movimiento.cuerpo`).
-@export var movimiento: ComponenteMovimiento
+@export var movimiento: ComponenteMovimiento:
+	set(valor):
+		movimiento = valor
+		update_configuration_warnings()
 ## Distancia máxima (px) a `centro`.
 @export var radio := 48.0
 ## Velocidad al andar (px/s). Múltiplos de 30 se ven más suaves (física a 120 Hz).
@@ -58,7 +64,16 @@ var _caminando := false
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	rng.randomize()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if movimiento == null:
+		avisos.append("Asigna el ComponenteMovimiento en `movimiento` (es quien mueve el cuerpo).")
+	return avisos
 
 
 ## Empieza (o vuelve a empezar) el paseo parado en su sitio. Sin `espera_inicial` espera lo

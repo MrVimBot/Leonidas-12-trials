@@ -14,7 +14,8 @@ extends Control
 ## content_scale_mode = CANVAS_ITEMS (igual que la cinemática): las coordenadas
 ## siguen siendo 480×270, pero la pintura se ve a la resolución real.
 ##
-## Teclado/mando: arriba/abajo eligen, Enter/Espacio/E/J (o A/B/X) confirman.
+## Teclado/mando: arriba/abajo eligen y `ui_accept` (Enter, Espacio, E, L, J y los botones 0, 1 y 2
+## del mando; ver el mapa de entradas) pulsa el botón con foco: lo hace la GUI de Godot, sin código aquí.
 ## El ratón también funciona (pasar por encima = seleccionar).
 
 @export_file("*.tscn") var escena_jugar := "res://scenes/cinematics/cinematica_inicial.tscn"
@@ -46,17 +47,6 @@ func _ready() -> void:
 	botones.actualizar_marcas()
 	negro.color.a = 1.0
 	create_tween().tween_property(negro, ^"color:a", 0.0, duracion_fundido)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if not _eligiendo:
-		return
-	# Las teclas del juego (E/J, botones del mando) también confirman.
-	if event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar"):
-		var b := get_viewport().gui_get_focus_owner() as Button
-		if b:
-			get_viewport().set_input_as_handled()
-			b.pressed.emit()
 
 
 ## Fundido a negro y, al terminar, `accion`. Ignora pulsaciones mientras tanto.

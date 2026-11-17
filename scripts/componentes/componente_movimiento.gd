@@ -1,3 +1,4 @@
+@tool
 class_name ComponenteMovimiento
 extends Node
 ## Mueve el CharacterBody2D padre (modo flotante, vista cenital): el cerebro de la entidad
@@ -5,13 +6,17 @@ extends Node
 ## este componente llama a `move_and_slide()` en su `_physics_process`. Funciona porque el
 ## padre se procesa antes que sus hijos, así que la intención y el movimiento ocurren en el
 ## mismo tick. Con `aplicar_movimiento` en false no mueve el cuerpo (lo hace otro).
+## `@tool` solo para avisar en el editor de lo que falta; en el editor no hace nada más.
 
 ## Tras `move_and_slide()`, una vez por cada colisión de ese tick: un cuerpo apoyado en una
 ## pared la emite en cada tick de física (120 por segundo). Los oyentes deben tolerarlo.
 signal choco(colision: KinematicCollision2D)
 
 ## Cuerpo que mueve. Si está vacío usa el nodo padre (debe ser un CharacterBody2D).
-@export var cuerpo: CharacterBody2D
+@export var cuerpo: CharacterBody2D:
+	set(valor):
+		cuerpo = valor
+		update_configuration_warnings()
 ## Velocidad máxima por defecto (px/s). Conviene un múltiplo de 60 (la física va a 120 ticks/s).
 @export var velocidad := 80.0
 ## Lo que acelera hacia la velocidad objetivo (px/s²).
@@ -23,6 +28,9 @@ signal choco(colision: KinematicCollision2D)
 
 
 func _ready() -> void:
+	# En el editor no rellena `cuerpo` (se guardaría en la escena) ni mueve nada.
+	if Engine.is_editor_hint():
+		return
 	if cuerpo == null:
 		cuerpo = get_parent() as CharacterBody2D
 	assert(cuerpo != null, "ComponenteMovimiento necesita un CharacterBody2D")
@@ -31,8 +39,18 @@ func _ready() -> void:
 		push_warning("%s: ComponenteMovimiento necesita motion_mode = Floating en su CharacterBody2D." % cuerpo.get_path())
 
 
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	var c: CharacterBody2D = cuerpo if cuerpo else get_parent() as CharacterBody2D
+	if c == null:
+		avisos.append("Ponlo como hijo de un CharacterBody2D o asígnalo en `cuerpo`.")
+	elif c.motion_mode != CharacterBody2D.MOTION_MODE_FLOATING:
+		avisos.append("El CharacterBody2D que mueve necesita Motion Mode = Floating (vista cenital).")
+	return avisos
+
+
 func _physics_process(_delta: float) -> void:
-	if not aplicar_movimiento:
+	if Engine.is_editor_hint() or not aplicar_movimiento:
 		return
 	cuerpo.move_and_slide()
 	for i in cuerpo.get_slide_collision_count():

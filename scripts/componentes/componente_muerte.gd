@@ -1,16 +1,21 @@
+@tool
 class_name ComponenteMuerte
 extends Node
 ## Muerte de un enemigo (u objeto con vida) sin animación propia: al recibir `murio`
 ## de su `vida`, apaga sus golpes y colisiones, suelta `monedas` (saltan al suelo
 ## y el jugador las recoge: `ObjetoSuelto`), se aplasta y se
 ## desvanece, y elimina a `cuerpo`.
+## `@tool` solo para avisar en el editor de lo que falta; en el editor no hace nada más.
 
 signal termino
 
 ## Respaldo de `escena_moneda` (ver `_escena_moneda()`).
 const RUTA_MONEDA := "res://scenes/items/moneda.tscn"
 
-@export var vida: ComponenteVida
+@export var vida: ComponenteVida:
+	set(valor):
+		vida = valor
+		update_configuration_warnings()
 @export var visual: CanvasItem
 ## Nodo que se elimina al terminar (por defecto, el padre).
 @export var cuerpo: Node
@@ -24,10 +29,20 @@ const RUTA_MONEDA := "res://scenes/items/moneda.tscn"
 
 
 func _ready() -> void:
+	# En el editor no rellena `cuerpo` (se guardaría en la escena) ni se conecta a la vida.
+	if Engine.is_editor_hint():
+		return
 	if cuerpo == null:
 		cuerpo = get_parent()
 	assert(vida != null, "ComponenteMuerte necesita un ComponenteVida")
 	vida.murio.connect(morir)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if vida == null:
+		avisos.append("Asigna el ComponenteVida en `vida` (muere cuando emite `murio`).")
+	return avisos
 
 
 func morir() -> void:

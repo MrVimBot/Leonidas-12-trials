@@ -1,3 +1,4 @@
+@tool
 class_name Hitbox
 extends Area2D
 ## Zona que HACE daño: cada tick de física, mientras está `activo`, busca qué toca y llama a
@@ -11,6 +12,8 @@ extends Area2D
 ## también con StaticBody2D). Las consultas se reutilizan (una por forma) para no crear
 ## objetos en cada tick; también la usa `ComponenteInteraccion`. El daño va en cuartos de corazón.
 ## Capa y máscara: en la capa golpe_jugador/golpe_enemigo, con máscara de lo que puede golpear.
+## `@tool` solo para avisar en el editor si le falta su CollisionShape2D; en el editor no hace
+## nada más (no toca `monitoring` ni golpea).
 
 ## Al golpear a un objetivo (una vez por objetivo, salvo `continuo`).
 signal golpeo(objetivo: Node)
@@ -32,11 +35,23 @@ var _consultas: Dictionary = {}
 
 
 func _ready() -> void:
+	# En el editor no cambia `monitoring` (se guardaría en la escena).
+	if Engine.is_editor_hint():
+		return
 	monitoring = false
 
 
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	# `consultar()` solo usa CollisionShape2D (no CollisionPolygon2D). Que no tenga ninguna
+	# forma ya lo avisa el propio Area2D.
+	if not get_children().any(func(c: Node) -> bool: return c is CollisionShape2D):
+		avisos.append("Necesita un CollisionShape2D hijo (la zona que golpea; CollisionPolygon2D no sirve).")
+	return avisos
+
+
 func _physics_process(_delta: float) -> void:
-	if not activo:
+	if Engine.is_editor_hint() or not activo:
 		return
 	for objetivo in consultar(self, collision_mask, _consultas):
 		_golpear(objetivo)

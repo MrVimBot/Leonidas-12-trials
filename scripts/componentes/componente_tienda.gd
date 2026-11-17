@@ -1,3 +1,4 @@
+@tool
 class_name ComponenteTienda
 extends Node
 ## Convierte a un NPC (o cualquier cosa con ZonaDialogo) en vendedor.
@@ -7,6 +8,9 @@ extends Node
 ##   - si no tienes monedas para lo más barato → dice `dialogo_sin_monedas` y ya;
 ##   - si te alcanza → `dialogo_saludo`, se abre el menú (autoload Tienda)
 ##     y al cerrarlo, `dialogo_despedida`.
+##
+## `@tool` solo para avisar en el editor si no vende nada. No tiene métodos virtuales: lo
+## demás (autoloads `EstadoJuego`, `Dialogos`, `Tienda`) solo se usa en juego, al hablarle.
 
 ## Al completar una compra.
 signal compro(articulo: ArticuloTienda)
@@ -15,7 +19,10 @@ signal compro(articulo: ArticuloTienda)
 enum Resultado { COMPRADO, SIN_MONEDAS, LLENO }
 
 ## Lo que vende, en el orden de la lista.
-@export var articulos: Array[ArticuloTienda] = []
+@export var articulos: Array[ArticuloTienda] = []:
+	set(valor):
+		articulos = valor
+		update_configuration_warnings()
 ## Nombre en la pestaña del menú de la tienda.
 @export var nombre_vendedor := "Tendera"
 ## Lo que dice al hablarle, si hay monedas para lo más barato.
@@ -24,6 +31,18 @@ enum Resultado { COMPRADO, SIN_MONEDAS, LLENO }
 @export var dialogo_sin_monedas: Dialogo
 ## Lo que dice al cerrar el menú.
 @export var dialogo_despedida: Dialogo
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if articulos.is_empty():
+		avisos.append("Añade algún ArticuloTienda en `articulos` (sin artículos solo dice `dialogo_sin_monedas`).")
+	for i in articulos.size():
+		var a := articulos[i]
+		# Con `get()`: en el editor ArticuloTienda no es @tool y solo responde a sus exports.
+		if a == null or a.get(&"objeto") == null:
+			avisos.append("El artículo %d de `articulos` está vacío o no tiene `objeto`." % i)
+	return avisos
 
 
 func precio_minimo() -> int:

@@ -1,10 +1,16 @@
+@tool
 class_name ComponenteParpadeo
 extends Node
 ## Parpadeo de un CanvasItem (p. ej. el sprite, tras recibir daño): `parpadear(duracion)`
 ## alterna su transparencia durante ese tiempo y la deja en 1 al acabar; `detener()` lo corta.
+## `@tool` solo para avisar en el editor de lo que falta; en el editor no hace nada más
+## (sobre todo, no toca el `modulate` del objetivo: se guardaría en la escena).
 
 ## Nodo que parpadea (su `modulate.a`).
-@export var objetivo: CanvasItem
+@export var objetivo: CanvasItem:
+	set(valor):
+		objetivo = valor
+		update_configuration_warnings()
 ## Segundos que dura cada fase (visible / apagado).
 @export var intervalo := 0.08
 ## Opacidad en la fase apagada.
@@ -14,11 +20,18 @@ var _restante := 0.0
 
 
 func _ready() -> void:
-	set_process(false) # solo corre mientras parpadea
+	set_process(false) # solo corre mientras parpadea (y nunca en el editor)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if objetivo == null:
+		avisos.append("Asigna en `objetivo` el CanvasItem que parpadea (p. ej. el sprite).")
+	return avisos
 
 
 func _process(delta: float) -> void:
-	if _restante <= 0.0:
+	if Engine.is_editor_hint() or _restante <= 0.0:
 		return
 	_restante -= delta
 	if _restante <= 0.0:

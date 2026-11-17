@@ -6,7 +6,7 @@ extends CanvasLayer
 ## a este script con señales conectadas en la escena.
 ##
 ## Se abre y cierra con la acción `pausa` (Esc / Start). Abierto =
-## `get_tree().paused`. En la pantalla de controles, `pausa` o E/J vuelven al menú.
+## `get_tree().paused`. En la pantalla de controles, `pausa` o `ui_accept` (Enter, Espacio, E/J) vuelven al menú.
 ## El Esc se lee en `_unhandled_input`. Esta escena (dentro de Game) lo recibe antes que
 ## los autoload `Libro`, `Tienda` y `Dialogos`: con alguno de ellos abierto la pausa ni se
 ## abre ni consume el evento (`_puede_abrir`), así que sigue hasta él y es él quien se
@@ -53,17 +53,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			_abrir()
 		return
-	if not abierto:
-		return
-	if not (event.is_action_pressed(&"interactuar") or event.is_action_pressed(&"atacar")):
-		return
-	get_viewport().set_input_as_handled()
-	if _viendo_controles:
+	# Con el menú abierto, los botones con foco reciben `ui_accept` por la GUI (Enter, Espacio, E,
+	# J...). Solo la pantalla de controles, que no tiene botones, lo lee aquí para volver.
+	if abierto and _viendo_controles and event.is_action_pressed(&"ui_accept"):
+		get_viewport().set_input_as_handled()
 		_volver_de_controles()
-		return
-	var b := get_viewport().gui_get_focus_owner() as Button
-	if b:
-		b.pressed.emit()
 
 
 func _abrir() -> void:

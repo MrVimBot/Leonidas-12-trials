@@ -1,3 +1,4 @@
+@tool
 class_name AnimadorDireccional
 extends Node
 ## Elige la animación según hacia dónde mira la entidad. Es el ÚNICO que toca su `sprite`
@@ -16,6 +17,9 @@ extends Node
 ## Diagonales: `direccion` es siempre cardinal. `orientar(entrada)` aplica la regla tipo
 ## Zelda: al moverse en diagonal conserva la dirección actual si sigue siendo parte de la
 ## diagonal, y solo gira si no; `mirar(hacia)` gira sin esa regla.
+##
+## `@tool` solo para avisar en el editor (`_get_configuration_warnings`) si falta `sprite`;
+## en el editor no hace nada más (`_ready` sale con `Engine.is_editor_hint()`).
 
 ## Hacia qué lado está dibujada la animación lateral.
 enum Lado { IZQUIERDA, DERECHA }
@@ -28,7 +32,10 @@ signal frame_cambio(frame: int)
 signal direccion_cambio(direccion: Vector2)
 
 ## Sprite que se controla.
-@export var sprite: AnimatedSprite2D
+@export var sprite: AnimatedSprite2D:
+	set(valor):
+		sprite = valor
+		update_configuration_warnings()
 ## Hacia qué lado está dibujada la animación lateral (se espeja para el otro). Si el
 ## SpriteFrames tiene el meta `side_faces`, manda ese valor.
 @export var lado_mira := Lado.IZQUIERDA
@@ -44,6 +51,9 @@ var direccion := Vector2.DOWN:
 
 
 func _ready() -> void:
+	# En el editor no conecta señales ni toca `lado_mira` (se guardaría en la escena).
+	if Engine.is_editor_hint():
+		return
 	assert(sprite != null, "AnimadorDireccional necesita un AnimatedSprite2D")
 	if sprite.sprite_frames and sprite.sprite_frames.has_meta(&"side_faces"):
 		# El meta lo escribe tools/sprite_frames_builder.gd como texto ("izquierda"/"derecha").
@@ -51,6 +61,13 @@ func _ready() -> void:
 		lado_mira = Lado.DERECHA if meta == "derecha" else Lado.IZQUIERDA
 	sprite.animation_finished.connect(func() -> void: termino.emit(sprite.animation))
 	sprite.frame_changed.connect(func() -> void: frame_cambio.emit(sprite.frame))
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if sprite == null:
+		avisos.append("Asigna el AnimatedSprite2D en `sprite`.")
+	return avisos
 
 
 func orientar(entrada: Vector2) -> void:

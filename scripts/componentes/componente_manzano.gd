@@ -1,3 +1,4 @@
+@tool
 class_name ComponenteManzano
 extends Node
 ## Hace que un `Decorado` (un manzano) suelte manzanas al golpearlo con la espada:
@@ -7,11 +8,19 @@ extends Node
 ## Va como hijo del árbol (scenes/entorno/manzano.tscn). Mete a su `cuerpo` en la capa
 ## interactuable para que lo detecte la espada (el Hitbox del jugador) y escucha su
 ## señal `golpeado`.
+## `@tool` solo para avisar en el editor de lo que falta; en el editor no hace nada más
+## (sobre todo, no cambia la capa del árbol: se guardaría en la escena).
 
 ## Árbol que golpean (por defecto, el padre).
-@export var cuerpo: Decorado
+@export var cuerpo: Decorado:
+	set(valor):
+		cuerpo = valor
+		update_configuration_warnings()
 ## Escena de la manzana que cae (scenes/items/manzana_suelta.tscn).
-@export var escena_manzana: PackedScene
+@export var escena_manzana: PackedScene:
+	set(valor):
+		escena_manzana = valor
+		update_configuration_warnings()
 ## Golpes necesarios para que caigan: al azar entre estos dos valores (ambos incluidos).
 @export var golpes_min := 3
 @export var golpes_max := 5
@@ -26,6 +35,8 @@ var _sin_manzanas := false
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	if cuerpo == null:
 		cuerpo = get_parent() as Decorado
 	assert(cuerpo != null, "ComponenteManzano debe ser hijo de un Decorado (o tener `cuerpo`)")
@@ -34,6 +45,15 @@ func _ready() -> void:
 	# Además de la capa del mundo, entra en "interactuable": es la que mira la espada.
 	cuerpo.set_collision_layer_value(Capas.NUMERO_INTERACTUABLE, true)
 	cuerpo.golpeado.connect(_al_golpear)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var avisos := PackedStringArray()
+	if cuerpo == null and not get_parent() is Decorado:
+		avisos.append("Ponlo como hijo de un Decorado (el manzano) o asígnalo en `cuerpo`.")
+	if escena_manzana == null:
+		avisos.append("Asigna en `escena_manzana` la escena de la manzana que cae (scenes/items/manzana_suelta.tscn).")
+	return avisos
 
 
 ## Cada espadazo cuenta un golpe, sin mirar cuánto daño quita.
