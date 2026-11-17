@@ -20,8 +20,17 @@ size = Vector2(10, 6)
 [sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
 size = Vector2(12, 20)
 
-[sub_resource type="RectangleShape2D" id="Shape_espada"]
+[sub_resource type="RectangleShape2D" id="Shape_espada_abajo"]
 size = Vector2(22, 14)
+
+[sub_resource type="RectangleShape2D" id="Shape_espada_arriba"]
+size = Vector2(22, 14)
+
+[sub_resource type="RectangleShape2D" id="Shape_espada_izquierda"]
+size = Vector2(16, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_espada_derecha"]
+size = Vector2(16, 20)
 
 [sub_resource type="CircleShape2D" id="Shape_alcance"]
 radius = 7.0
@@ -64,9 +73,21 @@ monitorable = false
 script = ExtResource("4_hit")
 activo = false
 
-[node name="Forma" type="CollisionShape2D" parent="Espada" unique_id=929743004]
+[node name="Abajo" type="CollisionShape2D" parent="Espada" unique_id=929743004]
 position = Vector2(0, 2)
-shape = SubResource("Shape_espada")
+shape = SubResource("Shape_espada_abajo")
+
+[node name="Arriba" type="CollisionShape2D" parent="Espada" unique_id=1869529950]
+position = Vector2(0, -24)
+shape = SubResource("Shape_espada_arriba")
+
+[node name="Izquierda" type="CollisionShape2D" parent="Espada" unique_id=1246590693]
+position = Vector2(-15, -10)
+shape = SubResource("Shape_espada_izquierda")
+
+[node name="Derecha" type="CollisionShape2D" parent="Espada" unique_id=305288873]
+position = Vector2(15, -10)
+shape = SubResource("Shape_espada_derecha")
 
 [node name="PuntoCarga" type="Marker2D" parent="." unique_id=1672171138]
 position = Vector2(0, -26)
@@ -87,10 +108,14 @@ hurtbox = NodePath("../Hurtbox")
 script = ExtResource("8_est")
 estamina_max = 1000.0
 
-[node name="Ataque" type="Node" parent="." unique_id=1117553780 node_paths=PackedStringArray("hitbox", "animador")]
+[node name="Ataque" type="Node" parent="." unique_id=1117553780 node_paths=PackedStringArray("hitbox", "animador", "forma_abajo", "forma_arriba", "forma_izquierda", "forma_derecha")]
 script = ExtResource("9_ata")
 hitbox = NodePath("../Espada")
 animador = NodePath("../Animador")
+forma_abajo = NodePath("../Espada/Abajo")
+forma_arriba = NodePath("../Espada/Arriba")
+forma_izquierda = NodePath("../Espada/Izquierda")
+forma_derecha = NodePath("../Espada/Derecha")
 
 [node name="Carga" type="Node" parent="." unique_id=1030449962 node_paths=PackedStringArray("punto_carga")]
 script = ExtResource("10_car")

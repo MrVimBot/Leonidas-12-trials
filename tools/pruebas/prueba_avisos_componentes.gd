@@ -57,15 +57,32 @@ func _probar_componentes() -> void:
 
 	# ComponenteAtaque
 	var ataque := _nuevo(ComponenteAtaque.new()) as ComponenteAtaque
-	_avisos("Ataque sin nada: hitbox y animador", ataque, 2, ["`hitbox`", "`animador`"])
+	_avisos("Ataque sin nada: hitbox, animador y las 4 formas", ataque, 6,
+		["`hitbox`", "`animador`", "Falta la forma de Abajo", "Falta la forma de Arriba",
+		"Falta la forma de Izquierda", "Falta la forma de Derecha"])
 	var hb := _nuevo(Hitbox.new()) as Hitbox
 	ataque.hitbox = hb
 	ataque.animador = anim
-	_avisos("Ataque con Hitbox sin forma avisa", ataque, 1, ["rectangular"])
-	var circulo := _forma(hb, CircleShape2D.new())
-	_avisos("Ataque con Hitbox de forma circular avisa", ataque, 1, ["rectangular"])
-	circulo.shape = RectangleShape2D.new()
-	_avisos("Ataque bien configurado: sin avisos", ataque, 0)
+	var formas: Array[CollisionShape2D] = []
+	for i in 4:
+		formas.append(_forma(hb, RectangleShape2D.new()))
+	ataque.forma_abajo = formas[0]
+	ataque.forma_arriba = formas[1]
+	ataque.forma_izquierda = formas[2]
+	_avisos("Ataque con una forma sin asignar avisa", ataque, 1, ["Falta la forma de Derecha"])
+	ataque.forma_derecha = _forma(_nuevo(Node2D.new()) as Node2D, RectangleShape2D.new())
+	_avisos("Ataque con forma fuera del Hitbox avisa", ataque, 1, ["Derecha", "hija directa"])
+	ataque.forma_derecha = formas[3]
+	formas[3].shape = null
+	_avisos("Ataque con forma sin shape avisa", ataque, 1, ["Derecha", "`shape`"])
+	formas[3].shape = CircleShape2D.new()
+	_avisos("Ataque bien configurado (cualquier Shape2D): sin avisos", ataque, 0)
+	ataque.forma_abajo = null
+	ataque.forma_arriba = null
+	ataque.solo_lados = true
+	_avisos("Ataque solo_lados sin Abajo ni Arriba: sin avisos", ataque, 0)
+	ataque.forma_izquierda = null
+	_avisos("Ataque solo_lados sin Izquierda avisa", ataque, 1, ["Falta la forma de Izquierda"])
 
 	# Hitbox
 	var hb_solo := _nuevo(Hitbox.new()) as Hitbox

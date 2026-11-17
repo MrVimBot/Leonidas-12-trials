@@ -28,7 +28,7 @@ Salida de cada prueba: líneas `PASA` / `FALLA`, `COMPROBACIONES: N` y `RESULTAD
 `prueba_transiciones`, `prueba_jugador_bloqueo`, `prueba_jugador_estados`, `prueba_entrada`,
 `prueba_libro_{raton,navegacion,barco}`, `prueba_escena_{zeus,kathita,sabios}`,
 `prueba_caminar_hasta`, `prueba_cinematica`, `prueba_pantalla`, `prueba_combate`, `prueba_npc`,
-`prueba_objetos_sueltos`, `prueba_avisos_componentes` (avisos de configuración del editor), `prueba_barco`, `prueba_musica`, `prueba_microfono` y
+`prueba_objetos_sueltos`, `prueba_ataque_formas` (forma del golpe por dirección: área exacta, una sola forma, sondas), `prueba_avisos_componentes` (avisos de configuración del editor), `prueba_barco`, `prueba_musica`, `prueba_microfono` y
 `prueba_animaciones` (compara con `referencias/animaciones.txt`; si la artista cambia sprites,
 regenerarla a propósito con `... -- prueba_animaciones generar`).
 

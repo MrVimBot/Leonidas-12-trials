@@ -77,7 +77,7 @@ Cada entidad = **cerebro** (script propio en la raíz: decide QUÉ hacer; el jug
 | `AnimadorDireccional` | Node | dirección cardinal, regla de diagonales tipo Zelda, `reproducir(base, reiniciar, invertir_lado)` → `base_frente/lado/espalda` con espejo (sin lado o espalda → frente; sin direcciones → `base`), `reproducir_fija(nombre)` sin sufijo ni espejo. Es el único que toca su `sprite`: nadie cambia `flip_h` ni llama a `play()` por fuera |
 | `ComponenteVida` | Node | vida, invulnerabilidad, `danado`/`murio`/`cambio`; se conecta solo a un `Hurtbox` |
 | `ComponenteEstamina` | Node | `gastar()`, regeneración con retraso |
-| `ComponenteAtaque` | Node | coloca el `Hitbox` por dirección y lo activa solo en `frames_golpe` |
+| `ComponenteAtaque` | Node | habilita solo la forma de la dirección (`forma_abajo/arriba/izquierda/derecha`: CollisionShape2D `Abajo`/`Arriba`/`Izquierda`/`Derecha` hijos del `Hitbox`, ajustables en el editor 2D; sin la suya usa la de Abajo, o la de Izquierda con `solo_lados`) y activa el `Hitbox` solo en `frames_golpe` |
 | `ComponenteCarga` | Node | levantar/lanzar `ObjetoAgarrable` |
 | `ComponenteInteraccion` | Area2D | busca delante algo con `interactuar(quien)` u `ObjetoAgarrable` |
 | `ComponenteParpadeo` | Node | parpadeo de un CanvasItem |
@@ -86,7 +86,7 @@ Cada entidad = **cerebro** (script propio en la raíz: decide QUÉ hacer; el jug
 
 Dependencias entre componentes por `@export` (se ven en el Inspector), no por rutas fijas. Las máquinas de estado van como enum en el cerebro.
 Los componentes con configuración obligatoria son `@tool` y avisan en el editor (triángulo amarillo, `_get_configuration_warnings()` + `update_configuration_warnings()` en los setters de sus exports) de lo que les falta; al ser `@tool` se ejecutan en el editor, así que **todo** `_ready`/`_process`/`_physics_process`/conexión/autoload va tras `if Engine.is_editor_hint(): return` (si no, cambian la escena abierta y se guarda). Los `assert` de `_ready` se mantienen. Prueba: `tools/pruebas/prueba_avisos_componentes.gd`.
-Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D + Movimiento + Animador + Vida→Hurtbox (capa enemigos) + Hitbox de contacto (`continuo = true`, capa golpe_enemigo, máscara jugador) + script cerebro con su IA.
+Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D + Movimiento + Animador + Vida→Hurtbox (capa enemigos) + Hitbox de contacto (`continuo = true`, capa golpe_enemigo, máscara jugador) + script cerebro con su IA. Si ataca con `ComponenteAtaque`: un Hitbox con una CollisionShape2D por dirección asignadas en sus `forma_*`.
 
 ## Jugador (hecho)
 - `scenes/player/jugador.tscn` + `scripts/player/jugador.gd` (`class_name Jugador`, cerebro). La posición del nodo son los pies. Estados: NORMAL, PIRUETA, ATAQUE, AGARRAR, TIRAR, DANO, MUERTO, BLOQUEADO.
@@ -110,7 +110,7 @@ Receta para un enemigo nuevo: CharacterBody2D (capa enemigos) + AnimatedSprite2D
 - **Monedas sueltas:** `ComponenteMuerte.monedas` ya no suma directo: `ObjetoSuelto.soltar(escena, padre, pos, n)` crea `n` instancias de `ComponenteMuerte.escena_moneda` (`scenes/items/moneda.tscn`; si el export está vacío se carga esa ruta con `load()`: **pendiente asignarlo en el Inspector** en el `Muerte` de seta y flor) que saltan y rebotan (choques con la capa mundo por rayo); se recogen al pisarlas ya en el suelo y a los 10 s parpadean y desaparecen. **`ObjetoSuelto`** (`scripts/items/objeto_suelto.gd`, Area2D máscara jugador) es una sola clase para todo lo que se recoge del suelo: `objeto` vacío = da `valor` monedas; con un `Objeto` lo mete en el inventario y, si no cabe, se queda en el suelo (`scenes/items/manzana_suelta.tscn`, 25 s). Las escenas las pasa quien suelta (`@export PackedScene`): el script no precarga sus propias escenas. Sprite: `moneda.aseprite` → layout `tools/sprite_layouts/moneda.lua` (14×15, origen (7, 14), `offset (0, −14)`).
 - **Sacudida de cámara:** `CamaraPixel.sacudir(intensidad, duracion)` (exports del grupo Sacudida: 3 px, 0,25 s; en píxeles enteros y decreciente). Game la llama cuando el Jugador recibe daño y `ModoBarco` cuando lo recibe el Barco (`vida.danado`).
 - **SetaBomba** (vida 3): deambula (con `ComponentePaseo`: su `Paseo` en la escena trae `espera`, `reparto`… y la seta le pasa `radio_deambular`/`velocidad_deambular`), persigue al verle, a `distancia_explotar` se infla y en el frame 3 suelta una `NubeToxica` (daño 4 = 1 corazón, una vez por objetivo; la voltereta la esquiva). Luego queda escondida 2,5 s (momento de atacarla) y sale. Contacto: 1.
-- **FlorFalsa** (vida 4): escondida = flor camuflada e invulnerable; al acercarse sale, muerde (`ComponenteAtaque`, frames 3–5, daño 2) y a los 5 s se esconde y reaparece a ≤ 72 px de su sitio (en suelo libre de la zona).
+- **FlorFalsa** (vida 4): escondida = flor camuflada e invulnerable; al acercarse sale, muerde (`ComponenteAtaque` con `solo_lados` y solo las formas `Izquierda`/`Derecha` en `Mordisco`, frames 3–5, daño 2) y a los 5 s se esconde y reaparece a ≤ 72 px de su sitio (en suelo libre de la zona).
 - El **montón Tocotón** (Guión p. 17) está **descartado** (decidido el 2026-11-14): no implementarlo ni pedir su sprite.
 
 ## Mundo (hecho: primer trozo)

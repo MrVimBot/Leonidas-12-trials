@@ -208,6 +208,10 @@ func ejecutar() -> void:
 	j.velocity = Vector2.ZERO
 	await ticks(5)
 	var m1 := EstadoJuego.monedas
+	# Semilla fija: la moneda sale con dirección y rapidez al azar y, alguna vez, aterriza
+	# fuera del cuerpo del jugador (entonces no se recoge, que es lo correcto en el juego).
+	# Sin semilla esta comprobación fallaba de vez en cuando.
+	seed(20261117)
 	ObjetoSuelto.soltar(load(ESC_MONEDA) as PackedScene, padre, j.global_position, 1)
 	await ticks(200)
 	ok("moneda con el jugador encima se recoge al aterrizar", EstadoJuego.monedas == m1 + 1, "%d -> %d" % [m1, EstadoJuego.monedas])
