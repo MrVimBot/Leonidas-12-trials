@@ -22,6 +22,7 @@ signal roto
 @export_range(0.0, 1.0) var probabilidad_botin := 0.0
 
 var _capa_original: int
+var _padre_original: Node
 var _mascara_original: int
 var _visual_y: float
 var _volando := false
@@ -45,6 +46,7 @@ func _ready() -> void:
 func levantar(punto: Node2D) -> void:
 	collision_layer = 0
 	collision_mask = 0
+	_padre_original = get_parent() # la zona: al lanzarlo vuelve a ella (no a Game)
 	reparent(punto)
 	z_index = 1
 	var t := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -55,8 +57,10 @@ func levantar(punto: Node2D) -> void:
 ## Con distancia 0 simplemente cae delante (p. ej. al recibir daño).
 func lanzar(dir: Vector2, distancia: float, pies: Vector2) -> void:
 	var altura := global_position.y - pies.y # negativo: está por encima
-	var escena := get_tree().current_scene
-	reparent(escena)
+	# Vuelve al nodo de la zona del que se levantó: si fuera hijo de Game, un objeto no
+	# rompible sobreviviría al cambio de zona.
+	var destino := _padre_original if is_instance_valid(_padre_original) else get_tree().current_scene
+	reparent(destino)
 	z_index = 0
 	# El nodo pasa a estar "en el suelo"; la altura se simula moviendo solo el Visual.
 	global_position = pies + dir * 6.0
@@ -100,8 +104,10 @@ func romper() -> void:
 	roto.emit()
 	if botin and randf() < probabilidad_botin:
 		var b := botin.instantiate() as Node2D
+		# Mismo padre que este objeto: basta la posición local (la global no se aplica a un
+		# nodo que aún no está en el árbol, y el add_child va diferido).
+		b.position = position
 		get_parent().add_child.call_deferred(b)
-		b.global_position = global_position
 	# TODO: partículas / sonido de romperse cuando haya arte.
 	var t := create_tween()
 	t.tween_property(visual, ^"scale", Vector2(1.4, 0.4), 0.08)

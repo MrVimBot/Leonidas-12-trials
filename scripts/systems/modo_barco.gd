@@ -52,6 +52,12 @@ func subir(zona: Zona, entrada: String, desde: String) -> void:
 	Microfono.activar()
 
 
+## Si Game se libera en plena travesía (pausa → Salir al menú), el micrófono no debe
+## quedarse abierto: es un autoload y sobrevive a la escena.
+func _exit_tree() -> void:
+	Microfono.desactivar()
+
+
 ## La zona cargada es a pie: quita el barco (si lo había) y vuelve Leonidas.
 func bajar() -> void:
 	_quitar_barco()

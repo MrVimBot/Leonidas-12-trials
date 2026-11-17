@@ -177,13 +177,22 @@ func _al_hundirse() -> void:
 
 func _cargar_zona(ruta: String, entrada: String) -> void:
 	var escena := load(ruta) as PackedScene
-	if escena == null:
-		push_error("Game: no se pudo cargar la zona %s" % ruta)
+	var raiz := escena.instantiate() if escena else null
+	var nueva := raiz as Zona
+	if nueva == null:
+		if raiz:
+			raiz.free()
+		# Ruta mala o raíz que no es una Zona (p. ej. una partida guardada con una zona
+		# renombrada): no se puede seguir sin zona; se cae a la zona inicial.
+		push_error("Game: %s no es una zona válida" % ruta)
+		if ruta == zona_inicial:
+			return
+		_cargar_zona(zona_inicial, entrada_inicial)
 		return
 	if zona_actual:
 		mundo.remove_child(zona_actual)
 		zona_actual.queue_free()
-	zona_actual = escena.instantiate() as Zona
+	zona_actual = nueva
 	mundo.add_child(zona_actual)
 
 	jugador.global_position = zona_actual.punto_entrada(entrada)

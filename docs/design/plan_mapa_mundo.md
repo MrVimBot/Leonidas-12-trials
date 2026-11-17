@@ -377,7 +377,7 @@ CLAUDE.md                                    (sección Mundo)
 - **No carga un PNG recién creado:** falta `godot --headless --path . --import`.
 - **El jugador no puede cruzar el muelle:** quedó `MAR` sólido en `Suelo` debajo del tile provisional (`rect` con `prov = true` debe borrar la otra capa).
 - **Rebote infinito entre zonas:** la entrada está dentro del rectángulo de la salida.
-- **Un `Area2D` no detecta `StaticBody2D`** con `get_overlapping_bodies()`: en el verificador usa consultas directas al espacio físico.
+- **Un `Area2D` sí detecta `StaticBody2D`, pero `get_overlapping_bodies()` va con un tick de retraso** (comprobado el 2026-11-16): en el verificador usa consultas directas al espacio físico.
 - **`class_name` no encontrado en modo `--script`:** carga los scripts con `load("res://…")`, como hace `build_pueblo.gd`.
 - **La flor falsa no reaparece:** necesita celdas en `Zona.suelo`; por eso solo va en el bosque (con `Suelo` de naturaleza).
 

@@ -2,8 +2,8 @@ class_name ComponenteMuerte
 extends Node
 ## Muerte de un enemigo (u objeto con vida) sin animación propia: al recibir `murio`
 ## de su `vida`, apaga sus golpes y colisiones, suelta `monedas` (saltan al suelo
-## y el jugador las recoge: `ObjetoSuelto`), hace un destello,
-## se aplasta y se desvanece, y elimina a `cuerpo`.
+## y el jugador las recoge: `ObjetoSuelto`), se aplasta y se
+## desvanece, y elimina a `cuerpo`.
 
 signal termino
 
@@ -46,8 +46,8 @@ func morir() -> void:
 		_terminar()
 		return
 	var t := create_tween()
-	t.tween_property(visual, ^"modulate", Color(3, 3, 3, 1), 0.06)
-	t.tween_property(visual, ^"modulate", Color.WHITE, 0.08)
+	# Sin destello blanco: Color(3, 3, 3) no se ve con GL Compatibility (los valores > 1
+	# se recortan). Para tener destello haría falta un shader. Decidido el 2026-11-17.
 	if visual is Node2D:
 		t.tween_property(visual, ^"scale", Vector2(1.3, 0.3), duracion).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	t.parallel().tween_property(visual, ^"modulate:a", 0.0, duracion)
