@@ -1,0 +1,55 @@
+{
+  "animations": {
+    "romper_arbusto": {
+      "duplicates": [[4, 3], [5, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "romper_arbusto.png",
+      "foot": 70,
+      "frame_count": 6,
+      "layer": "roto arbusto",
+      "loop": false,
+      "period": 6,
+      "region": [68, 40, 52, 32],
+      "unique_frames": 4
+    },
+    "romper_vasija_azul": {
+      "duplicates": [[4, 3], [5, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "romper_vasija_azul.png",
+      "foot": 69,
+      "frame_count": 6,
+      "layer": "roto vasija azul",
+      "loop": false,
+      "period": 6,
+      "region": [0, 40, 26, 32],
+      "unique_frames": 4
+    },
+    "romper_vasija_naranja": {
+      "duplicates": [[4, 3], [5, 3]],
+      "durations_ms": [100, 100, 100, 100, 100, 100],
+      "empty_frames": [],
+      "file": "romper_vasija_naranja.png",
+      "foot": 69,
+      "frame_count": 6,
+      "layer": "roto, vasija naranja",
+      "loop": false,
+      "period": 6,
+      "region": [24, 40, 46, 32],
+      "unique_frames": 4
+    }
+  },
+  "cell": {
+    "h": 32,
+    "w": 48
+  },
+  "name": "objetos_arrojables",
+  "origin": {
+    "x": 24,
+    "y": 30
+  },
+  "side_faces": "izquierda",
+  "source": "assets/sprites/objetos_arrojables.aseprite",
+  "warnings": ["romper_arbusto: 1 px quedaron fuera de la celda (agranda cell o ajusta foot)"]
+}

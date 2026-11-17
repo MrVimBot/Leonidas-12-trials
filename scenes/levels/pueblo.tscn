@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_mmgxq"]
 [ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="2_qsyfj"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="3_t1f4t"]
-[ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 [ext_resource type="Texture2D" uid="uid://bbnqxwtlj5yl8" path="res://assets/sprites/entorno/casa_amarilla_cerrada.png" id="4_73tgj"]
 [ext_resource type="Texture2D" uid="uid://bwtvjw54tujhk" path="res://assets/sprites/entorno/casa_balcon_cerrada.png" id="5_4nflu"]
 [ext_resource type="Texture2D" uid="uid://k42u3mxhqbpb" path="res://assets/sprites/entorno/casa_teja_cerrada.png" id="6_hk6x6"]
@@ -15,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://ihf64cpt7s7h" path="res://assets/sprites/entorno/pino.png" id="12_aijw0"]
 [ext_resource type="Texture2D" uid="uid://d0l3vkfif838u" path="res://assets/sprites/entorno/cipres_dorado.png" id="13_xaew7"]
 [ext_resource type="Texture2D" uid="uid://8ed0eogba4q3" path="res://assets/sprites/entorno/cipres.png" id="14_rqkgi"]
-[ext_resource type="Texture2D" uid="uid://b50emni8xr7q5" path="res://assets/sprites/entorno/manzano_1.png" id="15_wvopy"]
 [ext_resource type="Texture2D" uid="uid://bcvtmhxwdmtro" path="res://assets/sprites/entorno/manzano_2.png" id="16_1uqxn"]
 [ext_resource type="Texture2D" uid="uid://dfussqeii8pvf" path="res://assets/sprites/entorno/manzano_3.png" id="17_05cy4"]
 [ext_resource type="Texture2D" uid="uid://b50n32umu7yyw" path="res://assets/sprites/entorno/roca_grande.png" id="18_1qanc"]
@@ -57,7 +55,12 @@
 [ext_resource type="Resource" path="res://resources/dialogues/npc_tendedera_despedida.tres" id="51_dde"]
 [ext_resource type="Resource" path="res://resources/dialogues/cartel_camino_cerrado.tres" id="52_ccc"]
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_sabios.tscn" id="54_c4mwa"]
+[ext_resource type="PackedScene" path="res://scenes/items/arbusto.tscn" id="55_c4mwa"]
+[ext_resource type="PackedScene" path="res://scenes/items/piedra.tscn" id="56_c4yk8"]
+[ext_resource type="PackedScene" path="res://scenes/items/vasija_azul.tscn" id="57_xeer0"]
+[ext_resource type="PackedScene" path="res://scenes/items/vasija_naranja.tscn" id="58_22mwr"]
 [ext_resource type="Script" uid="uid://us5dtx7tine7" path="res://scripts/entorno/auto_transiciones.gd" id="60_autotr"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
@@ -239,7 +242,6 @@ textura = ExtResource("12_aijw0")
 
 [node name="Manzano1" parent="Objetos/Decorados" unique_id=931341301 instance=ExtResource("manzano_tscn")]
 position = Vector2(463, 400)
-textura = ExtResource("15_wvopy")
 
 [node name="Manzano2" parent="Objetos/Decorados" unique_id=984622723 instance=ExtResource("manzano_tscn")]
 position = Vector2(594, 377)
@@ -402,7 +404,6 @@ textura = ExtResource("13_xaew7")
 
 [node name="ManzanoNE1" parent="Objetos/Decorados" unique_id=1602178628 instance=ExtResource("manzano_tscn")]
 position = Vector2(1295, 430)
-textura = ExtResource("15_wvopy")
 
 [node name="ManzanoNE2" parent="Objetos/Decorados" unique_id=711584640 instance=ExtResource("manzano_tscn")]
 position = Vector2(1445, 300)
@@ -4581,6 +4582,27 @@ shape = SubResource("RectangleShape2D_374g8")
 [node name="EscenaSabios" parent="Objetos/Eventos" unique_id=394023614 node_paths=PackedStringArray("sabios") instance=ExtResource("54_c4mwa")]
 position = Vector2(920, 646)
 sabios = [NodePath("../../NPCs/Sabio1"), NodePath("../../NPCs/Sabio2"), NodePath("../../NPCs/Sabio3"), NodePath("../../NPCs/Sabio4")]
+
+[node name="Agarrables" type="Node2D" parent="Objetos" unique_id=268317659]
+y_sort_enabled = true
+
+[node name="Arbusto1" parent="Objetos/Agarrables" unique_id=1089044358 instance=ExtResource("55_c4mwa")]
+position = Vector2(700, 1200)
+
+[node name="Arbusto2" parent="Objetos/Agarrables" unique_id=1210371414 instance=ExtResource("55_c4mwa")]
+position = Vector2(726, 1222)
+
+[node name="Piedra1" parent="Objetos/Agarrables" unique_id=2123440018 instance=ExtResource("56_c4yk8")]
+position = Vector2(752, 1196)
+
+[node name="VasijaAzul1" parent="Objetos/Agarrables" unique_id=1833822775 instance=ExtResource("57_xeer0")]
+position = Vector2(690, 1236)
+
+[node name="VasijaNaranja1" parent="Objetos/Agarrables" unique_id=130818137 instance=ExtResource("58_22mwr")]
+position = Vector2(764, 1232)
+
+[node name="VasijaAzulCasa" parent="Objetos/Agarrables" unique_id=1737494563 instance=ExtResource("57_xeer0")]
+position = Vector2(500, 1100)
 
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1629385592]
 collision_mask = 0

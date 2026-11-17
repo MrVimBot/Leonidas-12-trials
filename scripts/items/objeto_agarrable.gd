@@ -4,9 +4,11 @@ extends StaticBody2D
 ## En el suelo bloquea el paso (capa mundo). Al lanzarlo vuela en línea recta con
 ## un pequeño arco, golpea con su Hitbox "Golpe" y se rompe al caer o chocar.
 ##
-## Estructura de la escena: StaticBody2D (capas mundo + interactuable) con este script,
-## un hijo "Visual" (Sprite2D/Node2D), su CollisionShape2D y un hijo "Golpe" (Hitbox,
-## capa golpe_jugador, máscara enemigos + interactuable).
+## Estructura de la escena (scenes/items/objeto_agarrable.tscn, de la que heredan vasijas,
+## piedra y arbusto): StaticBody2D (capas mundo + interactuable) con este script, un hijo
+## "Visual" (Sprite2D/Node2D), su CollisionShape2D, un hijo "Golpe" (Hitbox, capa
+## golpe_jugador, máscara enemigos + interactuable) y, si se rompe con animación, un
+## AnimatedSprite2D oculto ("Rotura", asignado en `sprite_rotura`).
 
 ## Al romperse.
 signal roto
@@ -18,14 +20,30 @@ signal roto
 @export var velocidad_vuelo := 190.0
 @export var altura_arco := 6.0
 ## Probabilidad (0–1) de soltar algo al romperse; la escena a soltar va en `botin`.
+## Es una escena de ObjetoSuelto (la moneda), igual que la de los enemigos.
 @export var botin: PackedScene
 @export_range(0.0, 1.0) var probabilidad_botin := 0.0
+## Cuántas unidades de `botin` salen cuando toca soltar.
+@export var monedas_min := 1
+@export var monedas_max := 2
+@export_group("Rotura")
+## Animación de `sprite_rotura` al romperse. Vacía = se aplasta y desvanece (respaldo).
+@export var animacion_rotura: StringName
+## AnimatedSprite2D (oculto en la escena) con la animación de romperse; sus pies son los del objeto.
+@export var sprite_rotura: AnimatedSprite2D
+## Segundos que se quedan los trozos en el suelo antes de desvanecerse.
+@export var duracion_restos := 1.0
+## Lo que queda en el sitio al levantarlo o cortarlo (el tocón del arbusto). Se pone una
+## sola vez, donde estaba el objeto.
+@export var resto: PackedScene
 
 var _capa_original: int
 var _padre_original: Node
 var _mascara_original: int
 var _visual_y: float
 var _volando := false
+var _roto := false
+var _resto_dejado := false
 var _dir := Vector2.ZERO
 var _distancia := 0.0
 var _recorrido := 0.0
@@ -47,6 +65,7 @@ func levantar(punto: Node2D) -> void:
 	collision_layer = 0
 	collision_mask = 0
 	_padre_original = get_parent() # la zona: al lanzarlo vuelve a ella (no a Game)
+	_dejar_resto()
 	reparent(punto)
 	z_index = 1
 	var t := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -98,21 +117,46 @@ func _aterrizar() -> void:
 
 
 func romper() -> void:
+	if _roto:
+		return
+	_roto = true
 	_volando = false
 	collision_layer = 0
 	golpe.set_deferred(&"activo", false)
 	roto.emit()
+	# Cortado en el sitio (con la espada): el resto aún no se dejó. Tras el vuelo ya está.
+	_dejar_resto()
 	if botin and randf() < probabilidad_botin:
-		var b := botin.instantiate() as Node2D
-		# Mismo padre que este objeto: basta la posición local (la global no se aplica a un
-		# nodo que aún no está en el árbol, y el add_child va diferido).
-		b.position = position
-		get_parent().add_child.call_deferred(b)
-	# TODO: partículas / sonido de romperse cuando haya arte.
-	var t := create_tween()
-	t.tween_property(visual, ^"scale", Vector2(1.4, 0.4), 0.08)
-	t.parallel().tween_property(visual, ^"modulate:a", 0.0, 0.12)
-	t.tween_callback(queue_free)
+		# Mismo padre que este objeto; `soltar` añade diferido (puede llamarse desde física).
+		ObjetoSuelto.soltar(botin, get_parent(), global_position, randi_range(monedas_min, monedas_max))
+	var sombra := get_node_or_null(^"Sombra") as CanvasItem
+	if sombra:
+		sombra.hide()
+	if sprite_rotura and animacion_rotura != &"":
+		visual.hide()
+		sprite_rotura.show()
+		sprite_rotura.play(animacion_rotura)
+		await sprite_rotura.animation_finished
+		await get_tree().create_timer(duracion_restos, false).timeout
+		var t := create_tween()
+		t.tween_property(sprite_rotura, ^"modulate:a", 0.0, 0.3)
+		t.tween_callback(queue_free)
+		return
+	# Respaldo sin animación: se aplasta y se desvanece.
+	var t2 := create_tween()
+	t2.tween_property(visual, ^"scale", Vector2(1.4, 0.4), 0.08)
+	t2.parallel().tween_property(visual, ^"modulate:a", 0.0, 0.12)
+	t2.tween_callback(queue_free)
+
+
+## Pone `resto` (el tocón) en el sitio original, una sola vez.
+func _dejar_resto() -> void:
+	if _resto_dejado or resto == null:
+		return
+	_resto_dejado = true
+	var r := resto.instantiate() as Node2D
+	r.position = position
+	get_parent().add_child.call_deferred(r)
 
 
 ## Golpe de espada (u otro Hitbox).

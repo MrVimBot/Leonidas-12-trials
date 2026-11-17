@@ -8,7 +8,7 @@
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_carta.tres" id="6_car"]
 [ext_resource type="Resource" path="res://resources/dialogues/cinematica_final.tres" id="7_fin"]
 [ext_resource type="Texture2D" uid="uid://dj5hxr2x8vgor" path="res://assets/backgrounds/cinematica/fondo_2.png" id="8_fon"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/cinematica_cama.tres" id="9_cam"]
+[ext_resource type="SpriteFrames" uid="uid://ibx84cloq3f4" path="res://resources/sprite_frames/cinematica_cama.tres" id="9_cam"]
 [ext_resource type="Texture2D" uid="uid://omdwfhs6gy1t" path="res://assets/backgrounds/cinematica/cuarto_leonidas.png" id="9_eyli5"]
 [ext_resource type="SpriteFrames" uid="uid://bioquihnq3yci" path="res://resources/sprite_frames/cinematica_mama.tres" id="10_mam"]
 [ext_resource type="Texture2D" uid="uid://tw5hy0hjo2o4" path="res://assets/sprites/cinematica/carta.png" id="11_pap"]

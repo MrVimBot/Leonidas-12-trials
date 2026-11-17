@@ -1,0 +1,153 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dj8p0x4alo1mm"]
+
+[ext_resource type="Texture2D" uid="uid://oie3tbsdtvgg" path="res://assets/sprites/strips/objetos_arrojables/romper_arbusto.png" id="1_fg417"]
+[ext_resource type="Texture2D" uid="uid://clwt1h1byj62u" path="res://assets/sprites/strips/objetos_arrojables/romper_vasija_azul.png" id="2_hu10i"]
+[ext_resource type="Texture2D" uid="uid://bsx13ph36bxhr" path="res://assets/sprites/strips/objetos_arrojables/romper_vasija_naranja.png" id="3_2beya"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ops4"]
+atlas = ExtResource("1_fg417")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qt11g"]
+atlas = ExtResource("1_fg417")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i1im5"]
+atlas = ExtResource("1_fg417")
+region = Rect2(96, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a42ww"]
+atlas = ExtResource("1_fg417")
+region = Rect2(144, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4rrm"]
+atlas = ExtResource("1_fg417")
+region = Rect2(192, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uqxd7"]
+atlas = ExtResource("1_fg417")
+region = Rect2(240, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mw5mi"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yk4fi"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_btddv"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(96, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdbpc"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(144, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qojyo"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(192, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3d1ye"]
+atlas = ExtResource("2_hu10i")
+region = Rect2(240, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crar7"]
+atlas = ExtResource("3_2beya")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8wkm"]
+atlas = ExtResource("3_2beya")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_104mi"]
+atlas = ExtResource("3_2beya")
+region = Rect2(96, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqf6i"]
+atlas = ExtResource("3_2beya")
+region = Rect2(144, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jnpe"]
+atlas = ExtResource("3_2beya")
+region = Rect2(192, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xry1f"]
+atlas = ExtResource("3_2beya")
+region = Rect2(240, 0, 48, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ops4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qt11g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i1im5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a42ww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4rrm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uqxd7")
+}],
+"loop": 0,
+"name": &"romper_arbusto",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mw5mi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yk4fi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_btddv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdbpc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qojyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3d1ye")
+}],
+"loop": 0,
+"name": &"romper_vasija_azul",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crar7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8wkm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_104mi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqf6i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2jnpe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xry1f")
+}],
+"loop": 0,
+"name": &"romper_vasija_naranja",
+"speed": 10.0
+}]
+metadata/origin = Vector2(24, 30)
+metadata/cell_size = Vector2i(48, 32)
+metadata/side_faces = "izquierda"
+metadata/source = "assets/sprites/objetos_arrojables.aseprite"

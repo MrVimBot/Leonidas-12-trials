@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c2tdq8nqkoy6d"]
+
+[ext_resource type="Script" uid="uid://bd51apdji81kq" path="res://scripts/items/objeto_agarrable.gd" id="1_kuub2"]
+[ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="2_e1lqt"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="3_588u1"]
+[ext_resource type="SpriteFrames" uid="uid://dj8p0x4alo1mm" path="res://resources/sprite_frames/objetos_arrojables.tres" id="4_n517w"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="5_5o8kf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfigu"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fokx3"]
+size = Vector2(14, 12)
+
+[node name="ObjetoAgarrable" type="StaticBody2D" unique_id=1722682495 node_paths=PackedStringArray("sprite_rotura")]
+collision_layer = 33
+collision_mask = 0
+script = ExtResource("1_kuub2")
+se_rompe_con_espada = true
+botin = ExtResource("2_e1lqt")
+probabilidad_botin = 0.3
+sprite_rotura = NodePath("Rotura")
+
+[node name="Sombra" type="Node2D" parent="." unique_id=412661964]
+script = ExtResource("3_588u1")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1358752242]
+
+[node name="Rotura" type="AnimatedSprite2D" parent="." unique_id=1374852641]
+visible = false
+sprite_frames = ExtResource("4_n517w")
+animation = &"romper_arbusto"
+offset = Vector2(0, -14)
+
+[node name="Colision" type="CollisionShape2D" parent="." unique_id=1324401027]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_lfigu")
+
+[node name="Golpe" type="Area2D" parent="." unique_id=1065527151]
+collision_layer = 8
+collision_mask = 36
+script = ExtResource("5_5o8kf")
+
+[node name="Forma" type="CollisionShape2D" parent="Golpe" unique_id=823072867]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_fokx3")

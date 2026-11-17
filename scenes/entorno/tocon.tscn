@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="1_dec"]
+[ext_resource type="Texture2D" uid="uid://bndfdou6llsry" path="res://assets/sprites/entorno/tocon.png" id="2_tex"]
+
+[node name="Tocon" instance=ExtResource("1_dec")]
+textura = ExtResource("2_tex")
+solido = false
+sombra = false

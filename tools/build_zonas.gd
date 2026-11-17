@@ -17,6 +17,10 @@ const C := Tiles # para acortar los nombres de tiles
 
 const DIR := "res://scenes/levels/"
 const MUSICA := "res://assets/audio/music/"
+const ARBUSTO := "res://scenes/items/arbusto.tscn"
+const VASIJA_AZUL := "res://scenes/items/vasija_azul.tscn"
+const VASIJA_NARANJA := "res://scenes/items/vasija_naranja.tscn"
+const PIEDRA := "res://scenes/items/piedra.tscn"
 const SETA := "res://scenes/enemies/seta_bomba.tscn"
 const FLOR := "res://scenes/enemies/flor_falsa.tscn"
 const REMOLINO := "res://scenes/entorno/remolino.tscn"
@@ -119,6 +123,13 @@ func _bosque() -> Constructor:
 	z.deco("Claro", "arbusto_verde", _t(25, 39))
 	z.deco("Claro", "arbusto_verde", _t(38, 33))
 	z.deco("Claro", "roca_grande", _t(30, 33), SIN_SOMBRA)
+	# Objetos que se levantan y lanzan (lejos de los pasos obligatorios del claro).
+	z.instancia("Claro", ARBUSTO, _t(21, 38))
+	z.instancia("Claro", ARBUSTO, _t(34, 36))
+	z.instancia("Claro", ARBUSTO, _t(40, 34))
+	z.instancia("Claro", VASIJA_AZUL, _t(23, 33))
+	z.instancia("Claro", VASIJA_NARANJA, _t(35, 40))
+	z.instancia("Claro", PIEDRA, _t(28, 36))
 	for p in [Vector2i(24, 31), Vector2i(38, 36), Vector2i(30, 38)]:
 		z.instancia("Enemigos", SETA, _t(p.x, p.y))
 	for p in [Vector2i(20, 36), Vector2i(36, 33), Vector2i(42, 31)]:
