@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cints4vq11nna"
+path="res://.godot/imported/objetos_arrojables.aseprite-3c8bd10937b6b8efca7e12c898f3f113.res"
+
+[deps]
+
+source_file="res://assets/sprites/objetos_arrojables.aseprite"
+dest_files=["res://.godot/imported/objetos_arrojables.aseprite-3c8bd10937b6b8efca7e12c898f3f113.res"]
+
+[params]
+
