@@ -1,0 +1,59 @@
+{
+	"alto_mundo": 28,
+	"ancla": {
+		"x": 47,
+		"y": 56
+	},
+	"animaciones": {
+		"atacar": {
+			"archivo": "atacar.png",
+			"celda": {
+				"h": 61,
+				"w": 89,
+				"x": 5,
+				"y": 0
+			},
+			"columnas": 5,
+			"cuadros": 31,
+			"fps": 24,
+			"loop": false,
+			"separacion": 2
+		},
+		"caminar": {
+			"archivo": "caminar.png",
+			"celda": {
+				"h": 61,
+				"w": 65,
+				"x": 9,
+				"y": 0
+			},
+			"columnas": 7,
+			"cuadros": 47,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"parado": {
+			"archivo": "parado.png",
+			"celda": {
+				"h": 60,
+				"w": 77,
+				"x": 9,
+				"y": 1
+			},
+			"columnas": 7,
+			"cuadros": 47,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		}
+	},
+	"densidad": 2,
+	"fuente": "res://fuente/nivel2/gamba",
+	"lienzo": {
+		"h": 61,
+		"w": 94
+	},
+	"mira": "izquierda",
+	"nombre": "gamba"
+}

@@ -1,0 +1,59 @@
+{
+	"alto_mundo": 34,
+	"ancla": {
+		"x": 65,
+		"y": 79
+	},
+	"animaciones": {
+		"atacar": {
+			"archivo": "atacar.png",
+			"celda": {
+				"h": 81,
+				"w": 99,
+				"x": 0,
+				"y": 0
+			},
+			"columnas": 7,
+			"cuadros": 53,
+			"fps": 24,
+			"loop": false,
+			"separacion": 2
+		},
+		"caminar": {
+			"archivo": "caminar.png",
+			"celda": {
+				"h": 64,
+				"w": 79,
+				"x": 28,
+				"y": 17
+			},
+			"columnas": 7,
+			"cuadros": 53,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"parado": {
+			"archivo": "parado.png",
+			"celda": {
+				"h": 70,
+				"w": 69,
+				"x": 35,
+				"y": 11
+			},
+			"columnas": 6,
+			"cuadros": 35,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		}
+	},
+	"densidad": 2,
+	"fuente": "res://fuente/nivel2/serpiente",
+	"lienzo": {
+		"h": 81,
+		"w": 130
+	},
+	"mira": "izquierda",
+	"nombre": "ciclope_serpiente"
+}

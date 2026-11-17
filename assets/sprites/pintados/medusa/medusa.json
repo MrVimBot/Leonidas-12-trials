@@ -1,0 +1,59 @@
+{
+	"alto_mundo": 96,
+	"ancla": {
+		"x": 132,
+		"y": 200
+	},
+	"animaciones": {
+		"atacar": {
+			"archivo": "atacar.png",
+			"celda": {
+				"h": 216,
+				"w": 239,
+				"x": 25,
+				"y": 0
+			},
+			"columnas": 8,
+			"cuadros": 60,
+			"fps": 24,
+			"loop": false,
+			"separacion": 2
+		},
+		"caminar": {
+			"archivo": "caminar.png",
+			"celda": {
+				"h": 188,
+				"w": 148,
+				"x": 56,
+				"y": 16
+			},
+			"columnas": 7,
+			"cuadros": 29,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"parado": {
+			"archivo": "parado.png",
+			"celda": {
+				"h": 196,
+				"w": 128,
+				"x": 67,
+				"y": 9
+			},
+			"columnas": 7,
+			"cuadros": 29,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		}
+	},
+	"densidad": 2,
+	"fuente": "res://fuente/nivel2/medusa",
+	"lienzo": {
+		"h": 216,
+		"w": 264
+	},
+	"mira": "frente",
+	"nombre": "medusa"
+}

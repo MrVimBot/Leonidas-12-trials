@@ -12,3 +12,7 @@ assets/backgrounds/cinematica/Untitled_*.png
 
 # Planes de saneamiento para modelos de IA (auditoría; no forman parte del juego)
 docs/plan/
+
+# Fotogramas pintados originales (nivel 2, ~160 MB): los copia tools/pintados/copiar_fuente.sh
+# y el juego usa lo que genera tools/pintados/normalizar.sh en assets/sprites/pintados/.
+/fuente/

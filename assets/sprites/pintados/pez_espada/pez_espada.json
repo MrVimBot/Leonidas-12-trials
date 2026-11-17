@@ -1,0 +1,73 @@
+{
+	"alto_mundo": 26,
+	"ancla": {
+		"x": 75,
+		"y": 52
+	},
+	"animaciones": {
+		"atacar": {
+			"archivo": "atacar.png",
+			"celda": {
+				"h": 72,
+				"w": 135,
+				"x": 1,
+				"y": 0
+			},
+			"columnas": 4,
+			"cuadros": 29,
+			"fps": 24,
+			"loop": false,
+			"separacion": 2
+		},
+		"caminar": {
+			"archivo": "caminar.png",
+			"celda": {
+				"h": 57,
+				"w": 130,
+				"x": 6,
+				"y": 3
+			},
+			"columnas": 4,
+			"cuadros": 35,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"correr": {
+			"archivo": "correr.png",
+			"celda": {
+				"h": 54,
+				"w": 132,
+				"x": 6,
+				"y": 8
+			},
+			"columnas": 3,
+			"cuadros": 12,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"parado": {
+			"archivo": "parado.png",
+			"celda": {
+				"h": 54,
+				"w": 132,
+				"x": 6,
+				"y": 3
+			},
+			"columnas": 5,
+			"cuadros": 47,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		}
+	},
+	"densidad": 2,
+	"fuente": "res://fuente/nivel2/pez_espada",
+	"lienzo": {
+		"h": 72,
+		"w": 150
+	},
+	"mira": "izquierda",
+	"nombre": "pez_espada"
+}
