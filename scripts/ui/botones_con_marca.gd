@@ -1,7 +1,7 @@
 class_name BotonesConMarca
-extends VBoxContainer
-## Contenedor de los botones de un menú (principal, pausa) que pone la marca "> " delante
-## del botón con el foco. Se asigna como script del VBoxContainer que tiene los botones.
+extends BoxContainer
+## Contenedor (vertical u horizontal) de los botones de un menú (principal, pausa, Game Over) que pone la marca "> " delante
+## del botón con el foco. Se asigna como script del VBoxContainer/HBoxContainer que tiene los botones.
 ##
 ## En `_ready` guarda el texto de cada botón y conecta `focus_entered` (cambia la marca) y
 ## `mouse_entered` (pasar el ratón por encima = seleccionar). Quien abre el menú y da el

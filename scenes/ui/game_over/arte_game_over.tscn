@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://73iaqaw4pbjs" path="res://assets/ui/game_over/fondo.png" id="1_fon"]
+[ext_resource type="Texture2D" uid="uid://bos8da6l3tq6u" path="res://assets/ui/game_over/haz.png" id="2_haz"]
+[ext_resource type="Texture2D" uid="uid://ty7puas6g1ux" path="res://assets/ui/game_over/luz_suelo.png" id="3_luz"]
+[ext_resource type="Texture2D" uid="uid://ddtjm76sq11rl" path="res://assets/ui/game_over/leonidas.png" id="4_leo"]
+[ext_resource type="Texture2D" uid="uid://7rtg1v4agrvq" path="res://assets/ui/game_over/cartel.png" id="5_car"]
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cartel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_entrada"]
+resource_name = "entrada"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cartel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.65, 0.8),
+"transitions": PackedFloat32Array(2, 0.5, 2, 1),
+"update": 0,
+"values": [Vector2(0, -40), Vector2(0, 0), Vector2(0, -3), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_go"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"entrada": SubResource("Animation_entrada")
+}
+
+[node name="ArteGameOver" type="Control"]
+custom_minimum_size = Vector2(192, 108)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+
+[node name="Cono" type="ColorRect" parent="."]
+editor_description = "El cono del foco es un hueco transparente en la capa del fondo (Layer 2): en Aseprite se ve sobre el blanco del lienzo. Este blanco lo rellena igual. PROVISIONAL: preguntar a la artista si va otro color o si debe verse el juego detrás."
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("1_fon")
+
+[node name="Haz" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("2_haz")
+
+[node name="LuzSuelo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("3_luz")
+
+[node name="Leonidas" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("4_leo")
+
+[node name="Cartel" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("5_car")
+
+[node name="Animacion" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_go")
+}

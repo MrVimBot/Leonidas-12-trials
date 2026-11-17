@@ -111,7 +111,10 @@ func ejecutar() -> void:
 	j.desbloquear(&"escena")
 	ok("b) todo quitado → NORMAL", j.estado == N and not j.esta_bloqueado())
 
-	# d) morir con un motivo activo
+	# d) morir con un motivo activo. En game.tscn el Jugador no reaparece solo (sale la
+	# pantalla de Game Over: prueba_game_over.gd); aquí se prueba su lógica de bloqueo.
+	j.reaparecer_automatico = true
+	j.murio.disconnect(game._al_morir_jugador)
 	await ticks(5)
 	j.vida.recibir_danio(100, j.global_position + Vector2.UP)
 	ok("d) muere", j.estado == Jugador.Estado.MUERTO, str(j.estado))

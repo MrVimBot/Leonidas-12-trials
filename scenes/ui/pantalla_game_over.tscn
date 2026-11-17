@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pantalla_game_over.gd" id="1_pgo"]
+[ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_over/arte_game_over.tscn" id="3_arte"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vacio"]
+
+[sub_resource type="Theme" id="Theme_game_over"]
+Button/colors/font_color = Color(0.953, 0.902, 0.769, 1)
+Button/colors/font_disabled_color = Color(0.953, 0.902, 0.769, 1)
+Button/colors/font_focus_color = Color(0.91, 0.71, 0.27, 1)
+Button/colors/font_hover_color = Color(0.91, 0.71, 0.27, 1)
+Button/colors/font_hover_pressed_color = Color(0.91, 0.71, 0.27, 1)
+Button/colors/font_pressed_color = Color(0.91, 0.71, 0.27, 1)
+Button/styles/disabled = SubResource("StyleBoxEmpty_vacio")
+Button/styles/focus = SubResource("StyleBoxEmpty_vacio")
+Button/styles/hover = SubResource("StyleBoxEmpty_vacio")
+Button/styles/normal = SubResource("StyleBoxEmpty_vacio")
+Button/styles/pressed = SubResource("StyleBoxEmpty_vacio")
+
+[node name="PantallaGameOver" type="CanvasLayer"]
+process_mode = 3
+layer = 30
+visible = false
+script = ExtResource("1_pgo")
+arte_por_defecto = ExtResource("3_arte")
+
+[node name="Raiz" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_game_over")
+
+[node name="Negro" type="ColorRect" parent="Raiz"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Lienzo" type="Control" parent="Raiz"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 108.0
+mouse_filter = 2
+
+[node name="Arte" parent="Raiz/Lienzo" instance=ExtResource("3_arte")]
+unique_name_in_owner = true
+
+[node name="Botones" type="HBoxContainer" parent="Raiz"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -26.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 40
+alignment = 1
+script = ExtResource("2_bot")
+
+[node name="Continuar" type="Button" parent="Raiz/Botones"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+focus_neighbor_left = NodePath("../Menu")
+text = "Continuar"
+
+[node name="Menu" type="Button" parent="Raiz/Botones"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+focus_neighbor_right = NodePath("../Continuar")
+text = "Menú principal"
+
+[connection signal="pressed" from="Raiz/Botones/Continuar" to="." method="_continuar"]
+[connection signal="pressed" from="Raiz/Botones/Menu" to="." method="_ir_al_menu"]

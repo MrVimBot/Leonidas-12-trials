@@ -19,6 +19,9 @@ extends Node2D
 @export var modo_barco := false
 ## Canción de la zona (Game se la pasa a Musica al entrar). Vacío = silencio.
 @export var musica: AudioStream
+## Arte de la pantalla de Game Over al morir aquí (escena con raíz Control, como
+## scenes/ui/game_over/arte_game_over.tscn). Vacío = el de siempre.
+@export var arte_game_over: PackedScene
 
 
 ## La Zona a la que pertenece `nodo` (la primera que aparece subiendo por sus padres), o null

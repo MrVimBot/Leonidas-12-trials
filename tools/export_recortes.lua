@@ -8,8 +8,10 @@
 --     --script-param root=$(pwd) \
 --     --script tools/export_recortes.lua
 --
--- Opciones de cada recorte: `aislar = true` (solo la mancha más grande) y
--- `escala = 0.4` (reduce por un factor no entero; también vale para toda la tabla).
+-- Opciones de cada recorte: `aislar = true` (solo la mancha más grande),
+-- `escala = 0.4` (reduce por un factor no entero; también vale para toda la tabla) y
+-- `capas = {"Layer 5", "Layer 6"}` (aplana solo esas capas, para hojas por capas como
+-- game_over.aseprite; sin `capas`, todas las visibles).
 --
 -- Normalmente se llama desde tools/export_sprites.sh. Nunca guarda el sprite.
 
@@ -22,6 +24,33 @@ local C = dofile(app.params.config or error("Falta --script-param config=..."))
 -- Aplanar el primer frame (solo capas visibles).
 local lienzo = Image(spr.width, spr.height, ColorMode.RGB)
 lienzo:drawSprite(spr, 1)
+
+-- Aplana solo las capas `nombres` (nivel superior o dentro de grupos) del primer frame.
+-- Cambia la visibilidad de las capas de la copia y la deja como estaba: el sprite no se guarda.
+local function aplanar_capas(nombres)
+  local quiero = {}
+  for _, n in ipairs(nombres) do quiero[n] = true end
+  local antes, encontradas = {}, 0
+  local function recorrer(capas, dentro)
+    for _, l in ipairs(capas) do
+      antes[#antes + 1] = { l, l.isVisible }
+      local si = dentro or quiero[l.name] == true
+      if quiero[l.name] then encontradas = encontradas + 1 end
+      if l.isGroup then
+        l.isVisible = true
+        recorrer(l.layers, si)
+      else
+        l.isVisible = si
+      end
+    end
+  end
+  recorrer(spr.layers, false)
+  assert(encontradas == #nombres, "export_recortes: falta alguna capa de " .. table.concat(nombres, ", "))
+  local img = Image(spr.width, spr.height, ColorMode.RGB)
+  img:drawSprite(spr, 1)
+  for _, par in ipairs(antes) do par[1].isVisible = par[2] end
+  return img
+end
 
 local function opaco(img, x, y)
   return app.pixelColor.rgbaA(img:getPixel(x, y)) > 0
@@ -131,7 +160,7 @@ for _, r in ipairs(C.recortes) do
   local dir = root .. "/" .. (r.dir or C.out_dir)
   app.fs.makeAllDirectories(dir)
   local img = Image(r.w, r.h, ColorMode.RGB)
-  img:drawImage(lienzo, Point(-r.x, -r.y))
+  img:drawImage(r.capas and aplanar_capas(r.capas) or lienzo, Point(-r.x, -r.y))
   if r.aislar then aislar_mayor(img) end
   local escala = r.escala or C.escala
   if escala and escala ~= 1 then img = escalar(img, escala) end

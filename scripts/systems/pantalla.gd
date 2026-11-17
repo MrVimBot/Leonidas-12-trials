@@ -10,3 +10,23 @@ extends RefCounted
 static func modo_pintura(nodo: Node, activo: bool) -> void:
 	nodo.get_window().content_scale_mode = (
 		Window.CONTENT_SCALE_MODE_CANVAS_ITEMS if activo else Window.CONTENT_SCALE_MODE_VIEWPORT)
+
+
+## Escala y centra `control` (arte de `control.size` px, en un CanvasLayer y en modo pintura)
+## para que cada píxel del arte ocupe un número ENTERO de píxeles de pantalla, el mayor
+## que quepa en la zona del juego. Devuelve ese número (k). Lo usan el libro y el Game Over.
+## Con escala entera y aspecto fijo, el juego ocupa pantalla × f píxeles de la ventana (lo
+## demás son bandas negras, donde no se puede dibujar); una unidad lógica son f píxeles.
+static func ajustar_a_pixel_entero(control: Control) -> float:
+	var pantalla := Vector2(
+		ProjectSettings.get_setting("display/window/size/viewport_width"),
+		ProjectSettings.get_setting("display/window/size/viewport_height"))
+	var ventana := Vector2(control.get_window().size)
+	var f := maxf(1.0, floorf(minf(ventana.x / pantalla.x, ventana.y / pantalla.y)))
+	var area := pantalla * f
+	var k := maxf(1.0, floorf(minf(area.x / control.size.x, area.y / control.size.y)))
+	var escala := k / f
+	control.scale = Vector2(escala, escala)
+	# Esquina en un píxel entero de pantalla.
+	control.position = ((pantalla - control.size * escala) / 2.0 * f).round() / f
+	return k

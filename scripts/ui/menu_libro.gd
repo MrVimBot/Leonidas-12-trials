@@ -69,9 +69,6 @@ var _en_pestanas := false
 var _tiempo := 0.0
 var _tiempo_aviso := 0.0
 
-## Pantalla lógica del juego (display/window/size/viewport_*), leída en _ready.
-var _pantalla := Vector2.ZERO
-
 ## Medidas de libro.json (px del lienzo) que hacen falta después de colocar los nodos.
 var _pestana_x: Array[float] = []
 var _pestana_y := Vector2(19, 11) # apagada, encendida
@@ -94,9 +91,6 @@ var _sel_desplazamiento := Vector2(-3, -4)
 
 
 func _ready() -> void:
-	var ancho: int = ProjectSettings.get_setting("display/window/size/viewport_width")
-	var alto: int = ProjectSettings.get_setting("display/window/size/viewport_height")
-	_pantalla = Vector2(ancho, alto)
 	_leer_medidas()
 	EstadoJuego.objetos_cambio.connect(func(_id: StringName, _n: int) -> void: _refrescar())
 	EstadoJuego.misiones_cambio.connect(_refrescar)
@@ -158,20 +152,11 @@ func _posicion_en_libro(c: Control) -> Vector2:
 
 
 ## Escala entera de pantalla para el libro y lo centra. Se llama al abrir y si cambia la
-## ventana. Con el modo CANVAS_ITEMS una unidad lógica son `f` píxeles de pantalla.
+## ventana.
 func _colocar() -> void:
 	if not abierto:
 		return
-	# Con escala entera y aspecto fijo, el juego ocupa _pantalla × f píxeles de la ventana
-	# (lo demás son bandas negras, donde no se puede dibujar).
-	var ventana := Vector2(get_window().size)
-	var f := maxf(1.0, floorf(minf(ventana.x / _pantalla.x, ventana.y / _pantalla.y)))
-	var area := _pantalla * f
-	var k := maxf(1.0, floorf(minf(area.x / libro.size.x, area.y / libro.size.y)))
-	var escala := k / f
-	libro.scale = Vector2(escala, escala)
-	# Esquina en un píxel entero de pantalla.
-	libro.position = ((_pantalla - libro.size * escala) / 2.0 * f).round() / f
+	Pantalla.ajustar_a_pixel_entero(libro)
 
 
 # --- Abrir y cerrar -------------------------------------------------------------------

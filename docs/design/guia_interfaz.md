@@ -24,7 +24,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Menú del inventario | Jugabilidad **p. 17** | ✅ Hecho (autoload `Libro`, ver CLAUDE.md «El libro» y `plan_inventario_libro.md`) |
 | Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ❌ Pendiente (nivel 2) |
 | Tienda del mercader | Ninguna maqueta | ✅ Hecha (diseño provisional): `scenes/ui/menu_tienda.tscn` |
-| Game over | Jugabilidad p. 8 (solo el texto "game over") | ❌ Pendiente: diseñar |
+| Game over | Jugabilidad p. 8 (solo el texto "game over") + `assets/sprites/game_over.aseprite` | ✅ Hecho: `scenes/ui/pantalla_game_over.tscn` |
 | Menú principal / título | Ninguna maqueta | ✅ Hecho (arte provisional: `scenes/ui/menu_principal.tscn`) |
 | Barco: vida del barco | Jugabilidad p. 9, Guión p. 18 (solo el texto) | ✅ Hecho (provisional): corazones del barco + `MedidorViento` |
 
@@ -96,8 +96,14 @@ Jugabilidad p. 10 y Guión p. 13 solo dicen que hay NPCs con tienda (burbuja "$"
 - **Hecho (2026-11-10):** autoload `Tienda` (`MenuTienda`) sobre `caja_dialogo.png`, en el mismo sitio que el diálogo; pestaña = nombre del vendedor. Renglones 1–2: `> [icono] Manzana (2)   3 mon.` y `Salir` (se desplaza si hay más artículos); renglón 3: descripción o aviso en rojo oscuro (#8a1c12). Las monedas se ven en la placa del HUD, que queda libre a la derecha. Sin monedas para lo más barato, la tendera solo habla (`ComponenteTienda.dialogo_sin_monedas`).
 - Pendiente de la artista: icono de moneda para el precio (ahora "mon.") y, si quiere, un marco propio para la tienda.
 
-### Game over — sin maqueta
-Jugabilidad p. 8: perder toda la vida = game over; el jugador reaparece en el último punto de control (ya implementado: `Jugador.murio` / `reaparecio`). Falta la pantalla: fundido, texto y "continuar". La animación `morir` de Leonidas ya existe.
+### Game over — hecho (2026-11-17)
+Jugabilidad p. 8: perder toda la vida = game over; se reaparece en el último punto de control. Arte de la artista: `assets/sprites/game_over.aseprite` (192×108, 6 capas).
+- **Piezas:** `tools/recortes/game_over.lua` (opción `capas` de `export_recortes.lua`) → `assets/ui/game_over/{fondo,haz,luz_suelo,leonidas,cartel}.png`, a lienzo completo y tamaño real; superpuestas dan el original exacto. Se montan en `scenes/ui/game_over/arte_game_over.tscn` (un TextureRect por pieza + `Animacion`/`entrada`: el cartel cae y rebota).
+- **Cono del foco:** en la capa del fondo es un hueco transparente (la artista lo ve sobre el blanco del lienzo); el `ColorRect` `Cono` (blanco) lo rellena. **Preguntar a la artista** si va otro color o si debe verse el juego detrás.
+- **Escala:** 192×108 no cabe entero en 480×270 (×2,5) → modo pintura y `Pantalla.ajustar_a_pixel_entero()` (compartida con el libro): ×10 en 1920×1080, ×7 en la ventana del editor, con bandas.
+- **Flujo:** `Jugador.murio` → `Game._al_morir_jugador()` → `PantallaGameOver.mostrar(zona.arte_game_over)` (pausa el árbol). Fundido a negro → arte → botones «Continuar» / «Menú principal» (`BotonesConMarca` en horizontal, `ui_accept`; desactivados mientras aparece). Continuar → `continuar_pedido` → Game, en negro, `jugador.reaparecer()` en su `punto_control` (entrada de la zona o donde se cargó) sin perder nada. Menú → escena principal sin guardar. El barco hundido NO pasa por aquí.
+- **Por zona:** `Zona.arte_game_over` (escena con raíz Control; vacío = el de siempre). Si trae `Animacion` con `entrada`, se reproduce.
+- Botones con texto de la fuente del juego (PROVISIONAL: no hay arte de botones).
 
 ### Barco — sin maqueta de UI (hecho, provisional)
 Jugabilidad p. 9 / Guión p. 18: el barco tiene su propia vida ("llegar con toda la salud posible").

@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://b15cn25lq0xa3" path="res://scripts/systems/modo_barco.gd" id="6_j5wjh"]
 [ext_resource type="PackedScene" path="res://scenes/player/barco.tscn" id="7_vef74"]
 [ext_resource type="Resource" path="res://resources/dialogues/tutorial_barco.tres" id="8_hve3p"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pantalla_game_over.tscn" id="9_vef74"]
 
 [node name="Game" type="Node2D" unique_id=194216102 groups=["game"]]
 y_sort_enabled = true
@@ -17,6 +18,7 @@ script = ExtResource("1_e2o6t")
 y_sort_enabled = true
 
 [node name="Jugador" parent="." unique_id=1575559739 instance=ExtResource("1_80nbo")]
+reaparecer_automatico = false
 
 [node name="Camara" type="Camera2D" parent="." unique_id=1303309162 node_paths=PackedStringArray("objetivo")]
 script = ExtResource("3_feb5d")
@@ -46,5 +48,9 @@ contenedor = NodePath("..")
 jugador = NodePath("../Jugador")
 camara = NodePath("../Camara")
 
+[node name="PantallaGameOver" parent="." unique_id=867840381 instance=ExtResource("9_vef74")]
+
 [connection signal="modo_cambio" from="." to="HUD" method="_al_cambiar_modo"]
+[connection signal="murio" from="Jugador" to="." method="_al_morir_jugador"]
 [connection signal="hundido" from="ModoBarco" to="." method="_al_hundirse"]
+[connection signal="continuar_pedido" from="PantallaGameOver" to="." method="_al_continuar_game_over"]

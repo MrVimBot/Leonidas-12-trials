@@ -10,6 +10,7 @@ extends Node2D
 ##   ├─ Camara (CamaraPixel)      sigue al jugador o al barco; límites según la zona
 ##   ├─ Transicion (CanvasLayer)  fundido a negro al cambiar de zona
 ##   ├─ HUD, MenuPausa
+##   ├─ PantallaGameOver          al morir a pie (`Jugador.murio`); Continuar = reaparecer
 ##   └─ ModoBarco                 crea/quita el barco, micrófono, premio y tutorial
 ##
 ## En una zona con `modo_barco` (el mar) Leonidas viaja en barco: este script solo carga
@@ -61,6 +62,7 @@ var _entrada_actual := ""
 @onready var camara: CamaraPixel = $Camara
 @onready var fundido: ColorRect = $Transicion/Fundido
 @onready var modo_barco: ModoBarco = $ModoBarco
+@onready var pantalla_game_over: PantallaGameOver = $PantallaGameOver
 
 
 ## El Game de la partida en curso (o null, p. ej. en el menú o con una zona suelta).
@@ -164,6 +166,23 @@ func _bloquear(b: bool) -> void:
 		jugador.desbloquear(&"zona")
 		if barco:
 			barco.desbloquear(&"zona")
+
+
+## Al morir Leonidas (señal `Jugador.murio`, conectada en game.tscn; en esta escena el
+## Jugador tiene `reaparecer_automatico = false`): pantalla de Game Over con el arte de la zona.
+func _al_morir_jugador() -> void:
+	pantalla_game_over.mostrar(zona_actual.arte_game_over if zona_actual else null)
+
+
+## «Continuar» del Game Over (señal `PantallaGameOver.continuar_pedido`, conectada en
+## game.tscn): la pantalla ya se cerró; en negro reaparece en su punto de control (la
+## entrada de la zona o donde se cargó la partida) y se vuelve a ver el mundo.
+func _al_continuar_game_over() -> void:
+	_cambiando = true # que no se abran la pausa ni el libro durante el fundido
+	fundido.color.a = 1.0
+	jugador.reaparecer()
+	await _fundir(0.0)
+	_cambiando = false
 
 
 ## Al hundirse (señal `ModoBarco.hundido`, conectada en game.tscn): fundido y se vuelve
