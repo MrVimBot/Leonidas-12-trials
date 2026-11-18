@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/sonidos_ui.gd" id="1_scr"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_mover.tres" id="2_mov"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_aceptar.tres" id="3_ace"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_volver.tres" id="4_vol"]
+
+[node name="SonidosUI" type="Node"]
+process_mode = 3
+script = ExtResource("1_scr")
+
+[node name="Mover" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_mov")
+bus = &"SFX"
+
+[node name="Aceptar" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_ace")
+bus = &"SFX"
+
+[node name="Volver" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_vol")
+bus = &"SFX"

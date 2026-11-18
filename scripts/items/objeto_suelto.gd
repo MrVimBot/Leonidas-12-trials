@@ -20,6 +20,8 @@ extends Area2D
 @export var valor := 1
 ## Segundos en el suelo antes de desaparecer (0 = nunca).
 @export var duracion := 10.0
+## Suena al recogerlo (cuando ya se entregó el premio). Vacío = en silencio.
+@export var sonido_recoger: AudioStreamPlayer
 ## Los últimos segundos parpadea para avisar.
 @export var tiempo_parpadeo := 3.0
 @export var gravedad := 520.0
@@ -129,10 +131,12 @@ func _dar() -> bool:
 func _recoger() -> void:
 	_recogida = true
 	set_deferred(&"monitoring", false)
-	# TODO: sonido al recoger cuando haya audio.
+	if sonido_recoger:
+		sonido_recoger.play()
 	sprite.visible = true
 	sombra.visible = false
 	var t := create_tween()
 	t.tween_property(sprite, ^"position:y", sprite.position.y - 14.0, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	t.parallel().tween_property(sprite, ^"modulate:a", 0.0, 0.25).set_delay(0.1)
 	t.tween_callback(queue_free)
+

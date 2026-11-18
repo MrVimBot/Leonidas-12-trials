@@ -9,12 +9,31 @@ extends BoxContainer
 
 const MARCA := "> "
 
+## Último botón con foco de este menú: el sonido de cambio solo suena si el foco pasa de un
+## botón a otro (no al abrir el menú, cuando se le da el foco por primera vez).
+var _ultimo_foco: Button
+
 
 func _ready() -> void:
 	for b: Button in get_children():
 		b.set_meta(&"texto", b.text)
-		b.focus_entered.connect(actualizar_marcas)
+		b.focus_entered.connect(_al_recibir_foco.bind(b))
 		b.mouse_entered.connect(b.grab_focus)
+		b.pressed.connect(SonidosUI.aceptar)
+	visibility_changed.connect(_al_cambiar_visibilidad)
+
+
+func _al_recibir_foco(boton: Button) -> void:
+	if _ultimo_foco != null and _ultimo_foco != boton:
+		SonidosUI.mover()
+	_ultimo_foco = boton
+	actualizar_marcas()
+
+
+## Al cerrarse el menú se olvida el foco: al reabrirlo no suena el primer botón.
+func _al_cambiar_visibilidad() -> void:
+	if not is_visible_in_tree():
+		_ultimo_foco = null
 
 
 ## Pone "> " delante del botón que tiene el foco y la quita de los demás.

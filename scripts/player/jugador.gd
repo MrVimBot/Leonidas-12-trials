@@ -64,6 +64,11 @@ const ANIM_CAMINAR_OBJETO := &"caminar_objeto"
 ## Se oye cuando la espada golpea a un enemigo (un `Hurtbox` activo; las vasijas suenan solas).
 @export var sonido_golpe: AudioStreamPlayer
 
+## Suena al empezar a comer (la pose dura `duracion_comer`).
+@export var sonido_comer: AudioStreamPlayer
+## Suena cada vez que se cura (`Vida.curado`).
+@export var sonido_curar: AudioStreamPlayer
+
 @export_group("Muerte")
 ## Si reaparece solo en `punto_control` al acabar de morir (si no, lo hace quien escuche `murio`).
 @export var reaparecer_automatico := true
@@ -115,6 +120,7 @@ func _ready() -> void:
 	punto_control = global_position
 	vida.danado.connect(_al_recibir_danio)
 	vida.murio.connect(_al_morir)
+	vida.curado.connect(_al_curarse)
 	ataque.hitbox.golpeo.connect(_al_golpear)
 	ataque.termino.connect(_volver_a_normal)
 	animador.termino.connect(_al_terminar_animacion)
@@ -257,6 +263,8 @@ func comer(objeto: Objeto) -> void:
 	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(objeto.icono_pequeno if objeto.icono_pequeno else objeto.icono, posicion_objeto_comer, true)
 	_temporizador_comer.start(duracion_comer)
+	if sonido_comer:
+		sonido_comer.play()
 
 
 ## `timeout` de `TemporizadorComer` (conectado en la escena). Si mientras tanto le golpearon
@@ -323,6 +331,8 @@ func _salir_del_estado(devolver_objeto: bool) -> void:
 				EstadoJuego.agregar_objeto(_comiendo.id)
 			_comiendo = null
 			_temporizador_comer.stop() # que el temporizador de comer() en curso no cure
+			if sonido_comer:
+				sonido_comer.stop()
 			_objeto_en_mano.visible = false
 
 
@@ -340,6 +350,11 @@ func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:
 	estado = Estado.DANO
 	parpadeo.parpadear(vida.tiempo_invulnerable())
 	animador.reproducir(&"recibir_dano", true)
+
+
+func _al_curarse(_cantidad: int) -> void:
+	if sonido_curar:
+		sonido_curar.play()
 
 
 ## La espada golpeó algo: solo suena el golpe si era un enemigo que recibe daño (los

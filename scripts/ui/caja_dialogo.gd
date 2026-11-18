@@ -29,6 +29,19 @@ const SIN_GLIFO := { "Á": "A", "Í": "I", "Ó": "O", "Ú": "U" }
 @export var parpadeo_flecha := 0.4
 ## Nombre del personaje → retrato (Texture2D). Ej.: {"Kathita": preload(...)}.
 @export var retratos: Dictionary = {}
+@export_group("Sonido")
+## Clic al abrir el cuadro.
+@export var sonido_abrir: AudioStreamPlayer
+## Tic al pulsar continuar (pasar de cuadro o cerrar).
+@export var sonido_avanzar: AudioStreamPlayer
+## Blip de la máquina de escribir (opcional).
+@export var sonido_letra: AudioStreamPlayer
+## Si suena el blip al escribir. Apagado por defecto: en textos largos cansa.
+@export var sonar_letras := false
+## Un blip cada tantas letras (los espacios no suenan).
+@export var letras_por_blip := 2
+## Tono del blip por hablante: nombre → `pitch_scale` (1,0 = el del archivo). Sin entrada, 1,0.
+@export var tonos_por_nombre: Dictionary = {}
 ## Espacio que ocupa el retrato a la izquierda del texto (ancho + separación).
 @export var ancho_retrato := 50
 
@@ -81,6 +94,8 @@ func mostrar_lineas(lineas: Array[Dictionary]) -> void:
 		jugador.bloquear(&"dialogo")
 	caja.visible = true
 	_mostrar_pagina()
+	if sonido_abrir:
+		sonido_abrir.play()
 	empezo.emit()
 	await termino
 
@@ -89,8 +104,10 @@ func _process(delta: float) -> void:
 	if not abierto:
 		return
 	if _escribiendo:
+		var antes := texto.visible_characters
 		_letras += letras_por_segundo * delta
 		texto.visible_characters = int(_letras)
+		_sonar_letras(antes, texto.visible_characters)
 		if texto.visible_characters >= texto.get_total_character_count():
 			_terminar_escritura()
 	else:
@@ -112,11 +129,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _escribiendo:
 		_terminar_escritura()
 	else:
+		if sonido_avanzar:
+			sonido_avanzar.play()
 		_indice += 1
 		if _indice >= _paginas.size():
 			_cerrar()
 		else:
 			_mostrar_pagina()
+
+
+## Blip por cada `letras_por_blip` letras nuevas entre `desde` y `hasta` (solo uno por
+## fotograma), con el tono del hablante.
+func _sonar_letras(desde: int, hasta: int) -> void:
+	if not sonar_letras or sonido_letra == null:
+		return
+	for i in range(desde, mini(hasta, texto.text.length())):
+		if i % maxi(letras_por_blip, 1) == 0 and texto.text.substr(i, 1).strip_edges() != "":
+			var hablante: String = _paginas[_indice].nombre
+			sonido_letra.pitch_scale = float(tonos_por_nombre.get(hablante, 1.0))
+			sonido_letra.play()
+			return
 
 
 ## Cierra el diálogo abierto de inmediato (p. ej. al saltar una cinemática).

@@ -2,6 +2,7 @@
 """SFX originales: python tools/audio/generar_sfx.py [paso_1 voltereta ...].
 
 Sin argumentos genera todo; un nombre de familia selecciona sus variantes.
+Para generar solo el segundo lote: python tools/audio/generar_sfx.py lote_2.
 Solo usa la biblioteca estándar y nunca descarga ni lee samples externos.
 """
 
@@ -36,6 +37,20 @@ SONIDOS = {
     "leonidas_danio_2": dict(family="leonidas_danio", retro=True, duration=0.280, pitch=1.05, peak_db=-3, brightness=3500, seed=802, limits=(0.20, 0.30)),
     "voltereta_1": dict(family="voltereta", duration=0.390, pitch=0.96, peak_db=-3, brightness=3600, seed=901, limits=(0.35, 0.45)),
     "voltereta_2": dict(family="voltereta", duration=0.430, pitch=1.04, peak_db=-3, brightness=3300, seed=902, limits=(0.35, 0.45)),
+    # LOTE 2. notes controla las frecuencias base de cada motivo (Hz).
+    "moneda_recoger_1": dict(batch=2, family="moneda_recoger", duration=0.190, pitch=0.98, peak_db=-3, brightness=4100, seed=1001, notes=(1300, 1900), limits=(0.15, 0.25)),
+    "moneda_recoger_2": dict(batch=2, family="moneda_recoger", duration=0.215, pitch=1.04, peak_db=-3, brightness=3850, seed=1002, notes=(1300, 1900), limits=(0.15, 0.25)),
+    "objeto_recoger": dict(batch=2, family="objeto_recoger", duration=0.300, pitch=1.0, peak_db=-3, brightness=2900, seed=1101, notes=(659.255, 830.609, 987.767), limits=(0.30, 0.30)),
+    "dialogo_avanzar_1": dict(batch=2, family="dialogo_avanzar", duration=0.045, pitch=0.96, peak_db=-12, brightness=2000, seed=1201, notes=(720,), limits=(0.04, 0.06)),
+    "dialogo_avanzar_2": dict(batch=2, family="dialogo_avanzar", duration=0.050, pitch=1.02, peak_db=-12, brightness=1850, seed=1202, notes=(720,), limits=(0.04, 0.06)),
+    "dialogo_avanzar_3": dict(batch=2, family="dialogo_avanzar", duration=0.055, pitch=1.06, peak_db=-12, brightness=2150, seed=1203, notes=(720,), limits=(0.04, 0.06)),
+    "dialogo_abrir": dict(batch=2, family="dialogo_abrir", duration=0.100, pitch=1.0, peak_db=-10, brightness=2300, seed=1301, notes=(540, 680), limits=(0.10, 0.10)),
+    "dialogo_letra": dict(batch=2, family="dialogo_letra", duration=0.025, pitch=1.0, peak_db=-15, brightness=1800, seed=1401, notes=(600,), limits=(0.02, 0.03)),
+    "comer": dict(batch=2, family="comer", duration=0.500, pitch=1.0, peak_db=-3, brightness=3100, seed=1501, notes=(310, 190), limits=(0.50, 0.50)),
+    "curar": dict(batch=2, family="curar", duration=0.400, pitch=1.0, peak_db=-3, brightness=2800, seed=1601, notes=(440, 554.365, 659.255, 880), limits=(0.40, 0.40)),
+    "menu_mover": dict(batch=2, family="menu_mover", duration=0.050, pitch=1.0, peak_db=-9, brightness=2600, seed=1701, notes=(1250,), limits=(0.05, 0.05)),
+    "menu_aceptar": dict(batch=2, family="menu_aceptar", duration=0.120, pitch=1.0, peak_db=-9, brightness=2900, seed=1801, notes=(784, 1046.502), limits=(0.12, 0.12)),
+    "menu_volver": dict(batch=2, family="menu_volver", duration=0.100, pitch=1.0, peak_db=-9, brightness=2300, seed=1901, notes=(740, 494), limits=(0.10, 0.10)),
 }
 
 RATE = 44100
@@ -127,7 +142,62 @@ def synthesize(p):
 
     f = p["family"]
     retro = p.get("retro", False)
-    if retro and f == "espada":
+    if p.get("batch") == 2:
+        notes = p["notes"]
+
+        def chime(start, length, freq, gain, metallic=False):
+            # Fundamental redonda; pocos parciales, colas cortas y sin brillo duro.
+            tone(start, length, freq, freq * 0.998, gain, 3.2)
+            tone(start, length * 0.68, freq * 2.01, freq * 2,
+                 gain * (0.19 if metallic else 0.09), 5)
+            if metallic:
+                tone(start, length * 0.42, freq * 2.73, freq * 2.72,
+                     gain * 0.07, 6)
+
+        if f == "moneda_recoger":
+            chime(0, duration * 0.65, notes[0], 0.65, metallic=True)
+            chime(duration * 0.22, duration * 0.78, notes[1], 0.82, metallic=True)
+        elif f == "objeto_recoger":
+            for k, freq in enumerate(notes):
+                start = duration * k * 0.25
+                chime(start, duration - start, freq, 0.65 + k * 0.07)
+        elif f == "dialogo_avanzar":
+            tone(0, duration, notes[0], notes[0] * 0.83, 0.7, 7)
+            noise(0, duration * 0.50, 750, 1100, 0.22, 7, width=0.4)
+        elif f == "dialogo_abrir":
+            tone(0, duration, notes[0], notes[1], 0.65, 5)
+            noise(0, duration * 0.35, 650, 1100, 0.17, 6, width=0.4)
+        elif f == "dialogo_letra":
+            arcade(0, duration, notes[0], notes[0], 0.7, 2.5)
+        elif f == "comer":
+            # Crujido de fruta en pequeñas fracturas; después un trago abstracto,
+            # con ruido grave y dos resonancias cortas, sin voz ni samples.
+            noise(0, duration * 0.34, 1300, 2400, 0.95, 5, width=0.35)
+            tone(0, duration * 0.18, 210, 140, 0.16, 6)
+            for k in range(7):
+                start = duration * (0.015 + k * 0.033) + rng.uniform(0, 0.006)
+                noise(start, duration * rng.uniform(0.055, 0.11),
+                      rng.uniform(1000, 1900), 2500, 0.7 * math.exp(-k * 0.18), 6, width=0.35)
+            tone(duration * 0.52, duration * 0.40, notes[0], notes[1], 0.18, 4)
+            tone(duration * 0.60, duration * 0.34, 160, 115, 0.11, 4)
+            noise(duration * 0.50, duration * 0.48, 300, 520, 0.22, 3, swell=True, width=0.3)
+        elif f == "curar":
+            for k, freq in enumerate(notes):
+                start = duration * k * 0.19
+                length = duration - start
+                chime(start, length, freq, 0.54 + k * 0.035)
+                arcade(start, length, freq / 2, freq / 2, 0.11, 4)
+        elif f == "menu_mover":
+            tone(0, duration, notes[0], notes[0] * 0.90, 0.6, 6)
+            noise(0, duration * 0.35, 1200, 1700, 0.08, 6)
+        elif f == "menu_aceptar":
+            chime(0, duration * 0.60, notes[0], 0.6)
+            chime(duration * 0.34, duration * 0.66, notes[1], 0.7)
+        elif f == "menu_volver":
+            arcade(0, duration, notes[0], notes[1], 0.65, 3.5)
+        else:
+            raise ValueError(f"Familia del lote 2 desconocida: {f}")
+    elif retro and f == "espada":
         # Filo de hierro: ataque metálico definido sobre el corte de aire.
         noise(0, duration * 0.75, 1500, 3200, 0.75, 1.8, swell=True)
         iron(0, duration * 0.88, 1680, 0.46)
@@ -262,7 +332,9 @@ def main():
     selected = set()
     for name in sys.argv[1:]:
         name = name.removesuffix(".wav")
-        matches = [key for key, p in SONIDOS.items() if key == name or p["family"] == name]
+        matches = [key for key, p in SONIDOS.items()
+                   if key == name or p["family"] == name
+                   or name == f"lote_{p.get('batch', 1)}"]
         if not matches:
             print(f"Sonido desconocido: {name}. Opciones: {', '.join(SONIDOS)}", file=sys.stderr)
             return 2

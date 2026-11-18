@@ -118,6 +118,7 @@ func _opciones() -> int:
 
 func _mover(paso: int) -> void:
 	_indice = wrapi(_indice + paso, 0, _opciones())
+	SonidosUI.mover()
 	if _indice < _desplazamiento:
 		_desplazamiento = _indice
 	elif _indice >= _desplazamiento + _filas.size():
@@ -133,10 +134,13 @@ func _elegir() -> void:
 	var articulo := _tienda.articulos[_indice]
 	match _tienda.comprar(articulo):
 		ComponenteTienda.Resultado.COMPRADO:
+			SonidosUI.aceptar()
 			_avisar("¡Gracias!")
 		ComponenteTienda.Resultado.SIN_MONEDAS:
+			SonidosUI.volver()
 			_avisar("No te alcanza.")
 		ComponenteTienda.Resultado.LLENO:
+			SonidosUI.volver()
 			_avisar("No puedes llevar más.")
 
 
@@ -172,6 +176,7 @@ func _refrescar() -> void:
 
 
 func _cerrar() -> void:
+	SonidosUI.volver()
 	abierto = false
 	caja.visible = false
 	_tienda = null

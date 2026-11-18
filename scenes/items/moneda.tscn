@@ -1,27 +1,33 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://3pqaap83votd"]
 
 [ext_resource type="Script" uid="uid://cuoulennrh5wl" path="res://scripts/items/objeto_suelto.gd" id="1_obj"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 [ext_resource type="SpriteFrames" uid="uid://ds3nne3o7hv72" path="res://resources/sprite_frames/moneda.tres" id="3_spr"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_moneda_recoger.tres" id="4_gpn3e"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mon"]
 radius = 6.0
 
-[node name="Moneda" type="Area2D"]
+[node name="Moneda" type="Area2D" unique_id=659744469 node_paths=PackedStringArray("sonido_recoger")]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_obj")
+sonido_recoger = NodePath("SonidoRecoger")
 
-[node name="Sombra" type="Node2D" parent="."]
+[node name="Sombra" type="Node2D" parent="." unique_id=214345073]
 script = ExtResource("2_som")
 tamano = Vector2i(10, 3)
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=872877515]
 sprite_frames = ExtResource("3_spr")
 animation = &"girar"
 offset = Vector2(0, -14)
 
-[node name="Forma" type="CollisionShape2D" parent="."]
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=1980574542]
 position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_mon")
+
+[node name="SonidoRecoger" type="AudioStreamPlayer" parent="." unique_id=359592572]
+stream = ExtResource("4_gpn3e")
+bus = &"SFX"

@@ -30,6 +30,7 @@ Libro="*res://scenes/ui/menu_libro.tscn"
 Musica="*res://autoload/musica.gd"
 Daltonismo="*res://scenes/ui/filtro_daltonismo.tscn"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+SonidosUI="*res://scenes/ui/sonidos_ui.tscn"
 
 [debug]
 

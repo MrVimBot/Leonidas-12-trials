@@ -192,6 +192,7 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 	visible = true
 	_colocar()
 	_refrescar()
+	SonidosUI.aceptar()
 	abierto_cambio.emit(true)
 	return true
 
@@ -200,6 +201,7 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 func cerrar() -> void:
 	if not abierto:
 		return
+	SonidosUI.volver()
 	abierto = false
 	visible = false
 	fondo.texture = null
@@ -270,6 +272,7 @@ func _ir_a_pagina(p: int, desde_izquierda: bool) -> void:
 	if p < 0 or p >= NUM_PAGINAS or p == _pagina:
 		return
 	var fila := paginas[_pagina].fila()
+	SonidosUI.mover()
 	_pagina = p as Pagina
 	paginas[_pagina].entrar(fila, desde_izquierda)
 	_refrescar()
@@ -281,20 +284,24 @@ func _mover(d: Vector2i) -> void:
 			_ir_a_pagina(_pagina + d.x, d.x > 0)
 		elif d.y > 0:
 			_en_pestanas = false
+			SonidosUI.mover()
 			_refrescar()
 		return
 	if paginas[_pagina].mover(d):
+		SonidosUI.mover()
 		_refrescar()
 	elif d.x != 0:
 		_ir_a_pagina(_pagina + d.x, d.x > 0)
 	elif d.y < 0:
 		_en_pestanas = true
+		SonidosUI.mover()
 		_refrescar()
 
 
 func _confirmar() -> void:
 	if _en_pestanas:
 		_en_pestanas = false
+		SonidosUI.aceptar()
 		_refrescar()
 		return
 	paginas[_pagina].confirmar()
