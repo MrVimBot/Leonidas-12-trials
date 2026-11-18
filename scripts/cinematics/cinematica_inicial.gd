@@ -214,7 +214,7 @@ func _atardecer() -> bool:
 			# Ventana deslizante: se piden los siguientes y se sueltan los ya pasados.
 			for k in range(i + 2, i + 2 + cuadros_por_adelantado):
 				_pedir_cuadro(k)
-			for k in _cuadros.keys():
+			for k: int in _cuadros.keys():
 				if k < i:
 					_cuadros.erase(k)
 		pintura_encima.modulate.a = pos - i

@@ -27,9 +27,9 @@ static func restaurar(nodo: Node) -> void:
 ## Con escala entera y aspecto fijo, el juego ocupa pantalla × f píxeles de la ventana (lo
 ## demás son bandas negras, donde no se puede dibujar); una unidad lógica son f píxeles.
 static func ajustar_a_pixel_entero(control: Control) -> float:
-	var pantalla := Vector2(
-		ProjectSettings.get_setting("display/window/size/viewport_width"),
-		ProjectSettings.get_setting("display/window/size/viewport_height"))
+	var ancho: float = ProjectSettings.get_setting("display/window/size/viewport_width")
+	var alto: float = ProjectSettings.get_setting("display/window/size/viewport_height")
+	var pantalla := Vector2(ancho, alto)
 	var ventana := Vector2(control.get_window().size)
 	var f := maxf(1.0, floorf(minf(ventana.x / pantalla.x, ventana.y / pantalla.y)))
 	var area := pantalla * f

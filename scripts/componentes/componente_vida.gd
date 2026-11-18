@@ -34,6 +34,14 @@ var invulnerable_extra := false
 var _tiempo_invulnerable := 0.0
 
 
+## La vida que expone `nodo` en su propiedad `vida` (contrato de Jugador, Barco y los
+## enemigos), o null si no tiene. Se lee por nombre porque quien pregunta no sabe de qué
+## clase es; comprobarlo con `is` evita el «cast» inseguro de un Variant.
+static func de(nodo: Object) -> ComponenteVida:
+	var valor: Variant = nodo.get(&"vida") if nodo else null
+	return valor if valor is ComponenteVida else null
+
+
 func _ready() -> void:
 	vida = vida_max
 	if hurtbox:

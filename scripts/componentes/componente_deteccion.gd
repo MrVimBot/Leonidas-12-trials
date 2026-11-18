@@ -96,5 +96,5 @@ func _perder() -> void:
 
 func _vivo(nodo: Node) -> bool:
 	# Jugador y Barco exponen su `vida` como propiedad.
-	var vida := nodo.get(&"vida") as ComponenteVida
+	var vida := ComponenteVida.de(nodo)
 	return vida == null or not vida.muerto

@@ -26,21 +26,22 @@ func _ready() -> void:
 	visible = false
 
 
-## Enseña la barra con la vida de `jefe` (ver contrato arriba) y su `texto_nombre`.
-func seguir(jefe: Node, texto_nombre: String) -> void:
+## Enseña la barra con la vida de `objetivo` (el jefe; ver contrato arriba) y su `texto_nombre`.
+func seguir(objetivo: Node, texto_nombre: String) -> void:
 	dejar()
-	_vida = jefe.get(&"vida") as ComponenteVida if jefe else null
+	_vida = ComponenteVida.de(objetivo)
 	if _vida == null:
-		push_error("BarraJefe: %s no tiene `vida` (ComponenteVida)" % jefe)
+		push_error("BarraJefe: %s no tiene `vida` (ComponenteVida)" % objetivo)
 		return
-	_jefe = jefe
+	_jefe = objetivo
 	nombre.text = texto_nombre
 	_vida.cambio.connect(_al_cambiar_vida)
 	_al_cambiar_vida(_vida.vida, _vida.vida_max)
-	if jefe.has_signal(&"invulnerable_cambio"):
-		jefe.connect(&"invulnerable_cambio", poner_gris)
-	poner_gris(jefe.get(&"invulnerable") == true)
-	jefe.tree_exiting.connect(dejar)
+	if objetivo.has_signal(&"invulnerable_cambio"):
+		objetivo.connect(&"invulnerable_cambio", poner_gris)
+	var invulnerable: bool = objetivo.get(&"invulnerable") == true
+	poner_gris(invulnerable)
+	objetivo.tree_exiting.connect(dejar)
 	visible = true
 
 

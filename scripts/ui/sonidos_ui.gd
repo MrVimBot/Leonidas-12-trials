@@ -1,3 +1,4 @@
+class_name SonidosInterfaz
 extends Node
 ## Sonidos de interfaz y de «avisos» globales (autoload `SonidosUI`). Menús: `mover()` al cambiar
 ## de opción, `aceptar()` al elegir, `volver()` al cancelar. Libro: `libro_abrir()`,
@@ -7,6 +8,9 @@ extends Node
 ## repiten los reproductores en cada escena. `PROCESS_MODE_ALWAYS`: suena con el juego en pausa.
 ## Los reproductores (hijos, con su `AudioStreamRandomizer` y el bus SFX) están en la escena.
 ## Los sonidos del mundo (pasos, golpes, objetos...) NO van aquí: cuelgan de su entidad.
+## Tiene `class_name` (distinto del autoload, que no puede llamarse igual) para que quien llama
+## a `SonidosUI.mover()` sepa su tipo: sin ella el autoload es un Node y cada llamada da el
+## aviso UNSAFE_METHOD_ACCESS.
 
 @onready var _mover: AudioStreamPlayer = %Mover
 @onready var _aceptar: AudioStreamPlayer = %Aceptar

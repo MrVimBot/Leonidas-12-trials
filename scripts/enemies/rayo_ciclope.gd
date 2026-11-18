@@ -64,7 +64,7 @@ func _physics_process(delta: float) -> void:
 ## `Golpe.golpeo` (conectada en la escena). Ver la cabecera: la voltereta lo atraviesa.
 func _al_golpear(objetivo: Node) -> void:
 	var duenio := objetivo.get_parent()
-	var vida_objetivo := duenio.get(&"vida") as ComponenteVida if duenio else null
+	var vida_objetivo := ComponenteVida.de(duenio)
 	if vida_objetivo and vida_objetivo.invulnerable_extra:
 		return
 	_acabar()

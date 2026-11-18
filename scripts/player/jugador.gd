@@ -361,7 +361,7 @@ func _al_curarse(_cantidad: int) -> void:
 ## La espada golpeó algo: solo suena el golpe si era un enemigo que recibe daño (los
 ## objetos rompibles tienen su propio sonido).
 func _al_golpear(objetivo: Node) -> void:
-	if sonido_golpe and objetivo is Hurtbox and objetivo.activo:
+	if sonido_golpe and objetivo is Hurtbox and (objetivo as Hurtbox).activo:
 		sonido_golpe.play()
 
 

@@ -602,8 +602,8 @@ func _pintar() -> void:
 
 
 func _matar_tweens() -> void:
-	for t in [_tween_canto, _tween_lanzar]:
+	for t: Tween in [_tween_canto, _tween_lanzar]:
 		if t:
-			(t as Tween).kill()
+			t.kill()
 	_tween_canto = null
 	_tween_lanzar = null

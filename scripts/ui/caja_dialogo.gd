@@ -146,7 +146,8 @@ func _sonar_letras(desde: int, hasta: int) -> void:
 	for i in range(desde, mini(hasta, texto.text.length())):
 		if i % maxi(letras_por_blip, 1) == 0 and texto.text.substr(i, 1).strip_edges() != "":
 			var hablante: String = _paginas[_indice].nombre
-			sonido_letra.pitch_scale = float(tonos_por_nombre.get(hablante, 1.0))
+			var tono: float = tonos_por_nombre.get(hablante, 1.0)
+			sonido_letra.pitch_scale = tono
 			sonido_letra.play()
 			return
 
