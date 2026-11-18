@@ -1,8 +1,8 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://cwbynthd4c7st"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/gamba/atacar.png" id="1_nvx5r"]
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/gamba/caminar.png" id="2_8xu2g"]
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/gamba/parado.png" id="3_cjc7a"]
+[ext_resource type="Texture2D" uid="uid://c7n4v3pry5vsb" path="res://assets/sprites/pintados/gamba/atacar.png" id="1_nvx5r"]
+[ext_resource type="Texture2D" uid="uid://cxpdx8gtcjhg6" path="res://assets/sprites/pintados/gamba/caminar.png" id="2_8xu2g"]
+[ext_resource type="Texture2D" uid="uid://dc5oo7dbpj1y6" path="res://assets/sprites/pintados/gamba/parado.png" id="3_cjc7a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bqcey"]
 atlas = ExtResource("1_nvx5r")

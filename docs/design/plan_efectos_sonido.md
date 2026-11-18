@@ -69,14 +69,58 @@ Extras opcionales si sobra tiempo (no se piden ahora): romper arbusto, recoger m
 5. **Limitaciones esperables:** la cerámica y el chapoteo son lo más difícil de sintetizar; si no convencen, reemplazarlos por un CC0 de Freesound (o jsfxr) con el mismo nombre de archivo.
 6. **Entrega:** avisarme cuando estén los `.wav` en `assets/audio/sfx/` y yo los integro y los pruebo.
 
-## 4. Integración en Godot (la hago yo al recibir los archivos)
+## 4. Integración en Godot (HECHA el 2026-11-18)
 
-Siguiendo las prácticas del proyecto (componentes, nada de rutas fijas, buses en el `.tres`, entrada/estado sin hacks):
+Se hizo sin `ComponenteSonido`: un `AudioStreamPlayer` por evento con un `AudioStreamRandomizer` (variantes + tono aleatorio) y el bus `SFX`, más `ComponentePasos` para los pasos. Detalle y dónde se dispara cada uno: sección «Sonido» de `CLAUDE.md`. Prueba: `tools/pruebas/prueba_sonidos.gd`.
 
-- **Bus `SFX`** declarado en `default_bus_layout.tres` (no se crean buses por código: ver nota del micrófono en `CLAUDE.md`). Volumen propio para poder bajarlo en un menú de opciones futuro.
-- **`ComponenteSonido`** (`scripts/componentes/componente_sonido.gd`, Node hijo de la entidad): exports `sonidos: Array[AudioStream]`, `volumen_db`, `variacion_tono` (±5 %); `reproducir()` elige una variante al azar y la suena en un `AudioStreamPlayer` del bus `SFX`. `@tool` con aviso si no tiene sonidos. Cada cerebro conecta su evento a su componente (p. ej. Jugador: `ataque_empezado`, `pirueta_empezada`, `vida.danado`, `vida.murio`; Barco: `vida.danado`; `ObjetoAgarrable`: `roto` y `_aterrizar`; enemigos: `Hurtbox`/`Vida.danado`).
-- **Pasos:** un `ComponentePasos` que escucha `frame_changed` del `AnimatedSprite2D` del jugador y suena en los dos fotogramas de apoyo de `caminar_*` (no en `caminar_objeto_*` si queda raro; decidir al oírlo). Sin pasos en el barco ni bloqueado.
-- **Pausa y libro:** los SFX del juego se silencian solos con `get_tree().paused`; no usar `PROCESS_MODE_ALWAYS`.
-- **Pruebas:** `tools/pruebas/` comprueba que cada archivo existe, que carga como `AudioStreamWAV` y que los componentes reproducen en el evento (con `Input.parse_input_event` como en el resto). Después `tools/verificar_todo.sh`.
-- **Actualizar `CLAUDE.md`** con una sección «Sonido» (bus, componente, lista de eventos).
-- Pendiente de decidir contigo: ¿sonido distinto por material de tile (tierra/arena/piedra) en el futuro? Hoy no; el diseño de `ComponentePasos` ya lo permitiría con un diccionario por capa de datos del tile.
+`assets/audio/sfx/LICENCIAS.md` (lo generó Codex) es opcional: sonidos sintetizados por código no exigen atribución. Si algún día se usa un sonido CC-BY, ese sí va en los créditos.
+
+## 5. Sonidos que faltan (propuesta, por prioridad)
+
+Mismo flujo: se añaden al script de Codex con el mismo formato (WAV mono 16 bits 44100 Hz, pico −3 dBFS, 2 variantes donde se repita mucho) y luego se enchufan.
+
+**Prioridad alta (se oyen todo el rato):**
+| Archivo | Qué es | Dónde |
+|---|---|---|
+| `moneda_recoger` | «cling» corto y brillante (0,15–0,25 s) | `ObjetoSuelto` al recogerse (valor > 0) |
+| `objeto_recoger` | tono suave ascendente, para manzana y objetos del inventario (0,3 s) | `ObjetoSuelto` con `objeto` |
+| `dialogo_avanzar` | «tic» muy suave por cada pulsación de continuar (0,05 s, 2–3 variantes) | `CajaDialogo` al pasar de cuadro |
+| `dialogo_letra` (opcional) | «blip» ultracorto por letra (0,02 s, tono distinto por hablante) | máquina de escribir de `CajaDialogo` (1 de cada 2 letras) |
+| `dialogo_abrir` | un clic al abrir el cuadro (0,1 s) | inicio de `Dialogos.mostrar` |
+| `comer` | mordisco crujiente + tragar (0,5 s) | `Jugador.comer()` |
+| `curar` | arpegio corto ascendente (0,4 s) | al curarse (`ComponenteVida.curado`) |
+| `menu_mover`, `menu_aceptar`, `menu_volver` | tics de interfaz (0,05–0,15 s) | menús principal/pausa, tienda y libro |
+
+**Prioridad media (combate y mundo):**
+| Archivo | Qué es | Dónde |
+|---|---|---|
+| `enemigo_muere` | «puf» + estallido ligero (0,4 s) | `ComponenteMuerte` |
+| `arbusto_cortar` | hojas que se cortan (0,3 s) | arbusto (`romper`) |
+| `agarrar`, `lanzar` | levantar un objeto (0,2 s) y lanzarlo (0,25 s) | `ComponenteCarga` |
+| `arbol_golpe` | golpe sordo en el tronco + hojas (0,3 s) | `Decorado.sacudir` / manzano |
+| `manzana_cae` | la manzana cae y rebota (0,3 s) | manzano al soltar |
+| `tienda_comprar` / `tienda_sin_dinero` | caja registradora suave / «bzz» (0,3 s) | `MenuTienda` |
+| `libro_abrir`, `libro_cerrar`, `libro_pagina` | papel que se abre / cierra / pasa (0,3–0,5 s) | `MenuLibro` |
+| `guardar_partida` | campanita (0,5 s) | botón Guardar del libro |
+| `mision_nueva` | fanfarria corta de 3 notas (0,8 s) | al `empezar_mision` |
+| `objeto_importante` | jingle de «¡obtuviste!» (1,2 s) | `mostrar_objeto_obtenido` (espada, libro, cabeza) |
+| `zona_cambio` (opcional) | «whoosh» muy bajo al fundido | `Game.cambiar_zona` |
+| `game_over` | jingle triste corto (1,5 s) | `PantallaGameOver` |
+
+**Enemigos y jefa (nivel 1 y 2):**
+| Archivo | Qué es |
+|---|---|
+| `seta_inflar`, `seta_explota` | la seta se infla / suelta la nube tóxica |
+| `flor_sale`, `flor_muerde` | la falsa flor emerge / muerde |
+| `gamba_muerde` | chasquido de pinza |
+| `pez_aviso`, `pez_carrera`, `pez_estocada` | aviso, carrera veloz y estocada |
+| `ciclope_apuntar`, `rayo_disparo`, `rayo_impacto` | carga del ojo, disparo y chisporroteo del rayo |
+| `medusa_invocar`, `medusa_embestida`, `medusa_golpe_suelo`, `medusa_derrotada` | canto de invocación, embestida, golpe de espada en el suelo (con vibración grave), derrota |
+| `trozo_estatua_cae` | piedra que cae y se rompe contra el suelo |
+| `tiburon_embiste` | chapoteo fuerte del tiburón |
+
+**Barco:** `barco_remo` (bucle suave de oleaje), `barco_viento` (bucle cuyo volumen sigue al soplido del micrófono), `barco_hundir`, `remolino` (bucle grave).
+
+**Ambiente y música (a futuro):** oleaje de la playa, pájaros del bosque, viento en la isla, eco de la cueva (bucles de 10–20 s) en el bus `Ambiente`. Pasos distintos por material (hierba, arena, piedra, madera del muelle) cuando se quiera.
+
+**Notas para encargarlos:** los bucles (`barco_*`, ambiente) necesitan empalme sin clic (que el final encaje con el inicio) y se importan con Loop activado; los sonidos de diálogo deben ser muy discretos porque suenan decenas de veces por conversación; para `dialogo_letra` conviene que cada personaje importante (Kathita, Zeus, los sabios, Medusa) tenga un tono base distinto.

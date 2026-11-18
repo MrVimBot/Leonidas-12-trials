@@ -58,6 +58,12 @@ const ANIM_CAMINAR_OBJETO := &"caminar_objeto"
 ## empuñadura de la espada queda en la mano levantada.
 @export var posicion_objeto_obtenido := Vector2(12, -23)
 
+@export_group("Sonido")
+## Se oye al recibir un golpe sin morir (si muere suena `Caer`, por la señal `murio` en la escena).
+@export var sonido_danio: AudioStreamPlayer
+## Se oye cuando la espada golpea a un enemigo (un `Hurtbox` activo; las vasijas suenan solas).
+@export var sonido_golpe: AudioStreamPlayer
+
 @export_group("Muerte")
 ## Si reaparece solo en `punto_control` al acabar de morir (si no, lo hace quien escuche `murio`).
 @export var reaparecer_automatico := true
@@ -109,6 +115,7 @@ func _ready() -> void:
 	punto_control = global_position
 	vida.danado.connect(_al_recibir_danio)
 	vida.murio.connect(_al_morir)
+	ataque.hitbox.golpeo.connect(_al_golpear)
 	ataque.termino.connect(_volver_a_normal)
 	animador.termino.connect(_al_terminar_animacion)
 	animador.reproducir(&"parado")
@@ -328,9 +335,18 @@ func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:
 	movimiento.empujar_desde(origen, empuje_dano, -animador.direccion)
 	if vida.muerto:
 		return
+	if sonido_danio:
+		sonido_danio.play()
 	estado = Estado.DANO
 	parpadeo.parpadear(vida.tiempo_invulnerable())
 	animador.reproducir(&"recibir_dano", true)
+
+
+## La espada golpeó algo: solo suena el golpe si era un enemigo que recibe daño (los
+## objetos rompibles tienen su propio sonido).
+func _al_golpear(objetivo: Node) -> void:
+	if sonido_golpe and objetivo is Hurtbox and objetivo.activo:
+		sonido_golpe.play()
 
 
 func _al_morir() -> void:

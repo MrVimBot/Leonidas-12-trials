@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://u60y7g12yc70"]
 
 [ext_resource type="Script" uid="uid://bdpsrwxdan8ab" path="res://scripts/player/barco.gd" id="1_bar"]
 [ext_resource type="SpriteFrames" uid="uid://i6yarktrbmgc" path="res://resources/sprite_frames/leonidas_mini.tres" id="2_spr"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="5_ani"]
 [ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="6_vid"]
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="7_par"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_barco_golpe.tres" id="8_bhu1h"]
 
 [sub_resource type="RectangleShape2D" id="Shape_casco"]
 size = Vector2(20, 10)
@@ -14,19 +15,18 @@ size = Vector2(20, 10)
 [sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
 size = Vector2(22, 14)
 
-[node name="Barco" type="CharacterBody2D" groups=["barco"]]
+[node name="Barco" type="CharacterBody2D" unique_id=101131978 node_paths=PackedStringArray("sonido_golpe") groups=["barco"]]
 collision_layer = 2
-collision_mask = 1
 motion_mode = 1
 script = ExtResource("1_bar")
+sonido_golpe = NodePath("SonidoGolpe")
 
-[node name="Estela" type="CPUParticles2D" parent="."]
+[node name="Estela" type="CPUParticles2D" parent="." unique_id=1531528397]
 z_index = -1
 position = Vector2(0, -3)
 emitting = false
 amount = 24
 lifetime = 0.6
-local_coords = false
 emission_shape = 3
 emission_rect_extents = Vector2(6, 1)
 gravity = Vector2(0, 0)
@@ -34,40 +34,44 @@ initial_velocity_min = 2.0
 initial_velocity_max = 6.0
 color = Color(0.86, 0.96, 1, 0.8)
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=2070157464]
 sprite_frames = ExtResource("2_spr")
 animation = &"barco_quieto_frente"
 offset = Vector2(0, -14)
 
-[node name="Colision" type="CollisionShape2D" parent="."]
+[node name="Colision" type="CollisionShape2D" parent="." unique_id=838016838]
 position = Vector2(0, -5)
 shape = SubResource("Shape_casco")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=320449736]
 collision_layer = 2
 collision_mask = 0
 monitoring = false
 script = ExtResource("3_hur")
 
-[node name="Forma" type="CollisionShape2D" parent="Hurtbox"]
+[node name="Forma" type="CollisionShape2D" parent="Hurtbox" unique_id=426291380]
 position = Vector2(0, -8)
 shape = SubResource("Shape_hurtbox")
 
-[node name="Movimiento" type="Node" parent="."]
+[node name="Movimiento" type="Node" parent="." unique_id=1266480764]
 script = ExtResource("4_mov")
 velocidad = 120.0
 aceleracion = 240.0
 friccion = 90.0
 
-[node name="Animador" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+[node name="Animador" type="Node" parent="." unique_id=2066338373 node_paths=PackedStringArray("sprite")]
 script = ExtResource("5_ani")
 sprite = NodePath("../Sprite")
 
-[node name="Vida" type="Node" parent="." node_paths=PackedStringArray("hurtbox")]
+[node name="Vida" type="Node" parent="." unique_id=777795431 node_paths=PackedStringArray("hurtbox")]
 script = ExtResource("6_vid")
 vida_max = 12
 hurtbox = NodePath("../Hurtbox")
 
-[node name="Parpadeo" type="Node" parent="." node_paths=PackedStringArray("objetivo")]
+[node name="Parpadeo" type="Node" parent="." unique_id=1318528869 node_paths=PackedStringArray("objetivo")]
 script = ExtResource("7_par")
 objetivo = NodePath("../Sprite")
+
+[node name="SonidoGolpe" type="AudioStreamPlayer" parent="." unique_id=1456373639]
+stream = ExtResource("8_bhu1h")
+bus = &"SFX"

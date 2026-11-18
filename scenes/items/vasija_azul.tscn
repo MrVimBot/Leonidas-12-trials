@@ -1,7 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dspqfuqy6opfn"]
 
 [ext_resource type="PackedScene" uid="uid://c2tdq8nqkoy6d" path="res://scenes/items/objeto_agarrable.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://c4xu1825jv6ta" path="res://assets/sprites/entorno/vasija_azul.png" id="2_tex"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_vasija_romper.tres" id="3_csofh"]
 
 [sub_resource type="RectangleShape2D" id="Forma_col"]
 size = Vector2(8, 5)
@@ -9,25 +10,26 @@ size = Vector2(8, 5)
 [sub_resource type="RectangleShape2D" id="Forma_golpe"]
 size = Vector2(12, 10)
 
-[node name="VasijaAzul" instance=ExtResource("1_base")]
+[node name="VasijaAzul" unique_id=1727666666 node_paths=PackedStringArray("sonido_rotura") instance=ExtResource("1_base")]
+sonido_rotura = NodePath("SonidoRotura")
 animacion_rotura = &"romper_vasija_azul"
 
-[node name="Sombra" parent="." index="0"]
+[node name="Sombra" parent="." index="0" unique_id=412661964]
 tamano = Vector2i(10, 3)
 
-[node name="Visual" parent="." index="1"]
+[node name="Visual" parent="." index="1" unique_id=1358752242]
 texture = ExtResource("2_tex")
 centered = false
 offset = Vector2(-5, -9)
 
-[node name="Colision" parent="." index="3"]
+[node name="Colision" parent="." index="3" unique_id=1324401027]
 position = Vector2(0, -2.5)
 shape = SubResource("Forma_col")
 
-[node name="Golpe" parent="." index="4"]
-
-danio = 1
-
-[node name="Forma" parent="Golpe" index="0"]
-position = Vector2(0, -5.0)
+[node name="Forma" parent="Golpe" parent_id_path=PackedInt32Array(1065527151) index="0" unique_id=823072867]
+position = Vector2(0, -5)
 shape = SubResource("Forma_golpe")
+
+[node name="SonidoRotura" type="AudioStreamPlayer" parent="." index="5" unique_id=1021888777]
+stream = ExtResource("3_csofh")
+bus = &"SFX"

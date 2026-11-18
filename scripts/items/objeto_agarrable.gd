@@ -26,6 +26,11 @@ signal roto
 ## Cuántas unidades de `botin` salen cuando toca soltar.
 @export var monedas_min := 1
 @export var monedas_max := 2
+@export_group("Sonido")
+## Suena al romperse (vasijas). Vacío = en silencio.
+@export var sonido_rotura: AudioStreamPlayer
+## Suena al caer tras lanzarlo sin romperse (piedra). Vacío = en silencio.
+@export var sonido_caida: AudioStreamPlayer
 @export_group("Rotura")
 ## Animación de `sprite_rotura` al romperse. Vacía = se aplasta y desvanece (respaldo).
 @export var animacion_rotura: StringName
@@ -111,6 +116,8 @@ func _aterrizar() -> void:
 	if rompible:
 		romper()
 		return
+	if sonido_caida:
+		sonido_caida.play()
 	golpe.activo = false
 	collision_layer = _capa_original
 	collision_mask = _mascara_original
@@ -124,6 +131,8 @@ func romper() -> void:
 	collision_layer = 0
 	golpe.set_deferred(&"activo", false)
 	roto.emit()
+	if sonido_rotura:
+		sonido_rotura.play()
 	# Cortado en el sitio (con la espada): el resto aún no se dejó. Tras el vuelo ya está.
 	_dejar_resto()
 	if botin and randf() < probabilidad_botin:

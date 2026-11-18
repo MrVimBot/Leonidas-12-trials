@@ -24,6 +24,10 @@ enum Estado { NAVEGANDO, DANO, HUNDIDO, BLOQUEADO }
 ## Por debajo de esto el soplido no cuenta (ruido).
 @export var umbral_soplo := 0.08
 
+@export_group("Sonido")
+## Se oye con cada golpe que recibe el barco (choque, tiburón, remolino), también el que lo hunde.
+@export var sonido_golpe: AudioStreamPlayer
+
 @export_group("Animación")
 ## Por encima de esta rapidez (px/s) se anima el barco en marcha; por debajo, quieto.
 @export var umbral_movimiento := 8.0
@@ -138,6 +142,8 @@ func _al_chocar(colision: KinematicCollision2D) -> void:
 
 
 func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:
+	if sonido_golpe:
+		sonido_golpe.play()
 	if vida.muerto:
 		return
 	estado = Estado.DANO

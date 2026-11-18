@@ -1,7 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cqbb0yu3qumiy"]
 
 [ext_resource type="PackedScene" uid="uid://c2tdq8nqkoy6d" path="res://scenes/items/objeto_agarrable.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://d4ctwfyiin4pn" path="res://assets/sprites/entorno/piedra.png" id="2_tex"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_piedra_caer.tres" id="3_c1vu2"]
 
 [sub_resource type="RectangleShape2D" id="Forma_col"]
 size = Vector2(12, 6)
@@ -9,28 +10,31 @@ size = Vector2(12, 6)
 [sub_resource type="RectangleShape2D" id="Forma_golpe"]
 size = Vector2(14, 10)
 
-[node name="Piedra" instance=ExtResource("1_base")]
+[node name="Piedra" unique_id=1010139914 node_paths=PackedStringArray("sonido_caida") instance=ExtResource("1_base")]
 rompible = false
 se_rompe_con_espada = false
 botin = null
 probabilidad_botin = 0.0
+sonido_caida = NodePath("SonidoCaida")
 
-[node name="Sombra" parent="." index="0"]
+[node name="Sombra" parent="." index="0" unique_id=412661964]
 tamano = Vector2i(14, 4)
 
-[node name="Visual" parent="." index="1"]
+[node name="Visual" parent="." index="1" unique_id=1358752242]
 texture = ExtResource("2_tex")
 centered = false
 offset = Vector2(-7, -11)
 
-[node name="Colision" parent="." index="3"]
-position = Vector2(0, -3.0)
+[node name="Colision" parent="." index="3" unique_id=1324401027]
 shape = SubResource("Forma_col")
 
-[node name="Golpe" parent="." index="4"]
-
+[node name="Golpe" parent="." index="4" unique_id=1065527151]
 danio = 3
 
-[node name="Forma" parent="Golpe" index="0"]
-position = Vector2(0, -5.0)
+[node name="Forma" parent="Golpe" index="0" unique_id=823072867]
+position = Vector2(0, -5)
 shape = SubResource("Forma_golpe")
+
+[node name="SonidoCaida" type="AudioStreamPlayer" parent="." index="5" unique_id=1642293806]
+stream = ExtResource("3_c1vu2")
+bus = &"SFX"

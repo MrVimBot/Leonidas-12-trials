@@ -14,6 +14,13 @@
 [ext_resource type="Script" uid="uid://co5jka0synv8f" path="res://scripts/componentes/componente_interaccion.gd" id="11_int"]
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="12_par"]
 [ext_resource type="Script" uid="uid://dpfh2bktlkqyf" path="res://scripts/componentes/componente_ajuste_pixel.gd" id="14_2hwye"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_paso.tres" id="15_0s0il"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_espada.tres" id="16_m8h8e"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_golpe_enemigo.tres" id="17_v0ym4"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_voltereta.tres" id="18_3fwcx"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_leonidas_danio.tres" id="19_mgrqf"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_leonidas_caer.tres" id="20_8griu"]
+[ext_resource type="Script" uid="uid://dmbq60s5cyr8e" path="res://scripts/componentes/componente_pasos.gd" id="21_bo305"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(10, 6)
@@ -36,11 +43,13 @@ size = Vector2(16, 20)
 [sub_resource type="CircleShape2D" id="Shape_alcance"]
 radius = 7.0
 
-[node name="Jugador" type="CharacterBody2D" unique_id=1575559739 groups=["jugador"]]
+[node name="Jugador" type="CharacterBody2D" unique_id=1575559739 node_paths=PackedStringArray("sonido_danio", "sonido_golpe") groups=["jugador"]]
 collision_layer = 2
 collision_mask = 65
 motion_mode = 1
 script = ExtResource("1_jug")
+sonido_danio = NodePath("SonidoDanio")
+sonido_golpe = NodePath("SonidoGolpe")
 
 [node name="Visual" type="Node2D" parent="." unique_id=2015405644]
 
@@ -157,6 +166,39 @@ one_shot = true
 script = ExtResource("14_2hwye")
 objetivo = NodePath("../Visual")
 
+[node name="SonidoPaso" type="AudioStreamPlayer" parent="." unique_id=436521220]
+stream = ExtResource("15_0s0il")
+bus = &"SFX"
+
+[node name="SonidoEspada" type="AudioStreamPlayer" parent="." unique_id=1054196725]
+stream = ExtResource("16_m8h8e")
+bus = &"SFX"
+
+[node name="SonidoGolpe" type="AudioStreamPlayer" parent="." unique_id=1676555479]
+stream = ExtResource("17_v0ym4")
+bus = &"SFX"
+
+[node name="SonidoVoltereta" type="AudioStreamPlayer" parent="." unique_id=843468753]
+stream = ExtResource("18_3fwcx")
+bus = &"SFX"
+
+[node name="SonidoDanio" type="AudioStreamPlayer" parent="." unique_id=1742073166]
+stream = ExtResource("19_mgrqf")
+bus = &"SFX"
+
+[node name="SonidoCaer" type="AudioStreamPlayer" parent="." unique_id=1170343437]
+stream = ExtResource("20_8griu")
+bus = &"SFX"
+
+[node name="Pasos" type="Node" parent="." unique_id=653458938 node_paths=PackedStringArray("sprite", "sonido")]
+script = ExtResource("21_bo305")
+sprite = NodePath("../Visual/Sprite")
+sonido = NodePath("../SonidoPaso")
+fotogramas_de_paso = PackedInt32Array(1, 5)
+
+[connection signal="ataque_empezado" from="." to="SonidoEspada" method="play"]
+[connection signal="pirueta_empezada" from="." to="SonidoVoltereta" method="play"]
+[connection signal="murio" from="Vida" to="SonidoCaer" method="play"]
 [connection signal="timeout" from="TemporizadorComer" to="." method="_al_terminar_temporizador_comer"]
 [connection signal="timeout" from="TemporizadorObjeto" to="." method="ocultar_objeto_obtenido"]
 [connection signal="timeout" from="TemporizadorMuerte" to="." method="_al_terminar_temporizador_muerte"]
