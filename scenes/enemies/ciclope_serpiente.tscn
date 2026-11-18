@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dg70wudl75gyn"]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://k8rfj1ih45j5" path="res://scripts/enemies/ciclope_serpiente.gd" id="2_cer"]
@@ -15,12 +15,11 @@ size = Vector2(20, 8)
 size = Vector2(26, 30)
 
 [sub_resource type="RectangleShape2D" id="Shape_contacto"]
-size = Vector2(20, 20)
 
-[node name="CiclopeSerpiente" node_paths=PackedStringArray("sonido_apuntar", "sonido_disparo") instance=ExtResource("1_base")]
+[node name="CiclopeSerpiente" unique_id=2131952654 node_paths=PackedStringArray("sonido_apuntar", "sonido_disparo") instance=ExtResource("1_base")]
+script = ExtResource("2_cer")
 sonido_apuntar = NodePath("SonidoApuntar")
 sonido_disparo = NodePath("SonidoDisparo")
-script = ExtResource("2_cer")
 escena_rayo = ExtResource("4_ray")
 
 [node name="Sombra" parent="." index="0"]
@@ -38,9 +37,6 @@ shape = SubResource("Shape_cuerpo")
 [node name="Forma" parent="Hurtbox" index="0"]
 position = Vector2(0, -15)
 shape = SubResource("Shape_hurtbox")
-
-[node name="Contacto" parent="." index="4"]
-danio = 1
 
 [node name="Forma" parent="Contacto" index="0"]
 position = Vector2(0, -10)
@@ -60,10 +56,10 @@ radio_perder = 200.0
 [node name="Muerte" parent="." index="10"]
 monedas = 1
 
-[node name="Ojo" type="Marker2D" parent="." index="11"]
+[node name="Ojo" type="Marker2D" parent="." index="11" unique_id=1558479177]
 position = Vector2(-25, -27)
 
-[node name="Paseo" type="Node" parent="." index="12" node_paths=PackedStringArray("movimiento")]
+[node name="Paseo" type="Node" parent="." index="12" unique_id=1334988563 node_paths=PackedStringArray("movimiento")]
 script = ExtResource("5_pas")
 movimiento = NodePath("../Movimiento")
 espera = Vector2(1, 3)
@@ -71,7 +67,7 @@ reparto = 1
 distancia_minima = 4.0
 margen_tiempo = 0.0
 
-[node name="Polvo" type="CPUParticles2D" parent="." index="13"]
+[node name="Polvo" type="CPUParticles2D" parent="." index="13" unique_id=1755735527]
 position = Vector2(0, -4)
 emitting = false
 amount = 10
@@ -89,12 +85,12 @@ scale_amount_min = 1.5
 scale_amount_max = 3.0
 color = Color(0.82, 0.76, 0.6, 0.7)
 
-[node name="SonidoApuntar" type="AudioStreamPlayer2D" parent="."]
+[node name="SonidoApuntar" type="AudioStreamPlayer2D" parent="." index="15" unique_id=1066853397]
 stream = ExtResource("sfx_ciclope_apuntar")
-bus = &"SFX"
 max_distance = 320.0
+bus = &"SFX"
 
-[node name="SonidoDisparo" type="AudioStreamPlayer2D" parent="."]
+[node name="SonidoDisparo" type="AudioStreamPlayer2D" parent="." index="16" unique_id=1312422229]
 stream = ExtResource("sfx_rayo_disparo")
-bus = &"SFX"
 max_distance = 320.0
+bus = &"SFX"
