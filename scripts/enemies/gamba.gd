@@ -193,9 +193,9 @@ func _mirar_x(dx: float) -> void:
 		animador.mirar(Vector2(signf(dx), 0))
 
 
-func _al_chocar(_colision: KinematicCollision2D) -> void:
+func _al_chocar(choque: KinematicCollision2D) -> void:
 	if estado == Estado.DEAMBULAR:
-		paseo.al_chocar()
+		paseo.al_chocar(choque.get_normal())
 
 
 func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:

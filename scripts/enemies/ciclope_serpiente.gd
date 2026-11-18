@@ -255,13 +255,13 @@ func _al_terminar_animacion(anim: StringName) -> void:
 		animador.reproducir(&"parado", true)
 
 
-func _al_chocar(_colision: KinematicCollision2D) -> void:
+func _al_chocar(colision: KinematicCollision2D) -> void:
 	if estado != Estado.VIGILAR:
 		return
 	if deteccion.viendo():
 		_retroceso = tiempo_retroceso_max # contra una pared: ya no hay a dónde retroceder
 	else:
-		paseo.al_chocar()
+		paseo.al_chocar(colision.get_normal())
 
 
 func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:

@@ -205,7 +205,7 @@ func _volver_a_acechar() -> void:
 func _al_chocar(colision: KinematicCollision2D) -> void:
 	match estado:
 		Estado.ACECHO:
-			paseo.al_chocar() # contra una roca: se para y elige otro sitio
+			paseo.al_chocar(colision.get_normal()) # contra una roca: se para y elige otro sitio
 		Estado.CARRERA:
 			# De frente contra el mundo = se estrella (rozar una pared no cuenta).
 			if colision.get_normal().dot(_rumbo) < -0.5:

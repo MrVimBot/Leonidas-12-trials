@@ -4,6 +4,8 @@ extends "res://tools/pruebas/base_prueba.gd"
 ##     Enter, Enter numérico y Espacio;
 ##  b) menú principal: cada tecla de aceptar pulsa el botón con foco UNA sola vez (la GUI de Godot lo
 ##     hace sola; no hay reenvío manual), arriba/abajo mueven el foco y dan la vuelta;
+##  b2) créditos: se abren, nombran Gravity y Controller Icons, arriba/abajo desplazan el texto y se vuelve
+##     con Enter, Esc o el botón de ratón «Volver», con el foco de nuevo en «Créditos»;
 ##  c) pausa: Continuar con E y con Enter, Controles con J y volver con E/J/Enter/Espacio/Esc, Salir;
 ##  d) el libro abierto no se ve afectado (Enter no hace nada, Espacio lo cierra, nadie tiene foco)
 ##     y a pie E/J siguen interactuando/atacando.
@@ -72,13 +74,13 @@ func _caso_b() -> void:
 	await ticks(3)
 	menu.boton_continuar.visible = true # no hay partida guardada en la prueba
 	var cuenta := {}
-	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_salir]:
+	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_creditos, menu.boton_salir]:
 		for c: Dictionary in b.pressed.get_connections():
 			b.pressed.disconnect(c["callable"] as Callable)
 		cuenta[b] = 0
 		b.pressed.connect(func() -> void: cuenta[b] += 1)
 	ok("b) arranca con foco en un botón", get_viewport().gui_get_focus_owner() is Button)
-	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_salir]:
+	for b: Button in [menu.boton_continuar, menu.boton_jugar, menu.boton_creditos, menu.boton_salir]:
 		for forma: Array in ACEPTAR:
 			b.grab_focus()
 			await ticks(1)
@@ -89,15 +91,53 @@ func _caso_b() -> void:
 	menu.boton_jugar.grab_focus()
 	await ticks(1)
 	await pulsar_tecla(KEY_DOWN)
-	ok("b) abajo: Jugar → Salir", get_viewport().gui_get_focus_owner() == menu.boton_salir)
+	ok("b) abajo: Jugar → Créditos", get_viewport().gui_get_focus_owner() == menu.boton_creditos)
 	await pulsar_tecla(KEY_UP)
-	ok("b) arriba: Salir → Jugar", get_viewport().gui_get_focus_owner() == menu.boton_jugar)
+	ok("b) arriba: Créditos → Jugar", get_viewport().gui_get_focus_owner() == menu.boton_jugar)
 	menu.boton_continuar.visible = false
 	menu.boton_jugar.grab_focus()
 	await pulsar_tecla(KEY_UP)
 	ok("b) arriba desde el primero da la vuelta", get_viewport().gui_get_focus_owner() == menu.boton_salir)
 	await pulsar_tecla(KEY_DOWN)
 	ok("b) abajo desde el último da la vuelta", get_viewport().gui_get_focus_owner() == menu.boton_jugar)
+	menu.free()
+	await ticks(2)
+	await _caso_creditos()
+
+
+func _caso_creditos() -> void:
+	var menu := MENU_PRINCIPAL.instantiate() as MenuPrincipal
+	get_tree().root.add_child(menu)
+	await ticks(3)
+	ok("b2) nombran la fuente Gravity y el plugin Controller Icons",
+		menu.texto_creditos.text.contains("Vincenzo Vuono") and menu.texto_creditos.text.contains("Ricardo Subtil"))
+	for vuelta: Array in [["Enter", KEY_ENTER], ["Esc", KEY_ESCAPE], ["ratón", 0]]:
+		menu.boton_creditos.grab_focus()
+		await ticks(1)
+		await pulsar_tecla(KEY_ENTER)
+		ok("b2) Enter sobre Créditos los abre", menu.viendo_creditos and menu.pantalla_creditos.visible
+			and not menu.panel.visible and get_viewport().gui_get_focus_owner() == null)
+		ok("b2) el botón Volver nombra la tecla", not menu.boton_volver.text.contains("{"), menu.boton_volver.text)
+		# Solo hay desplazamiento si el texto no cabe (depende del texto que ponga el equipo).
+		var barra := menu.desplazamiento.get_v_scroll_bar()
+		var sobra := barra.max_value - barra.page > 1.0
+		var antes := menu.desplazamiento.scroll_vertical
+		await pulsar_tecla(KEY_DOWN)
+		await ticks(1)
+		ok("b2) abajo desplaza el texto (si no cabe)", not sobra or menu.desplazamiento.scroll_vertical > antes,
+			"%d → %d" % [antes, menu.desplazamiento.scroll_vertical])
+		await pulsar_tecla(KEY_UP)
+		await ticks(1)
+		ok("b2) arriba lo devuelve", menu.desplazamiento.scroll_vertical == antes)
+		ok("b2) arriba/abajo no se escapan al menú", menu.viendo_creditos and get_viewport().gui_get_focus_owner() == null)
+		if vuelta[1] == 0:
+			menu.boton_volver.pressed.emit()
+			await ticks(2)
+		else:
+			await pulsar_tecla(vuelta[1] as Key)
+		ok("b2) se vuelve con %s y el foco queda en Créditos" % vuelta[0], not menu.viendo_creditos
+			and menu.panel.visible and not menu.pantalla_creditos.visible
+			and get_viewport().gui_get_focus_owner() == menu.boton_creditos)
 	menu.free()
 	await ticks(2)
 

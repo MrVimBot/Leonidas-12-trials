@@ -116,9 +116,9 @@ func _andar(dir: Vector2, vel: float, delta: float) -> void:
 	animador.reproducir(&"caminar")
 
 
-func _al_chocar(_colision: KinematicCollision2D) -> void:
+func _al_chocar(colision: KinematicCollision2D) -> void:
 	if estado == Estado.DEAMBULAR:
-		paseo.al_chocar() # contra un árbol: se para y elige otro sitio
+		paseo.al_chocar(colision.get_normal()) # contra un árbol: se para y elige otro sitio
 
 
 func _explotar() -> void:

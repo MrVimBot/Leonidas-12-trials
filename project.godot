@@ -10,8 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Leonidas-12-pruebas"
+config/name="Las casi 12 pruebas de Leonidas"
 run/main_scene="res://scenes/ui/menu_principal.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Leonidas-12-pruebas"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -23,16 +25,16 @@ driver/enable_input=true
 [autoload]
 
 EstadoJuego="*res://autoload/estado_juego.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+SonidosUI="*res://scenes/ui/sonidos_ui.tscn"
+Entrada="*res://autoload/esquema_entrada.gd"
+ControllerIcons="*uid://ba0u08kqujbda"
 Dialogos="*res://scenes/ui/caja_dialogo.tscn"
 Tienda="*res://scenes/ui/menu_tienda.tscn"
 Microfono="*res://autoload/microfono.gd"
 Libro="*res://scenes/ui/menu_libro.tscn"
 Musica="*res://autoload/musica.gd"
 Daltonismo="*res://scenes/ui/filtro_daltonismo.tscn"
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
-SonidosUI="*res://scenes/ui/sonidos_ui.tscn"
-Entrada="*res://autoload/esquema_entrada.gd"
-ControllerIcons="*uid://ba0u08kqujbda"
 
 [debug]
 

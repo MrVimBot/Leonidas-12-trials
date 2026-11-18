@@ -7,8 +7,8 @@ extends Node
 ## El cerebro decide CUÁNDO pasea (llama a `actualizar(delta)` en cada tick de física mientras
 ## está en su estado de paseo) y qué animación pone (lee `andando` y `hacia` después de
 ## actualizar); este componente decide el destino, las esperas y las paradas, y mueve el
-## cuerpo con el `ComponenteMovimiento`. Los choques los reenvía el cerebro con `al_chocar()`
-## (solo cuenta si está en su estado de paseo).
+## cuerpo con el `ComponenteMovimiento`. Los choques los reenvía el cerebro con
+## `al_chocar(colision.get_normal())` (solo cuenta si está en su estado de paseo).
 ##
 ## El destino se elige AL PARAR (no al acabar la espera): así `ir_a()` puede mandarlo a otro
 ## sitio (la seta vuelve a su origen tras perder de vista a Leonidas) y el orden de las
@@ -107,9 +107,16 @@ func actualizar(delta: float) -> void:
 
 
 ## El cerebro lo llama cuando choca (solo si está paseando): se para y elige otro destino.
-func al_chocar() -> void:
-	if _caminando:
-		_parar()
+## Con la `normal` del choque solo se para si iba CONTRA el obstáculo: un cuerpo que se queda
+## tocando algo (una vasija, una pared) recibe un choque en cada tick aunque esté quieto o se
+## aleje, y sin esta comprobación se paraba nada más arrancar y no volvía a andar nunca
+## (visto con una seta pegada a una vasija, 2026-11-18). Sin normal, se para siempre.
+func al_chocar(normal := Vector2.ZERO) -> void:
+	if not _caminando:
+		return
+	if normal != Vector2.ZERO and normal.dot(_destino - movimiento.cuerpo.global_position) >= 0.0:
+		return # se aleja del obstáculo (o lo roza): que siga
+	_parar()
 
 
 ## Cambia el destino actual sin tocar la espera (p. ej. «vuelve a casa»).

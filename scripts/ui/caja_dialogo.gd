@@ -189,9 +189,10 @@ func _mostrar_pagina() -> void:
 	# Con mando, los marcadores {accion} dejan un hueco en el texto y un icono encima.
 	var expandido := _expandir(p_texto)
 	var p_visible: String = expandido.texto
+	var huecos: Array[Dictionary] = expandido.huecos
 	texto.text = adaptar_a_fuente(p_visible)
 	texto.visible_characters = 0
-	_poner_iconos(p_visible, expandido.huecos)
+	_poner_iconos(p_visible, huecos)
 	_letras = 0.0
 	_escribiendo = true
 	flecha.visible = false

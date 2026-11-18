@@ -8,9 +8,10 @@ extends Node
 ## repiten los reproductores en cada escena. `PROCESS_MODE_ALWAYS`: suena con el juego en pausa.
 ## Los reproductores (hijos, con su `AudioStreamRandomizer` y el bus SFX) están en la escena.
 ## Los sonidos del mundo (pasos, golpes, objetos...) NO van aquí: cuelgan de su entidad.
-## Tiene `class_name` (distinto del autoload, que no puede llamarse igual) para que quien llama
-## a `SonidosUI.mover()` sepa su tipo: sin ella el autoload es un Node y cada llamada da el
-## aviso UNSAFE_METHOD_ACCESS.
+## ORDEN: en Proyecto → Ajustes → Autoload debe ir ANTES de Dialogos, Tienda y Libro. Un
+## autoload que es una escena solo tiene tipo para el analizador cuando ya está creado; los
+## scripts que se compilan al crear Tienda o Libro (y lo que arrastran: Game, Jugador, la
+## pausa…) verían `SonidosUI` como un Node y cada llamada daría UNSAFE_METHOD_ACCESS.
 
 @onready var _mover: AudioStreamPlayer = %Mover
 @onready var _aceptar: AudioStreamPlayer = %Aceptar

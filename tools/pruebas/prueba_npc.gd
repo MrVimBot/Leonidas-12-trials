@@ -124,24 +124,35 @@ func ejecutar() -> void:
 	var choques := 0
 	var parados_tras_choque := 0
 	var max_x := -INF
-	var esperando_parada := -1
 	var ult_dest := Vector2.INF
 	var cambios := 0
+	var se_aleja_tras_choque := false
+	# Choque contra el muro en este tick (normal hacia la izquierda), visto por la señal.
+	var choco_muro := [false]
+	(n.get_node(^"Movimiento") as ComponenteMovimiento).choco.connect(
+		func(c: KinematicCollision2D) -> void: choco_muro[0] = choco_muro[0] or c.get_normal().x < -0.5)
+	# ¿Iba andando hacia un punto detrás del muro (inalcanzable) al empezar este tick?
+	var iba_hacia_muro := false
 	for t in 12000:
+		choco_muro[0] = false
 		await get_tree().physics_frame
 		max_x = maxf(max_x, n.global_position.x)
 		if pas._destino != ult_dest:
 			cambios += 1
 			ult_dest = pas._destino
-		if n.global_position.x > 4999.8 and esperando_parada < 0 and pas._caminando:
+		# Regla: si choca yendo HACIA el muro, se para en ese mismo tick. Pegado pero alejándose
+		# no cuenta como choque contra él: debe seguir andando (antes se paraba en el acto y se
+		# quedaba en la pared para siempre).
+		if choco_muro[0] and iba_hacia_muro:
 			choques += 1
-			esperando_parada = 3
-		if esperando_parada >= 0:
-			esperando_parada -= 1
-			if esperando_parada < 0 and not pas._caminando:
+			if not pas._caminando:
 				parados_tras_choque += 1
+		if choques > 0 and n.global_position.x < 4990.0:
+			se_aleja_tras_choque = true
+		iba_hacia_muro = pas._caminando and pas._destino.x > n.global_position.x + 0.5
 	ok("NPC no atraviesa el muro (max x %.2f, límite 5000)" % max_x, max_x <= 5000.1)
 	ok("choca contra el muro (%d) y se para (%d) y sigue eligiendo destinos (%d)" % [choques, parados_tras_choque, cambios], choques > 0 and parados_tras_choque == choques and cambios > 5)
+	ok("tras chocar se despega del muro y sigue paseando", se_aleja_tras_choque)
 	raiz.queue_free()
 
 	# Bosque.

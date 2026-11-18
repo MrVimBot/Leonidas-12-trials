@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" uid="uid://cfwcu04p8suux" path="res://scripts/ui/menu_principal.gd" id="1_men"]
 [ext_resource type="Texture2D" uid="uid://clo0w4gh4oba1" path="res://assets/backgrounds/cinematica/fondo_1.png" id="2_fon"]
@@ -23,6 +23,24 @@ anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_barra"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.176, 0.106, 0.078, 0.15)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agarre"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.176, 0.106, 0.078, 0.8)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agarre_activo"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.71, 0.33, 0.14, 1)
+anti_aliasing = false
+
 [sub_resource type="Theme" id="Theme_menu"]
 Button/colors/font_color = Color(0.176, 0.106, 0.078, 1)
 Button/colors/font_disabled_color = Color(0.176, 0.106, 0.078, 1)
@@ -36,6 +54,12 @@ Button/styles/hover = SubResource("StyleBoxEmpty_boton")
 Button/styles/normal = SubResource("StyleBoxEmpty_boton")
 Button/styles/pressed = SubResource("StyleBoxEmpty_boton")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+ScrollContainer/styles/panel = SubResource("StyleBoxEmpty_boton")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_agarre")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_agarre_activo")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_agarre_activo")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_barra")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_barra")
 
 [node name="MenuPrincipal" type="Control"]
 layout_mode = 3
@@ -60,6 +84,7 @@ texture = ExtResource("2_fon")
 expand_mode = 1
 
 [node name="Titulo" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -77,6 +102,7 @@ de Leonidas"
 horizontal_alignment = 1
 
 [node name="Panel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -109,11 +135,67 @@ layout_mode = 2
 text = "Jugar"
 alignment = 0
 
+[node name="Creditos" type="Button" parent="Panel/Botones"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Créditos"
+alignment = 0
+
 [node name="Salir" type="Button" parent="Panel/Botones"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Salir"
 alignment = 0
+
+[node name="PantallaCreditos" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelCreditos" type="PanelContainer" parent="PantallaCreditos"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="PantallaCreditos/PanelCreditos"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Titulo" type="Label" parent="PantallaCreditos/PanelCreditos/VBox"]
+layout_mode = 2
+text = "Créditos"
+horizontal_alignment = 1
+
+[node name="Desplazamiento" type="ScrollContainer" parent="PantallaCreditos/PanelCreditos/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(388, 184)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="TextoCreditos" type="Label" parent="PantallaCreditos/PanelCreditos/VBox/Desplazamiento"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "FUENTES
+Perfect DOS VGA 437, de Zeh Fernando.
+Gravity, de Vincenzo Vuono (CC BY 4.0).
+
+PLUGINS
+Controller Icons, de Ricardo Subtil (licencia MIT):
+Copyright (c) 2023 Ricardo Subtil
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+autowrap_mode = 3
+
+[node name="Volver" type="Button" parent="PantallaCreditos/PanelCreditos/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "{volver} Volver"
 
 [node name="Fundido" type="CanvasLayer" parent="."]
 layer = 30
@@ -130,4 +212,6 @@ color = Color(0, 0, 0, 1)
 
 [connection signal="pressed" from="Panel/Botones/Continuar" to="." method="_continuar"]
 [connection signal="pressed" from="Panel/Botones/Jugar" to="." method="_jugar"]
+[connection signal="pressed" from="Panel/Botones/Creditos" to="." method="_mostrar_creditos"]
 [connection signal="pressed" from="Panel/Botones/Salir" to="." method="_salir"]
+[connection signal="pressed" from="PantallaCreditos/PanelCreditos/VBox/Volver" to="." method="_volver_de_creditos"]

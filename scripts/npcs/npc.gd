@@ -138,9 +138,9 @@ func _reposar() -> void:
 	_animador.reproducir(&"parado")
 
 
-func _al_chocar(_colision: KinematicCollision2D) -> void:
+func _al_chocar(colision: KinematicCollision2D) -> void:
 	if estado == Estado.PASEANDO:
-		_paseo.al_chocar()
+		_paseo.al_chocar(colision.get_normal())
 
 
 func _al_empezar_dialogo(quien: Node) -> void:
