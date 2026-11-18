@@ -4,12 +4,14 @@
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_trozo_estatua_cae.tres" id="sfx_trozo_estatua_cae"]
+[ext_resource type="PackedScene" uid="uid://cqbb0yu3qumiy" path="res://scenes/items/piedra.tscn" id="4_pie"]
 
 [sub_resource type="CircleShape2D" id="Shape_golpe"]
 radius = 12.0
 
 [node name="TrozoEstatua" type="Node2D"]
 script = ExtResource("1_tro")
+resto = ExtResource("4_pie")
 
 [node name="Sombra" type="Node2D" parent="."]
 script = ExtResource("2_som")

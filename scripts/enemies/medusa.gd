@@ -24,7 +24,8 @@ extends CharacterBody2D
 ##   RECUPERA   48–59 → ESPERA
 ##   LANZAR     desde el 50 %: cada `intervalo_trozos` s lanza `TrozoEstatua` (2 con ≤ 25 %)
 ##              desde `Mano`, en ESPERA o ACERCARSE. Sin pose propia: `parado` y un pequeño
-##              "levantar" del Sprite (PROVISIONAL, falta arte)
+##              "levantar" del Sprite (PROVISIONAL, falta arte). Cada trozo deja una piedra
+##              (`ObjetoAgarrable`) que Leonidas puede lanzarle; como mucho `max_piedras`
 ##   DERROTADA  al llegar a 0 de vida. NO usa `ComponenteMuerte` (Medusa no muere: suplica,
 ##              plan M5): se para, apaga sus golpes y su Hurtbox, libera cíclopes y trozos y
 ##              emite `derrotada`
@@ -124,6 +125,9 @@ const COLOR_CANTO := Color(0.6, 1.0, 0.65)
 @export var duracion_lanzar := 0.4
 ## Si es false, no lanza trozos mientras haya cíclopes vivos (PROVISIONAL: preguntar).
 @export var trozos_con_ciclopes := false
+## Piedras (restos de los trozos) que puede haber a la vez en el suelo; al pasar, se quita la
+## más antigua que no esté en brazos de Leonidas.
+@export var max_piedras := 3
 
 @export_group("Movimiento")
 @export var velocidad_caminar := 30.0
@@ -156,6 +160,7 @@ var _posicion_inicial := Vector2.ZERO
 var _impacto_base := Vector2.ZERO
 var _ciclopes: Array[CiclopeSerpiente] = []
 var _trozos: Array[Node2D] = []
+var _piedras: Array[ObjetoAgarrable] = []
 var _tween_canto: Tween
 var _tween_lanzar: Tween
 
@@ -251,6 +256,7 @@ func reiniciar() -> void:
 			c.queue_free()
 	_ciclopes.clear()
 	_liberar_trozos()
+	_liberar_piedras()
 	estado = Estado.INACTIVA
 	_invocado_inicio = false
 	_invocado_mitad = false
@@ -539,6 +545,7 @@ func _lanzar_trozo(destino: Vector2) -> void:
 	trozo.lanzar(destino)
 	_trozos.append(trozo)
 	trozo.tree_exited.connect(_al_salir_trozo.bind(trozo))
+	trozo.resto_dejado.connect(_al_dejar_piedra)
 
 
 func _al_salir_trozo(trozo: Node2D) -> void:
@@ -550,6 +557,37 @@ func _liberar_trozos() -> void:
 		if is_instance_valid(t):
 			t.queue_free()
 	_trozos.clear()
+
+
+func _al_dejar_piedra(piedra: ObjetoAgarrable) -> void:
+	_piedras.append(piedra)
+	piedra.tree_exiting.connect(_al_salir_piedra.bind(piedra))
+	var sobran := _piedras.size() - maxi(max_piedras, 1)
+	for p in _piedras.duplicate():
+		if sobran <= 0:
+			break
+		if _en_el_suelo(p):
+			p.queue_free()
+			sobran -= 1
+
+
+## `tree_exiting` también salta al levantarla (pasa a colgar del jugador): solo se quita de la
+## lista si se está liberando (rota al lanzarla o quitada por el límite).
+func _al_salir_piedra(piedra: ObjetoAgarrable) -> void:
+	if piedra.is_queued_for_deletion():
+		_piedras.erase(piedra)
+
+
+## Una piedra que Leonidas lleva en brazos cuelga de su `PuntoCarga`: esa no se quita.
+func _en_el_suelo(piedra: ObjetoAgarrable) -> bool:
+	return is_instance_valid(piedra) and piedra.get_parent() == get_parent()
+
+
+func _liberar_piedras() -> void:
+	for p in _piedras:
+		if _en_el_suelo(p):
+			p.queue_free()
+	_piedras.clear()
 
 
 # --- Vida -----------------------------------------------------------------------------------

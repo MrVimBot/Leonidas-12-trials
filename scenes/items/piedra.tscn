@@ -8,7 +8,7 @@
 size = Vector2(12, 6)
 
 [sub_resource type="RectangleShape2D" id="Forma_golpe"]
-size = Vector2(14, 10)
+size = Vector2(20, 14)
 
 [node name="Piedra" unique_id=1010139914 node_paths=PackedStringArray("sonido_caida") instance=ExtResource("1_base")]
 rompible = false
@@ -32,7 +32,7 @@ shape = SubResource("Forma_col")
 danio = 3
 
 [node name="Forma" parent="Golpe" index="0" unique_id=823072867]
-position = Vector2(0, -5)
+position = Vector2(0, -6)
 shape = SubResource("Forma_golpe")
 
 [node name="SonidoCaida" type="AudioStreamPlayer" parent="." index="5" unique_id=1642293806]
