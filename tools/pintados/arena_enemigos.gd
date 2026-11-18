@@ -21,6 +21,11 @@ extends Node
 @export var peces: Array[Vector2] = []
 @export var ciclope: PackedScene
 @export var ciclopes: Array[Vector2] = []
+## Medusa (jefa): al colocarla se llama a `empezar_combate()`. Necesita sitio: para verla,
+## `zona` = `cueva_jefe.tscn`, `entrada` = `desde_cueva` y un desplazamiento como (0, -200)
+## (el centro de la sala; las otras listas, vacías).
+@export var medusa: PackedScene
+@export var medusas: Array[Vector2] = []
 
 
 var _jugador: Jugador
@@ -52,8 +57,10 @@ func _ready() -> void:
 	var contenedor: Node = game.zona_actual.get_node_or_null(^"Objetos")
 	if contenedor == null:
 		contenedor = game.zona_actual
-	for par in [[gamba, gambas], [pez_espada, peces], [ciclope, ciclopes]]:
+	for par in [[gamba, gambas], [pez_espada, peces], [ciclope, ciclopes], [medusa, medusas]]:
 		for desplazamiento: Vector2 in par[1]:
 			var e := (par[0] as PackedScene).instantiate() as Node2D
 			e.position = game.jugador.global_position + desplazamiento - (contenedor as Node2D).global_position
 			contenedor.add_child(e)
+			if e is Medusa:
+				(e as Medusa).empezar_combate()

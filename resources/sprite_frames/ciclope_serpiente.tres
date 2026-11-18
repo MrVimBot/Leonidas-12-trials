@@ -1,8 +1,8 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://creuym5jhmnm4"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/ciclope_serpiente/atacar.png" id="1_uxd5t"]
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/ciclope_serpiente/caminar.png" id="2_pvam4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/pintados/ciclope_serpiente/parado.png" id="3_ait00"]
+[ext_resource type="Texture2D" uid="uid://bsd6dycqroc7d" path="res://assets/sprites/pintados/ciclope_serpiente/atacar.png" id="1_uxd5t"]
+[ext_resource type="Texture2D" uid="uid://woyo2a7himux" path="res://assets/sprites/pintados/ciclope_serpiente/caminar.png" id="2_pvam4"]
+[ext_resource type="Texture2D" uid="uid://dhm5vyjs6fkyu" path="res://assets/sprites/pintados/ciclope_serpiente/parado.png" id="3_ait00"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_326ry"]
 atlas = ExtResource("1_uxd5t")

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/gamba.tscn" id="3_ga"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/pez_espada.tscn" id="4_pe"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ciclope_serpiente.tscn" id="5_ci"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/medusa.tscn" id="6_me"]
 
 [node name="ArenaEnemigos" type="Node"]
 script = ExtResource("1_s")
@@ -16,3 +17,4 @@ pez_espada = ExtResource("4_pe")
 peces = Array[Vector2]([Vector2(-150, 140)])
 ciclope = ExtResource("5_ci")
 ciclopes = Array[Vector2]([Vector2(150, 230)])
+medusa = ExtResource("6_me")

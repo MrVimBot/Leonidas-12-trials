@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/enemies/medusa.gd" id="2_cer"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/medusa.tres" id="3_spr"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ciclope_serpiente.tscn" id="4_cic"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/trozo_estatua.tscn" id="5_tro"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="6_hit"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="7_som"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(40, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(36, 70)
+
+[sub_resource type="RectangleShape2D" id="Shape_contacto"]
+size = Vector2(36, 14)
+
+[sub_resource type="CircleShape2D" id="Shape_golpe"]
+radius = 14.0
+
+[node name="Medusa" instance=ExtResource("1_base")]
+script = ExtResource("2_cer")
+escena_ciclope = ExtResource("4_cic")
+escena_trozo = ExtResource("5_tro")
+
+[node name="Sombra" parent="." index="0"]
+tamano = Vector2i(56, 12)
+
+[node name="Sprite" parent="." index="1"]
+sprite_frames = ExtResource("3_spr")
+animation = &"parado"
+offset = Vector2(0, -92)
+
+[node name="Colision" parent="." index="2"]
+position = Vector2(0, -2)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Forma" parent="Hurtbox" index="0"]
+position = Vector2(0, -36)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Contacto" parent="." index="4"]
+danio = 2
+
+[node name="Forma" parent="Contacto" index="0"]
+position = Vector2(0, -7)
+shape = SubResource("Shape_contacto")
+
+[node name="Movimiento" parent="." index="5"]
+velocidad = 30.0
+
+[node name="Vida" parent="." index="7"]
+vida_max = 20
+invulnerabilidad = 0.25
+
+[node name="Deteccion" parent="." index="8"]
+radio_vision = 400.0
+radio_perder = 600.0
+
+[node name="GolpeSuelo" type="Area2D" parent="." index="11"]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("6_hit")
+danio = 4
+activo = false
+
+[node name="Forma" type="CollisionShape2D" parent="GolpeSuelo" index="0"]
+position = Vector2(6, 6)
+shape = SubResource("Shape_golpe")
+
+[node name="AvisoSuelo" type="Node2D" parent="." index="12"]
+visible = false
+top_level = true
+z_index = -1
+script = ExtResource("7_som")
+tamano = Vector2i(28, 10)
+color = Color(0.85, 0.12, 0.1, 0.5)
+
+[node name="Mano" type="Marker2D" parent="." index="13"]
+position = Vector2(-14, -70)
