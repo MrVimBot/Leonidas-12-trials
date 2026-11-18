@@ -4,6 +4,7 @@
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/remolino.tres" id="2_spr"]
 [ext_resource type="Shader" uid="uid://c01epckoxrs46" path="res://resources/shaders/quitar_color.gdshader" id="3_sha"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/remolino.wav" id="wav_remolino"]
 
 [sub_resource type="ShaderMaterial" id="Mat_fondo"]
 shader = ExtResource("3_sha")
@@ -32,3 +33,9 @@ continuo = true
 
 [node name="Forma" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("Shape_centro")
+
+[node name="SonidoRemolino" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("wav_remolino")
+bus = &"SFX"
+max_distance = 220.0
+autoplay = true

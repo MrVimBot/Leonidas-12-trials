@@ -87,6 +87,7 @@ visual = NodePath("../Sprite")
 sonido = NodePath("../SonidoMuerte")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto")]
 
-[node name="SonidoMuerte" type="AudioStreamPlayer" parent="."]
+[node name="SonidoMuerte" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("sfx_muere")
 bus = &"SFX"
+max_distance = 320.0

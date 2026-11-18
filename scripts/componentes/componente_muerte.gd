@@ -27,7 +27,7 @@ const RUTA_MONEDA := "res://scenes/items/moneda.tscn"
 ## Escena de la moneda suelta. Vacía = scenes/items/moneda.tscn (ver `_escena_moneda()`).
 @export var escena_moneda: PackedScene
 ## Suena al morir (hijo del enemigo: dura menos que `duracion`, así acaba antes de liberarlo).
-@export var sonido: AudioStreamPlayer
+@export var sonido: AudioStreamPlayer2D
 
 
 func _ready() -> void:

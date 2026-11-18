@@ -8,6 +8,11 @@
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="6_hit"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="7_som"]
 [ext_resource type="PackedScene" uid="uid://c7k2m9xq4ndpa" path="res://scenes/entorno/zona_dialogo.tscn" id="8_dia"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_invocar.tres" id="sfx_medusa_invocar"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_embestida.tres" id="sfx_medusa_embestida"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_golpe_suelo.tres" id="sfx_medusa_golpe_suelo"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_lanzar.tres" id="sfx_medusa_lanzar"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_derrotada.tres" id="sfx_medusa_derrotada"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(40, 10)
@@ -24,7 +29,10 @@ radius = 14.0
 [sub_resource type="CircleShape2D" id="Shape_charla"]
 radius = 30.0
 
-[node name="Medusa" instance=ExtResource("1_base")]
+[node name="Medusa" node_paths=PackedStringArray("sonido_invocar", "sonido_embestida", "sonido_lanzar") instance=ExtResource("1_base")]
+sonido_invocar = NodePath("SonidoInvocar")
+sonido_embestida = NodePath("SonidoEmbestida")
+sonido_lanzar = NodePath("SonidoLanzar")
 script = ExtResource("2_cer")
 escena_ciclope = ExtResource("4_cic")
 escena_trozo = ExtResource("5_tro")
@@ -93,3 +101,31 @@ posicion_burbuja = Vector2(0, -100)
 [node name="Forma" type="CollisionShape2D" parent="Charla" index="1"]
 position = Vector2(0, -8)
 shape = SubResource("Shape_charla")
+
+[node name="SonidoInvocar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_medusa_invocar")
+bus = &"SFX"
+max_distance = 500.0
+
+[node name="SonidoEmbestida" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_medusa_embestida")
+bus = &"SFX"
+max_distance = 500.0
+
+[node name="SonidoGolpeSuelo" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_medusa_golpe_suelo")
+bus = &"SFX"
+max_distance = 500.0
+
+[node name="SonidoLanzar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_medusa_lanzar")
+bus = &"SFX"
+max_distance = 500.0
+
+[node name="SonidoDerrotada" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_medusa_derrotada")
+bus = &"SFX"
+max_distance = 500.0
+
+[connection signal="golpe_suelo" from="." to="SonidoGolpeSuelo" method="play" unbinds=1]
+[connection signal="derrotada" from="." to="SonidoDerrotada" method="play"]

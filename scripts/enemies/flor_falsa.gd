@@ -7,6 +7,9 @@ extends CharacterBody2D
 
 enum Estado { ESCONDIDA, SALIR, ALERTA, MORDER, MORDER_EXITO, DANO, ESCONDERSE, MUERTA }
 
+@export_group("Sonido")
+## Al salir del escondite (el mordisco suena por la señal `golpe_activado` del `Ataque`, en la escena).
+@export var sonido_salir: AudioStreamPlayer2D
 @export_group("Mordisco")
 ## Alcance horizontal y vertical del mordisco (px desde la base del tallo).
 @export var alcance := Vector2(24, 14)
@@ -55,6 +58,8 @@ func _physics_process(delta: float) -> void:
 			_espera -= delta
 			if _espera <= 0.0 and deteccion.viendo():
 				estado = Estado.SALIR
+				if sonido_salir:
+					sonido_salir.play()
 				_fuera = tiempo_fuera
 				hurtbox.activo = true
 				_mirar_al_jugador()

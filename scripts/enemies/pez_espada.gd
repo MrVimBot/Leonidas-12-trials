@@ -16,6 +16,11 @@ extends CharacterBody2D
 
 enum Estado { ACECHO, AVISO, CARRERA, ESTOCADA, ENFRIAMIENTO, DANO, MUERTA }
 
+@export_group("Sonido")
+## Al avisar (antes de la carrera).
+@export var sonido_aviso: AudioStreamPlayer2D
+## Al arrancar la carrera (la estocada suena por `golpe_activado` del `Ataque`, en la escena).
+@export var sonido_carrera: AudioStreamPlayer2D
 @export_group("Movimiento")
 @export var velocidad_acecho := 30.0
 ## 240 px/s = 2 px por tick de física (casi 3 veces lo que corre Leonidas).
@@ -125,6 +130,8 @@ func _acechar(delta: float) -> void:
 
 ## Se para, mira a Leonidas y FIJA el rumbo de la carrera (Q5: no lo corrige después).
 func _avisar() -> void:
+	if sonido_aviso:
+		sonido_aviso.play()
 	estado = Estado.AVISO
 	_espera = tiempo_aviso
 	_rumbo = deteccion.direccion()
@@ -135,6 +142,8 @@ func _avisar() -> void:
 
 
 func _correr() -> void:
+	if sonido_carrera:
+		sonido_carrera.play()
 	estado = Estado.CARRERA
 	_origen_carrera = global_position
 	vida.invulnerable_extra = true

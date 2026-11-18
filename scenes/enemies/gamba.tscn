@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
 [ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
 [ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_gamba_muerde.tres" id="sfx_gamba_muerde"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(18, 6)
@@ -97,3 +98,10 @@ espera = Vector2(0.8, 2)
 reparto = 1
 distancia_minima = 8.0
 margen_tiempo = 0.0
+
+[node name="SonidoMordisco" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_gamba_muerde")
+bus = &"SFX"
+max_distance = 320.0
+
+[connection signal="golpe_activado" from="Ataque" to="SonidoMordisco" method="play"]

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bbru3q72w3pv0" path="res://scripts/componentes/componente_movimiento.gd" id="4_mov"]
 [ext_resource type="Script" uid="uid://cok2nxwmmb80e" path="res://scripts/componentes/animador_direccional.gd" id="5_ani"]
 [ext_resource type="Script" uid="uid://d07orbyj36vnr" path="res://scripts/componentes/componente_deteccion.gd" id="6_det"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_tiburon_embiste.tres" id="sfx_tiburon_embiste"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(20, 6)
@@ -13,7 +14,8 @@ size = Vector2(20, 6)
 [sub_resource type="RectangleShape2D" id="Shape_mordisco"]
 size = Vector2(22, 12)
 
-[node name="Tiburon" type="CharacterBody2D" groups=["enemigos"]]
+[node name="Tiburon" type="CharacterBody2D" groups=["enemigos"] node_paths=PackedStringArray("sonido_embestida")]
+sonido_embestida = NodePath("SonidoEmbestida")
 collision_layer = 4
 collision_mask = 1
 motion_mode = 1
@@ -57,3 +59,8 @@ script = ExtResource("6_det")
 radio_vision = 90.0
 radio_perder = 150.0
 grupo = &"barco"
+
+[node name="SonidoEmbestida" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_tiburon_embiste")
+bus = &"SFX"
+max_distance = 320.0

@@ -66,6 +66,13 @@ const COLOR_INVULNERABLE := Color(0.6, 0.6, 0.6)
 ## Tinte del "canto" al invocar. PROVISIONAL (no hay pose de invocar).
 const COLOR_CANTO := Color(0.6, 1.0, 0.65)
 
+@export_group("Sonido")
+## Al empezar el canto de invocación.
+@export var sonido_invocar: AudioStreamPlayer2D
+## Cuando empieza a deslizarse en la embestida (el golpe al suelo y la derrota suenan por señal, en la escena).
+@export var sonido_embestida: AudioStreamPlayer2D
+## Al arrojar un trozo de estatua.
+@export var sonido_lanzar: AudioStreamPlayer2D
 @export_group("Embestida")
 ## Segundos quieta entre embestidas.
 @export var pausa_embestidas := 1.2
@@ -342,6 +349,8 @@ func _al_cambiar_frame(frame: int) -> void:
 		_fijar_objetivo()
 	if not _deslizado and frame >= frame_deslizar and frame < frames_golpe.x:
 		_deslizado = true
+		if sonido_embestida:
+			sonido_embestida.play()
 		# Sin contacto mientras se desliza y golpea: si no, su daño (2) llegaría antes y la
 		# invulnerabilidad de Leonidas taparía el del espadazo (4). Vuelve en CLAVADA.
 		contacto.activo = false
@@ -415,6 +424,8 @@ func _siguiente_accion() -> bool:
 
 
 func _invocar() -> void:
+	if sonido_invocar:
+		sonido_invocar.play()
 	estado = Estado.INVOCAR
 	movimiento.detener()
 	animador.reproducir(&"parado", true)
@@ -506,6 +517,8 @@ func _lanzar_trozos() -> void:
 	var j := _leonidas()
 	if j == null:
 		return
+	if sonido_lanzar:
+		sonido_lanzar.play()
 	var n := 2 if vida.vida <= vida.vida_max * fraccion_dos_trozos else 1
 	for i in n:
 		var destino := j.global_position

@@ -27,6 +27,14 @@ enum Estado { NAVEGANDO, DANO, HUNDIDO, BLOQUEADO }
 @export_group("Sonido")
 ## Se oye con cada golpe que recibe el barco (choque, tiburón, remolino), también el que lo hunde.
 @export var sonido_golpe: AudioStreamPlayer
+## Al hundirse.
+@export var sonido_hundir: AudioStreamPlayer
+## Bucle de oleaje: suena mientras exista el barco (empieza solo, `autoplay`); se corta al hundirse.
+@export var sonido_oleaje: AudioStreamPlayer
+## Bucle de viento: su volumen sigue a la fuerza del soplido (0 = silencio).
+@export var sonido_viento: AudioStreamPlayer
+## Rapidez con la que sube y baja el viento (fracción de volumen por segundo).
+@export var suavizado_viento := 4.0
 
 @export_group("Animación")
 ## Por encima de esta rapidez (px/s) se anima el barco en marcha; por debajo, quieto.
@@ -51,6 +59,8 @@ var estado := Estado.NAVEGANDO
 var rumbo := Vector2.DOWN
 
 var _vel_previa := Vector2.ZERO
+## Volumen lineal actual del viento (0..1), suavizado.
+var _viento := 0.0
 var _tiempo_dano := 0.0
 ## Motivos de bloqueo (&"zona", &"escena"...), como en `Jugador`: cada sistema quita solo
 ## el suyo. Solo se usan las claves (un conjunto).
@@ -86,6 +96,7 @@ func _physics_process(delta: float) -> void:
 		Estado.HUNDIDO, Estado.BLOQUEADO:
 			movimiento.detener()
 	_animar()
+	_sonar_viento(delta)
 	_vel_previa = velocity # el componente mueve después (los hijos se procesan tras el padre)
 
 
@@ -101,6 +112,15 @@ func _navegar(delta: float) -> void:
 		movimiento.mover(rumbo, delta, velocidad_viento * soplo)
 	else:
 		movimiento.frenar(delta) # fricción baja: deriva
+
+
+## El volumen del viento sube y baja (suavizado) con el soplido mientras navega.
+func _sonar_viento(delta: float) -> void:
+	if sonido_viento == null:
+		return
+	var objetivo := soplido() if estado == Estado.NAVEGANDO else 0.0
+	_viento = move_toward(_viento, objetivo, suavizado_viento * delta)
+	sonido_viento.volume_db = linear_to_db(maxf(_viento, 0.0001))
 
 
 ## Fuerza del soplido (0..1) que usa el barco; también la lee el HUD.
@@ -153,6 +173,12 @@ func _al_recibir_danio(_cantidad: int, origen: Vector2) -> void:
 
 
 func _al_hundirse() -> void:
+	if sonido_hundir:
+		sonido_hundir.play()
+	if sonido_oleaje:
+		sonido_oleaje.stop()
+	if sonido_viento:
+		sonido_viento.stop()
 	estado = Estado.HUNDIDO
 	parpadeo.detener()
 	movimiento.detener()

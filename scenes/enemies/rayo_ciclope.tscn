@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://ca2hk43mk61ak" path="res://scripts/enemies/rayo_ciclope.gd" id="1_ray"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="2_hit"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_rayo_impacto.tres" id="sfx_rayo_impacto"]
 
 [sub_resource type="CircleShape2D" id="Shape_rayo"]
 radius = 3.0
 
-[node name="RayoCiclope" type="Node2D"]
+[node name="RayoCiclope" type="Node2D" node_paths=PackedStringArray("sonido_impacto")]
+sonido_impacto = NodePath("SonidoImpacto")
 script = ExtResource("1_ray")
 
 [node name="Estela" type="CPUParticles2D" parent="."]
@@ -49,5 +51,10 @@ danio = 2
 
 [node name="Forma" type="CollisionShape2D" parent="Golpe"]
 shape = SubResource("Shape_rayo")
+
+[node name="SonidoImpacto" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_rayo_impacto")
+bus = &"SFX"
+max_distance = 320.0
 
 [connection signal="golpeo" from="Golpe" to="." method="_al_golpear"]

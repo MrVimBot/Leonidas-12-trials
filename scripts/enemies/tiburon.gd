@@ -9,6 +9,8 @@ extends CharacterBody2D
 
 enum Estado { PATRULLA, EMBESTIR, CANSADO }
 
+## Al lanzarse a embestir.
+@export var sonido_embestida: AudioStreamPlayer2D
 @export var velocidad_patrulla := 60.0
 @export var alcance_patrulla := 120.0
 @export var velocidad_embestida := 120.0
@@ -65,6 +67,8 @@ func _patrullar(delta: float) -> void:
 
 
 func _embestir() -> void:
+	if sonido_embestida:
+		sonido_embestida.play()
 	estado = Estado.EMBESTIR
 	_tiempo = duracion_embestida
 	_dir_embestida = deteccion.direccion()

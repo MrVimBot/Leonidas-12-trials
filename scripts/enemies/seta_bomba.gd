@@ -7,6 +7,11 @@ extends CharacterBody2D
 
 enum Estado { DEAMBULAR, PERSEGUIR, EXPLOTAR, ESCONDIDA, SALIR, DANO, MUERTA }
 
+@export_group("Sonido")
+## Al empezar a inflarse.
+@export var sonido_inflar: AudioStreamPlayer2D
+## Al soltar la nube tóxica.
+@export var sonido_explota: AudioStreamPlayer2D
 @export_group("Movimiento")
 @export var velocidad_deambular := 30.0
 @export var velocidad_perseguir := 60.0
@@ -117,6 +122,8 @@ func _al_chocar(_colision: KinematicCollision2D) -> void:
 
 
 func _explotar() -> void:
+	if sonido_inflar:
+		sonido_inflar.play()
 	estado = Estado.EXPLOTAR
 	movimiento.detener()
 	contacto.activo = false
@@ -124,6 +131,8 @@ func _explotar() -> void:
 
 
 func _soltar_nube() -> void:
+	if sonido_explota:
+		sonido_explota.play()
 	if escena_nube == null:
 		return
 	var nube := escena_nube.instantiate() as Node2D

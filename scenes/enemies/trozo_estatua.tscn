@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dtgupsn2c7bay" path="res://scripts/enemies/trozo_estatua.gd" id="1_tro"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_trozo_estatua_cae.tres" id="sfx_trozo_estatua_cae"]
 
 [sub_resource type="CircleShape2D" id="Shape_golpe"]
 radius = 12.0
@@ -53,3 +54,10 @@ initial_velocity_max = 35.0
 scale_amount_min = 1.5
 scale_amount_max = 3.0
 color = Color(0.7, 0.68, 0.62, 0.8)
+
+[node name="SonidoCae" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_trozo_estatua_cae")
+bus = &"SFX"
+max_distance = 500.0
+
+[connection signal="cayo" from="." to="SonidoCae" method="play" unbinds=1]

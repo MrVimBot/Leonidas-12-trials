@@ -5,6 +5,8 @@
 [ext_resource type="SpriteFrames" uid="uid://creuym5jhmnm4" path="res://resources/sprite_frames/ciclope_serpiente.tres" id="3_spr"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/rayo_ciclope.tscn" id="4_ray"]
 [ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="5_pas"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_ciclope_apuntar.tres" id="sfx_ciclope_apuntar"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_rayo_disparo.tres" id="sfx_rayo_disparo"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(20, 8)
@@ -15,7 +17,9 @@ size = Vector2(26, 30)
 [sub_resource type="RectangleShape2D" id="Shape_contacto"]
 size = Vector2(20, 20)
 
-[node name="CiclopeSerpiente" instance=ExtResource("1_base")]
+[node name="CiclopeSerpiente" node_paths=PackedStringArray("sonido_apuntar", "sonido_disparo") instance=ExtResource("1_base")]
+sonido_apuntar = NodePath("SonidoApuntar")
+sonido_disparo = NodePath("SonidoDisparo")
 script = ExtResource("2_cer")
 escena_rayo = ExtResource("4_ray")
 
@@ -84,3 +88,13 @@ initial_velocity_max = 25.0
 scale_amount_min = 1.5
 scale_amount_max = 3.0
 color = Color(0.82, 0.76, 0.6, 0.7)
+
+[node name="SonidoApuntar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_ciclope_apuntar")
+bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoDisparo" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_rayo_disparo")
+bus = &"SFX"
+max_distance = 320.0

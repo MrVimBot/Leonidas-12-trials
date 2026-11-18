@@ -202,7 +202,7 @@ func ejecutar() -> void:
 		var enemigo := (load("res://scenes/enemies/%s.tscn" % escena) as PackedScene).instantiate() as Node2D
 		game.get_node(^"Mundo").add_child(enemigo)
 		enemigo.global_position = base + Vector2(0, -60)
-		var s_muerte := enemigo.get_node(^"SonidoMuerte") as AudioStreamPlayer
+		var s_muerte := enemigo.get_node(^"SonidoMuerte") as AudioStreamPlayer2D
 		ok("13) %s tiene SonidoMuerte en SFX" % escena, s_muerte.stream != null and s_muerte.bus == &"SFX")
 		(enemigo.get_node(^"Vida") as ComponenteVida).recibir_danio(100)
 		ok("13) %s al morir suena" % escena, s_muerte.playing)
@@ -279,6 +279,124 @@ func ejecutar() -> void:
 	await get_tree().process_frame
 	await esperar_normal()
 	await ticks(10)
+
+	# 16) Lote 4: enemigos (posicionales), Medusa, barco y remolino.
+	var mundo := game.get_node(^"Mundo")
+	var pos0 := j.global_position + Vector2(0, -90)
+	var seta := (load("res://scenes/enemies/seta_bomba.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(seta)
+	seta.global_position = pos0
+	seta.set_physics_process(false)
+	seta.call(&"_explotar")
+	ok("16) la seta al inflarse suena", (seta.get_node(^"SonidoInflar") as AudioStreamPlayer2D).playing)
+	seta.call(&"_soltar_nube")
+	ok("16) la seta al explotar suena", (seta.get_node(^"SonidoExplota") as AudioStreamPlayer2D).playing)
+
+	var flor := (load("res://scenes/enemies/flor_falsa.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(flor)
+	flor.global_position = pos0 + Vector2(50, 0)
+	flor.set_physics_process(false)
+	(flor.get_node(^"Ataque") as ComponenteAtaque).golpe_activado.emit()
+	ok("16) el mordisco de la flor suena (señal golpe_activado)", (flor.get_node(^"SonidoMordisco") as AudioStreamPlayer2D).playing)
+
+	var gamba := (load("res://scenes/enemies/gamba.tscn") as PackedScene).instantiate() as Gamba
+	gamba.semilla = 3
+	mundo.add_child(gamba)
+	gamba.global_position = j.global_position + Vector2(40, 0)
+	gamba.set_physics_process(false)
+	gamba.call(&"_morder") # el sonido llega en el fotograma del mordisco, no al empezar
+	var s_gamba := gamba.get_node(^"SonidoMordisco") as AudioStreamPlayer2D
+	ok("16) la gamba no suena al empezar a morder", not s_gamba.playing)
+	var mordio := await esperar_hasta(func() -> bool: return s_gamba.playing, 600)
+	ok("16) la gamba suena al morder", mordio)
+
+	var pez := (load("res://scenes/enemies/pez_espada.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(pez)
+	pez.global_position = pos0 + Vector2(-50, 0)
+	pez.set_physics_process(false)
+	pez.call(&"_avisar")
+	ok("16) el pez avisa", (pez.get_node(^"SonidoAviso") as AudioStreamPlayer2D).playing)
+	pez.call(&"_correr")
+	ok("16) el pez en carrera suena", (pez.get_node(^"SonidoCarrera") as AudioStreamPlayer2D).playing)
+	(pez.get_node(^"Ataque") as ComponenteAtaque).golpe_activado.emit()
+	ok("16) la estocada del pez suena", (pez.get_node(^"SonidoEstocada") as AudioStreamPlayer2D).playing)
+
+	var ciclope := (load("res://scenes/enemies/ciclope_serpiente.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(ciclope)
+	ciclope.global_position = pos0 + Vector2(0, -40)
+	ciclope.set_physics_process(false)
+	ciclope.call(&"_apuntar")
+	ok("16) el cíclope al apuntar suena", (ciclope.get_node(^"SonidoApuntar") as AudioStreamPlayer2D).playing)
+	ciclope.call(&"_disparar")
+	ok("16) el cíclope al disparar suena", (ciclope.get_node(^"SonidoDisparo") as AudioStreamPlayer2D).playing)
+
+	var rayo := (load("res://scenes/enemies/rayo_ciclope.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(rayo)
+	rayo.global_position = j.global_position + Vector2(0, 60)
+	var s_rayo := rayo.get_node(^"SonidoImpacto") as AudioStreamPlayer2D
+	rayo.call(&"_acabar")
+	await ticks(3)
+	ok("16) el impacto del rayo sigue sonando tras liberarse el rayo",
+		not is_instance_valid(rayo) or rayo.is_queued_for_deletion())
+	ok("16) y su sonido pasó al padre", is_instance_valid(s_rayo) and s_rayo.playing and s_rayo.get_parent() == mundo)
+
+	var tiburon := (load("res://scenes/enemies/tiburon.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(tiburon)
+	tiburon.global_position = pos0 + Vector2(90, 0)
+	tiburon.set_physics_process(false)
+	tiburon.call(&"_embestir")
+	ok("16) el tiburón al embestir suena", (tiburon.get_node(^"SonidoEmbestida") as AudioStreamPlayer2D).playing)
+
+	var medusa := (load("res://scenes/enemies/medusa.tscn") as PackedScene).instantiate() as Medusa
+	mundo.add_child(medusa)
+	medusa.global_position = pos0 + Vector2(0, -120)
+	medusa.set_physics_process(false)
+	medusa.call(&"_invocar")
+	ok("16) Medusa al invocar suena", (medusa.get_node(^"SonidoInvocar") as AudioStreamPlayer2D).playing)
+	medusa.golpe_suelo.emit(Vector2.ZERO)
+	ok("16) el golpe de Medusa al suelo suena (señal)", (medusa.get_node(^"SonidoGolpeSuelo") as AudioStreamPlayer2D).playing)
+	medusa.derrotada.emit()
+	ok("16) la derrota de Medusa suena (señal)", (medusa.get_node(^"SonidoDerrotada") as AudioStreamPlayer2D).playing)
+	if medusa.escena_trozo != null:
+		await ticks(3) # que su detección vea a Leonidas (a quien apunta el trozo)
+		medusa.call(&"_lanzar_trozos")
+		ok("16) Medusa al lanzar un trozo suena", (medusa.get_node(^"SonidoLanzar") as AudioStreamPlayer2D).playing)
+	var trozo := (load("res://scenes/enemies/trozo_estatua.tscn") as PackedScene).instantiate() as TrozoEstatua
+	mundo.add_child(trozo)
+	trozo.cayo.emit(Vector2.ZERO)
+	ok("16) el trozo de estatua al caer suena", (trozo.get_node(^"SonidoCae") as AudioStreamPlayer2D).playing)
+
+	# Los sonidos de enemigos son posicionales y acotados (no se oyen desde el otro lado del mapa).
+	for nodo in [seta.get_node(^"SonidoInflar"), gamba.get_node(^"SonidoMordisco"), medusa.get_node(^"SonidoInvocar")]:
+		var pl := nodo as AudioStreamPlayer2D
+		ok("16) %s es posicional y en SFX" % pl.name, pl.bus == &"SFX" and pl.max_distance <= 500.0)
+
+	var remolino := (load("res://scenes/entorno/remolino.tscn") as PackedScene).instantiate() as Node2D
+	mundo.add_child(remolino)
+	remolino.global_position = j.global_position + Vector2(0, 200)
+	await ticks(3)
+	ok("16) el remolino suena en bucle", (remolino.get_node(^"SonidoRemolino") as AudioStreamPlayer2D).playing)
+	for wav in ["barco_oleaje", "barco_viento", "remolino"]:
+		var w := load("res://assets/audio/sfx/%s.wav" % wav) as AudioStreamWAV
+		ok("16) %s está importado en bucle" % wav, w != null and w.loop_mode != AudioStreamWAV.LOOP_DISABLED)
+
+	var barco2 := (load("res://scenes/player/barco.tscn") as PackedScene).instantiate() as Barco
+	game.add_child(barco2)
+	await ticks(3)
+	ok("16) el barco tiene el oleaje sonando", barco2.sonido_oleaje.playing)
+	ok("16) sin soplar el viento está en silencio", barco2.sonido_viento.volume_db < -40.0)
+	Input.action_press(&"pirueta") # el barco sopla con Espacio/K
+	await ticks(120)
+	ok("16) soplando sube el viento", barco2.sonido_viento.volume_db > -12.0, str(barco2.sonido_viento.volume_db))
+	Input.action_release(&"pirueta")
+	barco2.call(&"_al_hundirse")
+	ok("16) hundirse suena y corta los bucles",
+		barco2.sonido_hundir.playing and not barco2.sonido_oleaje.playing and not barco2.sonido_viento.playing)
+	barco2.queue_free()
+	for e in [seta, flor, gamba, pez, ciclope, tiburon, medusa, trozo, remolino]:
+		if is_instance_valid(e):
+			e.queue_free()
+	await ticks(3)
 
 	# 12) Muerte (al final: Game abre el Game Over y pausa el árbol): suena la caída y no el daño.
 	j.vida.restaurar() # da invulnerabilidad: esperar a que acabe

@@ -34,6 +34,10 @@ var direccion := Vector2.LEFT
 
 var _recorrido := 0.0
 
+## Suena al chocar con una pared o con Leonidas (no al agotar el alcance). Sigue sonando cuando el
+## rayo desaparece: se pasa al padre (ver `_acabar`).
+@export var sonido_impacto: AudioStreamPlayer2D
+
 @onready var golpe: Hitbox = $Golpe
 
 
@@ -49,7 +53,7 @@ func _physics_process(delta: float) -> void:
 	var destino := global_position + paso
 	var consulta := PhysicsRayQueryParameters2D.create(global_position, destino, Capas.MUNDO)
 	if not get_world_2d().direct_space_state.intersect_ray(consulta).is_empty():
-		queue_free() # choca con una pared, un árbol…
+		_acabar() # choca con una pared, un árbol…
 		return
 	global_position = destino
 	_recorrido += paso.length()
@@ -63,4 +67,21 @@ func _al_golpear(objetivo: Node) -> void:
 	var vida_objetivo := duenio.get(&"vida") as ComponenteVida if duenio else null
 	if vida_objetivo and vida_objetivo.invulnerable_extra:
 		return
+	_acabar()
+
+
+## Impacto: suena el chisporroteo y se libera. El reproductor se pasa al padre (diferido, que
+## puede venir de una consulta física) para que acabe de sonar aunque el rayo ya no esté.
+func _acabar() -> void:
+	if sonido_impacto:
+		_soltar_sonido.call_deferred()
 	queue_free()
+
+
+func _soltar_sonido() -> void:
+	var padre := get_parent()
+	if padre == null:
+		return
+	sonido_impacto.reparent(padre)
+	sonido_impacto.finished.connect(sonido_impacto.queue_free)
+	sonido_impacto.play()

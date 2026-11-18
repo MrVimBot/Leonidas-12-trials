@@ -1,0 +1,9 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=2 format=3]
+
+[ext_resource type="AudioStream" uid="uid://beiiefa43s6w1" path="res://assets/audio/sfx/rayo_impacto.wav" id="1"]
+
+[resource]
+random_pitch = 1.04
+streams_count = 1
+stream_0/stream = ExtResource("1")
+stream_0/weight = 1.0

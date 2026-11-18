@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
 [ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
 [ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_pez_aviso.tres" id="sfx_pez_aviso"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_pez_carrera.tres" id="sfx_pez_carrera"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_pez_estocada.tres" id="sfx_pez_estocada"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(26, 6)
@@ -22,7 +25,9 @@ size = Vector2(28, 10)
 [sub_resource type="RectangleShape2D" id="Shape_estocada_derecha"]
 size = Vector2(28, 10)
 
-[node name="PezEspada" instance=ExtResource("1_bas")]
+[node name="PezEspada" node_paths=PackedStringArray("sonido_aviso", "sonido_carrera") instance=ExtResource("1_bas")]
+sonido_aviso = NodePath("SonidoAviso")
+sonido_carrera = NodePath("SonidoCarrera")
 script = ExtResource("2_cer")
 
 [node name="Sombra" parent="." index="0"]
@@ -96,3 +101,20 @@ espera = Vector2(1, 2.5)
 reparto = 1
 distancia_minima = 8.0
 margen_tiempo = 0.0
+
+[node name="SonidoAviso" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_pez_aviso")
+bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoCarrera" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_pez_carrera")
+bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoEstocada" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_pez_estocada")
+bus = &"SFX"
+max_distance = 320.0
+
+[connection signal="golpe_activado" from="Ataque" to="SonidoEstocada" method="play"]

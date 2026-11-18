@@ -8,6 +8,9 @@
 [ext_resource type="Script" uid="uid://bm8xsaki4cb2q" path="res://scripts/componentes/componente_vida.gd" id="6_vid"]
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="7_par"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_barco_golpe.tres" id="8_bhu1h"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_barco_hundir.tres" id="sfx_barco_hundir"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/barco_oleaje.wav" id="wav_barco_oleaje"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/barco_viento.wav" id="wav_barco_viento"]
 
 [sub_resource type="RectangleShape2D" id="Shape_casco"]
 size = Vector2(20, 10)
@@ -15,7 +18,10 @@ size = Vector2(20, 10)
 [sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
 size = Vector2(22, 14)
 
-[node name="Barco" type="CharacterBody2D" unique_id=101131978 node_paths=PackedStringArray("sonido_golpe") groups=["barco"]]
+[node name="Barco" type="CharacterBody2D" unique_id=101131978 node_paths=PackedStringArray("sonido_golpe", "sonido_hundir", "sonido_oleaje", "sonido_viento") groups=["barco"]]
+sonido_hundir = NodePath("SonidoHundir")
+sonido_oleaje = NodePath("SonidoOleaje")
+sonido_viento = NodePath("SonidoViento")
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_bar")
@@ -75,3 +81,18 @@ objetivo = NodePath("../Sprite")
 [node name="SonidoGolpe" type="AudioStreamPlayer" parent="." unique_id=1456373639]
 stream = ExtResource("8_bhu1h")
 bus = &"SFX"
+
+[node name="SonidoHundir" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_barco_hundir")
+bus = &"SFX"
+
+[node name="SonidoOleaje" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("wav_barco_oleaje")
+bus = &"SFX"
+autoplay = true
+
+[node name="SonidoViento" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("wav_barco_viento")
+bus = &"SFX"
+autoplay = true
+volume_db = -80.0

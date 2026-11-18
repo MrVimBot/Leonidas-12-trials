@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/nube_toxica.tscn" id="12_nub"]
 [ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="13_pas"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_enemigo_muere.tres" id="sfx_muere"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_seta_inflar.tres" id="sfx_seta_inflar"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_seta_explota.tres" id="sfx_seta_explota"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(14, 6)
@@ -25,7 +27,9 @@ size = Vector2(20, 17)
 [sub_resource type="RectangleShape2D" id="Shape_contacto"]
 size = Vector2(14, 10)
 
-[node name="SetaBomba" type="CharacterBody2D" groups=["enemigos"]]
+[node name="SetaBomba" type="CharacterBody2D" groups=["enemigos"] node_paths=PackedStringArray("sonido_inflar", "sonido_explota")]
+sonido_inflar = NodePath("SonidoInflar")
+sonido_explota = NodePath("SonidoExplota")
 collision_layer = 4
 collision_mask = 1
 motion_mode = 1
@@ -108,6 +112,17 @@ sonido = NodePath("../SonidoMuerte")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto")]
 monedas = 1
 
-[node name="SonidoMuerte" type="AudioStreamPlayer" parent="."]
+[node name="SonidoMuerte" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("sfx_muere")
 bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoInflar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_seta_inflar")
+bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoExplota" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_seta_explota")
+bus = &"SFX"
+max_distance = 320.0

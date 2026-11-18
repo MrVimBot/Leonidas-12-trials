@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://dkeawtwro5ajv" path="res://scripts/componentes/componente_muerte.gd" id="11_mue"]
 [ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="moneda_tscn"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_enemigo_muere.tres" id="sfx_muere"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_flor_sale.tres" id="sfx_flor_sale"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_flor_muerde.tres" id="sfx_flor_muerde"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(10, 6)
@@ -25,7 +27,8 @@ size = Vector2(20, 16)
 [sub_resource type="RectangleShape2D" id="Shape_mordisco_derecha"]
 size = Vector2(20, 16)
 
-[node name="FlorFalsa" type="CharacterBody2D" groups=["enemigos"]]
+[node name="FlorFalsa" type="CharacterBody2D" groups=["enemigos"] node_paths=PackedStringArray("sonido_salir")]
+sonido_salir = NodePath("SonidoSalir")
 collision_layer = 4
 collision_mask = 1
 motion_mode = 1
@@ -107,6 +110,19 @@ sonido = NodePath("../SonidoMuerte")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Mordisco")]
 monedas = 2
 
-[node name="SonidoMuerte" type="AudioStreamPlayer" parent="."]
+[node name="SonidoMuerte" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("sfx_muere")
 bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoSalir" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_flor_sale")
+bus = &"SFX"
+max_distance = 320.0
+
+[node name="SonidoMordisco" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_flor_muerde")
+bus = &"SFX"
+max_distance = 320.0
+
+[connection signal="golpe_activado" from="Ataque" to="SonidoMordisco" method="play"]

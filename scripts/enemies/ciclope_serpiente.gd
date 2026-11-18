@@ -31,6 +31,11 @@ signal derrotado
 
 enum Estado { APARECER, VIGILAR, APUNTAR, ENFRIAMIENTO, DANO, MUERTA }
 
+@export_group("Sonido")
+## Al empezar a apuntar.
+@export var sonido_apuntar: AudioStreamPlayer2D
+## Cuando sale el rayo.
+@export var sonido_disparo: AudioStreamPlayer2D
 @export_group("Rayo")
 ## Se asigna en el Inspector (no `preload`: regla del proyecto). Su raíz es un `RayoCiclope`.
 @export var escena_rayo: PackedScene
@@ -172,6 +177,8 @@ func _vigilar(delta: float) -> void:
 
 
 func _apuntar() -> void:
+	if sonido_apuntar:
+		sonido_apuntar.play()
 	estado = Estado.APUNTAR
 	_fijado = false
 	_retroceso = 0.0
@@ -188,6 +195,8 @@ func _fijar_punto() -> void:
 
 ## Fotograma `frame_disparo`: sale el rayo del ojo hacia el punto fijado.
 func _disparar() -> void:
+	if sonido_disparo:
+		sonido_disparo.play()
 	if escena_rayo == null:
 		return
 	var origen := _posicion_ojo()

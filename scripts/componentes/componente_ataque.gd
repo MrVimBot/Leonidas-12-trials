@@ -17,6 +17,9 @@ extends Node
 signal empezo
 ## Al terminar la animación del ataque (no si se `cancelar()`).
 signal termino
+## Cuando el golpe pasa a ser efectivo (el Hitbox se activa al entrar en `frames_golpe`): es el
+## momento del mordisco o la estocada, y el que usan los sonidos de ataque.
+signal golpe_activado
 
 ## Hitbox que se activa (padre de las formas); su `danio` se sustituye por el de este componente.
 @export var hitbox: Hitbox:
@@ -152,7 +155,10 @@ func cancelar() -> void:
 
 func _al_cambiar_frame(frame: int) -> void:
 	if atacando:
-		hitbox.activo = frame >= frames_golpe.x and frame <= frames_golpe.y
+		var en_golpe := frame >= frames_golpe.x and frame <= frames_golpe.y
+		if en_golpe and not hitbox.activo:
+			golpe_activado.emit()
+		hitbox.activo = en_golpe
 
 
 func _al_terminar(_anim: StringName) -> void:

@@ -4,6 +4,9 @@
 Sin argumentos genera todo; un nombre de familia selecciona sus variantes.
 Para generar solo el segundo lote: python tools/audio/generar_sfx.py lote_2.
 Para generar solo el tercer lote: python tools/audio/generar_sfx.py lote_3.
+Para generar solo el cuarto lote: python tools/audio/generar_sfx.py lote_4.
+Los tres ambientes del barco son bucles continuos con metadatos smpl;
+se empalman sin fundido a silencio. Los efectos restantes terminan en 8 ms.
 Solo usa la biblioteca estándar y nunca descarga ni lee samples externos.
 """
 
@@ -71,6 +74,29 @@ SONIDOS = {
     "objeto_importante": dict(batch=3, family="objeto_importante", duration=1.200, pitch=1.0, peak_db=-6, brightness=3400, seed=3101, notes=(523.251, 587.330, 659.255, 783.991, 1046.502), chord=(523.251, 659.255, 783.991, 1046.502), limits=(1.20, 1.20)),
     "game_over": dict(batch=3, family="game_over", duration=1.600, pitch=1.0, peak_db=-6, brightness=2300, seed=3201, notes=(659.255, 587.330, 493.883, 440), limits=(1.60, 1.60)),
     "zona_cambio": dict(batch=3, family="zona_cambio", duration=0.500, pitch=1.0, peak_db=-12, brightness=1500, seed=3301, notes=(700, 180), limits=(0.50, 0.50)),
+    # LOTE 4. notes: frecuencias (Hz); loop: ambiente periódico sin caída final.
+    "seta_inflar": dict(batch=4, family="seta_inflar", duration=0.500, pitch=1.0, peak_db=-3, brightness=2200, seed=4001, notes=(180, 460), limits=(0.50, 0.50)),
+    "seta_explota": dict(batch=4, family="seta_explota", duration=0.450, pitch=1.0, peak_db=-3, brightness=2800, seed=4002, notes=(320, 95), limits=(0.45, 0.45)),
+    "flor_sale": dict(batch=4, family="flor_sale", duration=0.300, pitch=1.0, peak_db=-3, brightness=2400, seed=4003, notes=(170, 560), limits=(0.30, 0.30)),
+    "flor_muerde": dict(batch=4, family="flor_muerde", duration=0.200, pitch=1.0, peak_db=-3, brightness=2800, seed=4004, notes=(620, 340), limits=(0.20, 0.20)),
+    "gamba_muerde": dict(batch=4, family="gamba_muerde", duration=0.150, pitch=1.0, peak_db=-3, brightness=3200, seed=4005, notes=(980, 650), limits=(0.15, 0.15)),
+    "pez_aviso": dict(batch=4, family="pez_aviso", duration=0.300, pitch=1.0, peak_db=-3, brightness=3100, seed=4006, notes=(950, 1330), limits=(0.30, 0.30)),
+    "pez_carrera": dict(batch=4, family="pez_carrera", duration=0.600, pitch=1.0, peak_db=-3, brightness=3200, seed=4007, notes=(550, 2400), limits=(0.60, 0.60)),
+    "pez_estocada": dict(batch=4, family="pez_estocada", duration=0.200, pitch=1.0, peak_db=-3, brightness=3600, seed=4008, notes=(1900, 950), limits=(0.20, 0.20)),
+    "ciclope_apuntar": dict(batch=4, family="ciclope_apuntar", duration=0.600, pitch=1.0, peak_db=-3, brightness=2700, seed=4009, notes=(240, 880), vibrato=0.028, limits=(0.60, 0.60)),
+    "rayo_disparo": dict(batch=4, family="rayo_disparo", duration=0.250, pitch=1.0, peak_db=-3, brightness=3400, seed=4010, notes=(1700, 260), limits=(0.25, 0.25)),
+    "rayo_impacto": dict(batch=4, family="rayo_impacto", duration=0.200, pitch=1.0, peak_db=-3, brightness=3200, seed=4011, notes=(1500, 650), limits=(0.20, 0.20)),
+    "tiburon_embiste": dict(batch=4, family="tiburon_embiste", duration=0.500, pitch=1.0, peak_db=-3, brightness=2600, seed=4012, notes=(105, 65), limits=(0.50, 0.50)),
+    "medusa_invocar": dict(batch=4, family="medusa_invocar", duration=1.000, pitch=1.0, peak_db=-3, brightness=2700, seed=4013, notes=(440, 493.883, 523.251), vibrato=0.009, limits=(1.0, 1.0)),
+    "medusa_embestida": dict(batch=4, family="medusa_embestida", duration=0.500, pitch=1.0, peak_db=-3, brightness=1800, seed=4014, notes=(750, 210), limits=(0.50, 0.50)),
+    "medusa_golpe_suelo": dict(batch=4, family="medusa_golpe_suelo", duration=0.600, pitch=1.0, peak_db=-3, brightness=3100, seed=4015, notes=(95, 55), limits=(0.60, 0.60)),
+    "medusa_lanzar": dict(batch=4, family="medusa_lanzar", duration=0.300, pitch=1.0, peak_db=-3, brightness=2300, seed=4016, notes=(1200, 380), limits=(0.30, 0.30)),
+    "trozo_estatua_cae": dict(batch=4, family="trozo_estatua_cae", duration=0.500, pitch=1.0, peak_db=-3, brightness=2800, seed=4017, notes=(100, 62), limits=(0.50, 0.50)),
+    "medusa_derrotada": dict(batch=4, family="medusa_derrotada", duration=1.500, pitch=1.0, peak_db=-3, brightness=2600, seed=4018, notes=(440, 220), limits=(1.50, 1.50)),
+    "barco_oleaje": dict(batch=4, family="barco_oleaje", loop=True, duration=4.000, pitch=1.0, peak_db=-12, brightness=2100, seed=4019, notes=(350, 1400), cycles=2, movement=0.32, limits=(4.0, 4.0)),
+    "barco_viento": dict(batch=4, family="barco_viento", loop=True, duration=3.000, pitch=1.0, peak_db=-12, brightness=1600, seed=4020, notes=(280, 950), cycles=1, movement=0.12, limits=(3.0, 3.0)),
+    "remolino": dict(batch=4, family="remolino", loop=True, duration=3.000, pitch=1.0, peak_db=-12, brightness=1200, seed=4021, notes=(180, 650), cycles=3, movement=0.36, limits=(3.0, 3.0)),
+    "barco_hundir": dict(batch=4, family="barco_hundir", duration=1.000, pitch=1.0, peak_db=-3, brightness=2400, seed=4022, notes=(160, 75), limits=(1.0, 1.0)),
 }
 
 RATE = 44100
@@ -97,7 +123,47 @@ def lowpass(signal, cutoff):
     return signal
 
 
+def synthesize_loop(p):
+    """Ruido periódico filtrado, con modulación que completa ciclos enteros.
+
+    El prefijo circular estabiliza los filtros antes del inicio. Se repite el
+    primer frame al final; no hay caída de volumen ni reinicio de osciladores.
+    En mono, el giro del remolino se evoca por timbre y volumen, no por paneo.
+    """
+    rng = random.Random(p["seed"])
+    n = round(p["duration"] * RATE)
+    period = n - 1
+    raw = [rng.uniform(-1, 1) for _ in range(period)]
+    # 93 ms previos: muy superior al asentamiento del filtro más grave.
+    pad = 4096
+    wrapped = raw[-pad:] + raw
+    bass = lowpass(wrapped, p["notes"][0] * p["pitch"])[pad:]
+    air = lowpass(wrapped, p["notes"][1] * p["pitch"])[pad:]
+    signal = []
+    for i, (low, high) in enumerate(zip(bass, air)):
+        phase = TAU * i / period
+        movement = math.cos(p["cycles"] * phase)
+        env = 1 + p["movement"] * movement
+        if p["family"] == "barco_oleaje":
+            value = 1.2 * low + (0.45 + 0.20 * movement) * (high - low)
+        elif p["family"] == "barco_viento":
+            value = 0.25 * low + 0.85 * (high - low)
+        elif p["family"] == "remolino":
+            value = 1.5 * low + (0.30 + 0.17 * math.sin(p["cycles"] * phase)) * (high - low)
+        else:
+            raise ValueError(f"Bucle desconocido: {p['family']}")
+        signal.append(value * env)
+    signal = lowpass(signal[-pad:] + signal, p["brightness"])[pad:]
+    signal.append(signal[0])
+    dc = sum(signal) / n
+    signal = [x - dc for x in signal]
+    scale = 32767 * 10 ** (p["peak_db"] / 20) / max(abs(x) for x in signal)
+    return [round(x * scale) for x in signal]
+
+
 def synthesize(p):
+    if p.get("loop"):
+        return synthesize_loop(p)
     rng = random.Random(p["seed"])
     duration, pitch = p["duration"], p["pitch"]
     n = round(duration * RATE)
@@ -313,6 +379,150 @@ def synthesize(p):
             noise(0, duration, 140, 260, 0.40, 1.2, swell=True, width=0.3)
         else:
             raise ValueError(f"Familia del lote 3 desconocida: {f}")
+    elif p.get("batch") == 4:
+        notes = p["notes"]
+
+        def air(start, length, f0, f1, gain, grow=False):
+            # Banda móvil de aire/agua. Una base inmediata evita preroll incluso
+            # cuando el fuelle o la carga aumentan de intensidad.
+            count = max(2, round(length * RATE))
+            offset = round(start * RATE)
+            lo = hi = 0.0
+            for j in range(min(count, n - offset)):
+                u = j / (count - 1)
+                freq = pitch * f0 * (f1 / f0) ** u
+                x = rng.uniform(-1, 1)
+                lo += (1 - math.exp(-TAU * freq * 0.4 / RATE)) * (x - lo)
+                hi += (1 - math.exp(-TAU * freq * 1.5 / RATE)) * (x - hi)
+                env = (0.20 + 1.8 * math.sin(math.pi * u)) * (1 - u) ** 0.65
+                if grow:
+                    env *= 0.25 + 1.6 * u
+                env *= min(1.0, j / (RATE * 0.0007))
+                signal[offset + j] += gain * env * (hi - lo)
+
+        def spirit(start, length, f0, f1, gain, grow=False, choir=False):
+            count = max(2, round(length * RATE))
+            offset = round(start * RATE)
+            phase = 0.0
+            for j in range(min(count, n - offset)):
+                u = j / (count - 1)
+                t = j / RATE
+                vibrato = p.get("vibrato", 0.006) * (0.15 + 0.85 * u)
+                freq = pitch * f0 * (f1 / f0) ** u
+                freq *= 1 + vibrato * math.sin(TAU * (5.5 * t + 1.5 * t * t))
+                phase += TAU * freq / RATE
+                env = min(1.0, t / 0.001) * (1 - u) ** 0.7
+                env *= (0.22 + 1.6 * u) if grow else math.exp(-1.2 * u)
+                tremolo = 1 - (0.05 + 0.22 * u) * (0.5 + 0.5 * math.sin(TAU * 11 * t)) if grow else 1
+                value = math.sin(phase) + 0.12 * math.sin(phase * 2)
+                if choir:
+                    # Coro puramente instrumental: armónicos suaves y batidos,
+                    # sin voz humana ni grabaciones.
+                    value += 0.18 * math.sin(phase * 1.004 + 0.12)
+                    value += 0.10 * math.sin(phase * 3) + 0.05 * math.sin(phase * 4)
+                signal[offset + j] += gain * env * tremolo * value
+
+        def fragments(start, span, count, gain, wood=False):
+            for k in range(count):
+                at = start + span * k / count + rng.uniform(0, span / (count * 3))
+                length = min(duration - at, rng.uniform(0.035, 0.085))
+                level = gain * math.exp(-1.4 * k / count)
+                freq = rng.uniform(170, 390) if wood else rng.uniform(500, 1400)
+                tone(at, length, freq, freq * 0.72, level, 6, harmonics=0.15)
+                noise(at, length * 0.65, 650 if wood else 1300,
+                      1600 if wood else 2400, level * 1.1, 5, width=0.4)
+
+        if f == "seta_inflar":
+            spirit(0, duration, notes[0], notes[1], 0.37, grow=True)
+            air(0, duration, 350, 1000, 0.65, grow=True)
+        elif f == "seta_explota":
+            tone(0, duration * 0.30, notes[0], notes[1], 0.8, 6)
+            noise(0, duration * 0.20, 900, 1600, 0.75, 6, width=0.35)
+            air(duration * 0.015, duration * 0.98, 1800, 450, 0.48)
+        elif f == "flor_sale":
+            tone(0, duration * 0.30, 180, 105, 0.55, 5)
+            spirit(0, duration, notes[0], notes[1], 0.30)
+            air(0, duration * 0.70, 650, 1200, 0.3)
+        elif f == "flor_muerde":
+            tone(0, duration * 0.66, notes[0], notes[1], 0.65, 8, harmonics=0.13)
+            noise(0, duration * 0.48, 1300, 2100, 0.8, 8, width=0.35)
+            tone(duration * 0.07, duration * 0.65, 240, 150, 0.3, 6)
+        elif f == "gamba_muerde":
+            for at, freq, gain in ((0, notes[0], 0.6), (duration * 0.22, notes[1], 0.8)):
+                tone(at, duration * 0.55, freq, freq * 0.8, gain, 9, harmonics=0.12)
+                noise(at, duration * 0.30, 1800, 2700, gain * 0.7, 8, width=0.4)
+        elif f == "pez_aviso":
+            spirit(0, duration, notes[0], notes[1], 0.48)
+            for k in range(3):
+                air(duration * k * 0.17, duration * 0.28, 700, 1500, 0.2)
+        elif f == "pez_carrera":
+            air(0, duration, notes[0], notes[1], 0.85, grow=True)
+            air(duration * 0.12, duration * 0.85, 1600, 500, 0.30)
+            for k in range(4):
+                at = duration * (0.35 + k * 0.14)
+                tone(at, duration * 0.14, 700 - k * 90, 300, 0.07, 5)
+        elif f == "pez_estocada":
+            tone(0, duration, notes[0], notes[1], 0.6, 8)
+            noise(0, duration * 0.40, 2300, 3200, 0.75, 7, width=0.4)
+            tone(0, duration * 0.50, 400, 260, 0.14, 7)
+        elif f == "ciclope_apuntar":
+            spirit(0, duration, notes[0], notes[1], 0.48, grow=True)
+            air(0, duration, 350, 1400, 0.28, grow=True)
+        elif f == "rayo_disparo":
+            arcade(0, duration, notes[0], notes[1], 0.48, 3, pulse=True)
+            tone(0, duration, notes[0] * 0.55, notes[1] * 0.8, 0.25, 4)
+            air(0, duration * 0.70, 2000, 600, 0.22)
+        elif f == "rayo_impacto":
+            noise(0, duration, 1400, 2600, 0.85, 5, width=0.35)
+            for k in range(6):
+                at = duration * k * 0.12
+                freq = rng.uniform(notes[1], notes[0])
+                arcade(at, duration * 0.26, freq, freq * 0.6, 0.17, 6)
+        elif f == "tiburon_embiste":
+            tone(0, duration * 0.60, notes[0], notes[1], 0.8, 5)
+            air(0, duration, 1300, 320, 0.95)
+            noise(0, duration * 0.40, 400, 1100, 0.65, 4, width=0.3)
+        elif f == "medusa_invocar":
+            for k, freq in enumerate(notes):
+                at = duration * k * 0.25
+                spirit(at, duration - at, freq, freq * 1.002, 0.34, choir=True)
+                tone(at, (duration - at) * 0.9, freq * 2, freq * 2, 0.035, 2.5)
+            air(0, duration, 1200, 1800, 0.11)
+        elif f == "medusa_embestida":
+            air(0, duration, notes[0], notes[1], 1)
+            noise(0, duration, 160, 350, 0.55, 1.4, swell=True, width=0.3)
+            tone(0, duration * 0.8, 90, 55, 0.13, 2)
+        elif f == "medusa_golpe_suelo":
+            tone(0, duration, notes[0], notes[1], 1, 5, harmonics=0.16)
+            noise(0, duration * 0.24, 600, 1800, 1, 6, width=0.3)
+            iron(0, duration * 0.32, 950, 0.24)
+            fragments(duration * 0.08, duration * 0.67, 7, 0.17)
+            noise(duration * 0.04, duration * 0.94, 150, 300, 0.45, 3, width=0.3)
+        elif f == "medusa_lanzar":
+            air(0, duration, notes[0], notes[1], 0.9)
+            tone(0, duration * 0.8, 170, 85, 0.16, 3)
+        elif f == "trozo_estatua_cae":
+            tone(0, duration * 0.75, notes[0], notes[1], 0.95, 5, harmonics=0.12)
+            noise(0, duration * 0.26, 600, 1500, 0.95, 6, width=0.3)
+            fragments(duration * 0.035, duration * 0.76, 9, 0.25)
+        elif f == "medusa_derrotada":
+            noise(0, duration * 0.24, 500, 1400, 0.65, 5, width=0.3)
+            tone(0, duration * 0.32, 110, 65, 0.60, 5)
+            fragments(0, duration * 0.68, 18, 0.29)
+            spirit(duration * 0.48, duration * 0.52, notes[0], notes[1], 0.20, choir=True)
+            tone(duration * 0.66, duration * 0.34, notes[1] * 1.5, notes[1] * 1.5, 0.05, 3)
+        elif f == "barco_hundir":
+            tone(0, duration * 0.42, notes[0], notes[1], 0.50, 5, harmonics=0.2)
+            noise(0, duration * 0.38, 350, 850, 0.48, 4, width=0.3)
+            fragments(0, duration * 0.44, 6, 0.16, wood=True)
+            for k in range(6):
+                at = duration * (0.18 + k * 0.095)
+                freq = 260 + k * 65
+                tone(at, duration * 0.12, freq, freq * 1.6, 0.13, 4)
+            tone(duration * 0.78, duration * 0.22, 290, 95, 0.37, 3)
+            air(duration * 0.70, duration * 0.30, 600, 220, 0.22)
+        else:
+            raise ValueError(f"Familia del lote 4 desconocida: {f}")
     elif retro and f == "espada":
         # Filo de hierro: ataque metálico definido sobre el corte de aire.
         noise(0, duration * 0.75, 1500, 3200, 0.75, 1.8, swell=True)
@@ -420,6 +630,25 @@ def synthesize(p):
     return [round(x * scale) for x in signal]
 
 
+def loop_chunk(frames):
+    """Metadatos RIFF smpl: bucle forward infinito, límites inclusivos."""
+    payload = struct.pack("<15I", 0, 0, round(1_000_000_000 / RATE),
+                          60, 0, 0, 0, 1, 0, 0, 0, 0, frames - 1, 0, 0)
+    return b"smpl" + struct.pack("<I", len(payload)) + payload
+
+
+def read_loop_chunk(path):
+    data = path.read_bytes()
+    offset = 12
+    while offset + 8 <= len(data):
+        tag = data[offset:offset + 4]
+        length = struct.unpack_from("<I", data, offset + 4)[0]
+        if tag == b"smpl":
+            return data[offset:offset + 8 + length]
+        offset += 8 + length + (length % 2)
+    return None
+
+
 def verify(path, p):
     issues = []
     with wave.open(str(path), "rb") as wav:
@@ -438,9 +667,20 @@ def verify(path, p):
         issues.append("clipping")
     if not any(abs(x) > 32 for x in samples[:round(RATE * 0.002)]):
         issues.append("ataque tardío")
-    if samples[-1] != 0 or abs(samples[-2]) > 32:
+    if p.get("loop"):
+        if samples[0] != samples[-1]:
+            issues.append("salto en empalme del bucle")
+        # La curvatura en el empalme debe estar dentro de la textura normal.
+        curvature = max(abs(samples[i + 1] - 2 * samples[i] + samples[i - 1])
+                        for i in range(1, frames - 1))
+        if abs(samples[1] - 2 * samples[0] + samples[-2]) > max(32, curvature * 1.1):
+            issues.append("cambio brusco de pendiente en bucle")
+        if read_loop_chunk(path) != loop_chunk(frames):
+            issues.append("metadatos de bucle incorrectos")
+    elif samples[-1] != 0 or abs(samples[-2]) > 32:
         issues.append("final sin fundido")
-    print(f"{path.name:25s} {duration * 1000:9.2f} {db:10.2f}  {'; '.join(issues) if issues else 'OK'}")
+    status = "; ".join(issues) if issues else ("OK (bucle)" if p.get("loop") else "OK")
+    print(f"{path.name:25s} {duration * 1000:9.2f} {db:10.2f}  {status}")
     return issues
 
 
@@ -468,6 +708,13 @@ def main():
         with wave.open(str(path), "wb") as wav:
             wav.setparams((1, 2, RATE, 0, "NONE", "not compressed"))
             wav.writeframes(struct.pack(f"<{len(samples)}h", *samples))
+        if p.get("loop"):
+            with path.open("r+b") as wav:
+                wav.seek(0, 2)
+                wav.write(loop_chunk(len(samples)))
+                length = wav.tell()
+                wav.seek(4)
+                wav.write(struct.pack("<I", length - 8))
         failed |= bool(verify(path, p))
     return int(failed)
 
