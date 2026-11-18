@@ -61,6 +61,8 @@ Autoload `Dialogos` = `scenes/ui/caja_dialogo.tscn` (`scripts/ui/caja_dialogo.gd
 ### Menú de ajustes / pausa — Jugabilidad p. 15
 En la maqueta hay tres iconos abajo a la izquierda (engranaje, lista, "?") con la nota "**posiblemente quitar y volver un botón del teclado**". Con la caja de diálogo abajo en el centro no caben bien; la propuesta es **no dibujarlos** y abrir la pausa con **Esc** (`ui_cancel`, que ya usa la cinemática para saltarse) o Start en el mando. Contenido mínimo: continuar, volumen de música/efectos, controles, salir. No hay arte: pedir a la artista un marco/fondo o reutilizar el estilo de la caja de diálogo.
 
+**Hecho:** menú de pausa (`scenes/ui/menu_pausa.tscn`) con Continuar, Controles, Daltonismo y Salir. «Daltonismo» cicla No / Protanopía / Deuteranopía: filtro de corrección a pantalla completa (autoload `Daltonismo`, ver CLAUDE.md). Recordatorio de accesibilidad: el filtro ayuda, pero lo importante sigue siendo no depender solo del color (formas, iconos, parpadeos) en avisos y enemigos; revisarlo con el plugin Eyesee del editor.
+
 ### Menú del inventario — Jugabilidad p. 17
 
 > **Hecho el 2026-11-14** con el arte de Lucía reducido (`scripts/ui/menu_libro.gd`). Lo de abajo es la propuesta original.

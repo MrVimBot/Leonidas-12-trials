@@ -29,6 +29,7 @@ Microfono="*res://autoload/microfono.gd"
 Libro="*res://scenes/ui/menu_libro.tscn"
 Musica="*res://autoload/musica.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+Daltonismo="*res://scenes/ui/filtro_daltonismo.tscn"
 
 [debug]
 
@@ -49,7 +50,7 @@ window/stretch/scale_mode="integer"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/godot-eyesee/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
 
 [gui]
 

@@ -1,6 +1,6 @@
 class_name MenuPausa
 extends CanvasLayer
-## Menú de pausa: Continuar, Controles, Filtro de daltonismo y Salir.
+## Menú de pausa: Continuar, Controles, Daltonismo y Salir.
 ## Va dentro de `game.tscn`. La interfaz (paneles, botones, textos y tema) está
 ## en `scenes/ui/menu_pausa.tscn` y se edita desde el editor; los botones llaman
 ## a este script con señales conectadas en la escena.
@@ -12,7 +12,8 @@ extends CanvasLayer
 ## abre ni consume el evento (`_puede_abrir`), así que sigue hasta él y es él quien se
 ## cierra con ese Esc.
 ##
-## «Filtro de daltonismo» todavía no hace nada (pendiente).
+## «Daltonismo» pasa al siguiente filtro del autoload `Daltonismo` (No → Protanopía →
+## Deuteranopía) y el botón muestra el elegido: «Daltonismo: No».
 ## «Salir» vuelve al menú principal (sin guardar: se guarda desde el libro).
 
 var abierto := false
@@ -24,10 +25,14 @@ var _viendo_controles := false
 @onready var _botones: BotonesConMarca = %Botones
 @onready var _boton_continuar: Button = %Continuar
 @onready var _boton_controles: Button = %Controles
+@onready var _boton_daltonismo: Button = %Daltonismo
 
 
 func _ready() -> void:
 	visible = false
+	# El texto de la escena («Daltonismo») es el rótulo; se le añade el filtro elegido.
+	_boton_daltonismo.set_meta(&"rotulo", _boton_daltonismo.text)
+	_actualizar_daltonismo()
 
 
 ## ¿Se puede abrir ahora? No con el libro, la tienda o un diálogo abiertos, ni
@@ -91,7 +96,17 @@ func _volver_de_controles() -> void:
 
 
 func _filtro_daltonismo() -> void:
-	pass # pendiente: de momento no muestra nada
+	Daltonismo.siguiente()
+	_actualizar_daltonismo()
+	_botones.actualizar_marcas()
+
+
+## BotonesConMarca pinta el texto guardado en la meta `texto` (con o sin "> ").
+func _actualizar_daltonismo() -> void:
+	var rotulo: String = _boton_daltonismo.get_meta(&"rotulo")
+	var texto := "%s: %s" % [rotulo, Daltonismo.nombre()]
+	_boton_daltonismo.set_meta(&"texto", texto)
+	_boton_daltonismo.text = texto
 
 
 func _salir() -> void:

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://6pel28bmcx3o"]
+
+[ext_resource type="Script" uid="uid://c7lt7f0odnsyc" path="res://scripts/ui/filtro_daltonismo.gd" id="1_scsrh"]
+[ext_resource type="Shader" uid="uid://xwj3ars0ln76" path="res://resources/shaders/daltonismo.gdshader" id="2_noayu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggtss"]
+shader = ExtResource("2_noayu")
+shader_parameter/tipo = 0
+shader_parameter/intensidad = 1.0
+
+[node name="FiltroDaltonismo" type="CanvasLayer" unique_id=627280506]
+process_mode = 3
+layer = 128
+script = ExtResource("1_scsrh")
+
+[node name="Filtro" type="ColorRect" parent="." unique_id=85226877]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_ggtss")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
