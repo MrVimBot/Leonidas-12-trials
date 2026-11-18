@@ -1,8 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dhhppcnq8d1bn"]
 
 [ext_resource type="Script" uid="uid://cfwcu04p8suux" path="res://scripts/ui/menu_principal.gd" id="1_men"]
 [ext_resource type="Texture2D" uid="uid://clo0w4gh4oba1" path="res://assets/backgrounds/cinematica/fondo_1.png" id="2_fon"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="3_bot"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 16.0
@@ -21,14 +23,6 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 anti_aliasing = false
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_barra"]
-content_margin_left = 3.0
-content_margin_right = 3.0
-bg_color = Color(0.176, 0.106, 0.078, 0.15)
-anti_aliasing = false
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agarre"]
 content_margin_left = 3.0
 content_margin_right = 3.0
@@ -39,6 +33,12 @@ anti_aliasing = false
 content_margin_left = 3.0
 content_margin_right = 3.0
 bg_color = Color(0.71, 0.33, 0.14, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_barra"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.176, 0.106, 0.078, 0.15)
 anti_aliasing = false
 
 [sub_resource type="Theme" id="Theme_menu"]
@@ -61,7 +61,7 @@ VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_agarre_activo")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_barra")
 VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_barra")
 
-[node name="MenuPrincipal" type="Control"]
+[node name="MenuPrincipal" type="Control" unique_id=2107501974]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,7 +71,7 @@ grow_vertical = 2
 theme = SubResource("Theme_menu")
 script = ExtResource("1_men")
 
-[node name="Fondo" type="TextureRect" parent="."]
+[node name="Fondo" type="TextureRect" parent="." unique_id=967837949]
 texture_filter = 2
 layout_mode = 1
 anchors_preset = 15
@@ -83,7 +83,7 @@ mouse_filter = 2
 texture = ExtResource("2_fon")
 expand_mode = 1
 
-[node name="Titulo" type="Label" parent="."]
+[node name="Titulo" type="Label" parent="." unique_id=620844236]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
@@ -101,7 +101,7 @@ text = "Las casi 12 pruebas
 de Leonidas"
 horizontal_alignment = 1
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=1012905268]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -116,38 +116,38 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Botones" type="VBoxContainer" parent="Panel"]
+[node name="Botones" type="VBoxContainer" parent="Panel" unique_id=729448586]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 script = ExtResource("3_bot")
 
-[node name="Continuar" type="Button" parent="Panel/Botones"]
+[node name="Continuar" type="Button" parent="Panel/Botones" unique_id=1412100472]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Continuar"
 alignment = 0
 
-[node name="Jugar" type="Button" parent="Panel/Botones"]
+[node name="Jugar" type="Button" parent="Panel/Botones" unique_id=208310647]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Jugar"
 alignment = 0
 
-[node name="Creditos" type="Button" parent="Panel/Botones"]
+[node name="Creditos" type="Button" parent="Panel/Botones" unique_id=310831098]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Créditos"
 alignment = 0
 
-[node name="Salir" type="Button" parent="Panel/Botones"]
+[node name="Salir" type="Button" parent="Panel/Botones" unique_id=127041057]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Salir"
 alignment = 0
 
-[node name="PantallaCreditos" type="CenterContainer" parent="."]
+[node name="PantallaCreditos" type="CenterContainer" parent="." unique_id=671232721]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -157,25 +157,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelCreditos" type="PanelContainer" parent="PantallaCreditos"]
+[node name="PanelCreditos" type="PanelContainer" parent="PantallaCreditos" unique_id=1780563902]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="PantallaCreditos/PanelCreditos"]
+[node name="VBox" type="VBoxContainer" parent="PantallaCreditos/PanelCreditos" unique_id=1525923357]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Titulo" type="Label" parent="PantallaCreditos/PanelCreditos/VBox"]
+[node name="Titulo" type="Label" parent="PantallaCreditos/PanelCreditos/VBox" unique_id=1610595804]
 layout_mode = 2
 text = "Créditos"
 horizontal_alignment = 1
 
-[node name="Desplazamiento" type="ScrollContainer" parent="PantallaCreditos/PanelCreditos/VBox"]
+[node name="Desplazamiento" type="ScrollContainer" parent="PantallaCreditos/PanelCreditos/VBox" unique_id=82271098]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(388, 184)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="TextoCreditos" type="Label" parent="PantallaCreditos/PanelCreditos/VBox/Desplazamiento"]
+[node name="TextoCreditos" type="Label" parent="PantallaCreditos/PanelCreditos/VBox/Desplazamiento" unique_id=688500139]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -190,17 +190,17 @@ Copyright (c) 2023 Ricardo Subtil
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
 autowrap_mode = 3
 
-[node name="Volver" type="Button" parent="PantallaCreditos/PanelCreditos/VBox"]
+[node name="Volver" type="Button" parent="PantallaCreditos/PanelCreditos/VBox" unique_id=1066681370]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-text = "{volver} Volver"
+text = "Volver"
 
-[node name="Fundido" type="CanvasLayer" parent="."]
+[node name="Fundido" type="CanvasLayer" parent="." unique_id=758789446]
 layer = 30
 
-[node name="Negro" type="ColorRect" parent="Fundido"]
+[node name="Negro" type="ColorRect" parent="Fundido" unique_id=969140905]
 unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
