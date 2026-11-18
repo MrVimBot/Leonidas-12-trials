@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/inventario/objetos/icono_libro.png" id="6_bol"]
 [ext_resource type="Script" uid="uid://b02t1hm48boo4" path="res://scripts/ui/fila_corazones.gd" id="7_fil"]
 [ext_resource type="PackedScene" path="res://scenes/ui/barra_jefe.tscn" id="8_jef"]
+[ext_resource type="PackedScene" path="res://scenes/ui/icono_mando.tscn" id="9_ico"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 5
@@ -103,6 +104,16 @@ offset_top = -6.0
 offset_right = 124.0
 offset_bottom = 10.0
 text = "[Espacio]"
+
+[node name="PistaIcono" parent="MedidorViento" instance=ExtResource("9_ico")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 42.0
+offset_top = -8.0
+offset_right = 62.0
+offset_bottom = 12.0
+ruta = "pirueta"
 
 [node name="BarraJefe" parent="." instance=ExtResource("8_jef")]
 unique_name_in_owner = true

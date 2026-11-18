@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Dialogo" format=3 uid="uid://bo3u440rttucp"]
 
-[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+[ext_resource type="Script" uid="uid://bwo4r65ndogtj" path="res://scripts/systems/dialogo.gd" id="1_dia"]
 
 [resource]
 script = ExtResource("1_dia")
 texto = "# PROVISIONAL (lo reescribe el guion). Leonidas intenta alejarse del cartel sin haber hecho la voltereta.
 Kathita: ¡Leonidas, espera! Todavía no puedes seguir.
-Kathita: Antes tienes que dar una voltereta. Pulsa Espacio (o K; A en el mando).
+Kathita: Antes tienes que dar una voltereta. Pulsa {pirueta}.
 "

@@ -32,7 +32,7 @@ extends Node2D
 @export var dialogo_mision: Dialogo
 @export var dialogo_espada: Dialogo
 ## Aviso de objeto obtenido (sin nombre de quien habla).
-@export var texto_obtenido := "¡Obtuviste la espada! Pulsa [J] para atacar."
+@export var texto_obtenido := "¡Obtuviste la espada! Pulsa {atacar} para atacar."
 @export var dialogo_ataque: Dialogo
 ## Si Leonidas sale del Disparador antes de su primer espadazo: se le devuelve a su sitio.
 @export var dialogo_no_te_vayas: Dialogo

@@ -6,10 +6,12 @@
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_dialogo_abrir.tres" id="4_awwhr"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_dialogo_avanzar.tres" id="5_ouheb"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_dialogo_letra.tres" id="6_weh12"]
+[ext_resource type="PackedScene" path="res://scenes/ui/icono_mando.tscn" id="7_ico"]
 
 [node name="CajaDialogo" type="CanvasLayer" unique_id=767719053 node_paths=PackedStringArray("sonido_abrir", "sonido_avanzar", "sonido_letra")]
 layer = 20
 script = ExtResource("1_caj")
+escena_icono = ExtResource("7_ico")
 sonido_abrir = NodePath("SonidoAbrir")
 sonido_avanzar = NodePath("SonidoAvanzar")
 sonido_letra = NodePath("SonidoLetra")

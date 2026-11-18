@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Dialogo" format=3 uid="uid://sxq53ya5dto6"]
 
-[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+[ext_resource type="Script" uid="uid://bwo4r65ndogtj" path="res://scripts/systems/dialogo.gd" id="1_dia"]
 
 [resource]
 script = ExtResource("1_dia")
@@ -8,6 +8,6 @@ texto = "# TEXTO PROVISIONAL: sustituir por el del guion.
 Leonidas: ¡A navegar!
 Elijo el rumbo con las teclas de moverme.
 Si soplo al micrófono, la vela se hincha y voy más rápido.
-Si no tengo micrófono, mantengo Espacio.
+Si no tengo micrófono, mantengo {pirueta}.
 Cuidado con rocas, remolinos y tiburones.
 (Guarda silencio un momento...)"

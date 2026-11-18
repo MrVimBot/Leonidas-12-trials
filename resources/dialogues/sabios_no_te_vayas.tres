@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Dialogo" format=3 uid="uid://gpekktya2ihj"]
 
-[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+[ext_resource type="Script" uid="uid://bwo4r65ndogtj" path="res://scripts/systems/dialogo.gd" id="1_dia"]
 
 [resource]
 script = ExtResource("1_dia")
 texto = "# PROVISIONAL. Si Leonidas se aleja de los sabios antes de probar la espada.
 Toro: ¡Eh, no tan deprisa, muchacho!
-Toro: Antes de irte, prueba la espada. Golpea el aire con [J].
+Toro: Antes de irte, prueba la espada. Golpea el aire con {atacar}.
 "

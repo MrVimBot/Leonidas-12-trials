@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byxl57yte0473" path="res://scripts/ui/menu_pausa.gd" id="1_pau"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/icono_mando.tscn" id="3_ico"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vacio"]
 
@@ -106,6 +107,12 @@ layout_mode = 2
 text = "Daltonismo"
 alignment = 0
 
+[node name="TipoEntrada" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=1720916052]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tipo de entrada"
+alignment = 0
+
 [node name="Salir" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=594479011]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Continuar")
@@ -125,7 +132,8 @@ layout_mode = 2
 text = "Controles"
 horizontal_alignment = 1
 
-[node name="Lista" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=399873369]
+[node name="ListaTeclado" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=399873369]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Moverse: WASD / Flechas
 Atacar: J
@@ -133,17 +141,113 @@ Pirueta: Espacio / K
 Interactuar: E / L
 Libro: I
 Cambiar página: Q / R
-Pausa: Esc · Start (mando)
-Mando: X atacar · A pirueta
-B interactuar · Select libro"
+Pausa: Esc"
+
+[node name="ListaMando" type="GridContainer" parent="Raiz/Centro/PanelControles/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="NombreMoverse" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Moverse"
+
+[node name="IconosMoverse" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="IconoMoverse_1" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "ps5/l_stick"
+
+[node name="IconoMoverse_2" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "ps5/dpad"
+
+[node name="NombreAtacar" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Atacar"
+
+[node name="IconoAtacar" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "atacar"
+
+[node name="NombrePirueta" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Pirueta"
+
+[node name="IconoPirueta" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "pirueta"
+
+[node name="NombreInteractuar" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Interactuar"
+
+[node name="IconoInteractuar" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "interactuar"
+
+[node name="NombreLibro" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Libro"
+
+[node name="IconoLibro" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "ps5/touch_pad"
+
+[node name="NombrePaginas" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Cambiar página"
+
+[node name="IconosPaginas" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="IconoPaginas_1" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "pagina_anterior"
+
+[node name="IconoPaginas_2" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "pagina_siguiente"
+
+[node name="NombrePausa" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+layout_mode = 2
+text = "Pausa"
+
+[node name="IconoPausa" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "pausa"
 
 [node name="Pie" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=1136592914]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.6)
 layout_mode = 2
 text = "Esc: volver"
 horizontal_alignment = 1
 
+[node name="PieMando" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="Icono" parent="Raiz/Centro/PanelControles/VBox/PieMando" instance=ExtResource("3_ico")]
+layout_mode = 2
+ruta = "ps5/circle"
+
+[node name="Texto" type="Label" parent="Raiz/Centro/PanelControles/VBox/PieMando"]
+layout_mode = 2
+text = "volver"
+
 [connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Continuar" to="." method="_cerrar"]
 [connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Controles" to="." method="_mostrar_controles"]
 [connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Daltonismo" to="." method="_filtro_daltonismo"]
+[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/TipoEntrada" to="." method="_tipo_entrada"]
 [connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Salir" to="." method="_salir"]

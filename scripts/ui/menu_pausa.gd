@@ -1,6 +1,6 @@
 class_name MenuPausa
 extends CanvasLayer
-## Menú de pausa: Continuar, Controles, Daltonismo y Salir.
+## Menú de pausa: Continuar, Controles, Daltonismo, Tipo de entrada y Salir.
 ## Va dentro de `game.tscn`. La interfaz (paneles, botones, textos y tema) está
 ## en `scenes/ui/menu_pausa.tscn` y se edita desde el editor; los botones llaman
 ## a este script con señales conectadas en la escena.
@@ -14,6 +14,10 @@ extends CanvasLayer
 ##
 ## «Daltonismo» pasa al siguiente filtro del autoload `Daltonismo` (No → Protanopía →
 ## Deuteranopía) y el botón muestra el elegido: «Daltonismo: No».
+## «Tipo de entrada» alterna Teclado / Mando en el autoload `Entrada` (no filtra la entrada:
+## solo cambia qué teclas nombran los textos de ayuda) y la lista de Controles muestra la
+## del tipo elegido (`ListaTeclado` en texto / `ListaMando` con iconos de PS5 del plugin
+## Controller Icons, `IconoMando`; todo en la escena).
 ## «Salir» vuelve al menú principal (sin guardar: se guarda desde el libro).
 
 var abierto := false
@@ -26,6 +30,11 @@ var _viendo_controles := false
 @onready var _boton_continuar: Button = %Continuar
 @onready var _boton_controles: Button = %Controles
 @onready var _boton_daltonismo: Button = %Daltonismo
+@onready var _boton_tipo_entrada: Button = %TipoEntrada
+@onready var _lista_teclado: Control = %ListaTeclado
+@onready var _lista_mando: Control = %ListaMando
+@onready var _pie_controles: Label = %Pie
+@onready var _pie_mando: Control = %PieMando
 
 
 func _ready() -> void:
@@ -33,6 +42,8 @@ func _ready() -> void:
 	# El texto de la escena («Daltonismo») es el rótulo; se le añade el filtro elegido.
 	_boton_daltonismo.set_meta(&"rotulo", _boton_daltonismo.text)
 	_actualizar_daltonismo()
+	_boton_tipo_entrada.set_meta(&"rotulo", _boton_tipo_entrada.text)
+	_actualizar_tipo_entrada()
 
 
 ## ¿Se puede abrir ahora? No con el libro, la tienda o un diálogo abiertos, ni
@@ -84,6 +95,12 @@ func _cerrar() -> void:
 
 func _mostrar_controles() -> void:
 	_viendo_controles = true
+	# Mando: lista con iconos de PS5 y pie «(Círculo) volver»; teclado: todo en texto.
+	var con_iconos := Entrada.usa_iconos()
+	_lista_teclado.visible = not con_iconos
+	_pie_controles.visible = not con_iconos
+	_lista_mando.visible = con_iconos
+	_pie_mando.visible = con_iconos
 	_panel_menu.visible = false
 	_panel_controles.visible = true
 
@@ -107,6 +124,19 @@ func _actualizar_daltonismo() -> void:
 	var texto := "%s: %s" % [rotulo, Daltonismo.nombre()]
 	_boton_daltonismo.set_meta(&"texto", texto)
 	_boton_daltonismo.text = texto
+
+
+func _tipo_entrada() -> void:
+	Entrada.siguiente() # alterna Teclado / Mando
+	_actualizar_tipo_entrada()
+	_botones.actualizar_marcas()
+
+
+func _actualizar_tipo_entrada() -> void:
+	var rotulo: String = _boton_tipo_entrada.get_meta(&"rotulo")
+	var texto := "%s: %s" % [rotulo, Entrada.nombre()]
+	_boton_tipo_entrada.set_meta(&"texto", texto)
+	_boton_tipo_entrada.text = texto
 
 
 func _salir() -> void:

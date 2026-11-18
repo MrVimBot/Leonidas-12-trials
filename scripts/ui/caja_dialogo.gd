@@ -44,6 +44,12 @@ const SIN_GLIFO := { "Á": "A", "Í": "I", "Ó": "O", "Ú": "U" }
 @export var tonos_por_nombre: Dictionary = {}
 ## Espacio que ocupa el retrato a la izquierda del texto (ancho + separación).
 @export var ancho_retrato := 50
+@export_group("Iconos del mando")
+## Escena del icono (`scenes/ui/icono_mando.tscn`). Con el tipo de entrada Mando, los
+## marcadores `{atacar}`, `{pirueta}`… del texto se dibujan como iconos de PS5.
+@export var escena_icono: PackedScene
+## Lado del icono en píxeles (la fuente mide 16 de alto).
+@export var tamano_icono := 20
 
 var abierto := false
 
@@ -51,6 +57,10 @@ var _paginas: Array[Dictionary] = []
 var _indice := 0
 var _escribiendo := false
 var _letras := 0.0
+## Iconos de la página mostrada: {nodo: Control, indice: int}. `indice` es el carácter (un
+## espacio en el texto) sobre el que va el icono: se enseña cuando la máquina de escribir llega.
+var _iconos: Array[Dictionary] = []
+var _marcador := RegEx.create_from_string("\\{([a-z_]+)\\}")
 
 @onready var caja: Control = $Caja
 @onready var nombre: Label = $Caja/Nombre
@@ -108,6 +118,7 @@ func _process(delta: float) -> void:
 		_letras += letras_por_segundo * delta
 		texto.visible_characters = int(_letras)
 		_sonar_letras(antes, texto.visible_characters)
+		_actualizar_iconos()
 		if texto.visible_characters >= texto.get_total_character_count():
 			_terminar_escritura()
 	else:
@@ -175,8 +186,12 @@ func _mostrar_pagina() -> void:
 	texto.position.x = _texto_x + (ancho_retrato if cara else 0)
 	texto.size.x = _texto_ancho - (ancho_retrato if cara else 0)
 	nombre.text = adaptar_a_fuente(p_nombre)
-	texto.text = adaptar_a_fuente(p_texto)
+	# Con mando, los marcadores {accion} dejan un hueco en el texto y un icono encima.
+	var expandido := _expandir(p_texto)
+	var p_visible: String = expandido.texto
+	texto.text = adaptar_a_fuente(p_visible)
 	texto.visible_characters = 0
+	_poner_iconos(p_visible, expandido.huecos)
 	_letras = 0.0
 	_escribiendo = true
 	flecha.visible = false
@@ -185,11 +200,83 @@ func _mostrar_pagina() -> void:
 func _terminar_escritura() -> void:
 	_escribiendo = false
 	texto.visible_characters = -1
+	_actualizar_iconos()
+
+
+## Con el tipo Mando cambia cada marcador conocido (`{atacar}`) por un hueco de un espacio
+## (más otro a cada lado si no lo hay) y apunta dónde quedó. Con Teclado no toca nada: los
+## marcadores ya son texto (`Entrada.sustituir`).
+## Devuelve {texto: String, huecos: Array[{accion: StringName, indice: int}]}.
+func _expandir(t: String) -> Dictionary:
+	var huecos: Array[Dictionary] = []
+	if not Entrada.usa_iconos():
+		return { "texto": t, "huecos": huecos }
+	var salida := ""
+	var desde := 0
+	for m in _marcador.search_all(t):
+		var accion := StringName(m.get_string(1))
+		if not Entrada.ETIQUETAS.has(accion):
+			continue # no es una acción: se queda como texto
+		salida += t.substr(desde, m.get_start() - desde)
+		desde = m.get_end()
+		if not salida.is_empty() and not salida.ends_with(" ") and not salida.ends_with("\n"):
+			salida += " "
+		huecos.append({ "accion": accion, "indice": salida.length() })
+		salida += " "
+		if desde < t.length() and t[desde] != " " and t[desde] != "\n":
+			salida += " "
+	salida += t.substr(desde)
+	return { "texto": salida, "huecos": huecos }
+
+
+## Crea los iconos de la página sobre sus huecos (ocultos hasta que se escriba el hueco).
+func _poner_iconos(t: String, huecos: Array[Dictionary]) -> void:
+	_quitar_iconos()
+	if escena_icono == null:
+		return
+	var fuente := texto.get_theme_font(&"font")
+	var tam := texto.get_theme_font_size(&"font_size")
+	var alto_linea := fuente.get_height(tam)
+	var ancho_hueco := fuente.get_string_size(" ", HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
+	for h in huecos:
+		var accion: StringName = h.accion
+		var indice: int = h.indice
+		var antes := t.substr(0, indice)
+		var linea := antes.count("\n")
+		var en_linea := antes.substr(antes.rfind("\n") + 1)
+		var x := fuente.get_string_size(en_linea, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
+		var icono := escena_icono.instantiate() as IconoMando
+		icono.ruta = Entrada.ruta_icono(accion)
+		icono.custom_minimum_size = Vector2(tamano_icono, tamano_icono)
+		icono.size = icono.custom_minimum_size
+		icono.position = (texto.position + Vector2(
+			x + (ancho_hueco - tamano_icono) / 2.0,
+			linea * alto_linea + (alto_linea - tamano_icono) / 2.0)).round()
+		icono.visible = false
+		caja.add_child(icono)
+		_iconos.append({ "nodo": icono, "indice": indice })
+
+
+## Enseña los iconos cuyo hueco ya ha escrito la máquina de escribir.
+func _actualizar_iconos() -> void:
+	var escritos := texto.visible_characters
+	for i in _iconos:
+		var nodo: Control = i.nodo
+		var indice: int = i.indice
+		nodo.visible = escritos < 0 or escritos > indice
+
+
+func _quitar_iconos() -> void:
+	for i in _iconos:
+		var nodo: Control = i.nodo
+		nodo.queue_free()
+	_iconos.clear()
 
 
 func _cerrar() -> void:
 	abierto = false
 	caja.visible = false
+	_quitar_iconos()
 	# Se emite ANTES de quitar el motivo: quien esperaba `termino` sigue en el acto (dentro
 	# de emit) y, si abre otro diálogo o la tienda (saludo → tienda), pone su motivo
 	# mientras el de este aún está; así el jugador no llega a pasar por NORMAL ni se le
@@ -214,7 +301,11 @@ func _paginar(lineas: Array[Dictionary]) -> Array[Dictionary]:
 	var max_lineas := maxi(1, floori(texto.size.y / fuente.get_height(tam)))
 	var paginas: Array[Dictionary] = []
 	for l in lineas:
+		# Marcadores como {atacar}: con Teclado pasan a texto («[J]»); con Mando se quedan y
+		# `_mostrar_pagina` los dibuja como iconos (aquí solo se mide el hueco que dejan).
 		var l_texto: String = l.texto
+		if not Entrada.usa_iconos():
+			l_texto = Entrada.sustituir(l_texto)
 		var ancho := ancho_base - (ancho_retrato if retratos.has(l.nombre) else 0)
 		var renglones := _partir_en_renglones(l_texto, fuente, tam, ancho)
 		for i in range(0, renglones.size(), max_lineas):
@@ -228,7 +319,9 @@ func _partir_en_renglones(t: String, fuente: Font, tam: int, ancho: float) -> Pa
 	var actual := ""
 	for palabra in t.split(" ", false):
 		var prueba := palabra if actual.is_empty() else actual + " " + palabra
-		if fuente.get_string_size(prueba, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x <= ancho:
+		# Se mide con el hueco que dejará el icono, no con las letras del marcador.
+		var medida: String = _expandir(prueba).texto
+		if fuente.get_string_size(medida, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x <= ancho:
 			actual = prueba
 		else:
 			if not actual.is_empty():

@@ -16,7 +16,7 @@ extends CanvasLayer
 ##   Game emite la primera en su `_ready` (después del de este hijo), también si la
 ##   partida empieza en el mar.
 ## En barco: se oculta la ranura del objeto y la estamina, y aparece el `MedidorViento`
-## (fuerza del soplido) con la pista "[Espacio]" si no llega audio del micrófono.
+## (fuerza del soplido) con la pista «[Espacio]» (o el icono de Círculo con mando) si no llega audio del micrófono.
 ## Vida en CUARTOS de corazón: los dibuja `FilaCorazones` (5 estados de
 ## assets/ui/corazones.png: lleno, 3/4, 1/2, 1/4, vacío).
 ## Combate de jefe: `BarraJefe` arriba en el centro. Game emite `jefe_empezo(jefe, nombre)` /
@@ -43,6 +43,7 @@ var _en_barco := false
 ## Es una `BarraEstamina` (barra genérica) usada aquí como medidor de viento.
 @onready var medidor_viento: BarraEstamina = %MedidorViento
 @onready var pista_viento: Label = %Pista
+@onready var pista_icono: Control = %PistaIcono
 @onready var barra_jefe: BarraJefe = %BarraJefe
 
 
@@ -98,7 +99,10 @@ func _process(delta: float) -> void:
 	if _en_barco:
 		var barco := game.barco if game else null
 		medidor_viento.valor = barco.soplido() if barco else 0.0
-		pista_viento.visible = not Microfono.disponible
+		# Sin micrófono se sopla con la pirueta: «[Espacio]» (teclado) o su icono de PS5 (mando).
+		var sin_micro := not Microfono.disponible
+		pista_viento.visible = sin_micro and not Entrada.usa_iconos()
+		pista_icono.visible = sin_micro and Entrada.usa_iconos()
 		return
 	if jugador == null:
 		return

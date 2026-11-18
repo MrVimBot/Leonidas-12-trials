@@ -26,7 +26,7 @@ extends Node2D
 @export var dialogo_llamada: Dialogo
 @export var dialogo_libro: Dialogo
 ## Aviso de objeto obtenido (sin nombre de quien habla).
-@export var texto_obtenido := "¡Obtuviste el libro de Leonidas! Pulsa [I] para abrirlo."
+@export var texto_obtenido := "¡Obtuviste el libro de Leonidas! Pulsa {inventario} para abrirlo."
 @export var dialogo_voltereta: Dialogo
 @export var dialogo_despedida: Dialogo
 
