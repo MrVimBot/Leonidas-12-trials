@@ -26,6 +26,12 @@ enum Estado { DEAMBULAR, PERSEGUIR, ATACAR, RECARGA, DANO, MUERTA }
 ## amontonen. Cerca de Leonidas (`distancia_sin_desfase`) apuntan directamente a él.
 @export var desfase_maximo := Vector2(12, 6)
 @export var distancia_sin_desfase := 28.0
+## Al perseguir se apartan de otras gambas más cercanas que esto (px; en vertical cuenta el
+## doble porque el dibujo es más ancho que alto). Hace falta además del choque de los cuerpos:
+## la colisión es solo la base (18×6) y el dibujo mide 47×30, así que sin esto se ven apiladas.
+@export var distancia_separacion := 34.0
+## Peso de la separación frente a la dirección hacia Leonidas.
+@export var fuerza_separacion := 3.0
 
 @export_group("Daño")
 @export var empuje_dano := 120.0
@@ -57,9 +63,9 @@ func _ready() -> void:
 		paseo.rng.seed = semilla + 1
 	else:
 		_rng.randomize()
-	# La gamba SÍ choca con otros enemigos: en grupo se empujan y no se apilan en un punto
-	# (la seta y la flor no lo necesitan; por eso no está en la escena base).
-	collision_mask |= Capas.ENEMIGOS
+	# Las gambas NO chocan entre sí (máscara solo mundo, como la base): si dos cuerpos empiezan
+	# solapados, el choque las deja bloqueadas una contra otra. Se reparten con `_separacion()`,
+	# una fuerza suave que nunca bloquea.
 	paseo.centro = global_position
 	paseo.radio = radio_deambular
 	paseo.velocidad = velocidad_deambular
@@ -83,7 +89,13 @@ func _physics_process(delta: float) -> void:
 		Estado.ATACAR:
 			movimiento.frenar(delta)
 		Estado.RECARGA:
-			movimiento.frenar(delta)
+			# Quieta tras morder, pero apartándose de las vecinas (si no, el grupo se queda
+			# amontonado en el sitio del mordisco).
+			var sep := _separacion()
+			if sep.length() > 0.1:
+				movimiento.mover(sep.normalized(), delta, velocidad_deambular)
+			else:
+				movimiento.frenar(delta)
 			_espera -= delta
 			if _espera <= 0.0:
 				_volver_a_andar()
@@ -131,8 +143,24 @@ func _perseguir(delta: float) -> void:
 		movimiento.frenar(delta)
 		animador.reproducir(&"parado")
 		return
-	movimiento.mover(meta.normalized(), delta, velocidad_perseguir)
+	var direccion := meta.normalized() + _separacion() * fuerza_separacion
+	movimiento.mover(direccion.normalized(), delta, velocidad_perseguir)
 	animador.reproducir(&"caminar")
+
+
+## Empuje para alejarse de las gambas vecinas (0 si no hay ninguna cerca). Grupos de 3–5:
+## recorrer el grupo `enemigos` cada tick es barato.
+func _separacion() -> Vector2:
+	var empuje := Vector2.ZERO
+	for otro in get_tree().get_nodes_in_group(&"enemigos"):
+		if otro == self or not otro is Gamba:
+			continue
+		var d: Vector2 = global_position - (otro as Gamba).global_position
+		d.y *= 2.0
+		var l := d.length()
+		if l > 0.01 and l < distancia_separacion:
+			empuje += d / l * (1.0 - l / distancia_separacion)
+	return empuje
 
 
 func _morder() -> void:

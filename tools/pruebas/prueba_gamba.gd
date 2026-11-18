@@ -51,6 +51,7 @@ func ejecutar() -> void:
 	j.vida.restaurar()
 	g.global_position = j.global_position + Vector2(-14, 0)
 	var sueltos_antes := game.find_children("*", "ObjetoSuelto", true, false).size()
+	var monedas_antes := EstadoJuego.monedas
 	var golpes := 0
 	for i in 6:
 		if not is_instance_valid(g) or g.vida.muerto:
@@ -63,11 +64,14 @@ func ejecutar() -> void:
 		golpes += 1
 	ok("3) muere con dos espadazos", (not is_instance_valid(g) or g.vida.muerto) and golpes == 2, "golpes=%d vida=%d" % [golpes, g.vida.vida if is_instance_valid(g) else 0])
 	await ticks(60)
+	# La moneda rebota al azar y a veces cae bajo Leonidas, que la recoge: cuenta también esa.
 	var sueltos := game.find_children("*", "ObjetoSuelto", true, false).size() - sueltos_antes
-	ok("3) suelta 1 moneda", sueltos == 1, "sueltas=%d" % sueltos)
+	var recogidas := EstadoJuego.monedas - monedas_antes
+	ok("3) suelta 1 moneda", sueltos + recogidas == 1, "sueltas=%d recogidas=%d" % [sueltos, recogidas])
 	await ticks(200)
 
-	# 4) Tres gambas juntas persiguiendo: ninguna a < 4 px de otra.
+	# 4) Tres gambas juntas persiguiendo no se ven apiladas: distancia con la vertical al doble
+	# (como `Gamba._separacion`: el dibujo es más ancho que alto) de al menos 14 px.
 	j.vida.restaurar()
 	j.global_position = base
 	var grupo: Array[Gamba] = []
@@ -78,5 +82,5 @@ func ejecutar() -> void:
 	for a in 3:
 		for b in range(a + 1, 3):
 			min_d = minf(min_d, grupo[a].global_position.distance_to(grupo[b].global_position))
-	ok("4) tres gambas no se apilan", min_d >= 4.0, "distancia mínima %.1f" % min_d)
+	ok("4) tres gambas no se apilan", min_d >= 14.0, "distancia mínima %.1f" % min_d)
 	ok("4) todas persiguen o atacan", grupo.all(func(x: Gamba) -> bool: return x.estado != Gamba.Estado.DEAMBULAR))
