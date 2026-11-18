@@ -61,6 +61,7 @@
 [ext_resource type="PackedScene" path="res://scenes/items/vasija_naranja.tscn" id="58_22mwr"]
 [ext_resource type="Script" uid="uid://us5dtx7tine7" path="res://scripts/entorno/auto_transiciones.gd" id="60_autotr"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
+[ext_resource type="AudioStream" uid="uid://bhkyg5laygb83" path="res://assets/audio/music/ciudad.mp3" id="musica_ciudad"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xr1lb"]
 size = Vector2(30, 36)
@@ -96,6 +97,7 @@ size = Vector2(72, 16)
 y_sort_enabled = true
 script = ExtResource("1_mmgxq")
 nombre_zona = "Pueblo"
+musica = ExtResource("musica_ciudad")
 suelo = NodePath("Suelo")
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=101057235]
