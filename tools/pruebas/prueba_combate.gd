@@ -3,7 +3,7 @@ extends "res://tools/pruebas/base_prueba.gd"
 ## la espada (suelta monedas), flor escondida invulnerable que despierta al acercarse, contacto de
 ## la seta que quita vida y el HUD lo refleja, manzano que suelta manzanas, hablar con un NPC,
 ## detección (`ComponenteDeteccion`, también unitaria) y vida cargada de una partida.
-## Usa miembros privados del HUD (`_estados`) porque los corazones solo exponen su textura.
+## Los corazones del HUD se leen con `FilaCorazones.cuartos_de()` (lo que se dibuja).
 
 func esperar_zona() -> void:
 	await esperar_normal()
@@ -16,8 +16,8 @@ func ejecutar() -> void:
 	var hud := game.get_node(^"HUD") as HUD
 	var cor := hud.corazones
 	var llenos := 0
-	for c in cor.get_children():
-		if (c as TextureRect).texture == hud._estados[4]:
+	for i in cor.get_child_count():
+		if cor.cuartos_de(i) == 4:
 			llenos += 1
 	ok("c) HUD: 3 corazones llenos", cor.get_child_count() == 3 and llenos == 3, "%d/%d" % [llenos, cor.get_child_count()])
 	ok("c) HUD: estamina valor inicial 1.0", is_equal_approx(hud.barra_estamina.valor, 1.0), str(hud.barra_estamina.valor))
@@ -96,10 +96,7 @@ func ejecutar() -> void:
 	var antes := j.vida.vida
 	await ticks(10)
 	ok("a) contacto de seta quita vida", j.vida.vida < antes, "%d -> %d" % [antes, j.vida.vida])
-	var cuartos_hud := 0
-	for i in cor.get_child_count():
-		var t := (cor.get_child(i) as TextureRect).texture
-		cuartos_hud += hud._estados.find(t)
+	var cuartos_hud := cor.cuartos_visibles()
 	ok("a) HUD refleja la vida", cuartos_hud == j.vida.vida, "hud=%d vida=%d" % [cuartos_hud, j.vida.vida])
 	# Manzano
 	var arbol: Decorado = null
@@ -180,9 +177,7 @@ func ejecutar() -> void:
 	EstadoJuego.lugar_cargado = lg
 	await crear_game(true, true)
 	hud = game.get_node(^"HUD") as HUD
-	var cu := 0
-	for i in hud.corazones.get_child_count():
-		cu += hud._estados.find((hud.corazones.get_child(i) as TextureRect).texture)
+	var cu := hud.corazones.cuartos_visibles()
 	ok("c) cargada: jugador.vida == 5", j.vida.vida == 5, str(j.vida.vida))
 	ok("c) cargada: HUD muestra 5 cuartos", cu == 5, str(cu))
 	ok("c) cargada: no muerto", not j.vida.muerto)

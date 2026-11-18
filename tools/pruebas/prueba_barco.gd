@@ -29,10 +29,7 @@ func ir_barco(ruta: String, entrada: String) -> Dictionary:
 
 
 func cuartos_hud(hud: HUD) -> int:
-	var c := 0
-	for n in hud.corazones.get_children():
-		c += hud._estados.find((n as TextureRect).texture)
-	return c
+	return hud.corazones.cuartos_visibles()
 
 
 func ejecutar() -> void:

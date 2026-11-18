@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" uid="uid://j6swil82lpwk" path="res://scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Script" uid="uid://cb4kjpjmb27xe" path="res://scripts/ui/barra_estamina.gd" id="2_bar"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://d30qfhyo3tefp" path="res://assets/ui/provisional/ranura_objeto.png" id="4_ran"]
 [ext_resource type="Texture2D" uid="uid://ies4vs6m3fbn" path="res://assets/ui/provisional/icono_espada.png" id="5_esp"]
 [ext_resource type="Texture2D" uid="uid://dvf0vpwivckdg" path="res://assets/ui/provisional/icono_libro.png" id="6_bol"]
+[ext_resource type="Script" uid="uid://b02t1hm48boo4" path="res://scripts/ui/fila_corazones.gd" id="7_fil"]
+[ext_resource type="PackedScene" path="res://scenes/ui/barra_jefe.tscn" id="8_jef"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 5
@@ -19,6 +21,7 @@ offset_right = 122.0
 offset_bottom = 13.0
 mouse_filter = 2
 theme_override_constants/separation = 0
+script = ExtResource("7_fil")
 
 [node name="RanuraObjeto" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -100,3 +103,6 @@ offset_top = -6.0
 offset_right = 124.0
 offset_bottom = 10.0
 text = "[Espacio]"
+
+[node name="BarraJefe" parent="." instance=ExtResource("8_jef")]
+unique_name_in_owner = true

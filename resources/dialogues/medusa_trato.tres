@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL (Guión p. 28). Fingen su muerte: Medusa le da una réplica de su cabeza.
+Medusa: Entonces finjamos mi muerte.
+Medusa: Toma esta cabeza de piedra. Es igual que la mía: nadie notará la diferencia.
+Medusa: Llévasela a tus sabios y déjame vivir en paz.
+Leonidas: Trato hecho.
+"

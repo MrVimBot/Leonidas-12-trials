@@ -17,27 +17,24 @@ extends CanvasLayer
 ##   partida empieza en el mar.
 ## En barco: se oculta la ranura del objeto y la estamina, y aparece el `MedidorViento`
 ## (fuerza del soplido) con la pista "[Espacio]" si no llega audio del micrófono.
-## Vida en CUARTOS de corazón: assets/ui/corazones.png tiene 5 estados cada 12 px
-## (lleno, 3/4, 1/2, 1/4, vacío).
-
-const CUARTOS_POR_CORAZON := 4
-const ANCHO_CELDA := 12
+## Vida en CUARTOS de corazón: los dibuja `FilaCorazones` (5 estados de
+## assets/ui/corazones.png: lleno, 3/4, 1/2, 1/4, vacío).
+## Combate de jefe: `BarraJefe` arriba en el centro. Game emite `jefe_empezo(jefe, nombre)` /
+## `jefe_termino` (conectadas en game.tscn a `_al_empezar_jefe` / `_al_terminar_jefe`).
 
 @export var jugador: Jugador
 ## Para leer el soplido del barco actual (`game.barco`) en el medidor de viento.
 @export var game: Game
-@export var textura_corazones: Texture2D = preload("res://assets/ui/corazones.png")
 ## Segundos que la barra de estamina sigue visible después de llenarse.
 @export var ocultar_estamina_tras := 0.6
 ## Dónde va la barra de estamina respecto a los pies de Leonidas (en pantalla).
 @export var posicion_estamina := Vector2(-8, -33)
 
-var _estados: Array[AtlasTexture] = []
 var _tiempo_estamina_llena := 0.0
 var _vida: ComponenteVida = null
 var _en_barco := false
 
-@onready var corazones: HBoxContainer = %Corazones
+@onready var corazones: FilaCorazones = %Corazones
 @onready var icono_objeto: TextureRect = %Icono
 @onready var barra_estamina: BarraEstamina = %BarraEstamina
 @onready var libro: CanvasItem = %Inventario
@@ -46,15 +43,10 @@ var _en_barco := false
 ## Es una `BarraEstamina` (barra genérica) usada aquí como medidor de viento.
 @onready var medidor_viento: BarraEstamina = %MedidorViento
 @onready var pista_viento: Label = %Pista
+@onready var barra_jefe: BarraJefe = %BarraJefe
 
 
 func _ready() -> void:
-	# Una textura por estado: índice = cuartos llenos (0 = vacío ... 4 = lleno).
-	for cuartos in range(CUARTOS_POR_CORAZON + 1):
-		var a := AtlasTexture.new()
-		a.atlas = textura_corazones
-		a.region = Rect2((CUARTOS_POR_CORAZON - cuartos) * ANCHO_CELDA, 0, ANCHO_CELDA, ANCHO_CELDA)
-		_estados.append(a)
 	if jugador:
 		seguir_vida(jugador.vida)
 		jugador.estamina.cambio.connect(_al_cambiar_estamina)
@@ -84,6 +76,16 @@ func modo_barco(activo: bool) -> void:
 	medidor_viento.visible = activo
 	if activo:
 		barra_estamina.modulate.a = 0.0
+
+
+## Conectada en game.tscn a `Game.jefe_empezo`.
+func _al_empezar_jefe(jefe: Node, nombre: String) -> void:
+	barra_jefe.seguir(jefe, nombre)
+
+
+## Conectada en game.tscn a `Game.jefe_termino`.
+func _al_terminar_jefe() -> void:
+	barra_jefe.dejar()
 
 
 ## Conectada en game.tscn a `Game.modo_cambio`.
@@ -126,18 +128,7 @@ func _actualizar_objetos() -> void:
 
 
 func _al_cambiar_vida(vida: int, vida_max: int) -> void:
-	var total := ceili(vida_max / float(CUARTOS_POR_CORAZON))
-	while corazones.get_child_count() < total:
-		var t := TextureRect.new()
-		t.stretch_mode = TextureRect.STRETCH_KEEP
-		corazones.add_child(t)
-	while corazones.get_child_count() > total:
-		var sobra := corazones.get_child(corazones.get_child_count() - 1)
-		corazones.remove_child(sobra)
-		sobra.queue_free()
-	for i in total:
-		var cuartos := clampi(vida - i * CUARTOS_POR_CORAZON, 0, CUARTOS_POR_CORAZON)
-		(corazones.get_child(i) as TextureRect).texture = _estados[cuartos]
+	corazones.mostrar(vida, vida_max)
 
 
 func _al_cambiar_estamina(estamina: float, estamina_max: float) -> void:

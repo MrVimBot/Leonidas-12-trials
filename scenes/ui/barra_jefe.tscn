@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://wuyhyw0is2mm" path="res://scripts/ui/barra_jefe.gd" id="1_bar"]
+[ext_resource type="Script" uid="uid://b02t1hm48boo4" path="res://scripts/ui/fila_corazones.gd" id="2_fil"]
+[ext_resource type="Shader" uid="uid://fp8mxchy36kj" path="res://resources/shaders/desaturar.gdshader" id="3_des"]
+
+[sub_resource type="ShaderMaterial" id="Material_gris"]
+shader = ExtResource("3_des")
+shader_parameter/cantidad = 1.0
+
+[node name="BarraJefe" type="MarginContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 17.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 1
+script = ExtResource("1_bar")
+material_gris = SubResource("Material_gris")
+
+[node name="Contenido" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Nombre" type="Label" parent="Contenido"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.72, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.06, 0.05, 1)
+theme_override_constants/outline_size = 4
+text = "Medusa"
+
+[node name="Corazones" type="HBoxContainer" parent="Contenido"]
+unique_name_in_owner = true
+modulate = Color(1, 0.85, 0.45, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 1
+script = ExtResource("2_fil")

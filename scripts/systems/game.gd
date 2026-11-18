@@ -21,6 +21,11 @@ extends Node2D
 signal zona_cambiada(zona: Zona)
 ## Cambia entre ir a pie y en barco; `vida` es la que debe mostrar el HUD.
 signal modo_cambio(en_barco: bool, vida: ComponenteVida)
+## Empieza un combate de jefe: el HUD enseña su barra de vida (`BarraJefe`, ver su contrato).
+## Se emite con `empezar_jefe()`.
+signal jefe_empezo(jefe: Node, nombre: String)
+## Acaba el combate de jefe (vencido, reiniciado tras el Game Over o al cambiar de zona).
+signal jefe_termino
 
 @export_file("*.tscn") var zona_inicial := "res://scenes/levels/pueblo.tscn"
 @export var entrada_inicial := "inicio"
@@ -54,6 +59,10 @@ var cambiando: bool:
 		return _cambiando
 
 var _cambiando := false
+## Jefe cuya barra se ve ahora (null si ninguno).
+var _jefe: Node = null
+## Vida máxima de Leonidas sin corazones extra (la de jugador.tscn: 12 = 3 corazones).
+var _vida_base := 0
 var _ruta_actual := ""
 var _entrada_actual := ""
 
@@ -87,6 +96,10 @@ func _ready() -> void:
 	if depurar and depurar_dar_espada and EstadoJuego.lugar_cargado == null:
 		EstadoJuego.tiene_espada = true
 	EstadoJuego.contando_tiempo = true
+	# Corazones extra (uno por jefe vencido): antes de fijar la vida guardada, que puede pasar de 12.
+	_vida_base = jugador.vida.vida_max
+	aplicar_corazones_extra(true)
+	EstadoJuego.estado_restablecido.connect(aplicar_corazones_extra)
 	fundido.color.a = 0.0
 	jugador.reaparecio.connect(camara.saltar_a_objetivo)
 	jugador.vida.danado.connect(_sacudir_camara)
@@ -124,6 +137,28 @@ func datos_guardado() -> DatosLugar:
 	if barco == null:
 		datos.posicion = jugador.global_position
 	return datos
+
+
+## Vida máxima de Leonidas = la de su escena + 4 cuartos por `EstadoJuego.corazones_extra`.
+## Se llama al empezar, al restablecerse EstadoJuego y al ganar un corazón (escena del jefe,
+## con `llenar` = true: cura del todo). El barco tiene su propia vida: no se toca.
+func aplicar_corazones_extra(llenar := false) -> void:
+	jugador.vida.fijar_maximo(_vida_base + ComponenteVida.CUARTOS_POR_CORAZON * EstadoJuego.corazones_extra, llenar)
+
+
+## La escena de un jefe lo llama al empezar el combate: el HUD enseña su barra de vida.
+## `jefe` cumple el contrato de `BarraJefe` (`vida`, y opcionalmente `invulnerable_cambio`).
+func empezar_jefe(jefe: Node, nombre: String) -> void:
+	_jefe = jefe
+	jefe_empezo.emit(jefe, nombre)
+
+
+## Al vencer al jefe o reiniciar su combate: se oculta su barra. Sin jefe no hace nada.
+func terminar_jefe() -> void:
+	if _jefe == null:
+		return
+	_jefe = null
+	jefe_termino.emit()
 
 
 ## Pone al jugador en `pos` (partida cargada): ahí reaparece si muere y ahí va la cámara.
@@ -208,6 +243,7 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 			return
 		_cargar_zona(zona_inicial, entrada_inicial)
 		return
+	terminar_jefe() # el jefe se va con su zona
 	if zona_actual:
 		mundo.remove_child(zona_actual)
 		zona_actual.queue_free()

@@ -35,7 +35,10 @@ Salida de cada prueba: líneas `PASA` / `FALLA`, `COMPROBACIONES: N` y `RESULTAD
 rayo contra pared y alcance, invocación `invocado`/`aparecer()`/`derrotado`),
 `prueba_medusa_cerebro` (Medusa en `cueva_jefe`: INACTIVA, invoca 2 cíclopes y es invulnerable y gris hasta que mueren,
 golpe al suelo con aviso donde está Leonidas (4 cuartos), CLAVADA, 2 cíclopes nuevos a mitad de vida, trozos de estatua
-(1, y 2 con ≤ 25 %), `reiniciar()` y DERROTADA sin liberarse) y
+(1, y 2 con ≤ 25 %), `reiniciar()` y DERROTADA sin liberarse),
+`prueba_medusa` (combate completo con la Medusa y la `EscenaMedusa` de `cueva_jefe`: encuentro con la salida cerrada,
+barra de vida (gris con cíclopes), espadazo, segunda fase, derrota con la cabeza de piedra y el corazón extra (vida 16),
+guardar y cargar con Medusa ya derrotada, y morir a mitad: el combate se reinicia, también reapareciendo dentro) y
 `prueba_animaciones` (compara con `referencias/animaciones.txt`; si la artista cambia sprites,
 regenerarla a propósito con `... -- prueba_animaciones generar`).
 

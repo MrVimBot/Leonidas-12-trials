@@ -1,11 +1,11 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_base"]
-[ext_resource type="Script" path="res://scripts/enemies/gamba.gd" id="2_cer"]
+[ext_resource type="Script" uid="uid://c3ufru4efslfu" path="res://scripts/enemies/gamba.gd" id="2_cer"]
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/gamba.tres" id="3_spr"]
-[ext_resource type="Script" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
-[ext_resource type="Script" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
+[ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
+[ext_resource type="Script" uid="uid://ewwi3sus3g0p" path="res://scripts/componentes/componente_paseo.gd" id="6_pas"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(18, 6)

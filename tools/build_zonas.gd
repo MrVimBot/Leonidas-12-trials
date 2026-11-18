@@ -359,7 +359,31 @@ func _cueva_jefe() -> Constructor:
 		z.deco("Petrificados", "estatua", _t(p.x, p.y), SIN_SOMBRA)
 	z.deco("Ruinas", "columna_rota_2", _t(12, 5), SIN_SOMBRA)
 	z.deco("Ruinas", "columna_rota_2", _t(22, 5), SIN_SOMBRA)
-	z.marcador("PuntoJefe", Vector2(272, 150)) # aquí irá Medusa
+	z.marcador("PuntoJefe", Vector2(272, 150)) # donde está Medusa
+
+	# Medusa (plan 06, M6) y la escena de su combate. La raíz de la escena va en la boca del
+	# pasillo: su Disparador cubre la sala y su Cierre tapa el pasillo (y = 328) durante el
+	# combate; empieza desactivado, así que el verificador recorre la sala sin él.
+	var medusa := z.instancia("Jefe", "res://scenes/enemies/medusa.tscn", Vector2(272, 150))
+	medusa.name = "Medusa"
+	var escena := z.instancia("Eventos", "res://scenes/cinematics/escena_medusa.tscn", Vector2(272, 304))
+	escena.name = "EscenaMedusa"
+	escena.set("medusa", medusa)
+	# Dónde aparecen los cíclopes que invoca (Medusa elige los más alejados de Leonidas): en
+	# la losa, lejos de las estatuas y de la entrada.
+	var puntos_nodo := Node2D.new()
+	puntos_nodo.name = "PuntosInvocacion"
+	z.raiz.add_child(puntos_nodo)
+	puntos_nodo.owner = z.raiz
+	var puntos: Array[Marker2D] = []
+	for p in [Vector2(176, 176), Vector2(368, 176), Vector2(200, 248), Vector2(344, 248)]:
+		var m := Marker2D.new()
+		m.name = "Punto%d" % (puntos.size() + 1)
+		m.position = p
+		puntos_nodo.add_child(m)
+		m.owner = z.raiz
+		puntos.append(m)
+	medusa.set("puntos_invocacion", puntos)
 	return z
 
 

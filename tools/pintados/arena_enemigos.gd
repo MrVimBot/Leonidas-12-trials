@@ -21,9 +21,10 @@ extends Node
 @export var peces: Array[Vector2] = []
 @export var ciclope: PackedScene
 @export var ciclopes: Array[Vector2] = []
-## Medusa (jefa): al colocarla se llama a `empezar_combate()`. Necesita sitio: para verla,
-## `zona` = `cueva_jefe.tscn`, `entrada` = `desde_cueva` y un desplazamiento como (0, -200)
-## (el centro de la sala; las otras listas, vacías).
+## Medusa suelta (jefa): al colocarla se llama a `empezar_combate()`, sin escena ni barra de
+## vida. Para el combate completo (encuentro, barra, derrota) no hace falta: `zona` =
+## `cueva_jefe.tscn`, `entrada` = `desde_cueva` y las listas vacías (la zona ya trae a Medusa y
+## su `EscenaMedusa`; se empieza al entrar en la sala).
 @export var medusa: PackedScene
 @export var medusas: Array[Vector2] = []
 

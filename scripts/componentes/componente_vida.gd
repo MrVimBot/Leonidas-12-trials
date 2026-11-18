@@ -14,6 +14,9 @@ signal curado(cantidad: int)
 ## Al llegar la vida a 0.
 signal murio
 
+## Cuartos de vida en un corazón (la vida va en cuartos: 4 = un corazón).
+const CUARTOS_POR_CORAZON := 4
+
 ## Vida máxima (y con la que empieza), en cuartos de corazón.
 @export var vida_max: int = 6
 ## Segundos de invulnerabilidad tras recibir un golpe que no mata.
@@ -70,6 +73,15 @@ func curar(cantidad: int) -> void:
 ## > 0; con 0 solo deja `muerto` en true, sin avisar.
 func fijar(valor: int) -> void:
 	vida = clampi(valor, 0, vida_max)
+	muerto = vida == 0
+	cambio.emit(vida, vida_max)
+
+
+## Cambia la vida máxima (p. ej. un corazón extra) y emite `cambio`. La vida se limita al
+## nuevo máximo; con `llenar` queda llena. No da invulnerabilidad.
+func fijar_maximo(valor: int, llenar := false) -> void:
+	vida_max = maxi(valor, 1)
+	vida = vida_max if llenar else mini(vida, vida_max)
 	muerto = vida == 0
 	cambio.emit(vida, vida_max)
 

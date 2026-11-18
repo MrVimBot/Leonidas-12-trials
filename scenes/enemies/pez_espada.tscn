@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_bas"]
-[ext_resource type="Script" path="res://scripts/enemies/pez_espada.gd" id="2_cer"]
+[ext_resource type="Script" uid="uid://bmgfh1ucn41ay" path="res://scripts/enemies/pez_espada.gd" id="2_cer"]
 [ext_resource type="SpriteFrames" path="res://resources/sprite_frames/pez_espada.tres" id="3_spr"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
 [ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]

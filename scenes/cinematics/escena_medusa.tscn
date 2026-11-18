@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cinematics/escena_medusa.gd" id="1_esc"]
+[ext_resource type="Resource" path="res://resources/dialogues/medusa_encuentro.tres" id="2_enc"]
+[ext_resource type="Resource" path="res://resources/dialogues/medusa_suplica.tres" id="3_sup"]
+[ext_resource type="Resource" path="res://resources/dialogues/medusa_trato.tres" id="4_tra"]
+[ext_resource type="Resource" path="res://resources/dialogues/medusa_recordatorio.tres" id="5_rec"]
+[ext_resource type="Texture2D" uid="uid://dpuwl2wnkuojg" path="res://assets/sprites/entorno/provisional/roca_cueva.png" id="6_roc"]
+
+[sub_resource type="RectangleShape2D" id="Forma_disparador"]
+size = Vector2(416, 272)
+
+[sub_resource type="RectangleShape2D" id="Forma_cierre"]
+size = Vector2(32, 16)
+
+[node name="EscenaMedusa" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_esc")
+dialogo_encuentro = ExtResource("2_enc")
+dialogo_suplica = ExtResource("3_sup")
+dialogo_trato = ExtResource("4_tra")
+dialogo_recordatorio = ExtResource("5_rec")
+
+[node name="Disparador" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="Disparador"]
+position = Vector2(0, -140)
+shape = SubResource("Forma_disparador")
+
+[node name="PuntoLeonidas" type="Marker2D" parent="."]
+position = Vector2(0, -116)
+
+[node name="Cierre" type="StaticBody2D" parent="."]
+position = Vector2(0, 24)
+collision_mask = 0
+
+[node name="Forma" type="CollisionShape2D" parent="Cierre"]
+shape = SubResource("Forma_cierre")
+disabled = true
+
+[node name="Visual" type="Sprite2D" parent="Cierre"]
+visible = false
+position = Vector2(0, 8)
+texture = ExtResource("6_roc")
+centered = false
+offset = Vector2(-21, -31)

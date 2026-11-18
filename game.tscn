@@ -51,6 +51,8 @@ camara = NodePath("../Camara")
 [node name="PantallaGameOver" parent="." unique_id=867840381 instance=ExtResource("9_vef74")]
 
 [connection signal="modo_cambio" from="." to="HUD" method="_al_cambiar_modo"]
+[connection signal="jefe_empezo" from="." to="HUD" method="_al_empezar_jefe"]
+[connection signal="jefe_termino" from="." to="HUD" method="_al_terminar_jefe"]
 [connection signal="murio" from="Jugador" to="." method="_al_morir_jugador"]
 [connection signal="hundido" from="ModoBarco" to="." method="_al_hundirse"]
 [connection signal="continuar_pedido" from="PantallaGameOver" to="." method="_al_continuar_game_over"]

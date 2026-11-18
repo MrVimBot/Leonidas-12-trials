@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/enemies/trozo_estatua.gd" id="1_tro"]
+[ext_resource type="Script" uid="uid://dtgupsn2c7bay" path="res://scripts/enemies/trozo_estatua.gd" id="1_tro"]
 [ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
 [ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="3_hit"]
 

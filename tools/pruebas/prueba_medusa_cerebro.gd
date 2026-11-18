@@ -1,6 +1,6 @@
 extends "res://tools/pruebas/base_prueba.gd"
 ## Cerebro de Medusa (`scenes/enemies/medusa.tscn`, plan 06 M1–M3), instanciada junto al jugador
-## en `cueva_jefe` (aún sin colocar allí: eso es M6):
+## en `cueva_jefe` (en lugar de la que pone la zona, que prueba `prueba_medusa.gd`):
 ## 0) INACTIVA no ataca; 1) `empezar_combate()` invoca 2 cíclopes y queda invulnerable y gris;
 ## un golpe no le quita vida; al morir los cíclopes deja de serlo; 2) el golpe al suelo cae donde
 ## estaba Leonidas (aviso incluido) y le quita 4; 3) a mitad de vida invoca 2 cíclopes nuevos y,
@@ -33,7 +33,11 @@ func curar_jugador() -> void:
 func ejecutar() -> void:
 	await crear_game(true, true)
 	await ir("res://scenes/levels/cueva_jefe.tscn", "desde_cueva")
+	# Fuera la Medusa de la zona y su escena del encuentro (las prueba prueba_medusa.gd): aquí
+	# se pone una Medusa suelta.
 	for e in get_tree().get_nodes_in_group(&"enemigos"):
+		e.queue_free()
+	for e in game.find_children("*", "EscenaMedusa", true, false):
 		e.queue_free()
 	await ticks(3)
 	curar_jugador()

@@ -36,6 +36,7 @@ const OBJ_ESPADA := &"espada"
 const OBJ_LIBRO := &"libro"
 const OBJ_MANZANA := &"manzana"
 const OBJ_CARTA := &"carta"
+const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
 
@@ -49,6 +50,8 @@ const PROGRESO := {
 	&"avisos_zeus": 0,
 	&"tiempo_jugado": 0.0,
 	&"jefes_derrotados": 0,
+	&"corazones_extra": 0,
+	&"medusa_derrotada": false,
 }
 
 ## Dónde se guarda la partida (variable para poder probar sin tocar la real).
@@ -72,6 +75,12 @@ var avisos_zeus := 0
 ## Segundos de juego (solo cuentan con Game en marcha y sin pausa: ver `contando_tiempo`).
 var tiempo_jugado := 0.0
 var jefes_derrotados := 0
+## Corazones que se suman a los 3 de Leonidas (uno por jefe vencido, Jugabilidad p. 12). Lo
+## aplica Game: `jugador.vida.vida_max` = base + 4 por corazón (`Game.aplicar_corazones_extra`).
+var corazones_extra := 0
+## Medusa vencida (escena del encuentro, `EscenaMedusa`): al volver a `cueva_jefe` se queda en
+## la sala con su recordatorio, sin combate.
+var medusa_derrotada := false
 ## Lo pone Game mientras existe: el menú y la cinemática no cuentan como tiempo jugado.
 var contando_tiempo := false
 

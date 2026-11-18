@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL (Guión p. 26). Leonidas entra en la guarida de Medusa.
+Medusa: Otro héroe que viene a por mi cabeza...
+Medusa: Mira bien a tu alrededor, niño. Todos ellos vinieron antes que tú.
+Leonidas: No me iré sin cumplir mi misión.
+Medusa: Entonces quédate aquí. Para siempre.
+"

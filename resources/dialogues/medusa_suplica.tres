@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL (Guión pp. 27 y 37). Medusa, vencida, suplica.
+Medusa: ¡Espera! No me mates, te lo suplico.
+Medusa: Yo no elegí ser así. Los dioses me maldijeron y me encerraron en esta cueva.
+Medusa: Cualquiera que me mira se convierte en piedra. No quería hacer daño a nadie.
+Leonidas: ...
+Leonidas: No voy a matarte. Pero los sabios esperan una prueba.
+"

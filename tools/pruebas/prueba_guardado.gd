@@ -38,7 +38,8 @@ func ejecutar() -> void:
 		and E.misiones.get(&"derrotar_medusa") == E.EstadoMision.ACTIVA
 		and E.misiones.get(&"ir_al_templo") == E.EstadoMision.COMPLETADA, str(E.misiones))
 	ok("a) banderas", E.mision_recibida and E.voltereta_aprendida and not E.tutorial_barco_visto
-		and E.avisos_zeus == 0 and E.jefes_derrotados == 0)
+		and E.avisos_zeus == 0 and E.jefes_derrotados == 0
+		and E.corazones_extra == 0 and not E.medusa_derrotada) # banderas posteriores al archivo: su valor inicial
 	ok("a) tiempo jugado", is_equal_approx(E.tiempo_jugado, 1.5057729595959584))
 	var l := E.lugar_cargado
 	ok("a) lugar", l != null and l.zona == "res://scenes/levels/bosque.tscn" and l.entrada == "desde_pueblo"
@@ -63,6 +64,8 @@ func ejecutar() -> void:
 	E.avisos_zeus = 7
 	E.tiempo_jugado = 1234.5
 	E.jefes_derrotados = 2
+	E.corazones_extra = 1
+	E.medusa_derrotada = true
 	var lg := DatosLugar.new()
 	lg.zona = "res://scenes/levels/playa.tscn"
 	lg.entrada = "desde_bosque"

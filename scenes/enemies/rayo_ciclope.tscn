@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/enemies/rayo_ciclope.gd" id="1_ray"]
-[ext_resource type="Script" path="res://scripts/componentes/hitbox.gd" id="2_hit"]
+[ext_resource type="Script" uid="uid://ca2hk43mk61ak" path="res://scripts/enemies/rayo_ciclope.gd" id="1_ray"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="2_hit"]
 
 [sub_resource type="CircleShape2D" id="Shape_rayo"]
 radius = 3.0

@@ -41,7 +41,14 @@ extends CharacterBody2D
 ## - `reiniciar()`: vida llena, INACTIVA, banderas de invocación a cero, posición inicial, sin
 ##   cíclopes ni trozos vivos (Game Over a mitad del combate, M6).
 ## - `vida` (ComponenteVida, 20 cuartos) para la barra: `vida.cambio(vida, vida_max)`.
-## - `puntos_invocacion`: los pondrá la zona (M6); sin ellos usa `desplazamientos_invocacion`.
+## - `puntos_invocacion`: los pone la zona (`tools/build_zonas.gd`, `cueva_jefe`); sin ellos usa
+##   `desplazamientos_invocacion`.
+## - `quedarse_derrotada()`: DERROTADA sin emitir `derrotada` (al cargar `cueva_jefe` con
+##   `EstadoJuego.medusa_derrotada`).
+## - `charla` (ZonaDialogo, sin diálogo hasta que `EscenaMedusa` le pone el recordatorio): tras el
+##   trato Medusa se queda en la sala y se puede hablar con ella.
+## La escena del encuentro, la derrota y la recompensa son `EscenaMedusa`
+## (scripts/cinematics/escena_medusa.gd).
 ## Todo número es PROVISIONAL hasta que Esteban lo pruebe.
 
 ## Al cambiar la invulnerabilidad por los cíclopes (para la barra de vida, M4).
@@ -157,6 +164,7 @@ var _tween_lanzar: Tween
 @onready var forma_golpe: CollisionShape2D = $GolpeSuelo/Forma
 @onready var aviso: Node2D = $AvisoSuelo
 @onready var mano: Marker2D = $Mano
+@onready var charla: ZonaDialogo = $Charla
 
 
 func _ready() -> void:
@@ -548,6 +556,14 @@ func _al_cambiar_vida(actual: int, maximo: int) -> void:
 
 
 func _al_ser_derrotada() -> void:
+	quedarse_derrotada()
+	derrotada.emit()
+
+
+## Deja a Medusa en DERROTADA (quieta, sin golpes ni Hurtbox, sin cíclopes ni trozos) sin emitir
+## `derrotada`. La usa `_al_ser_derrotada` y la escena del encuentro al cargar la sala con
+## Medusa ya vencida. Se puede llamar más de una vez.
+func quedarse_derrotada() -> void:
 	_matar_tweens()
 	estado = Estado.DERROTADA
 	movimiento.detener()
@@ -565,7 +581,6 @@ func _al_ser_derrotada() -> void:
 	sprite.position = Vector2.ZERO
 	_pintar()
 	animador.reproducir(&"parado", true)
-	derrotada.emit()
 
 
 func _pintar() -> void:

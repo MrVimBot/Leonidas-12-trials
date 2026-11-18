@@ -22,7 +22,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 | Burbujas sobre los NPC (… ! $) | Jugabilidad **p. 10**, Guión **p. 13** | ✅ Hecho (arte provisional) |
 | Menú de ajustes / pausa | Jugabilidad **p. 15** (iconos abajo a la izquierda) | ❌ Pendiente |
 | Menú del inventario | Jugabilidad **p. 17** | ✅ Hecho (autoload `Libro`, ver CLAUDE.md «El libro» y `plan_inventario_libro.md`) |
-| Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ❌ Pendiente (nivel 2) |
+| Vida del jefe (Medusa) | Guión **p. 38**; estilo: Jugabilidad **p. 13**; ejemplos: Guión p. 68 y p. 113 | ✅ Hecha (provisional): `scenes/ui/barra_jefe.tscn` dentro del HUD |
 | Tienda del mercader | Ninguna maqueta | ✅ Hecha (diseño provisional): `scenes/ui/menu_tienda.tscn` |
 | Game over | Jugabilidad p. 8 (solo el texto "game over") + `assets/sprites/game_over.aseprite` | ✅ Hecho: `scenes/ui/pantalla_game_over.tscn` |
 | Menú principal / título | Ninguna maqueta | ✅ Hecho (arte provisional: `scenes/ui/menu_principal.tscn`) |
@@ -37,10 +37,11 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 
 | Nodo | Posición (480×270) | Arte | Notas |
 |---|---|---|---|
-| `Corazones` | (2, 1), arriba a la izquierda | `assets/ui/corazones.png` (61×12, 5 estados cada 12 px: lleno, ¾, ½, ¼, vacío) | Vida en cuartos: `Vida.vida_max = 12` → 3 corazones. Añade corazones solo si sube `vida_max` (un jefe da un corazón extra, Jugabilidad p. 12) |
+| `Corazones` | (2, 1), arriba a la izquierda | `assets/ui/corazones.png` (61×12, 5 estados cada 12 px: lleno, ¾, ½, ¼, vacío) | Vida en cuartos: `Vida.vida_max = 12` → 3 corazones. `FilaCorazones`: añade corazones si sube `vida_max` (vencer a Medusa da uno, `EstadoJuego.corazones_extra`; Jugabilidad p. 12) |
 | `RanuraObjeto` + `Icono` | (2, 14), debajo de los corazones | `provisional/ranura_objeto.png` 14×14, `provisional/icono_espada.png` | La espada se ve si `jugador.tiene_espada`. En el nivel 2 aquí irá también el **escudo** (Guión p. 24) |
 | `Inventario` (el **libro**) | (464, 2), arriba a la derecha | `provisional/icono_libro.png` 14×14 (PROVISIONAL, la artista aún no entrega el sprite) | Solo se ve si `EstadoJuego.tiene_libro` (lo regala Kathita). Aún no abre nada (ver menú del libro). La bolsa de la maqueta (`bolsa_inventario.png`) queda sin uso |
 | `Monedas` (`ContadorMonedas`) | (441, 255), abajo a la derecha | `provisional/placa_dinero.png` 39×12 + dígitos de 4×6 px dibujados en código | Escucha `EstadoJuego.monedas_cambio`, máximo 999 |
+| `BarraJefe` | Arriba en el centro | Corazones del jugador teñidos (PROVISIONAL) | Solo en combate de jefe; ver «Vida del jefe (Medusa)» |
 | `BarraEstamina` | Sobre la cabeza de Leonidas (−8, −33 de los pies) | Dibujada en código (16×3) | No sale en la maqueta; solo se ve mientras la estamina no está llena |
 
 ### Diálogos — Jugabilidad p. 15
@@ -92,6 +93,8 @@ Prioridad para la entrega: la pestaña **Objetos** (comer manzanas es la forma d
 - Mecánicas que la UI tiene que poder mostrar:
   - Medusa es **invulnerable mientras haya cíclopes serpiente** (p. ej. los corazones en gris o con un brillo).
   - Al llegar a la **mitad de la vida** cambia de fase.
+- **Hecho (provisional, 2026-11-17):** `BarraJefe` (`scenes/ui/barra_jefe.tscn` + `scripts/ui/barra_jefe.gd`) dentro de `scenes/ui/hud.tscn`, oculta hasta el combate. Arriba en el centro (MarginContainer de ancho completo, margen superior 1 px; `HBoxContainer` centrado): el nombre «Medusa» con la fuente del juego (crema con contorno oscuro, para leerse sobre la cueva) y 5 corazones de 4 cuartos (`FilaCorazones`, la misma fila que los corazones de Leonidas) con `modulate` dorado. Mientras Medusa es invulnerable (cíclopes vivos y el canto de invocar), los corazones se ven **en gris** (material con `resources/shaders/desaturar.gdshader`: un `modulate` gris solo oscurecería el rojo). La enseña Game (`empezar_jefe` / `terminar_jefe` → señales `jefe_empezo` / `jefe_termino` → HUD); se oculta al vencerla, al reiniciar el combate tras el Game Over y al cambiar de zona.
+  - Pendiente de la artista: los corazones de Medusa (rojos con detalles dorados, ~12 px) y, si se quiere como en la p. 113, su cara a la izquierda. El cambio de fase a mitad de vida no tiene marca propia en la barra (solo se ve el gris de la nueva invocación).
 
 ### Tienda del mercader — sin maqueta
 Jugabilidad p. 10 y Guión p. 13 solo dicen que hay NPCs con tienda (burbuja "$") y "tiendas con ítems limitados"; el mercader vende consumibles (manzanas). Propuesta: reutilizar la caja de diálogo con una lista de 2–3 objetos y su precio, y descontar con `EstadoJuego.gastar_monedas()`.
