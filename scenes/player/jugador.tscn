@@ -23,6 +23,8 @@
 [ext_resource type="Script" uid="uid://dmbq60s5cyr8e" path="res://scripts/componentes/componente_pasos.gd" id="21_bo305"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_comer.tres" id="22_v0ym4"]
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_curar.tres" id="23_3fwcx"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_agarrar.tres" id="sfx_agarrar"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_lanzar.tres" id="sfx_lanzar"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(10, 6)
@@ -137,9 +139,11 @@ forma_arriba = NodePath("../Espada/Arriba")
 forma_izquierda = NodePath("../Espada/Izquierda")
 forma_derecha = NodePath("../Espada/Derecha")
 
-[node name="Carga" type="Node" parent="." unique_id=1030449962 node_paths=PackedStringArray("punto_carga")]
+[node name="Carga" type="Node" parent="." unique_id=1030449962 node_paths=PackedStringArray("punto_carga", "sonido_agarrar", "sonido_lanzar")]
 script = ExtResource("10_car")
 punto_carga = NodePath("../PuntoCarga")
+sonido_agarrar = NodePath("../SonidoAgarrar")
+sonido_lanzar = NodePath("../SonidoLanzar")
 
 [node name="Interaccion" type="Area2D" parent="." unique_id=1867358659 node_paths=PackedStringArray("animador")]
 position = Vector2(0, 4)
@@ -206,6 +210,14 @@ bus = &"SFX"
 
 [node name="SonidoCurar" type="AudioStreamPlayer" parent="." unique_id=190334673]
 stream = ExtResource("23_3fwcx")
+bus = &"SFX"
+
+[node name="SonidoAgarrar" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_agarrar")
+bus = &"SFX"
+
+[node name="SonidoLanzar" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_lanzar")
 bus = &"SFX"
 
 [connection signal="ataque_empezado" from="." to="SonidoEspada" method="play"]

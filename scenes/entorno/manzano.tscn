@@ -4,11 +4,23 @@
 [ext_resource type="Texture2D" uid="uid://b50emni8xr7q5" path="res://assets/sprites/entorno/manzano_1.png" id="2_tex"]
 [ext_resource type="Script" uid="uid://tlshi1x5eo06" path="res://scripts/componentes/componente_manzano.gd" id="3_man"]
 [ext_resource type="PackedScene" path="res://scenes/items/manzana_suelta.tscn" id="4_esc"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_arbol_golpe.tres" id="sfx_golpe"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_manzana_cae.tres" id="sfx_caer"]
 
 [node name="Manzano" instance=ExtResource("1_dec")]
 textura = ExtResource("2_tex")
 
-[node name="Manzanas" type="Node" parent="." node_paths=PackedStringArray("cuerpo")]
+[node name="Manzanas" type="Node" parent="." node_paths=PackedStringArray("cuerpo", "sonido_golpe", "sonido_manzanas")]
 script = ExtResource("3_man")
 cuerpo = NodePath("..")
 escena_manzana = ExtResource("4_esc")
+sonido_golpe = NodePath("../SonidoGolpe")
+sonido_manzanas = NodePath("../SonidoManzanas")
+
+[node name="SonidoGolpe" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_golpe")
+bus = &"SFX"
+
+[node name="SonidoManzanas" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_caer")
+bus = &"SFX"

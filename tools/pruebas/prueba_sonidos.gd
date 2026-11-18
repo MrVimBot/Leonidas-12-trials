@@ -196,6 +196,90 @@ func ejecutar() -> void:
 	Dialogos.cerrar()
 	await ticks(5)
 
+	# 13) Lote 3, mundo: muerte de enemigos, arbusto, agarrar/lanzar y manzano.
+	var base := j.global_position
+	for escena in ["seta_bomba", "gamba"]:
+		var enemigo := (load("res://scenes/enemies/%s.tscn" % escena) as PackedScene).instantiate() as Node2D
+		game.get_node(^"Mundo").add_child(enemigo)
+		enemigo.global_position = base + Vector2(0, -60)
+		var s_muerte := enemigo.get_node(^"SonidoMuerte") as AudioStreamPlayer
+		ok("13) %s tiene SonidoMuerte en SFX" % escena, s_muerte.stream != null and s_muerte.bus == &"SFX")
+		(enemigo.get_node(^"Vida") as ComponenteVida).recibir_danio(100)
+		ok("13) %s al morir suena" % escena, s_muerte.playing)
+	var arbusto := (load("res://scenes/items/arbusto.tscn") as PackedScene).instantiate() as ObjetoAgarrable
+	game.get_node(^"Mundo").add_child(arbusto)
+	arbusto.global_position = base + Vector2(60, 0)
+	arbusto.romper()
+	ok("13) cortar un arbusto suena", arbusto.sonido_rotura != null and arbusto.sonido_rotura.playing)
+	var v1 := (load("res://scenes/items/vasija_azul.tscn") as PackedScene).instantiate() as ObjetoAgarrable
+	game.get_node(^"Mundo").add_child(v1)
+	v1.global_position = base + Vector2(-60, 0)
+	parar_todos()
+	j.carga.levantar(v1)
+	ok("13) agarrar suena", sonando("SonidoAgarrar"))
+	j.carga.lanzar(Vector2.RIGHT)
+	ok("13) lanzar suena", sonando("SonidoLanzar"))
+	var v2 := (load("res://scenes/items/vasija_naranja.tscn") as PackedScene).instantiate() as ObjetoAgarrable
+	game.get_node(^"Mundo").add_child(v2)
+	v2.global_position = base + Vector2(-60, 20)
+	j.carga.levantar(v2)
+	parar_todos()
+	j.carga.soltar(Vector2.DOWN)
+	ok("13) soltar sin impulso no suena a lanzar", not sonando("SonidoLanzar"))
+	var manzano := (load("res://scenes/entorno/manzano.tscn") as PackedScene).instantiate() as Decorado
+	game.get_node(^"Mundo").add_child(manzano)
+	manzano.global_position = base + Vector2(0, 80)
+	var s_gol := manzano.get_node(^"SonidoGolpe") as AudioStreamPlayer
+	var s_man := manzano.get_node(^"SonidoManzanas") as AudioStreamPlayer
+	manzano.recibir_golpe(1, base)
+	ok("13) golpear el manzano suena", s_gol.playing)
+	var cayeron := false
+	for n in 6:
+		manzano.recibir_golpe(1, base)
+		if s_man.playing:
+			cayeron = true
+			break
+	ok("13) al caer las manzanas suena", cayeron)
+
+	# 14) Lote 3, interfaz: SonidosUI (todos sus sonidos), objeto obtenido, libro y guardar.
+	var sonidos_ui := {"libro_abrir": "LibroAbrir", "libro_cerrar": "LibroCerrar", "libro_pagina": "LibroPagina",
+		"guardar": "Guardar", "mision_nueva": "MisionNueva", "game_over": "GameOver", "zona_cambio": "ZonaCambio"}
+	for metodo in sonidos_ui:
+		var pl := SonidosUI.get_node(sonidos_ui[metodo]) as AudioStreamPlayer
+		pl.stop()
+		SonidosUI.call(metodo)
+		ok("14) SonidosUI.%s suena" % metodo, pl.playing and pl.bus == &"SFX")
+	SonidosUI.mision_nueva()
+	SonidosUI.objeto_importante()
+	ok("14) objeto_importante corta mision_nueva",
+		(SonidosUI.get_node(^"ObjetoImportante") as AudioStreamPlayer).playing and not (SonidosUI.get_node(^"MisionNueva") as AudioStreamPlayer).playing)
+	(SonidosUI.get_node(^"ObjetoImportante") as AudioStreamPlayer).stop()
+	j.mostrar_objeto_obtenido(load("res://assets/ui/inventario/objetos/icono_espada.png") as Texture2D, 0.1)
+	ok("14) mostrar un objeto obtenido suena", (SonidosUI.get_node(^"ObjetoImportante") as AudioStreamPlayer).playing)
+	j.ocultar_objeto_obtenido()
+	if not EstadoJuego.tiene_libro:
+		EstadoJuego.agregar_objeto(EstadoJuego.OBJ_LIBRO)
+	await esperar_normal()
+	ok("14) el libro se puede abrir", Libro.abrir())
+	ok("14) abrir el libro suena", (SonidosUI.get_node(^"LibroAbrir") as AudioStreamPlayer).playing)
+	(SonidosUI.get_node(^"LibroPagina") as AudioStreamPlayer).stop()
+	Libro.call(&"_ir_a_pagina", 2, true)
+	ok("14) cambiar de página suena", (SonidosUI.get_node(^"LibroPagina") as AudioStreamPlayer).playing)
+	(SonidosUI.get_node(^"Guardar") as AudioStreamPlayer).stop()
+	Libro.call(&"_guardar")
+	ok("14) guardar suena", (SonidosUI.get_node(^"Guardar") as AudioStreamPlayer).playing)
+	Libro.cerrar()
+	ok("14) cerrar el libro suena", (SonidosUI.get_node(^"LibroCerrar") as AudioStreamPlayer).playing)
+	await ticks(3)
+
+	# 15) Cambio de zona: suena el whoosh al empezar el fundido.
+	(SonidosUI.get_node(^"ZonaCambio") as AudioStreamPlayer).stop()
+	game.cambiar_zona("res://scenes/levels/playa.tscn", "desde_bosque")
+	ok("15) cambiar de zona suena", (SonidosUI.get_node(^"ZonaCambio") as AudioStreamPlayer).playing)
+	await get_tree().process_frame
+	await esperar_normal()
+	await ticks(10)
+
 	# 12) Muerte (al final: Game abre el Game Over y pausa el árbol): suena la caída y no el daño.
 	j.vida.restaurar() # da invulnerabilidad: esperar a que acabe
 	await ticks(200)
@@ -203,4 +287,5 @@ func ejecutar() -> void:
 	j.vida.recibir_danio(100, j.global_position + Vector2(10, 0))
 	ok("12) morir suena la caída", sonando("SonidoCaer"))
 	ok("12) y no suena el daño", not sonando("SonidoDanio"))
-
+	var cayo_game_over := await esperar_hasta(func() -> bool: return (SonidosUI.get_node(^"GameOver") as AudioStreamPlayer).playing, 900)
+	ok("12) al morir suena el Game Over", cayo_game_over)

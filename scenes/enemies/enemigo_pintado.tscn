@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dtfna31fc1jpi" path="res://scripts/componentes/componente_parpadeo.gd" id="8_par"]
 [ext_resource type="Script" uid="uid://dkeawtwro5ajv" path="res://scripts/componentes/componente_muerte.gd" id="9_mue"]
 [ext_resource type="PackedScene" path="res://scenes/items/moneda.tscn" id="10_mon"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_enemigo_muere.tres" id="sfx_muere"]
 
 [sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
 size = Vector2(20, 8)
@@ -78,9 +79,14 @@ script = ExtResource("7_det")
 script = ExtResource("8_par")
 objetivo = NodePath("../Sprite")
 
-[node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar")]
+[node name="Muerte" type="Node" parent="." node_paths=PackedStringArray("vida", "visual", "desactivar", "sonido")]
 script = ExtResource("9_mue")
 escena_moneda = ExtResource("10_mon")
 vida = NodePath("../Vida")
 visual = NodePath("../Sprite")
+sonido = NodePath("../SonidoMuerte")
 desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto")]
+
+[node name="SonidoMuerte" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("sfx_muere")
+bus = &"SFX"

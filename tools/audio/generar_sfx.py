@@ -3,6 +3,7 @@
 
 Sin argumentos genera todo; un nombre de familia selecciona sus variantes.
 Para generar solo el segundo lote: python tools/audio/generar_sfx.py lote_2.
+Para generar solo el tercer lote: python tools/audio/generar_sfx.py lote_3.
 Solo usa la biblioteca estándar y nunca descarga ni lee samples externos.
 """
 
@@ -51,6 +52,25 @@ SONIDOS = {
     "menu_mover": dict(batch=2, family="menu_mover", duration=0.050, pitch=1.0, peak_db=-9, brightness=2600, seed=1701, notes=(1250,), limits=(0.05, 0.05)),
     "menu_aceptar": dict(batch=2, family="menu_aceptar", duration=0.120, pitch=1.0, peak_db=-9, brightness=2900, seed=1801, notes=(784, 1046.502), limits=(0.12, 0.12)),
     "menu_volver": dict(batch=2, family="menu_volver", duration=0.100, pitch=1.0, peak_db=-9, brightness=2300, seed=1901, notes=(740, 494), limits=(0.10, 0.10)),
+    # LOTE 3. notes define tonos, barridos y motivos; chord el acorde final.
+    "enemigo_muere_1": dict(batch=3, family="enemigo_muere", duration=0.380, pitch=0.96, peak_db=-3, brightness=2600, seed=2001, notes=(530, 150), limits=(0.35, 0.45)),
+    "enemigo_muere_2": dict(batch=3, family="enemigo_muere", duration=0.425, pitch=1.04, peak_db=-3, brightness=2450, seed=2002, notes=(530, 150), limits=(0.35, 0.45)),
+    "arbusto_cortar_1": dict(batch=3, family="arbusto_cortar", duration=0.270, pitch=0.97, peak_db=-3, brightness=3700, seed=2101, notes=(1700, 2900), limits=(0.25, 0.30)),
+    "arbusto_cortar_2": dict(batch=3, family="arbusto_cortar", duration=0.290, pitch=1.05, peak_db=-3, brightness=3400, seed=2102, notes=(1700, 2900), limits=(0.25, 0.30)),
+    "agarrar": dict(batch=3, family="agarrar", duration=0.150, pitch=1.0, peak_db=-9, brightness=2100, seed=2201, notes=(230, 460), limits=(0.15, 0.15)),
+    "lanzar": dict(batch=3, family="lanzar", duration=0.200, pitch=1.0, peak_db=-9, brightness=2600, seed=2301, notes=(1700, 420), limits=(0.20, 0.20)),
+    "arbol_golpe_1": dict(batch=3, family="arbol_golpe", duration=0.300, pitch=0.96, peak_db=-3, brightness=2700, seed=2401, notes=(170, 105), limits=(0.30, 0.30)),
+    "arbol_golpe_2": dict(batch=3, family="arbol_golpe", duration=0.300, pitch=1.04, peak_db=-3, brightness=2500, seed=2402, notes=(170, 105), limits=(0.30, 0.30)),
+    "manzana_cae": dict(batch=3, family="manzana_cae", duration=0.300, pitch=1.0, peak_db=-3, brightness=1800, seed=2501, notes=(190, 130), limits=(0.30, 0.30)),
+    "libro_abrir": dict(batch=3, family="libro_abrir", duration=0.400, pitch=1.0, peak_db=-3, brightness=2000, seed=2601, notes=(170, 240), limits=(0.40, 0.40)),
+    "libro_cerrar": dict(batch=3, family="libro_cerrar", duration=0.300, pitch=1.0, peak_db=-3, brightness=1900, seed=2701, notes=(145, 90), limits=(0.30, 0.30)),
+    "libro_pagina_1": dict(batch=3, family="libro_pagina", duration=0.220, pitch=0.96, peak_db=-3, brightness=2900, seed=2801, notes=(900, 1900), limits=(0.20, 0.25)),
+    "libro_pagina_2": dict(batch=3, family="libro_pagina", duration=0.245, pitch=1.04, peak_db=-3, brightness=2700, seed=2802, notes=(900, 1900), limits=(0.20, 0.25)),
+    "guardar_partida": dict(batch=3, family="guardar_partida", duration=0.600, pitch=1.0, peak_db=-3, brightness=3500, seed=2901, notes=(1046.502, 1318.510), limits=(0.60, 0.60)),
+    "mision_nueva": dict(batch=3, family="mision_nueva", duration=0.800, pitch=1.0, peak_db=-6, brightness=3000, seed=3001, notes=(523.251, 659.255, 783.991), limits=(0.80, 0.80)),
+    "objeto_importante": dict(batch=3, family="objeto_importante", duration=1.200, pitch=1.0, peak_db=-6, brightness=3400, seed=3101, notes=(523.251, 587.330, 659.255, 783.991, 1046.502), chord=(523.251, 659.255, 783.991, 1046.502), limits=(1.20, 1.20)),
+    "game_over": dict(batch=3, family="game_over", duration=1.600, pitch=1.0, peak_db=-6, brightness=2300, seed=3201, notes=(659.255, 587.330, 493.883, 440), limits=(1.60, 1.60)),
+    "zona_cambio": dict(batch=3, family="zona_cambio", duration=0.500, pitch=1.0, peak_db=-12, brightness=1500, seed=3301, notes=(700, 180), limits=(0.50, 0.50)),
 }
 
 RATE = 44100
@@ -197,6 +217,102 @@ def synthesize(p):
             arcade(0, duration, notes[0], notes[1], 0.65, 3.5)
         else:
             raise ValueError(f"Familia del lote 2 desconocida: {f}")
+    elif p.get("batch") == 3:
+        notes = p["notes"]
+
+        def breath(start, length, f0, f1, gain):
+            # Banda de aire con descenso real del filtro, sin tono de sirena.
+            offset = round(start * RATE)
+            count = max(2, round(length * RATE))
+            lo = hi = 0.0
+            for j in range(min(count, n - offset)):
+                u = j / (count - 1)
+                freq = pitch * f0 * (f1 / f0) ** u
+                x = rng.uniform(-1, 1)
+                lo += (1 - math.exp(-TAU * freq * 0.4 / RATE)) * (x - lo)
+                hi += (1 - math.exp(-TAU * freq * 1.5 / RATE)) * (x - hi)
+                env = min(1.0, j / (RATE * 0.0007))
+                env *= (0.18 + 2.4 * math.sin(math.pi * u)) * (1 - u) ** 1.5
+                signal[offset + j] += gain * env * (hi - lo)
+
+        def pluck(start, length, freq, gain, bell=False):
+            # Lira/campanita de consola: fundamental limpia, armónicos discretos.
+            tone(start, length, freq, freq * 0.999, gain, 3.6 if bell else 2.6)
+            tone(start, length * 0.72, freq * 2.003, freq * 2,
+                 gain * (0.16 if bell else 0.10), 5)
+            if bell:
+                tone(start, length * 0.50, freq * 2.76, freq * 2.75, gain * 0.045, 6)
+            else:
+                arcade(start, length, freq / 2, freq / 2, gain * 0.16, 3.6)
+
+        if f == "enemigo_muere":
+            noise(0, duration * 0.88, 500, 1300, 1.0, 3, swell=True, width=0.35)
+            arcade(0, duration, notes[0], notes[1], 0.43, 4)
+            tone(0, duration * 0.50, 155, 80, 0.35, 5)
+        elif f == "arbusto_cortar":
+            breath(0, duration, notes[1], notes[0] * 0.6, 0.9)
+            for k in range(5):
+                start = duration * (0.035 + k * 0.09) + rng.uniform(0, 0.005)
+                noise(start, duration * 0.18, notes[0], notes[1],
+                      0.27 * math.exp(-k * 0.2), 5, width=0.4)
+        elif f == "agarrar":
+            arcade(0, duration, notes[0], notes[1], 0.55, 2.5)
+            noise(0, duration * 0.70, 420, 800, 0.18, 3, swell=True)
+        elif f == "lanzar":
+            breath(0, duration, notes[0], notes[1], 0.9)
+            tone(0, duration * 0.70, 260, 120, 0.055, 3)
+        elif f == "arbol_golpe":
+            tone(0, duration * 0.62, notes[0], notes[1], 0.85, 6, harmonics=0.16)
+            noise(0, duration * 0.28, 480, 800, 0.65, 6, width=0.3)
+            breath(duration * 0.025, duration * 0.94, 2000, 850, 0.44)
+            for k in range(3):
+                noise(duration * (0.08 + k * 0.14), duration * 0.18,
+                      1300, 2100, 0.12, 5)
+        elif f == "manzana_cae":
+            # Contacto inicial y exactamente dos rebotes, cada vez más pequeños.
+            for start, length, gain, shift in ((0, 0.36, 0.8, 1),
+                                               (0.47, 0.27, 0.30, 1.09),
+                                               (0.76, 0.24, 0.13, 1.18)):
+                tone(duration * start, duration * length,
+                     notes[0] * shift, notes[1] * shift, gain, 5)
+                noise(duration * start, duration * length * 0.65,
+                      400, 700, gain * 0.34, 6, width=0.3)
+        elif f == "libro_abrir":
+            tone(0, duration * 0.42, notes[0], notes[1], 0.20, 5, harmonics=0.1)
+            noise(0, duration * 0.75, 300, 650, 0.65, 2.2, swell=True, width=0.3)
+            breath(duration * 0.025, duration * 0.97, 1250, 500, 0.50)
+        elif f == "libro_cerrar":
+            tone(0, duration * 0.75, notes[0], notes[1], 0.70, 5)
+            noise(0, duration * 0.38, 450, 900, 0.75, 5, width=0.25)
+            breath(0, duration, 1000, 400, 0.26)
+        elif f == "libro_pagina":
+            breath(0, duration, notes[0], notes[1], 0.70)
+            breath(duration * 0.13, duration * 0.86, notes[1], notes[0] * 0.7, 0.35)
+        elif f == "guardar_partida":
+            pluck(0, duration * 0.67, notes[0], 0.62, bell=True)
+            pluck(duration * 0.28, duration * 0.72, notes[1], 0.72, bell=True)
+        elif f == "mision_nueva":
+            for k, freq in enumerate(notes):
+                start = duration * k * 0.26
+                pluck(start, duration - start, freq, 0.57 + k * 0.035)
+                tone(start, (duration - start) * 0.75, freq * 2, freq * 2, 0.035, 4)
+        elif f == "objeto_importante":
+            for k, freq in enumerate(notes):
+                start = duration * k * 0.115
+                pluck(start, duration * 0.32, freq, 0.48 + k * 0.025)
+            start = duration * 0.60
+            for freq, gain in zip(p["chord"], (0.27, 0.20, 0.17, 0.23)):
+                pluck(start, duration - start, freq, gain, bell=True)
+        elif f == "game_over":
+            for k, freq in enumerate(notes):
+                start = duration * k * 0.21
+                length = duration * 0.34 if k < len(notes) - 1 else duration - start
+                pluck(start, length, freq, 0.46 - k * 0.035)
+        elif f == "zona_cambio":
+            breath(0, duration, notes[0], notes[1], 0.75)
+            noise(0, duration, 140, 260, 0.40, 1.2, swell=True, width=0.3)
+        else:
+            raise ValueError(f"Familia del lote 3 desconocida: {f}")
     elif retro and f == "espada":
         # Filo de hierro: ataque metálico definido sobre el corte de aire.
         noise(0, duration * 0.75, 1500, 3200, 0.75, 1.8, swell=True)

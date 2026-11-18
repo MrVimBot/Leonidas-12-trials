@@ -309,5 +309,6 @@ func _terminar() -> void:
 	# también si se salta la cinemática.
 	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_CARTA)
 	EstadoJuego.empezar_mision(EstadoJuego.MISION_IR_AL_TEMPLO)
+	SonidosUI.mision_nueva() # autoload: sigue sonando al cambiar de escena
 	Pantalla.modo_pintura(self, false)
 	get_tree().change_scene_to_file(escena_siguiente)

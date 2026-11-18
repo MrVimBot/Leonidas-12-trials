@@ -183,6 +183,7 @@ func cambiar_zona(ruta: String, entrada: String = "inicio") -> void:
 ## Fundido a negro → carga la zona → fundido de vuelta, con los cuerpos bloqueados
 ## (motivo &"zona"). Quien llama pone `_cambiando` a true antes; aquí se quita al final.
 func _transicion(ruta: String, entrada: String) -> void:
+	SonidosUI.zona_cambio()
 	await _fundir(1.0)
 	_cargar_zona(ruta, entrada)
 	_bloquear(true) # el barco puede ser nuevo (al jugador, repetir el motivo no le hace nada)

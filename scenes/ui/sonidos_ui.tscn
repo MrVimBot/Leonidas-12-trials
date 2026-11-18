@@ -1,9 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/sonidos_ui.gd" id="1_scr"]
-[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_mover.tres" id="2_mov"]
-[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_aceptar.tres" id="3_ace"]
-[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_volver.tres" id="4_vol"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_mover.tres" id="2_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_aceptar.tres" id="3_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_menu_volver.tres" id="4_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_libro_abrir.tres" id="5_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_libro_cerrar.tres" id="6_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_libro_pagina.tres" id="7_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_guardar_partida.tres" id="8_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_mision_nueva.tres" id="9_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_objeto_importante.tres" id="10_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_game_over.tres" id="11_a"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_zona_cambio.tres" id="12_a"]
 
 [node name="SonidosUI" type="Node"]
 process_mode = 3
@@ -11,15 +19,55 @@ script = ExtResource("1_scr")
 
 [node name="Mover" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-stream = ExtResource("2_mov")
+stream = ExtResource("2_a")
 bus = &"SFX"
 
 [node name="Aceptar" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-stream = ExtResource("3_ace")
+stream = ExtResource("3_a")
 bus = &"SFX"
 
 [node name="Volver" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-stream = ExtResource("4_vol")
+stream = ExtResource("4_a")
+bus = &"SFX"
+
+[node name="LibroAbrir" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_a")
+bus = &"SFX"
+
+[node name="LibroCerrar" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_a")
+bus = &"SFX"
+
+[node name="LibroPagina" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("7_a")
+bus = &"SFX"
+
+[node name="Guardar" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("8_a")
+bus = &"SFX"
+
+[node name="MisionNueva" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("9_a")
+bus = &"SFX"
+
+[node name="ObjetoImportante" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("10_a")
+bus = &"SFX"
+
+[node name="GameOver" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("11_a")
+bus = &"SFX"
+
+[node name="ZonaCambio" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("12_a")
 bus = &"SFX"

@@ -192,7 +192,7 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 	visible = true
 	_colocar()
 	_refrescar()
-	SonidosUI.aceptar()
+	SonidosUI.libro_abrir()
 	abierto_cambio.emit(true)
 	return true
 
@@ -201,7 +201,7 @@ func abrir(pagina: Pagina = Pagina.INVENTARIO) -> bool:
 func cerrar() -> void:
 	if not abierto:
 		return
-	SonidosUI.volver()
+	SonidosUI.libro_cerrar()
 	abierto = false
 	visible = false
 	fondo.texture = null
@@ -272,7 +272,7 @@ func _ir_a_pagina(p: int, desde_izquierda: bool) -> void:
 	if p < 0 or p >= NUM_PAGINAS or p == _pagina:
 		return
 	var fila := paginas[_pagina].fila()
-	SonidosUI.mover()
+	SonidosUI.libro_pagina()
 	_pagina = p as Pagina
 	paginas[_pagina].entrar(fila, desde_izquierda)
 	_refrescar()
@@ -330,6 +330,8 @@ func _usar(id: StringName) -> void:
 func _guardar() -> void:
 	var game := Game.actual(self)
 	var hecho := game != null and EstadoJuego.guardar(game.datos_guardado())
+	if hecho:
+		SonidosUI.guardar()
 	_avisar(Pagina.GUARDAR, "¡Partida guardada!" if hecho else "No se pudo guardar.")
 
 

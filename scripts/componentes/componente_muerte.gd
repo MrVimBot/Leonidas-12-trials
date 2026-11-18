@@ -26,6 +26,8 @@ const RUTA_MONEDA := "res://scenes/items/moneda.tscn"
 @export var monedas := 0
 ## Escena de la moneda suelta. Vacía = scenes/items/moneda.tscn (ver `_escena_moneda()`).
 @export var escena_moneda: PackedScene
+## Suena al morir (hijo del enemigo: dura menos que `duracion`, así acaba antes de liberarlo).
+@export var sonido: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -46,6 +48,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 
 func morir() -> void:
+	if sonido:
+		sonido.play()
 	for n in desactivar:
 		if n is Hitbox or n is Hurtbox:
 			n.set_deferred(&"activo", false)

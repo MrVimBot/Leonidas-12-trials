@@ -77,6 +77,8 @@ Se hizo sin `ComponenteSonido`: un `AudioStreamPlayer` por evento con un `AudioS
 
 ## 5. Sonidos que faltan (propuesta, por prioridad)
 
+> **Lote 3 HECHO (2026-11-18):** muerte de enemigo, arbusto, agarrar/lanzar, árbol y manzana, libro (abrir, cerrar, página, guardar), misión nueva, objeto importante, Game Over y cambio de zona. Quedan: tienda (comprar/sin dinero propios), derrota de Medusa y los lotes de enemigos y barco.
+>
 > **Lote 2 HECHO (2026-11-18):** moneda, objeto, comer, curar, diálogo (abrir, avanzar, letra) y menús (mover, aceptar, volver). Lo que sigue en las tablas son los pendientes (el resto de «prioridad alta» ya está).
 
 Mismo flujo: se añaden al script de Codex con el mismo formato (WAV mono 16 bits 44100 Hz, pico −3 dBFS, 2 variantes donde se repita mucho) y luego se enchufan.

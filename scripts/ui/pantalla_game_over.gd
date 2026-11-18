@@ -50,6 +50,7 @@ func mostrar(arte: PackedScene = null) -> void:
 	if abierta:
 		return
 	abierta = true
+	SonidosUI.game_over()
 	_poner_arte(arte)
 	get_tree().paused = true
 	Pantalla.modo_pintura(self, true)

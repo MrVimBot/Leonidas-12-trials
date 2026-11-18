@@ -22,6 +22,10 @@ signal cambio(objeto: ObjetoAgarrable)
 		update_configuration_warnings()
 ## Distancia (px) a la que cae un objeto lanzado con `lanzar()` sin distancia propia.
 @export var distancia_lanzamiento := 72.0
+## Suena al levantar un objeto.
+@export var sonido_agarrar: AudioStreamPlayer
+## Suena al lanzarlo (no al soltarlo sin impulso, p. ej. al recibir un golpe).
+@export var sonido_lanzar: AudioStreamPlayer
 
 ## Objeto que se carga ahora, o null.
 var objeto: ObjetoAgarrable = null
@@ -53,6 +57,8 @@ func levantar(obj: ObjetoAgarrable) -> void:
 	if cargando() or obj == null:
 		return
 	objeto = obj
+	if sonido_agarrar:
+		sonido_agarrar.play()
 	obj.levantar(punto_carga)
 	cambio.emit(objeto)
 
@@ -62,7 +68,10 @@ func lanzar(direccion: Vector2, distancia := -1.0) -> void:
 		return
 	var obj := objeto
 	objeto = null
-	obj.lanzar(direccion, distancia if distancia >= 0.0 else distancia_lanzamiento, portador.global_position)
+	var alcance := distancia if distancia >= 0.0 else distancia_lanzamiento
+	if alcance > 0.0 and sonido_lanzar:
+		sonido_lanzar.play()
+	obj.lanzar(direccion, alcance, portador.global_position)
 	cambio.emit(null)
 
 

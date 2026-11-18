@@ -279,6 +279,7 @@ func _al_terminar_temporizador_comer() -> void:
 ## Con `duracion` > 0 la quita sola al acabar; con 0 se queda hasta
 ## `ocultar_objeto_obtenido()` (p. ej. mientras sale el aviso «¡Obtuviste…!»).
 func mostrar_objeto_obtenido(icono: Texture2D, duracion := 1.0) -> void:
+	SonidosUI.objeto_importante()
 	animador.direccion = Vector2.DOWN # la pose es de frente; al acabar sigue mirando abajo
 	animador.reproducir_fija(ANIM_COMER)
 	_mostrar_objeto_en_mano(icono, posicion_objeto_obtenido, false)

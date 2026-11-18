@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c2tdq8nqkoy6d" path="res://scenes/items/objeto_agarrable.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://bcy2ndi4exp7f" path="res://assets/sprites/entorno/arbusto.png" id="2_tex"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/tocon.tscn" id="3_tocon"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_arbusto_cortar.tres" id="sfx_cortar"]
 
 [sub_resource type="RectangleShape2D" id="Forma_col"]
 size = Vector2(14, 6)
@@ -10,7 +11,8 @@ size = Vector2(14, 6)
 [sub_resource type="RectangleShape2D" id="Forma_golpe"]
 size = Vector2(16, 14)
 
-[node name="Arbusto" instance=ExtResource("1_base")]
+[node name="Arbusto" node_paths=PackedStringArray("sonido_rotura") instance=ExtResource("1_base")]
+sonido_rotura = NodePath("SonidoRotura")
 animacion_rotura = &"romper_arbusto"
 resto = ExtResource("3_tocon")
 monedas_max = 3
@@ -35,3 +37,7 @@ danio = 0
 [node name="Forma" parent="Golpe" index="0"]
 position = Vector2(0, -7.0)
 shape = SubResource("Forma_golpe")
+
+[node name="SonidoRotura" type="AudioStreamPlayer" parent="." index="5"]
+stream = ExtResource("sfx_cortar")
+bus = &"SFX"

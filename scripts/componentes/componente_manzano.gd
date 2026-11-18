@@ -29,6 +29,10 @@ extends Node
 @export var manzanas_max := 2
 ## Dónde caen respecto a la base del árbol: delante del tronco, para poder recogerlas.
 @export var desplazamiento_caida := Vector2(0, 8)
+## Suena con cada espadazo al tronco (también cuando ya no da más manzanas).
+@export var sonido_golpe: AudioStreamPlayer
+## Suena cuando caen las manzanas.
+@export var sonido_manzanas: AudioStreamPlayer
 
 var _golpes_restantes := 0
 var _sin_manzanas := false
@@ -59,11 +63,15 @@ func _get_configuration_warnings() -> PackedStringArray:
 ## Cada espadazo cuenta un golpe, sin mirar cuánto daño quita.
 func _al_golpear() -> void:
 	cuerpo.sacudir()
+	if sonido_golpe:
+		sonido_golpe.play()
 	if _sin_manzanas:
 		return
 	_golpes_restantes -= 1
 	if _golpes_restantes > 0:
 		return
 	_sin_manzanas = true
+	if sonido_manzanas:
+		sonido_manzanas.play()
 	var n := randi_range(manzanas_min, manzanas_max)
 	ObjetoSuelto.soltar(escena_manzana, cuerpo.get_parent(), cuerpo.global_position + desplazamiento_caida, n)
