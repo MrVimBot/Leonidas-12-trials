@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://byfvebt0368lb" path="res://assets/sprites/entorno/columna_rota_3.png" id="7_tsm5e"]
 [ext_resource type="Texture2D" uid="uid://dvpur3547d614" path="res://assets/sprites/entorno/arco_ruinas.png" id="8_83qh4"]
 [ext_resource type="Texture2D" uid="uid://ca28s1ml7efe3" path="res://assets/sprites/entorno/provisional/entrada_cueva.png" id="9_dvsqn"]
+[ext_resource type="AudioStream" uid="uid://bhusck3gm5kb2" path="res://assets/audio/music/playa.mp3" id="9_musica"]
 [ext_resource type="Texture2D" uid="uid://bclvo3vrltu4l" path="res://assets/sprites/entorno/columna_rota_1.png" id="10_b6jhp"]
 [ext_resource type="Texture2D" uid="uid://b50n32umu7yyw" path="res://assets/sprites/entorno/roca_grande.png" id="10_wtsj0"]
 [ext_resource type="Texture2D" uid="uid://bblh7onlgjcvn" path="res://assets/sprites/entorno/columna_rota_2.png" id="11_i01uh"]
@@ -23,8 +24,8 @@
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="16_q6jf2"]
 [ext_resource type="Texture2D" uid="uid://dfussqeii8pvf" path="res://assets/sprites/entorno/manzano_3.png" id="17_kh3om"]
 [ext_resource type="Texture2D" uid="uid://2s7d37vbbuak" path="res://assets/sprites/entorno/manzano_4.png" id="18_loa26"]
-[ext_resource type="PackedScene" path="res://scenes/items/vasija_azul.tscn" id="19_kq84f"]
-[ext_resource type="PackedScene" path="res://scenes/items/vasija_naranja.tscn" id="20_4sant"]
+[ext_resource type="PackedScene" uid="uid://dspqfuqy6opfn" path="res://scenes/items/vasija_azul.tscn" id="19_kq84f"]
+[ext_resource type="PackedScene" uid="uid://d037xruooid8v" path="res://scenes/items/vasija_naranja.tscn" id="20_4sant"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/gamba.tscn" id="21_lvicc"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/pez_espada.tscn" id="22_ohix6"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ciclope_serpiente.tscn" id="23_or6i4"]
@@ -32,7 +33,12 @@
 [ext_resource type="Texture2D" uid="uid://bm3qslop8726t" path="res://assets/sprites/entorno/arbusto_1.png" id="27_kh3om"]
 [ext_resource type="Texture2D" uid="uid://dnvtm3pdyu4bb" path="res://assets/sprites/entorno/arbusto_verde.png" id="28_loa26"]
 [ext_resource type="Texture2D" uid="uid://m1dulo7sull2" path="res://assets/sprites/entorno/arbusto_2.png" id="29_kq84f"]
-[ext_resource type="AudioStream" uid="uid://bhusck3gm5kb2" path="res://assets/audio/music/playa.mp3" id="9_musica"]
+[ext_resource type="Texture2D" uid="uid://b3ock3yu28fix" path="res://assets/sprites/entorno/cartel.png" id="31_4sant"]
+[ext_resource type="PackedScene" uid="uid://c7k2naxq4ndpa" path="res://scenes/entorno/zona_dialogo.tscn" id="32_lvicc"]
+[ext_resource type="Resource" path="res://resources/dialogues/cartel_isla.tres" id="33_ohix6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_or6i4"]
+size = Vector2(30, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll75p"]
 size = Vector2(64, 30)
@@ -46,11 +52,11 @@ size = Vector2(24, 12)
 [node name="Isla" type="Node2D" unique_id=2141516053 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
 script = ExtResource("1_u630u")
-musica = ExtResource("9_musica")
 nombre_zona = "Isla de Medusa"
 limites_camara = Rect2i(0, 0, 1792, 1472)
 suelo = NodePath("Suelo")
 pintada = true
+musica = ExtResource("9_musica")
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=462437085]
 z_index = -1
@@ -312,7 +318,7 @@ position = Vector2(1512, 216)
 position = Vector2(744, 1400)
 
 [node name="VasijaNaranja4" parent="Objetos/Vasijas" unique_id=166021251 instance=ExtResource("20_4sant")]
-position = Vector2(504, 968)
+position = Vector2(504, 912)
 
 [node name="Enemigos" type="Node2D" parent="Objetos" unique_id=1893529387]
 y_sort_enabled = true
@@ -775,6 +781,21 @@ textura = ExtResource("29_kq84f")
 [node name="Arbusto12" parent="Objetos/Arbustos" unique_id=1771567759 instance=ExtResource("4_cmj0y")]
 position = Vector2(232, 812)
 textura = ExtResource("27_kh3om")
+
+[node name="Carteles" type="Node2D" parent="Objetos" unique_id=1112984941]
+y_sort_enabled = true
+
+[node name="CartelInicio" parent="Objetos/Carteles" unique_id=653890674 instance=ExtResource("4_cmj0y")]
+position = Vector2(440, 110)
+textura = ExtResource("31_4sant")
+
+[node name="ZonaDialogo" parent="Objetos/Carteles/CartelInicio" unique_id=1442241700 instance=ExtResource("32_lvicc")]
+dialogo = ExtResource("33_ohix6")
+posicion_burbuja = Vector2(0, -42)
+
+[node name="Forma" type="CollisionShape2D" parent="Objetos/Carteles/CartelInicio/ZonaDialogo" unique_id=1522958389]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_or6i4")
 
 [node name="Entradas" type="Node2D" parent="." unique_id=143922830]
 

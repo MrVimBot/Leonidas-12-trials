@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c3fvi1klwnkwe"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/strips/remolino/girar.png" id="1_vbidi"]
+[ext_resource type="Texture2D" uid="uid://cih6t4ekwy2wf" path="res://assets/sprites/strips/remolino/girar.png" id="1_vbidi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_81vps"]
 atlas = ExtResource("1_vbidi")

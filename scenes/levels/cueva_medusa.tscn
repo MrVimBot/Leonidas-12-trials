@@ -96,7 +96,7 @@ sombra = false
 y_sort_enabled = true
 
 [node name="CiclopeSerpiente1" parent="Objetos/Enemigos" unique_id=440307587 instance=ExtResource("10_tt65g")]
-position = Vector2(376, 136)
+position = Vector2(376, 184)
 
 [node name="CiclopeSerpiente2" parent="Objetos/Enemigos" unique_id=1300708276 instance=ExtResource("10_tt65g")]
 position = Vector2(552, 344)

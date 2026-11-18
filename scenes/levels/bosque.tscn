@@ -19,11 +19,11 @@
 [ext_resource type="PackedScene" path="res://scenes/items/arbusto.tscn" id="17_efe5w"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/flor_falsa.tscn" id="17_ht1j7"]
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="18_nkjfk"]
-[ext_resource type="PackedScene" path="res://scenes/items/vasija_azul.tscn" id="18_w37u8"]
-[ext_resource type="PackedScene" path="res://scenes/items/vasija_naranja.tscn" id="19_1faqu"]
+[ext_resource type="PackedScene" uid="uid://dspqfuqy6opfn" path="res://scenes/items/vasija_azul.tscn" id="18_w37u8"]
+[ext_resource type="PackedScene" uid="uid://d037xruooid8v" path="res://scenes/items/vasija_naranja.tscn" id="19_1faqu"]
 [ext_resource type="Script" uid="uid://us5dtx7tine7" path="res://scripts/entorno/auto_transiciones.gd" id="19_k3x8r"]
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="20_0uh1j"]
-[ext_resource type="PackedScene" path="res://scenes/items/piedra.tscn" id="20_xm354"]
+[ext_resource type="PackedScene" uid="uid://cqbb0yu3qumiy" path="res://scenes/items/piedra.tscn" id="20_xm354"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/manzano.tscn" id="manzano_tscn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8wshr"]
@@ -794,6 +794,27 @@ position = Vector2(584, 536)
 
 [node name="FlorFalsa3" parent="Objetos/Enemigos" unique_id=521885197 instance=ExtResource("17_ht1j7")]
 position = Vector2(680, 504)
+
+[node name="FlorFalsa4" parent="Objetos/Enemigos" unique_id=463914963 instance=ExtResource("17_ht1j7")]
+position = Vector2(282, 262)
+
+[node name="FlorFalsa5" parent="Objetos/Enemigos" unique_id=833314354 instance=ExtResource("17_ht1j7")]
+position = Vector2(290, 350)
+
+[node name="FlorFalsa6" parent="Objetos/Enemigos" unique_id=657709043 instance=ExtResource("17_ht1j7")]
+position = Vector2(282, 430)
+
+[node name="SetaBomba4" parent="Objetos/Enemigos" unique_id=1318480285 instance=ExtResource("16_mx1dl")]
+position = Vector2(300, 395)
+
+[node name="SetaBomba5" parent="Objetos/Enemigos" unique_id=1584134454 instance=ExtResource("16_mx1dl")]
+position = Vector2(610, 395)
+
+[node name="SetaBomba6" parent="Objetos/Enemigos" unique_id=1976794815 instance=ExtResource("16_mx1dl")]
+position = Vector2(668, 380)
+
+[node name="SetaBomba7" parent="Objetos/Enemigos" unique_id=40373386 instance=ExtResource("16_mx1dl")]
+position = Vector2(726, 400)
 
 [node name="ArbolesBorde" type="Node2D" parent="Objetos" unique_id=1789084123]
 y_sort_enabled = true
