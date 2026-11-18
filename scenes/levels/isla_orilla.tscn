@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="15_vjqte"]
 [ext_resource type="Script" uid="uid://us5dtx7tine7" path="res://scripts/entorno/auto_transiciones.gd" id="16_q1hf0"]
 [ext_resource type="Script" uid="uid://bxb4pynf785qg" path="res://scripts/entorno/variador_pasto.gd" id="17_vm53d"]
+[ext_resource type="AudioStream" uid="uid://bhusck3gm5kb2" path="res://assets/audio/music/playa.mp3" id="9_musica"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8brpk"]
 size = Vector2(32, 320)
@@ -34,6 +35,7 @@ size = Vector2(64, 16)
 [node name="IslaOrilla" type="Node2D" unique_id=766483828 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
 script = ExtResource("1_pkbnt")
+musica = ExtResource("9_musica")
 nombre_zona = "Orilla de la isla"
 limites_camara = Rect2i(0, 0, 960, 544)
 suelo = NodePath("Suelo")

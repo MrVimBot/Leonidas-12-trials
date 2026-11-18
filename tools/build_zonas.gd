@@ -227,6 +227,7 @@ func _mar() -> Constructor:
 func _isla_orilla() -> Constructor:
 	var z := Constructor.new("IslaOrilla", "Orilla de la isla", 60, 34, 24)
 	z.pintada = true # nivel 2: arte pintado, modo pintura
+	z.musica = MUSICA + "playa.mp3" # la isla de Medusa usa la música de la playa
 	z.rect([0, 0, 59, 5], C.MAR)
 	z.rect([0, 6, 59, 6], C.MAR_ORILLA)
 	z.rect([0, 7, 59, 24], C.ARENA)
@@ -275,6 +276,7 @@ func _isla_orilla() -> Constructor:
 func _isla() -> Constructor:
 	var z := Constructor.new("Isla", "Isla de Medusa", 112, 92, 25)
 	z.pintada = true # nivel 2: arte pintado, modo pintura
+	z.musica = MUSICA + "playa.mp3" # la isla de Medusa usa la música de la playa
 	z.rect([0, 0, 111, 91], C.MAR)
 	# Islotes: arena con hierba dentro (3 tiles de playa).
 	var islotes := {

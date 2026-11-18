@@ -32,6 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://bm3qslop8726t" path="res://assets/sprites/entorno/arbusto_1.png" id="27_kh3om"]
 [ext_resource type="Texture2D" uid="uid://dnvtm3pdyu4bb" path="res://assets/sprites/entorno/arbusto_verde.png" id="28_loa26"]
 [ext_resource type="Texture2D" uid="uid://m1dulo7sull2" path="res://assets/sprites/entorno/arbusto_2.png" id="29_kq84f"]
+[ext_resource type="AudioStream" uid="uid://bhusck3gm5kb2" path="res://assets/audio/music/playa.mp3" id="9_musica"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll75p"]
 size = Vector2(64, 30)
@@ -45,6 +46,7 @@ size = Vector2(24, 12)
 [node name="Isla" type="Node2D" unique_id=2141516053 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
 script = ExtResource("1_u630u")
+musica = ExtResource("9_musica")
 nombre_zona = "Isla de Medusa"
 limites_camara = Rect2i(0, 0, 1792, 1472)
 suelo = NodePath("Suelo")
