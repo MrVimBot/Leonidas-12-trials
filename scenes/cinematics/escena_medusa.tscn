@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/cinematics/escena_medusa.gd" id="1_esc"]
+[ext_resource type="Script" uid="uid://d3lu2r8lemwl" path="res://scripts/cinematics/escena_medusa.gd" id="1_esc"]
 [ext_resource type="Resource" path="res://resources/dialogues/medusa_encuentro.tres" id="2_enc"]
 [ext_resource type="Resource" path="res://resources/dialogues/medusa_suplica.tres" id="3_sup"]
 [ext_resource type="Resource" path="res://resources/dialogues/medusa_trato.tres" id="4_tra"]

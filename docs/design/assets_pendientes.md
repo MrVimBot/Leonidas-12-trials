@@ -97,6 +97,15 @@
 - **Falta:** exportarlo a PNG (agrandado sin suavizar si se usa como icono de la app) y
   ponerlo en `application/config/icon`.
 
+## Nivel 2: arte PROVISIONAL que hay que pedir (2026-11-17)
+
+No son assets sin usar, sino lo contrario: piezas que el juego ya necesita y que hoy son
+provisionales. Tabla completa (con dónde está cada una) en `docs/design/arte_pintado.md`,
+«Arte PROVISIONAL en el juego»: rayo del cíclope, trozos de estatua, aviso del golpe de Medusa,
+barra de vida de la jefa, icono de la cabeza de piedra, poses de Medusa (invocar, lanzar, daño,
+derrota, súplica), cierre de rocas de la sala, palmeras/cueva/tiles de cueva y muelle, y la
+transición hierba↔arena de la isla.
+
 ## Ya en el repo antes de esta sincronización y sin usar todavía
 
 - `assets/sprites/environment/*.png`: ilustraciones grandes (~600 px), no pixel art a escala.

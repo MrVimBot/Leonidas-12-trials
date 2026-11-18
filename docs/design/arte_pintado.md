@@ -138,6 +138,22 @@ Medidos sobre el avance del dibujo (índices desde 0, a 24 fps):
 
 - Decidido el 2026-11-17: 24 fps, la escala de la tabla, y Leonidas **sigue en pixel art** en el
   nivel 2 (no habrá versión lineless).
-- Sin arte todavía: el rayo del cíclope, los trozos de estatua de Medusa, la barra de vida de
-  la jefa (5 corazones, Guión p. 38), animaciones de daño/derrota/súplica de Medusa, fondos y
-  tiles del nivel 2, gran pinza, sirena, comerciante de mapas, escudo, coco.
+- Los cuatro personajes ya se usan en el juego (2026-11-17): gambas, peces espada y cíclopes
+  en `isla_orilla`, `isla` y `cueva_medusa` (los coloca `tools/build_zonas.gd`; ver CLAUDE.md,
+  «Mundo») y Medusa en `cueva_jefe`.
+- Fuera del alcance de estos planes: fondos y tiles del nivel 2, gran pinza, sirena,
+  comerciante de mapas, escudo, coco.
+
+### Arte PROVISIONAL en el juego (para pedírselo a la artista)
+
+| Pieza | Hoy | Dónde |
+|---|---|---|
+| Rayo del cíclope | trazo dibujado por código | `scenes/enemies/rayo_ciclope.tscn` |
+| Trozos de estatua de Medusa | `Polygon2D` gris | `scenes/enemies/trozo_estatua.tscn` |
+| Aviso del golpe de Medusa | elipse roja | `AvisoSuelo` en `scenes/enemies/medusa.tscn` |
+| Barra de vida de la jefa (Guión p. 38) | corazones de Leonidas teñidos de dorado | `scenes/ui/barra_jefe.tscn` |
+| Icono de la cabeza de piedra | cabeza de `parado` en grises | `assets/ui/provisional/icono_cabeza_piedra.png` |
+| Medusa: invocar, lanzar, daño, derrota, súplica | `parado` / saltito / gris | `scripts/enemies/medusa.gd` |
+| Cierre de rocas de la sala del jefe | `roca_cueva.png` provisional | `scenes/cinematics/escena_medusa.tscn` |
+| Palmeras, cueva, suelos de cueva, muelle | reducciones de las ilustraciones / tiles provisionales | `assets/sprites/entorno/provisional/`, `provisional.tres` |
+| Arena de la isla | relleno de tierra con bordes hacia la hierba | `Tiles.ARENA` (falta hierba↔arena) |

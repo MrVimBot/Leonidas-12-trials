@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://q4s1jgbslxg3" path="res://scripts/ui/contador_monedas.gd" id="3_mon"]
 [ext_resource type="Texture2D" uid="uid://d30qfhyo3tefp" path="res://assets/ui/provisional/ranura_objeto.png" id="4_ran"]
 [ext_resource type="Texture2D" uid="uid://ies4vs6m3fbn" path="res://assets/ui/provisional/icono_espada.png" id="5_esp"]
-[ext_resource type="Texture2D" uid="uid://dvf0vpwivckdg" path="res://assets/ui/provisional/icono_libro.png" id="6_bol"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventario/objetos/icono_libro.png" id="6_bol"]
 [ext_resource type="Script" uid="uid://b02t1hm48boo4" path="res://scripts/ui/fila_corazones.gd" id="7_fil"]
 [ext_resource type="PackedScene" path="res://scenes/ui/barra_jefe.tscn" id="8_jef"]
 
@@ -47,10 +47,10 @@ visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -16.0
+offset_left = -18.0
 offset_top = 2.0
 offset_right = -2.0
-offset_bottom = 16.0
+offset_bottom = 18.0
 grow_horizontal = 0
 mouse_filter = 2
 texture = ExtResource("6_bol")

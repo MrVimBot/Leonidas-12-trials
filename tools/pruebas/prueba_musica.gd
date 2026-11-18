@@ -1,5 +1,5 @@
 extends "res://tools/pruebas/base_prueba.gd"
-## Música por zona (autoload Musica): pueblo en silencio, bosque/playa/mar/cueva_jefe con su pista
+## Música por zona (autoload Musica): pueblo (ciudad), bosque/playa/mar/cueva_jefe con su pista
 ## en bucle, un solo reproductor a la vez, la misma pista no se reinicia al recargar la zona, varios
 ## cambios seguidos dejan un único reproductor y al liberar Game vuelve el silencio.
 ##
@@ -50,7 +50,7 @@ func ejecutar() -> void:
 	Microfono.nivel_forzado = 0.0
 	await crear_game(true, true)
 	await esperar(1.3)
-	comprobar("pueblo: silencio", "")
+	comprobar("pueblo", "ciudad")
 	await ir_y_esperar(BOSQUE, "desde_pueblo")
 	comprobar("bosque", "bosque")
 	ok("bosque en bucle", (reproductores()[0] as AudioStreamPlayer).stream.loop)
@@ -70,7 +70,7 @@ func ejecutar() -> void:
 	await ir_y_esperar(BOSQUE, "desde_playa")
 	comprobar("bosque de vuelta", "bosque")
 	await ir_y_esperar(PUEBLO, "desde_bosque")
-	comprobar("pueblo: silencio otra vez", "")
+	comprobar("pueblo de vuelta", "ciudad")
 	# Cambios rápidos de pista: queda un único reproductor
 	for pista: String in ["playa", "bosque", "playa"]:
 		Musica.reproducir(load("res://assets/audio/music/%s.mp3" % pista))
