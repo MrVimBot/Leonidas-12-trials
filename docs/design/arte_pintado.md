@@ -139,8 +139,9 @@ Medidos sobre el avance del dibujo (índices desde 0, a 24 fps):
 - Decidido el 2026-11-17: 24 fps, la escala de la tabla, y Leonidas **sigue en pixel art** en el
   nivel 2 (no habrá versión lineless).
 - Los cuatro personajes ya se usan en el juego (2026-11-17): gambas, peces espada y cíclopes
-  en `isla_orilla`, `isla` y `cueva_medusa` (los coloca `tools/build_zonas.gd`; ver CLAUDE.md,
-  «Mundo») y Medusa en `cueva_jefe`.
+  en `isla_orilla`, `isla` y `cueva_medusa` (los coloca `tools/build_zonas.gd`, salvo los de la
+  `isla`, que van en los puntos azules del layout: `tools/zonas/isla/montar_isla.gd`; ver
+  CLAUDE.md, «Mundo») y Medusa en `cueva_jefe`.
 - Fuera del alcance de estos planes: fondos y tiles del nivel 2, gran pinza, sirena,
   comerciante de mapas, escudo, coco.
 
@@ -155,5 +156,10 @@ Medidos sobre el avance del dibujo (índices desde 0, a 24 fps):
 | Icono de la cabeza de piedra | cabeza de `parado` en grises | `assets/ui/provisional/icono_cabeza_piedra.png` |
 | Medusa: invocar, lanzar, daño, derrota, súplica | `parado` / saltito / gris | `scripts/enemies/medusa.gd` |
 | Cierre de rocas de la sala del jefe | `roca_cueva.png` provisional | `scenes/cinematics/escena_medusa.tscn` |
-| Palmeras, cueva, suelos de cueva, muelle | reducciones de las ilustraciones / tiles provisionales | `assets/sprites/entorno/provisional/`, `provisional.tres` |
-| Arena de la isla | relleno de tierra con bordes hacia la hierba | `Tiles.ARENA` (falta hierba↔arena) |
+| Suelos de cueva y de la sala del jefe, muelle | tiles provisionales | `provisional.tres` (`cueva_medusa`, `cueva_jefe`, `isla_orilla`) |
+| Suelo de `isla_orilla` | tiles de arena/hierba provisionales (sus palmeras ya son las pintadas) | `tools/build_zonas.gd` |
+| Icono del coco (libro y mano) | reducción del `coco.png` pintado | `assets/ui/provisional/icono_coco*.png` (`tools/build_icono_coco.gd`) |
+| Premios de los cofres de la isla | monedas, manzanas y cocos a ojo | `PREMIOS` de `tools/zonas/isla/montar_isla.gd` (cada `Cofre` en el Inspector) |
+
+La `isla` ya usa el arte definitivo (mapa en capas, palmeras, árboles, estatuas, cueva, rocas,
+cofres): ver `docs/design/arte_nivel2_mapa.md`.

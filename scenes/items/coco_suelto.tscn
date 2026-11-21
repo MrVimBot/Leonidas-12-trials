@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://kxfwjv1x8eu4"]
+
+[ext_resource type="Script" uid="uid://cuoulennrh5wl" path="res://scripts/items/objeto_suelto.gd" id="1_obj"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+[ext_resource type="Texture2D" uid="uid://p3j5vn3685o1" path="res://assets/ui/provisional/icono_coco_pequeno.png" id="3_tex"]
+[ext_resource type="Resource" path="res://resources/objetos/coco.tres" id="4_obj"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_objeto_recoger.tres" id="5_son"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_coco"]
+radius = 6.0
+
+[node name="CocoSuelto" type="Area2D" unique_id=1524234989 node_paths=PackedStringArray("sonido_recoger")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_obj")
+objeto = ExtResource("4_obj")
+duracion = 25.0
+sonido_recoger = NodePath("SonidoRecoger")
+
+[node name="Sombra" type="Node2D" parent="." unique_id=1570221612]
+script = ExtResource("2_som")
+tamano = Vector2i(9, 3)
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1091323850]
+texture = ExtResource("3_tex")
+offset = Vector2(0, -4)
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=2114535143]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_coco")
+
+[node name="SonidoRecoger" type="AudioStreamPlayer" parent="." unique_id=1360012454]
+stream = ExtResource("5_son")
+bus = &"SFX"

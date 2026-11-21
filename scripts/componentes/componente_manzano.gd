@@ -5,6 +5,9 @@ extends Node
 ## cada espadazo lo sacude y, tras unos cuantos, caen unas manzanas (`ObjetoSuelto`)
 ## delante del tronco. Después ya no da más; al volver a cargar la zona se reinicia.
 ##
+## También lo usa la palmera coquera del nivel 2 (scenes/entorno/palmera_coquera.tscn) con
+## `escena_manzana` = coco_suelto.tscn: el componente no mira qué fruta suelta.
+##
 ## Va como hijo del árbol (scenes/entorno/manzano.tscn). Mete a su `cuerpo` en la capa
 ## interactuable para que lo detecte la espada (el Hitbox del jugador) y escucha su
 ## señal `golpeado`.

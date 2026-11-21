@@ -37,6 +37,7 @@ const OBJ_LIBRO := &"libro"
 const OBJ_MANZANA := &"manzana"
 const OBJ_CARTA := &"carta"
 const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
+const OBJ_COCO := &"coco"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
 
@@ -81,6 +82,9 @@ var corazones_extra := 0
 ## Medusa vencida (escena del encuentro, `EscenaMedusa`): al volver a `cueva_jefe` se queda en
 ## la sala con su recordatorio, sin combate.
 var medusa_derrotada := false
+## Cofres ya abiertos (`Cofre.clave()`: zona/nombre del nodo). No va en PROGRESO: es una lista,
+## y las constantes de PROGRESO se copian tal cual (una lista constante sería de solo lectura).
+var cofres_abiertos: Array[StringName] = []
 ## Lo pone Game mientras existe: el menú y la cinemática no cuentan como tiempo jugado.
 var contando_tiempo := false
 
@@ -122,6 +126,7 @@ func _poner_a_cero() -> void:
 	monedas = 0
 	objetos.clear()
 	misiones.clear()
+	cofres_abiertos.clear()
 	for clave: StringName in PROGRESO:
 		set(clave, PROGRESO[clave])
 	lugar_cargado = null
@@ -240,6 +245,17 @@ func mision_completada(id: StringName) -> bool:
 	return misiones.get(id, -1) == EstadoMision.COMPLETADA
 
 
+# --- Cofres ---------------------------------------------------------------------------
+
+func cofre_abierto(clave: StringName) -> bool:
+	return clave in cofres_abiertos
+
+
+func marcar_cofre_abierto(clave: StringName) -> void:
+	if not cofre_abierto(clave):
+		cofres_abiertos.append(clave)
+
+
 # --- Guardar / cargar -----------------------------------------------------------------
 
 func hay_partida() -> bool:
@@ -258,6 +274,7 @@ func guardar(lugar: DatosLugar) -> bool:
 	cfg.set_value("jugador", "monedas", monedas)
 	cfg.set_value("jugador", "objetos", _a_cadenas(objetos))
 	cfg.set_value("progreso", "misiones", _a_cadenas(misiones))
+	cfg.set_value("progreso", "cofres", PackedStringArray(cofres_abiertos))
 	for clave: StringName in PROGRESO:
 		cfg.set_value("progreso", clave, get(clave))
 	var err := cfg.save(ruta_partida)
@@ -288,6 +305,9 @@ func cargar() -> bool:
 	for id: Variant in mis:
 		@warning_ignore("unsafe_call_argument") # claves/valores de ConfigFile: Variant
 		misiones[StringName(id)] = int(mis[id]) as EstadoMision
+	var cofres: PackedStringArray = cfg.get_value("progreso", "cofres", PackedStringArray())
+	for clave in cofres:
+		cofres_abiertos.append(StringName(clave))
 	for clave: StringName in PROGRESO:
 		set(clave, cfg.get_value("progreso", clave, PROGRESO[clave]))
 	_avisar_restablecido()
