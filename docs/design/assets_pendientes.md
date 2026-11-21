@@ -106,6 +106,11 @@ barra de vida de la jefa, icono de la cabeza de piedra, poses de Medusa (invocar
 derrota, súplica), cierre de rocas de la sala, palmeras/cueva/tiles de cueva y muelle, y la
 transición hierba↔arena de la isla.
 
+**Actualización 2026-11-21:** llegó el arte pintado de la isla (mapa en 5 capas, palmeras, cueva,
+estatuas, rocas, cofres): ya está en `assets/backgrounds/nivel2/` y `assets/sprites/entorno/nivel2/`,
+**sin integrar**. Sustituye a las palmeras, la boca de la cueva, las estatuas y el suelo de la isla;
+el resto de la lista sigue provisional. Detalle en `docs/design/arte_nivel2_mapa.md`.
+
 ## Ya en el repo antes de esta sincronización y sin usar todavía
 
 - `assets/sprites/environment/*.png`: ilustraciones grandes (~600 px), no pixel art a escala.
