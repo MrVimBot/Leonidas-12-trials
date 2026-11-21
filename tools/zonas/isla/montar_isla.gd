@@ -17,6 +17,7 @@ extends SceneTree
 ## arte = 1 px de pantalla a 1920×1080. Los objetos pintados se reducen con `Decorado.escala`.
 
 const Constructor := preload("res://tools/zonas/constructor_zona.gd")
+const ZonaPintada := preload("res://tools/zonas/zona_pintada.gd")
 
 const RUTA := "res://scenes/levels/isla.tscn"
 const DATOS := "res://tools/zonas/isla/isla_datos.json"
@@ -58,22 +59,21 @@ const CONTORNO_CUEVA := [
 	Vector2(-55, -60), Vector2(-55, -8),
 ]
 
-const BASE_PALMERA := Vector2(12, 6)
-const BASE_ARBOL := Vector2(16, 8)
 
 ## Decorados: [textura (dentro de entorno/nivel2/), posición, escala, opciones de Decorado].
-## Posiciones comprobadas contra la máscara transitable de analizar_isla.py (holgura ≥ 16 px).
+## Posiciones (centro de la base de la imagen) comprobadas contra la máscara transitable de
+## analizar_isla.py (holgura ≥ 16 px). La colisión la calcula `ZonaPintada.opciones_pie`.
 const DECORADOS := {
 	"Palmeras": [
-		["palmera_1", Vector2(360, 168), 0.036, {"base": BASE_PALMERA}],
-		["palmera_2", Vector2(600, 120), 0.041, {"base": BASE_PALMERA}],
-		["palmera_3", Vector2(636, 264), 0.041, {"base": BASE_PALMERA}],
-		["palmera_4", Vector2(564, 312), 0.052, {"base": BASE_PALMERA}],
-		["palmera_1", Vector2(792, 360), 0.036, {"base": BASE_PALMERA}],
-		["palmera_3", Vector2(828, 420), 0.041, {"base": BASE_PALMERA}],
-		["mini_palmera", Vector2(120, 180), 0.049, {"base": Vector2(10, 5)}],
-		["mini_palmera", Vector2(420, 150), 0.049, {"base": Vector2(10, 5)}],
-		["mini_palmera", Vector2(2000, 450), 0.049, {"base": Vector2(10, 5)}],
+		["palmera_1", Vector2(360, 168), 0.036, {}],
+		["palmera_2", Vector2(600, 120), 0.041, {}],
+		["palmera_3", Vector2(636, 264), 0.041, {}],
+		["palmera_4", Vector2(564, 312), 0.052, {}],
+		["palmera_1", Vector2(792, 360), 0.036, {}],
+		["palmera_3", Vector2(828, 420), 0.041, {}],
+		["mini_palmera", Vector2(120, 180), 0.049, {}],
+		["mini_palmera", Vector2(420, 150), 0.049, {}],
+		["mini_palmera", Vector2(2000, 450), 0.049, {}],
 		# Sobre la franja de costa del oeste (no se pisa): solo decoración.
 		["palmera_2", Vector2(24, 120), 0.041, {"solido": false}],
 		["palmera_4", Vector2(30, 264), 0.052, {"solido": false}],
@@ -81,8 +81,8 @@ const DECORADOS := {
 		["palmera_3", Vector2(40, 560), 0.041, {"solido": false}],
 	],
 	"Arboles": [
-		["arbol", Vector2(690, 200), 0.052, {"base": BASE_ARBOL}],
-		["arbol", Vector2(720, 288), 0.052, {"base": BASE_ARBOL}],
+		["arbol", Vector2(690, 200), 0.052, {}],
+		["arbol", Vector2(720, 288), 0.052, {}],
 	],
 	"Rocas": [
 		["roca_2", Vector2(552, 384), 0.076, {"sombra": false}],
@@ -104,7 +104,8 @@ const CRISTALES := [
 	Vector2(1440, 48), Vector2(1476, 108), Vector2(2004, 96), Vector2(2100, 36), Vector2(2208, 96),
 	Vector2(2316, 84), Vector2(2376, 96), Vector2(1968, 1116), Vector2(2040, 1176), Vector2(1944, 1224),
 ]
-const COQUERAS := [Vector2(240, 300), Vector2(2000, 330), Vector2(520, 1180)]
+## Pie de cada coquera (su escena ya trae `ancla`).
+const COQUERAS := [Vector2(234, 298), Vector2(1994, 328), Vector2(514, 1178)]
 
 
 ## Se monta un fotograma después: un `--script` se compila antes de que existan los autoload,
@@ -115,8 +116,7 @@ func _initialize() -> void:
 
 
 func _montar() -> void:
-	var texto := FileAccess.get_file_as_string(DATOS)
-	var datos: Dictionary = JSON.parse_string(texto) if not texto.is_empty() else {}
+	var datos := ZonaPintada.leer_datos(DATOS)
 	if datos.is_empty():
 		push_error("No se pudo leer %s: ejecuta antes analizar_isla.py" % DATOS)
 		quit(1)
@@ -131,8 +131,11 @@ func _montar() -> void:
 	# Sin tiles: el suelo es el mapa pintado. `Suelo` se queda vacío (Zona lo espera).
 	z.suelo_prov.free()
 	z.limites.free() # la costa y el borde del mapa van en `Colisiones`
-	_mapa(z, float(datos.escala_mapa))
-	_colisiones(z, datos)
+	var capas: Array = CAPAS.map(func(c: String) -> String: return DIR_CAPAS + c + ".png")
+	ZonaPintada.poner_mapa(z.raiz, capas, float(datos.escala_mapa))
+	# Costa (mar, acantilados, bordes del mapa) y paredes de las elevaciones: polígonos sólidos
+	# en la capa mundo, uno por trozo para que sean simples (sin agujeros) y editables.
+	ZonaPintada.poner_colisiones(z.raiz, {"Costa": datos.costa, "BordesElevacion": datos.bordes_elevacion})
 	_bosques(z, datos.bosques)
 	_cueva(z)
 
@@ -142,12 +145,13 @@ func _montar() -> void:
 	z.salida("SalidaCueva", CUEVA + BOCA, Vector2(36, 30), "cueva_medusa", "desde_isla")
 	z.marcador("PuntoControlIsla", Vector2(125, 110))
 
+	# Las posiciones de las tablas son el centro de la base de la imagen; `correccion_pie` las
+	# lleva al pie real del dibujo y `opciones_pie` pone ahí `ancla` y la colisión.
 	for grupo: String in DECORADOS:
 		for d: Array in DECORADOS[grupo]:
-			var op: Dictionary = (d[3] as Dictionary).merged({"escala": d[2]})
-			z.deco(grupo, "nivel2/" + d[0], d[1], op)
+			_deco(z, grupo, d[0], d[1], d[2], d[3])
 	for i in CRISTALES.size():
-		z.deco("Rocas", "nivel2/roca_1", CRISTALES[i], {"escala": 0.06 + 0.01 * (i % 3), "solido": false, "sombra": false})
+		_deco(z, "Rocas", "roca_1", CRISTALES[i], 0.06 + 0.01 * (i % 3), {"solido": false, "sombra": false})
 	for p: Vector2 in COQUERAS:
 		z.instancia("Palmeras", COQUERA, p)
 
@@ -177,55 +181,14 @@ func _v(a: Array) -> Vector2:
 	return Vector2(float(a[0]), float(a[1]))
 
 
-## Las cinco capas del mapa, todas en (0, 0) (comparten lienzo), debajo de todo.
-func _mapa(z: Constructor, escala: float) -> void:
-	var mapa := Node2D.new()
-	mapa.name = "Mapa"
-	mapa.z_index = -1
-	mapa.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	z.raiz.add_child(mapa, true)
-	z.raiz.move_child(mapa, 0)
-	mapa.owner = z.raiz
-	for nombre: String in CAPAS:
-		var s := Sprite2D.new()
-		s.name = nombre.to_pascal_case()
-		s.texture = load(DIR_CAPAS + nombre + ".png")
-		s.centered = false
-		s.scale = Vector2(escala, escala)
-		mapa.add_child(s, true)
-		s.owner = z.raiz
-
-
-## Costa (mar, acantilados, bordes del mapa) y paredes de las elevaciones: polígonos sólidos
-## en la capa mundo, uno por trozo para que sean simples (sin agujeros) y editables.
-func _colisiones(z: Constructor, datos: Dictionary) -> void:
-	var colisiones := Node2D.new()
-	colisiones.name = "Colisiones"
-	z.raiz.add_child(colisiones, true)
-	colisiones.owner = z.raiz
-	for par: Array in [["Costa", datos.costa], ["BordesElevacion", datos.bordes_elevacion]]:
-		var cuerpo := StaticBody2D.new()
-		cuerpo.name = par[0]
-		cuerpo.collision_layer = Capas.MUNDO
-		cuerpo.collision_mask = 0
-		colisiones.add_child(cuerpo, true)
-		cuerpo.owner = z.raiz
-		for i in (par[1] as Array).size():
-			var poli := CollisionPolygon2D.new()
-			poli.name = "%s%d" % [par[0], i + 1]
-			var pts := PackedVector2Array()
-			for p: Array in par[1][i]:
-				pts.append(_v(p))
-			poli.polygon = pts
-			cuerpo.add_child(poli, true)
-			poli.owner = z.raiz
+func _deco(z: Constructor, grupo: String, nombre: String, pos: Vector2, escala: float, op: Dictionary) -> void:
+	var todo := op.merged({"escala": escala}).merged(ZonaPintada.opciones_pie(nombre, escala), true)
+	z.deco(grupo, "nivel2/" + nombre, pos + ZonaPintada.correccion_pie(nombre, escala), todo)
 
 
 func _bosques(z: Constructor, bosques: Array) -> void:
 	for i in bosques.size():
-		var pts := PackedVector2Array()
-		for p: Array in bosques[i]:
-			pts.append(_v(p))
+		var pts := ZonaPintada.a_puntos(bosques[i])
 		var centro := Vector2.ZERO
 		for p in pts:
 			centro += p

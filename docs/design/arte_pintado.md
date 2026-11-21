@@ -156,10 +156,9 @@ Medidos sobre el avance del dibujo (índices desde 0, a 24 fps):
 | Icono de la cabeza de piedra | cabeza de `parado` en grises | `assets/ui/provisional/icono_cabeza_piedra.png` |
 | Medusa: invocar, lanzar, daño, derrota, súplica | `parado` / saltito / gris | `scripts/enemies/medusa.gd` |
 | Cierre de rocas de la sala del jefe | `roca_cueva.png` provisional | `scenes/cinematics/escena_medusa.tscn` |
-| Suelos de cueva y de la sala del jefe, muelle | tiles provisionales | `provisional.tres` (`cueva_medusa`, `cueva_jefe`, `isla_orilla`) |
-| Suelo de `isla_orilla` | tiles de arena/hierba provisionales (sus palmeras ya son las pintadas) | `tools/build_zonas.gd` |
+| Suelos de cueva y de la sala del jefe | tiles provisionales | `provisional.tres` (`cueva_medusa`, `cueva_jefe`) |
 | Icono del coco (libro y mano) | reducción del `coco.png` pintado | `assets/ui/provisional/icono_coco*.png` (`tools/build_icono_coco.gd`) |
 | Premios de los cofres de la isla | monedas, manzanas y cocos a ojo | `PREMIOS` de `tools/zonas/isla/montar_isla.gd` (cada `Cofre` en el Inspector) |
 
-La `isla` ya usa el arte definitivo (mapa en capas, palmeras, árboles, estatuas, cueva, rocas,
-cofres): ver `docs/design/arte_nivel2_mapa.md`.
+La `isla` y la `isla_orilla` ya usan el arte definitivo (mapas pintados, palmeras, árboles,
+estatuas, cueva, rocas, cofres): ver `docs/design/arte_nivel2_mapa.md`.

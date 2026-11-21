@@ -2,7 +2,8 @@
 
 La artista entregó el arte pintado de la isla del nivel 2 (carpeta `Assets Leonidas/Fondo/Nivel_2`).
 Desde el 2026-11-21 la zona `isla` está **rehecha con él siguiendo el layout** (no es la isla de
-islotes que generaba `tools/build_zonas.gd`), y las palmeras de `isla_orilla` también son las nuevas.
+islotes que generaba `tools/build_zonas.gd`), y la `isla_orilla` con el fondo pintado de la playa
+(ver «La `isla_orilla`»).
 
 Estética "lineless" pintada, como los personajes (ver `arte_pintado.md`): no es pixel art, así que las
 zonas del nivel 2 van en modo pintura (`Zona.pintada = true`, CANVAS_ITEMS).
@@ -14,6 +15,8 @@ zonas del nivel 2 van en modo pintura (`Zona.pintada = true`, CANVAS_ITEMS).
 | 5 capas del mapa | `assets/backgrounds/nivel2/{piso,mar,orilla,monte_1,monte_2}.png` | 9828×5873 cada una (16–40 MB) |
 | 19 objetos sueltos | `assets/sprites/entorno/nivel2/*.png` | ver tabla |
 | 6 layouts de referencia | `docs/reference/nivel2/layout/*.jpeg` | ~1000×600 (no se exportan) |
+| Fondo de la playa (`isla_orilla`) | `assets/backgrounds/nivel2/playa_entero_fondo.png` | 4960×3508 (13 MB), con muelle y barca |
+| Lámina «como se debe de ver» de la playa | `docs/reference/nivel2/playa_entero_como_se_debe_ver.jpeg` | reducida a 2000 px; solo referencia |
 
 Todos con mipmaps activados en su `.import`. El filtro `Linear Mipmap` lo pone el nodo que los
 dibuja (el del proyecto es Nearest): el nodo `Mapa`, `Decorado` con `escala` ≠ 1, el `Arboles` de
@@ -67,6 +70,26 @@ versión web no importa).
 - Prueba: `tools/pruebas/prueba_isla.gd` (se llega a cofres y enemigos; a las elevaciones, solo
   por las aberturas; cofres; cocos). El verificador de zonas la recorre como a las demás.
 
+## La `isla_orilla` (playa del desembarco)
+
+- Fondo `playa_entero_fondo.png` en `Mapa` a escala **0,125** → **620×438 px de mundo**. Va a la
+  mitad que la isla porque está pintado con un pincel el doble de grande (guijarros y remolinos
+  de la arena): así la arena se ve igual de grande al pasar de una zona a otra.
+- Colisión (`Colisiones/Costa`): agua y espuma (más verde que rojo en el dibujo), la barca y la
+  mata de hierba de la esquina; el muelle se pisa. La saca `tools/zonas/isla/analizar_orilla.py`
+  (→ `orilla_datos.json`) y la escena la montó una vez `montar_orilla.gd` (`editada_a_mano`).
+- Objetos como en la lámina de referencia: `palmera_1..4` grandes (~200–290 px de alto) y dos
+  `arbusto` a los lados, `roca_3` abajo a la izquierda; sin sombra (la lámina no la pinta). Las
+  franjas sólidas `BordeOeste` (x < 60) y `BordeEste` (x > 596) impiden esconderse entre los
+  troncos y el borde del mapa.
+- Llegada en barco `desde_mar` (318, 52) en el muelle y `SalidaMar` en su punta; `desde_isla`
+  (329, 400) y `SalidaIsla` abajo, en el camino de guijarros (lleva a `desde_orilla` de la isla).
+  3 gambas en (430, 230), lejos del muelle y de las entradas.
+- **Ojo con la escala de los objetos:** las palmeras de la playa (como las pinta la lámina) son
+  bastante más altas que las de la `isla` (~80 px, elegido a ojo). El layout base de la isla
+  también las dibuja mayores (~150 px): si se quiere que casen, subir la `escala` de las
+  palmeras y árboles de la isla (y `alto_min/max` de los `BosqueDenso`, volviendo a «Poblar»).
+
 ## Objetos de entorno (`assets/sprites/entorno/nivel2/`)
 
 PNG con alfa, dibujados a tamaño grande: se reducen con la escala del nodo (`Decorado.escala`), no
@@ -84,23 +107,29 @@ regenerando los PNG. Escalas usadas (px de mundo de alto aproximados entre paré
 | `roca_1..3` | 351×609 · 459×446 · 675×509 | cristal 0,06–0,08 · 0,076 · 0,055 |
 | `cofre_cerrado`, `cofre_abierto` | 646×445 · 636×583 | 0,04 (26 de ancho) |
 
-`arbol` y `arbusto` traen ~150 px de margen vacío bajo el tronco: a su escala, el tronco queda
-~8 px por encima del punto de apoyo (se nota poco; si molesta, recortar el margen en la textura
-importada con un `AtlasTexture`).
+**Pie de cada dibujo:** muchos no tienen el tronco centrado (`palmera_3` +166 px, la coquera −176)
+ni pegado abajo (`arbol`/`arbusto`, ~150 px de margen). `tools/zonas/isla/medir_pies.py` lo mide
+(→ `pies.json`) y cada `Decorado` lleva `ancla` = ese pie, con la colisión encima (rocas: casi todo
+el bloque; troncos: el ancho del tronco). Al colocar uno nuevo, poner su `ancla` (o usar
+`ZonaPintada.opciones_pie`). Los árboles de los `BosqueDenso` no lo usan (no tienen colisión
+propia).
 
 ## Qué sustituyó a qué
 
 | Antes (provisional) | Ahora |
 |---|---|
 | suelo, arena y agua de la `isla` (tiles) | capas del mapa |
-| palmeras de `isla` e `isla_orilla` (`entorno/provisional/palmera*`) | `palmera_1..4`, `mini_palmera` |
+| palmeras de `isla` e `isla_orilla` (`entorno/provisional/palmera*`) | `palmera_1..4`, `mini_palmera`, `arbusto` |
+| tiles, muelle, rocas y ruinas de `isla_orilla` | `playa_entero_fondo.png` + objetos pintados |
 | `provisional/entrada_cueva.png` | `cueva` |
 | estatuas, pedestales y ruinas de pixel art de la `isla` | `estatua_1..4` (sin ruinas) |
 | manzanos y vasijas de la `isla` | palmeras coqueras y cofres |
 
 **Sigue provisional:** los tiles de `cueva_medusa` y `cueva_jefe` (`roca_cueva.png` incluida), el
-muelle y el suelo de `isla_orilla`, el rayo del cíclope, los trozos de estatua, el aviso del golpe
+rayo del cíclope, los trozos de estatua, el aviso del golpe
 de Medusa y demás piezas de la tabla «Arte PROVISIONAL en el juego» de `arte_pintado.md`.
-`assets/sprites/entorno/provisional/` y `tools/build_arte_provisional.gd` **no se retiran**: la
-playa (nivel 1) sigue usando las palmeras provisionales y las cuevas, sus tiles y la roca
-(`entrada_cueva.png` ya no la usa nadie).
+`tools/build_arte_provisional.gd` **no se retira**: las cuevas (tiles y `roca_cueva.png`) y el
+`mar` (sus tiles) lo siguen usando. De `assets/sprites/entorno/provisional/` ya no se usan las
+palmeras, la mini palmera, `entrada_cueva.png` ni `roca_mar_*` (la playa del nivel 1 también tiene
+ya su dibujo definitivo, `assets/backgrounds/playa/playa.aseprite`): se pueden borrar cuando se
+limpie el generador.

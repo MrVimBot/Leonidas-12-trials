@@ -107,10 +107,9 @@ derrota, súplica), cierre de rocas de la sala, palmeras/cueva/tiles de cueva y 
 transición hierba↔arena de la isla.
 
 **Actualización 2026-11-21:** llegó el arte pintado de la isla (mapa en 5 capas, palmeras, cueva,
-estatuas, rocas, cofres) y **ya está integrado** en la zona `isla` (y las palmeras, en
-`isla_orilla`). Sin uso todavía: ninguna pieza (el `coco.png` solo da los iconos provisionales del
-objeto coco). Siguen provisionales los tiles de cueva y del jefe, el muelle, el suelo de
-`isla_orilla` y el resto de la lista. Detalle en `docs/design/arte_nivel2_mapa.md`.
+estatuas, rocas, cofres) y **ya está integrado** en la zona `isla`; la playa (`playa_entero_fondo.png`,
+con muelle y barca) en `isla_orilla`. Sin uso todavía: ninguna pieza (el `coco.png` solo da los iconos provisionales del
+objeto coco). Siguen provisionales los tiles de cueva y del jefe y el resto de la lista. Detalle en `docs/design/arte_nivel2_mapa.md`.
 
 ## Ya en el repo antes de esta sincronización y sin usar todavía
 

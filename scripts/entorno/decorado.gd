@@ -31,6 +31,14 @@ signal golpeado
 	set(valor):
 		escala = valor
 		_actualizar()
+## Punto del dibujo (en píxeles de la textura) que toca el suelo: queda en el origen del nodo, y
+## ahí van la colisión, la sombra y el orden por Y. (0, 0) = centro del borde inferior. Hace
+## falta en el arte pintado, que no siempre tiene el tronco centrado ni pegado abajo (palmeras
+## inclinadas, margen vacío bajo el dibujo): medido con tools/zonas/isla/medir_pies.py.
+@export var ancla := Vector2.ZERO:
+	set(valor):
+		ancla = valor
+		_actualizar()
 ## Tamaño de la colisión en la base, en píxeles. (0, 0) = automático según la imagen.
 @export var base := Vector2.ZERO:
 	set(valor):
@@ -108,10 +116,10 @@ func _actualizar() -> void:
 		else ComponenteSombra.tamano_para_ancho(textura.get_width() * escala * 0.7)
 	_sombra.position = desplazamiento_sombra
 	var tam := textura.get_size()
-	# La base de la imagen queda en el origen del nodo (el offset va en píxeles de la textura:
-	# la escala del Sprite lo reduce con ella).
+	# El ancla (por defecto, el centro de la base de la imagen) queda en el origen del nodo; el
+	# offset va en píxeles de la textura: la escala del Sprite lo reduce con ella.
 	_sprite.centered = false
-	_sprite.offset = Vector2(-floorf(tam.x / 2.0), -tam.y)
+	_sprite.offset = -ancla if ancla != Vector2.ZERO else Vector2(-floorf(tam.x / 2.0), -tam.y)
 	_sprite.scale = Vector2(escala, escala)
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_PARENT_NODE if is_equal_approx(escala, 1.0) \
 		else CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS

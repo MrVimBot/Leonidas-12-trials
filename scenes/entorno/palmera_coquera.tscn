@@ -8,12 +8,13 @@
 [ext_resource type="AudioStream" path="res://resources/audio/sfx_arbol_golpe.tres" id="sfx_golpe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_asrx8"]
-size = Vector2(12, 6)
+size = Vector2(11, 8)
 
 [node name="PalmeraCoquera" unique_id=1278535399 instance=ExtResource("1_dec")]
 textura = ExtResource("2_tex")
 escala = 0.032
-base = Vector2(12, 6)
+ancla = Vector2(874, 2786)
+base = Vector2(11, 8)
 
 [node name="Sombra" parent="." index="0"]
 tamano = Vector2i(47, 15)
@@ -22,10 +23,10 @@ tamano = Vector2i(47, 15)
 texture_filter = 4
 scale = Vector2(0.032, 0.032)
 texture = ExtResource("2_tex")
-offset = Vector2(-1049, -2863)
+offset = Vector2(-874, -2786)
 
 [node name="Colision" parent="." index="2"]
-position = Vector2(0, -3)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_asrx8")
 
 [node name="Cocos" type="Node" parent="." index="3" unique_id=1347794872 node_paths=PackedStringArray("cuerpo", "sonido_golpe", "sonido_manzanas")]

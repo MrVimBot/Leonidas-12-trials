@@ -8,8 +8,9 @@ extends SceneTree
 ##
 ##   casa_arbol ↑ pueblo ↓ bosque ↓ playa ↓ mar ↓ isla_orilla ↓ isla → cueva_medusa → cueva_jefe
 ##
-## La `isla` ya NO sale de aquí: se montó con el arte pintado definitivo desde
-## tools/zonas/isla/montar_isla.gd y se retoca a mano (metadato `editada_a_mano`).
+## La `playa`, la `isla` y la `isla_orilla` ya NO salen de aquí: se montaron con el dibujo de la
+## artista desde tools/zonas/playa/montar_playa.gd y tools/zonas/isla/montar_isla.gd y
+## montar_orilla.gd, y se retocan a mano (metadato `editada_a_mano`).
 ##
 ## ⚠ SOBRESCRIBE las escenas; si una zona se retoca a mano, quítala de aquí.
 ## Después: godot --headless --path . --script res://tools/verificar_zonas.gd
@@ -31,16 +32,6 @@ const TIBURON := "res://scenes/enemies/tiburon.tscn"
 const GAMBA := "res://scenes/enemies/gamba.tscn"
 const CICLOPE := "res://scenes/enemies/ciclope_serpiente.tscn"
 const ARBOLES := ["pino", "cipres", "pino", "arbol_naranja", "cipres_dorado"]
-const PALMERA := "provisional/palmera"
-const MINI_PALMERA := "provisional/mini_palmera"
-const BASE_PALMERA := Vector2(12, 6)
-## Palmeras pintadas de la artista (nivel 2): textura y escala para ~80 px de alto (la mini,
-## ~30). Ver docs/design/arte_nivel2_mapa.md.
-const PALMERAS_PINTADAS := [
-	["nivel2/palmera_1", 0.036], ["nivel2/palmera_2", 0.041],
-	["nivel2/palmera_3", 0.041], ["nivel2/palmera_4", 0.052],
-]
-const MINI_PALMERA_PINTADA := ["nivel2/mini_palmera", 0.049]
 const SIN_SOMBRA := {"sombra": false}
 ## Rocas del mar de la artista (tools/recortes/piedras_barquito.lua): textura, colisión y
 ## su desplazamiento. Traen el agua y la sombra pintadas debajo (6–9 px): la colisión sube
@@ -53,9 +44,7 @@ const ROCAS_BARCO := [
 
 var _zonas := {
 	"bosque": _bosque,
-	"playa": _playa,
 	"mar": _mar,
-	"isla_orilla": _isla_orilla,
 	"cueva_medusa": _cueva_medusa,
 	"cueva_jefe": _cueva_jefe,
 	"casa_arbol": _casa_arbol,
@@ -96,14 +85,6 @@ func _arena(z: Constructor, r: Array) -> void:
 func _arboles_borde(z: Constructor, franjas: Array) -> void:
 	for r in franjas:
 		z.dispersar("ArbolesBorde", ARBOLES, r, Vector2(46, 34), {"solido": false})
-
-
-## Rocas grandes (sólidas) cada 40 px en una columna, delante de un límite invisible.
-func _rocas_columna(z: Constructor, x: float, y0: float, y1: float) -> void:
-	var y := y0
-	while y <= y1:
-		z.deco("Rocas", "roca_grande", Vector2(x, y), SIN_SOMBRA)
-		y += 40.0
 
 
 # --- Bosque: al sur del pueblo; primer combate ------------------------------------
@@ -152,47 +133,6 @@ func _bosque() -> Constructor:
 	return z
 
 
-# --- Playa ("Orilla del mar"): árboles arriba, mar y muelle abajo ------------------
-
-func _playa() -> Constructor:
-	var z := Constructor.new("Playa", "Orilla del mar", 60, 34, 22)
-	z.musica = MUSICA + "playa.mp3"
-	z.rect([0, 0, 59, 9], C.PASTO)
-	z.rect([0, 10, 59, 27], C.ARENA)
-	z.rect([0, 28, 59, 33], C.MAR)
-	for r in [[0, 0, 59, 1], [0, 2, 1, 9], [58, 2, 59, 9]]:
-		z.rect(r, C.SETO)
-	_arena(z, [28, 0, 31, 1])
-	_arena(z, [29, 0, 30, 9])
-	z.rect([28, 26, 31, 33], C.MUELLE, true)
-
-	z.entrada("desde_bosque", Vector2(480, 40))
-	z.entrada("desde_mar", Vector2(480, 472))
-	z.salida("SalidaBosque", Vector2(480, 8), Vector2(64, 16), "bosque", "desde_playa")
-	z.salida("SalidaMar", Vector2(480, 536), Vector2(48, 16), "mar", "desde_playa")
-
-	z.limite("Oeste", Rect2(-16, 160, 32, 290))
-	z.limite("Este", Rect2(944, 160, 32, 290))
-	_rocas_columna(z, 20, 180, 440)
-	_rocas_columna(z, 940, 180, 440)
-
-	var op := {"base": BASE_PALMERA}
-	for p in [Vector2i(8, 13), Vector2i(20, 12), Vector2i(42, 13), Vector2i(53, 12), Vector2i(14, 20), Vector2i(48, 21)]:
-		z.deco("Palmeras", PALMERA, _t(p.x, p.y), op)
-	for p in [Vector2i(25, 15), Vector2i(37, 16), Vector2i(6, 24), Vector2i(55, 24)]:
-		z.deco("Palmeras", MINI_PALMERA, _t(p.x, p.y), op)
-	z.deco("Decorados", "roca", _t(17, 17), SIN_SOMBRA)
-	z.deco("Decorados", "roca", _t(45, 23), SIN_SOMBRA)
-	z.deco("Decorados", "tronco", _t(36, 22), SIN_SOMBRA)
-	z.deco("Decorados", "troncos_apilados", _t(24, 24), SIN_SOMBRA)
-	z.cartel(Vector2(432, 420), "res://resources/dialogues/cartel_muelle.tres")
-
-	z.dispersar("Arboles", ARBOLES, [3, 3, 25, 8], Vector2(54, 36))
-	z.dispersar("Arboles", ARBOLES, [35, 3, 56, 8], Vector2(54, 36))
-	_arboles_borde(z, [[0, 0, 59, 1], [0, 0, 1, 9], [58, 0, 59, 9]])
-	return z
-
-
 # --- Mar ("Barquito"): minijuego del barco hacia el sur (docs/design/plan_minijuego_barco.md)
 # `modo_barco`: Game sustituye a Leonidas por el Barco. Muelles cortos pegados al borde;
 # el barco no navega sobre ellos: la salida está justo delante.
@@ -227,52 +167,6 @@ func _mar() -> Constructor:
 		z.instancia("Peligros", REMOLINO, p)
 	for p in [Vector2(384, 560), Vector2(300, 760), Vector2(460, 930), Vector2(384, 1030)]:
 		z.instancia("Peligros", TIBURON, p)
-	return z
-
-
-# --- Orilla de la isla: la playa al revés (se llega por mar desde el norte) ---------
-
-func _isla_orilla() -> Constructor:
-	var z := Constructor.new("IslaOrilla", "Orilla de la isla", 60, 34, 24)
-	z.pintada = true # nivel 2: arte pintado, modo pintura
-	z.musica = MUSICA + "playa.mp3" # la isla de Medusa usa la música de la playa
-	z.rect([0, 0, 59, 5], C.MAR)
-	z.rect([0, 6, 59, 6], C.MAR_ORILLA)
-	z.rect([0, 7, 59, 24], C.ARENA)
-	z.rect([0, 25, 59, 33], C.PASTO)
-	for r in [[0, 32, 59, 33], [0, 25, 1, 31], [58, 25, 59, 31]]:
-		z.rect(r, C.SETO)
-	_arena(z, [28, 32, 31, 33])
-	_arena(z, [29, 25, 30, 33])
-	z.rect([28, 0, 31, 8], C.MUELLE, true)
-
-	z.entrada("desde_mar", Vector2(480, 56))
-	z.entrada("desde_isla", Vector2(480, 504))
-	z.salida("SalidaMar", Vector2(480, 8), Vector2(48, 16), "mar", "desde_isla")
-	z.salida("SalidaIsla", Vector2(480, 536), Vector2(64, 16), "isla", "desde_orilla")
-
-	z.limite("Oeste", Rect2(-16, 96, 32, 320))
-	z.limite("Este", Rect2(944, 96, 32, 320))
-	_rocas_columna(z, 20, 120, 390)
-	_rocas_columna(z, 940, 120, 390)
-
-	var palmeras := [Vector2i(6, 11), Vector2i(16, 10), Vector2i(24, 13), Vector2i(38, 12), Vector2i(46, 10),
-			Vector2i(55, 12), Vector2i(10, 19), Vector2i(21, 21), Vector2i(40, 20), Vector2i(51, 21)]
-	for i in palmeras.size():
-		var pp: Array = PALMERAS_PINTADAS[i % PALMERAS_PINTADAS.size()]
-		z.deco("Palmeras", pp[0], _t(palmeras[i].x, palmeras[i].y), {"base": BASE_PALMERA, "escala": pp[1]})
-	for p in [Vector2i(13, 15), Vector2i(33, 17), Vector2i(44, 16), Vector2i(27, 22), Vector2i(5, 23), Vector2i(56, 22)]:
-		z.deco("Palmeras", MINI_PALMERA_PINTADA[0], _t(p.x, p.y),
-				{"base": Vector2(10, 5), "escala": MINI_PALMERA_PINTADA[1]})
-	# Primer aviso de ruinas.
-	z.deco("Ruinas", "columna_rota_1", _t(19, 16))
-	z.deco("Ruinas", "columna_rota_2", _t(43, 23))
-	z.deco("Ruinas", "roca", _t(35, 22), SIN_SOMBRA)
-	# Primer contacto con las gambas: lejos del muelle y de SalidaMar (su mordisco empuja y
-	# podría echar a Leonidas al mar) y a más de 96 px de las dos entradas.
-	_grupo_gambas(z, _t(48, 17), 3)
-
-	_arboles_borde(z, [[0, 32, 59, 33], [0, 25, 1, 33], [58, 25, 59, 33]])
 	return z
 
 
