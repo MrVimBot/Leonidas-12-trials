@@ -65,16 +65,19 @@ texture = ExtResource("4_ll75p")
 centered = false
 
 [node name="Orilla" type="Sprite2D" parent="Mapa" unique_id=378318000]
+position = Vector2(0, 80)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_kh3om")
 centered = false
 
 [node name="Monte1" type="Sprite2D" parent="Mapa" unique_id=307912601]
+position = Vector2(295, 388)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("6_loa26")
 centered = false
 
 [node name="Monte2" type="Sprite2D" parent="Mapa" unique_id=76894013]
+position = Vector2(299, 600)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("7_kq84f")
 centered = false

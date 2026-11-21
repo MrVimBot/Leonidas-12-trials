@@ -49,8 +49,12 @@ TROZO = 128  # celdas por trozo de colisión
 
 
 def capa(nombre):
-    im = Image.open(CAPAS / f"{nombre}.png").convert("RGBA").resize((W, H), Image.BILINEAR)
-    return np.array(im).astype(int)
+    # Las capas están recortadas a su dibujo (recortar_capas.py): se devuelven a su sitio en el
+    # lienzo antes de reducirlas.
+    esquinas = json.loads(Path(__file__).with_name("capas_recorte.json").read_text())
+    lienzo = Image.new("RGBA", LIENZO)
+    lienzo.paste(Image.open(CAPAS / f"{nombre}.png").convert("RGBA"), tuple(esquinas.get(nombre, [0, 0])))
+    return np.array(lienzo.resize((W, H), Image.BILINEAR)).astype(int)
 
 
 def layout(nombre):

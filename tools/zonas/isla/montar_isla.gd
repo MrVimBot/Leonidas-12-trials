@@ -21,6 +21,7 @@ const ZonaPintada := preload("res://tools/zonas/zona_pintada.gd")
 
 const RUTA := "res://scenes/levels/isla.tscn"
 const DATOS := "res://tools/zonas/isla/isla_datos.json"
+const RECORTE := "res://tools/zonas/isla/capas_recorte.json"
 const CAPAS := ["mar", "piso", "orilla", "monte_1", "monte_2"] # de abajo arriba
 const DIR_CAPAS := "res://assets/backgrounds/nivel2/"
 const MUSICA := "res://assets/audio/music/playa.mp3"
@@ -132,7 +133,10 @@ func _montar() -> void:
 	z.suelo_prov.free()
 	z.limites.free() # la costa y el borde del mapa van en `Colisiones`
 	var capas: Array = CAPAS.map(func(c: String) -> String: return DIR_CAPAS + c + ".png")
-	ZonaPintada.poner_mapa(z.raiz, capas, float(datos.escala_mapa))
+	# Capas recortadas a su dibujo (recortar_capas.py): cada una en su esquina del lienzo.
+	var recorte := ZonaPintada.leer_datos(RECORTE)
+	var esquinas: Array = CAPAS.map(func(c: String) -> Vector2: return ZonaPintada.a_puntos([recorte.get(c, [0, 0])])[0])
+	ZonaPintada.poner_mapa(z.raiz, capas, float(datos.escala_mapa), true, esquinas)
 	# Costa (mar, acantilados, bordes del mapa) y paredes de las elevaciones: polígonos sólidos
 	# en la capa mundo, uno por trozo para que sean simples (sin agujeros) y editables.
 	ZonaPintada.poner_colisiones(z.raiz, {"Costa": datos.costa, "BordesElevacion": datos.bordes_elevacion})

@@ -12,7 +12,7 @@ zonas del nivel 2 van en modo pintura (`Zona.pintada = true`, CANVAS_ITEMS).
 
 | Qué | Ruta | Tamaño |
 |---|---|---|
-| 5 capas del mapa | `assets/backgrounds/nivel2/{piso,mar,orilla,monte_1,monte_2}.png` | 9828×5873 cada una (16–40 MB) |
+| 5 capas del mapa | `assets/backgrounds/nivel2/{piso,mar,orilla,monte_1,monte_2}.png` | lienzo de 9828×5873; `piso`, `orilla` y `monte_*` recortadas a su dibujo |
 | 19 objetos sueltos | `assets/sprites/entorno/nivel2/*.png` | ver tabla |
 | 6 layouts de referencia | `docs/reference/nivel2/layout/*.jpeg` | ~1000×600 (no se exportan) |
 | Fondo de la playa (`isla_orilla`) | `assets/backgrounds/nivel2/playa_entero_fondo.png` | 4960×3508 (13 MB), con muelle y barca |
@@ -27,8 +27,12 @@ versión web no importa).
 
 - **Escala 0,25**: el lienzo ocupa **2457×1468 px de mundo** (`limites_camara`); en modo pintura,
   1 px del arte = 1 px de pantalla a 1920×1080.
-- **Capas**: nodo `Mapa` (`z_index −1`) con un `Sprite2D` por capa en (0, 0), de abajo arriba
-  `mar` → `piso` → `orilla` → `monte_1` → `monte_2` (comprobado: encajan así). `orilla` es la «U»
+- **Capas**: nodo `Mapa` (`z_index −1`) con un `Sprite2D` por capa, de abajo arriba
+  `mar` → `piso` → `orilla` → `monte_1` → `monte_2` (comprobado: encajan así). `piso`, `orilla` y
+  `monte_*` están recortadas a su dibujo (`tools/zonas/isla/recortar_capas.py`; `monte_2` era un
+  98 % de transparencia) y cada Sprite va en su esquina del lienzo × 0,25 (`capas_recorte.json`).
+  Con eso y la precarga de zonas de Game (`PrecargaZonas`), entrar en la isla ya no congela el
+  juego (antes, 2,2 s en negro). `orilla` es la «U»
   elevada del sur con su acantilado; `monte_1`/`monte_2` son la elevación del noroeste (con sus
   rampas). `Suelo` (TileMapLayer) se queda vacío.
 - **Layouts**: son el mapa entero estirado a su tamaño (comprobado superponiéndolos), así que un

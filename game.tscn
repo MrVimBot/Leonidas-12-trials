@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://ca528nsv7o8om" path="res://scenes/ui/menu_pausa.tscn" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://b15cn25lq0xa3" path="res://scripts/systems/modo_barco.gd" id="6_j5wjh"]
-[ext_resource type="PackedScene" path="res://scenes/player/barco.tscn" id="7_vef74"]
-[ext_resource type="Resource" path="res://resources/dialogues/tutorial_barco.tres" id="8_hve3p"]
+[ext_resource type="PackedScene" uid="uid://u60y7g12yc70" path="res://scenes/player/barco.tscn" id="7_vef74"]
+[ext_resource type="Resource" uid="uid://sxq53ya5dto6" path="res://resources/dialogues/tutorial_barco.tres" id="8_hve3p"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pantalla_game_over.tscn" id="9_vef74"]
+[ext_resource type="Script" uid="uid://cu7dx4gc1fxdf" path="res://scripts/systems/precarga_zonas.gd" id="10_hve3p"]
 
 [node name="Game" type="Node2D" unique_id=194216102 groups=["game"]]
 y_sort_enabled = true
@@ -50,9 +51,12 @@ camara = NodePath("../Camara")
 
 [node name="PantallaGameOver" parent="." unique_id=867840381 instance=ExtResource("9_vef74")]
 
-[connection signal="modo_cambio" from="." to="HUD" method="_al_cambiar_modo"]
+[node name="PrecargaZonas" type="Node" parent="." unique_id=1771314456]
+script = ExtResource("10_hve3p")
+
 [connection signal="jefe_empezo" from="." to="HUD" method="_al_empezar_jefe"]
 [connection signal="jefe_termino" from="." to="HUD" method="_al_terminar_jefe"]
+[connection signal="modo_cambio" from="." to="HUD" method="_al_cambiar_modo"]
 [connection signal="murio" from="Jugador" to="." method="_al_morir_jugador"]
 [connection signal="hundido" from="ModoBarco" to="." method="_al_hundirse"]
 [connection signal="continuar_pedido" from="PantallaGameOver" to="." method="_al_continuar_game_over"]

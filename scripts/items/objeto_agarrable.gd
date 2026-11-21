@@ -71,8 +71,9 @@ func levantar(punto: Node2D) -> void:
 	collision_mask = 0
 	_padre_original = get_parent() # la zona: al lanzarlo vuelve a ella (no a Game)
 	_dejar_resto()
+	# Sin z_index: en brazos se ordena por Y con su portador (hijo de Leonidas), así los árboles
+	# y casas lo tapan cuando Leonidas está detrás de ellos.
 	reparent(punto)
-	z_index = 1
 	var t := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	t.tween_property(self, ^"position", Vector2.ZERO, 0.2)
 
@@ -85,7 +86,6 @@ func lanzar(dir: Vector2, distancia: float, pies: Vector2) -> void:
 	# rompible sobreviviría al cambio de zona.
 	var destino := _padre_original if is_instance_valid(_padre_original) else get_tree().current_scene
 	reparent(destino)
-	z_index = 0
 	# El nodo pasa a estar "en el suelo"; la altura se simula moviendo solo el Visual.
 	global_position = pies + dir * 6.0
 	_altura_inicial = altura

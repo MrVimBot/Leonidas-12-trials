@@ -6,10 +6,11 @@ extends RefCounted
 ## guardarse en la escena.
 
 
-## Nodo `Mapa` (z −1) con un Sprite2D por textura, todas en (0, 0) y a `escala`, de abajo arriba
-## en el orden de `rutas`. Va el primero de la zona. `pintado`: Linear Mipmap (arte pintado,
-## reducido); si no, el filtro del proyecto (Nearest, pixel art).
-static func poner_mapa(raiz: Node, rutas: Array, escala: float, pintado := true) -> void:
+## Nodo `Mapa` (z −1) con un Sprite2D por textura, a `escala`, de abajo arriba en el orden de
+## `rutas`. Va el primero de la zona. `esquinas`: px del lienzo donde empieza cada capa recortada
+## (vacío = todas en (0, 0)). `pintado`: Linear Mipmap (arte pintado, reducido); si no, el filtro
+## del proyecto (Nearest, pixel art).
+static func poner_mapa(raiz: Node, rutas: Array, escala: float, pintado := true, esquinas: Array = []) -> void:
 	var mapa := Node2D.new()
 	mapa.name = "Mapa"
 	mapa.z_index = -1
@@ -18,12 +19,15 @@ static func poner_mapa(raiz: Node, rutas: Array, escala: float, pintado := true)
 	raiz.add_child(mapa, true)
 	raiz.move_child(mapa, 0)
 	mapa.owner = raiz
-	for ruta: String in rutas:
+	for i in rutas.size():
+		var ruta: String = rutas[i]
 		var s := Sprite2D.new()
 		s.name = ruta.get_file().get_basename().to_pascal_case()
 		s.texture = load(ruta)
 		s.centered = false
 		s.scale = Vector2(escala, escala)
+		if i < esquinas.size():
+			s.position = (esquinas[i] as Vector2) * escala
 		mapa.add_child(s, true)
 		s.owner = raiz
 
