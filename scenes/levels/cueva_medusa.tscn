@@ -1,10 +1,10 @@
-[gd_scene format=4 uid="uid://by6xu4ohrvdn4"]
+[gd_scene format=3 uid="uid://by6xu4ohrvdn4"]
 
 [ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_uu4ft"]
 [ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="2_kpqja"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/decorado.tscn" id="4_6ybn4"]
 [ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="10_6pj7v"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/ciclope_serpiente.tscn" id="10_tt65g"]
+[ext_resource type="PackedScene" uid="uid://dg70wudl75gyn" path="res://scenes/enemies/ciclope_serpiente.tscn" id="10_tt65g"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/gamba.tscn" id="11_6ybn4"]
 [ext_resource type="Texture2D" uid="uid://bj745u288mitt" path="res://assets/backgrounds/nivel2/pasillo_medusa/fondo.png" id="30_fondo"]
 [ext_resource type="Texture2D" uid="uid://bxw08um0yijra" path="res://assets/sprites/entorno/nivel2/pasillo_cristal_1.png" id="31_t"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://crfy5cvsmjypx" path="res://assets/sprites/entorno/nivel2/pasillo_rocas_4.png" id="37_t"]
 [ext_resource type="Texture2D" uid="uid://co334e8s0xq23" path="res://assets/sprites/entorno/nivel2/pasillo_estatua_1.png" id="38_t"]
 [ext_resource type="Texture2D" uid="uid://dflawj3sbei7a" path="res://assets/sprites/entorno/nivel2/pasillo_estatua_2.png" id="39_t"]
+[ext_resource type="Texture2D" uid="uid://bdf670fs1qwwk" path="res://assets/backgrounds/nivel2/pasillo_medusa/penumbra.png" id="40_penumbra"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vpeac"]
 size = Vector2(16, 120)
@@ -32,13 +33,18 @@ suelo = NodePath("Suelo")
 pintada = true
 metadata/editada_a_mano = true
 
-[node name="Mapa" type="Node2D" parent="." index="0"]
+[node name="Mapa" type="Node2D" parent="." unique_id=1497692677]
 z_index = -1
 texture_filter = 5
 
-[node name="Fondo" type="Sprite2D" parent="Mapa"]
+[node name="Fondo" type="Sprite2D" parent="Mapa" unique_id=41150929]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("30_fondo")
+centered = false
+
+[node name="Penumbra" type="Sprite2D" parent="Mapa" unique_id=1158208929]
+scale = Vector2(2, 2)
+texture = ExtResource("40_penumbra")
 centered = false
 
 [node name="Suelo" type="TileMapLayer" parent="." unique_id=1947977969]
@@ -51,95 +57,104 @@ y_sort_enabled = true
 [node name="Ruinas" type="Node2D" parent="Objetos" unique_id=1120666810]
 y_sort_enabled = true
 
-[node name="PasilloCristal1" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloCristal1" parent="Objetos/Ruinas" unique_id=169719117 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(204.8, 272.8)
 textura = ExtResource("31_t")
 escala = 0.4
+solido = false
 sombra = false
-base = Vector2(36, 12)
 
-[node name="PasilloCristal2" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
-position = Vector2(612.0, 255.6)
+[node name="PasilloCristal2" parent="Objetos/Ruinas" unique_id=172543613 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
+position = Vector2(612, 255.6)
 textura = ExtResource("32_t")
 escala = 0.4
+solido = false
 sombra = false
-base = Vector2(36, 12)
 
-[node name="PasilloCristal3" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
-position = Vector2(940.0, 184.8)
+[node name="PasilloCristal3" parent="Objetos/Ruinas" unique_id=1125765346 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
+position = Vector2(940, 184.8)
 textura = ExtResource("33_t")
 escala = 0.4
+solido = false
 sombra = false
-base = Vector2(36, 12)
 
-[node name="PasilloRocas1" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloRocas1" parent="Objetos/Ruinas" unique_id=863924360 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(431.4, 431.6)
 textura = ExtResource("34_t")
 escala = 0.4
-sombra = false
 solido = false
+sombra = false
 
-[node name="PasilloRocas2" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloRocas2" parent="Objetos/Ruinas" unique_id=383487480 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(813.4, 431.6)
 textura = ExtResource("35_t")
 escala = 0.4
-sombra = false
 solido = false
+sombra = false
 
-[node name="PasilloRocas3" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloRocas3" parent="Objetos/Ruinas" unique_id=847227585 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(59.4, 431.6)
 textura = ExtResource("36_t")
 escala = 0.4
-sombra = false
 solido = false
+sombra = false
 
-[node name="PasilloRocas4" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloRocas4" parent="Objetos/Ruinas" unique_id=1428481551 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(1067.4, 431.6)
 textura = ExtResource("37_t")
 escala = 0.4
-sombra = false
 solido = false
+sombra = false
 
-[node name="PasilloEstatua1" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
-position = Vector2(328.4, 152.0)
+[node name="PasilloEstatua1" parent="Objetos/Ruinas" unique_id=504228737 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
+position = Vector2(328.4, 152)
 textura = ExtResource("38_t")
 escala = 0.4
+solido = false
 sombra = false
-base = Vector2(20, 8)
 
-[node name="PasilloEstatua2" parent="Objetos/Ruinas" instance=ExtResource("4_6ybn4")]
+[node name="PasilloEstatua2" parent="Objetos/Ruinas" unique_id=1001260348 instance=ExtResource("4_6ybn4")]
+modulate = Color(0.56, 0.5, 0.66, 1)
 position = Vector2(887.8, 191.6)
 textura = ExtResource("39_t")
 escala = 0.4
+solido = false
 sombra = false
-base = Vector2(20, 8)
 
 [node name="Enemigos" type="Node2D" parent="Objetos" unique_id=679733145]
 y_sort_enabled = true
 
 [node name="CiclopeSerpiente1" parent="Objetos/Enemigos" unique_id=440307587 instance=ExtResource("10_tt65g")]
-position = Vector2(270, 215)
+position = Vector2(231, 334)
 
 [node name="CiclopeSerpiente2" parent="Objetos/Enemigos" unique_id=1300708276 instance=ExtResource("10_tt65g")]
-position = Vector2(470, 130)
+position = Vector2(385, 209)
 
 [node name="CiclopeSerpiente3" parent="Objetos/Enemigos" unique_id=1870686894 instance=ExtResource("10_tt65g")]
-position = Vector2(700, 150)
+position = Vector2(800, 225)
 
 [node name="CiclopeSerpiente4" parent="Objetos/Enemigos" unique_id=420113269 instance=ExtResource("10_tt65g")]
-position = Vector2(780, 300)
+position = Vector2(966, 298)
 
 [node name="Gamba1" parent="Objetos/Enemigos" unique_id=1 instance=ExtResource("11_6ybn4")]
-position = Vector2(664, 308)
+position = Vector2(674, 368)
 
 [node name="Gamba2" parent="Objetos/Enemigos" unique_id=1066341279 instance=ExtResource("11_6ybn4")]
-position = Vector2(636, 322)
+position = Vector2(646, 382)
 
 [node name="Gamba3" parent="Objetos/Enemigos" unique_id=1670716767 instance=ExtResource("11_6ybn4")]
-position = Vector2(622, 300)
+position = Vector2(632, 360)
 
 [node name="Gamba4" parent="Objetos/Enemigos" unique_id=1220942200 instance=ExtResource("11_6ybn4")]
-position = Vector2(652, 290)
+position = Vector2(662, 350)
 
 [node name="Entradas" type="Node2D" parent="." unique_id=78258313]
 
@@ -155,9 +170,176 @@ position = Vector2(1064, 215)
 [node name="Limites" type="StaticBody2D" parent="." unique_id=1695905881]
 collision_mask = 0
 
-[node name="Borde" type="CollisionPolygon2D" parent="Limites"]
-build_mode = 1
-polygon = PackedVector2Array(60, 60, 1054, 60, 1054, 150, 1112, 150, 1112, 280, 1054, 280, 1054, 340, 60, 340, 60, 280, 2, 280, 2, 150, 60, 150)
+[node name="Inferior1_1" type="CollisionPolygon2D" parent="Limites" unique_id=215568729]
+polygon = PackedVector2Array(1136.7, 454.9, 4.1, 454.9, 3, 429.6)
+
+[node name="Inferior1_2" type="CollisionPolygon2D" parent="Limites" unique_id=1290581336]
+polygon = PackedVector2Array(1136.7, 454.9, 3, 429.6, 0, 426.5)
+
+[node name="Inferior1_3" type="CollisionPolygon2D" parent="Limites" unique_id=1739627939]
+polygon = PackedVector2Array(1136.7, 454.9, 0, 426.5, -25.3, 425.5, 231, 408.3)
+
+[node name="Inferior1_4" type="CollisionPolygon2D" parent="Limites" unique_id=649954038]
+polygon = PackedVector2Array(-25.3, 425.5, -25.3, 354.6, 0, 353.6)
+
+[node name="Inferior1_5" type="CollisionPolygon2D" parent="Limites" unique_id=1197549355]
+polygon = PackedVector2Array(-25.3, 425.5, 0, 353.6, 14.2, 345.5)
+
+[node name="Inferior1_6" type="CollisionPolygon2D" parent="Limites" unique_id=1844256601]
+polygon = PackedVector2Array(14.2, 345.5, 19.2, 334.3, 36.5, 321.1)
+
+[node name="Inferior1_7" type="CollisionPolygon2D" parent="Limites" unique_id=2118731747]
+polygon = PackedVector2Array(-25.3, 425.5, 14.2, 345.5, 36.5, 321.1, 62.8, 311, 79, 311, 99.3, 317.1, 125.6, 333.3, 174.3, 375.9)
+
+[node name="Inferior1_8" type="CollisionPolygon2D" parent="Limites" unique_id=1299762367]
+polygon = PackedVector2Array(-25.3, 425.5, 174.3, 375.9, 208.7, 400.2)
+
+[node name="Inferior1_9" type="CollisionPolygon2D" parent="Limites" unique_id=2025505676]
+polygon = PackedVector2Array(-25.3, 425.5, 208.7, 400.2, 231, 408.3)
+
+[node name="Inferior1_10" type="CollisionPolygon2D" parent="Limites" unique_id=1521902243]
+polygon = PackedVector2Array(1136.7, 454.9, 231, 408.3, 247.2, 406.2, 660.5, 426.5)
+
+[node name="Inferior1_11" type="CollisionPolygon2D" parent="Limites" unique_id=1004987709]
+polygon = PackedVector2Array(365.7, 287.7, 398.1, 231, 432.6, 180.3, 441.7, 171.2, 468, 173.2)
+
+[node name="Inferior1_12" type="CollisionPolygon2D" parent="Limites" unique_id=1756298691]
+polygon = PackedVector2Array(321.1, 350.5, 365.7, 287.7, 468, 173.2, 497.4, 202.6)
+
+[node name="Inferior1_13" type="CollisionPolygon2D" parent="Limites" unique_id=79493150]
+polygon = PackedVector2Array(281.6, 388, 321.1, 350.5, 497.4, 202.6, 523.8, 249.2, 540, 293.8)
+
+[node name="Inferior1_14" type="CollisionPolygon2D" parent="Limites" unique_id=446528898]
+polygon = PackedVector2Array(247.2, 406.2, 281.6, 388, 540, 293.8, 560.2, 310, 564.3, 332.3)
+
+[node name="Inferior1_15" type="CollisionPolygon2D" parent="Limites" unique_id=880105361]
+polygon = PackedVector2Array(247.2, 406.2, 564.3, 332.3, 582.5, 376.9)
+
+[node name="Inferior1_16" type="CollisionPolygon2D" parent="Limites" unique_id=1167463912]
+polygon = PackedVector2Array(247.2, 406.2, 582.5, 376.9, 616, 414.4)
+
+[node name="Inferior1_17" type="CollisionPolygon2D" parent="Limites" unique_id=1086787419]
+polygon = PackedVector2Array(247.2, 406.2, 616, 414.4, 632.2, 424.5)
+
+[node name="Inferior1_18" type="CollisionPolygon2D" parent="Limites" unique_id=1229603503]
+polygon = PackedVector2Array(247.2, 406.2, 632.2, 424.5, 660.5, 426.5)
+
+[node name="Inferior1_19" type="CollisionPolygon2D" parent="Limites" unique_id=1652601000]
+polygon = PackedVector2Array(1136.7, 454.9, 660.5, 426.5, 693, 410.3)
+
+[node name="Inferior1_20" type="CollisionPolygon2D" parent="Limites" unique_id=788142737]
+polygon = PackedVector2Array(1136.7, 454.9, 693, 410.3, 748.7, 352.6, 996.9, 379.9)
+
+[node name="Inferior1_21" type="CollisionPolygon2D" parent="Limites" unique_id=1975860471]
+polygon = PackedVector2Array(813.5, 255.3, 813.5, 247.2, 822.6, 242.1)
+
+[node name="Inferior1_22" type="CollisionPolygon2D" parent="Limites" unique_id=280402029]
+polygon = PackedVector2Array(748.7, 352.6, 813.5, 255.3, 822.6, 242.1, 842.9, 219.8, 846.9, 219.8, 853, 223.9)
+
+[node name="Inferior1_23" type="CollisionPolygon2D" parent="Limites" unique_id=1517400416]
+polygon = PackedVector2Array(748.7, 352.6, 853, 223.9, 889.5, 230, 917.9, 260.4)
+
+[node name="Inferior1_24" type="CollisionPolygon2D" parent="Limites" unique_id=1881619548]
+polygon = PackedVector2Array(748.7, 352.6, 917.9, 260.4, 931, 265.4, 945.2, 312)
+
+[node name="Inferior1_25" type="CollisionPolygon2D" parent="Limites" unique_id=81162647]
+polygon = PackedVector2Array(748.7, 352.6, 945.2, 312, 957.4, 338.4)
+
+[node name="Inferior1_26" type="CollisionPolygon2D" parent="Limites" unique_id=1971353887]
+polygon = PackedVector2Array(748.7, 352.6, 957.4, 338.4, 965.5, 350.5)
+
+[node name="Inferior1_27" type="CollisionPolygon2D" parent="Limites" unique_id=5776304]
+polygon = PackedVector2Array(748.7, 352.6, 965.5, 350.5, 996.9, 379.9)
+
+[node name="Inferior1_28" type="CollisionPolygon2D" parent="Limites" unique_id=1078084970]
+polygon = PackedVector2Array(1136.7, 454.9, 996.9, 379.9, 1013.1, 377.9)
+
+[node name="Inferior1_29" type="CollisionPolygon2D" parent="Limites" unique_id=927815807]
+polygon = PackedVector2Array(1136.7, 331.3, 1136.7, 454.9, 1013.1, 377.9, 1032.3, 358.6, 1112.4, 331.3)
+
+[node name="Inferior1_30" type="CollisionPolygon2D" parent="Limites" unique_id=717155207]
+polygon = PackedVector2Array(1032.3, 358.6, 1057.7, 307, 1082, 307, 1096.2, 315.1, 1112.4, 331.3)
+
+[node name="Superior1_1" type="CollisionPolygon2D" parent="Limites" unique_id=263586136]
+polygon = PackedVector2Array(652.4, 300.9, 634.2, 304.9, 611.9, 302.9, 590.6, 291.8, 592.7, 271.5)
+
+[node name="Superior1_2" type="CollisionPolygon2D" parent="Limites" unique_id=1590131367]
+polygon = PackedVector2Array(652.4, 300.9, 592.7, 271.5, 578.5, 233)
+
+[node name="Superior1_3" type="CollisionPolygon2D" parent="Limites" unique_id=1431834692]
+polygon = PackedVector2Array(652.4, 300.9, 578.5, 233, 556.2, 188.4)
+
+[node name="Superior1_4" type="CollisionPolygon2D" parent="Limites" unique_id=1953539373]
+polygon = PackedVector2Array(652.4, 300.9, 556.2, 188.4, 538, 162.1, 730.4, 186.4, 710.2, 245.2, 696, 269.5, 672.7, 290.8)
+
+[node name="Superior1_5" type="CollisionPolygon2D" parent="Limites" unique_id=1713840532]
+polygon = PackedVector2Array(369.8, 170.2, 315.1, 245.2, 295.8, 262.4, 273.5, 274.5, 251.2, 280.6)
+
+[node name="Superior1_6" type="CollisionPolygon2D" parent="Limites" unique_id=585564656]
+polygon = PackedVector2Array(403.2, 136.8, 369.8, 170.2, 251.2, 280.6, 224.9, 280.6, 178.3, 264.4, 169.2, 255.3, 155, 226.9)
+
+[node name="Superior1_7" type="CollisionPolygon2D" parent="Limites" unique_id=995486431]
+polygon = PackedVector2Array(443.7, 118.5, 403.2, 136.8, 155, 226.9, 144.9, 184.4, 144.9, 160.1)
+
+[node name="Superior1_8" type="CollisionPolygon2D" parent="Limites" unique_id=2045349495]
+polygon = PackedVector2Array(443.7, 118.5, 144.9, 160.1, 135.8, 148.9)
+
+[node name="Superior1_9" type="CollisionPolygon2D" parent="Limites" unique_id=2052931434]
+polygon = PackedVector2Array(443.7, 118.5, 135.8, 148.9, -25.3, 147.9, -25.3, -24.3)
+
+[node name="Superior1_10" type="CollisionPolygon2D" parent="Limites" unique_id=180027115]
+polygon = PackedVector2Array(484.3, 118.5, 443.7, 118.5, -25.3, -24.3, 1137.7, -24.3)
+
+[node name="Superior1_11" type="CollisionPolygon2D" parent="Limites" unique_id=777705225]
+polygon = PackedVector2Array(506.5, 130.7, 484.3, 118.5, 1137.7, -24.3)
+
+[node name="Superior1_12" type="CollisionPolygon2D" parent="Limites" unique_id=1882953393]
+polygon = PackedVector2Array(538, 162.1, 506.5, 130.7, 1137.7, -24.3, 769.9, 155, 755.8, 161.1)
+
+[node name="Superior1_13" type="CollisionPolygon2D" parent="Limites" unique_id=231604478]
+polygon = PackedVector2Array(1137.7, -24.3, 1136.7, 148.9, 1017.1, 148.9)
+
+[node name="Superior1_14" type="CollisionPolygon2D" parent="Limites" unique_id=2114253180]
+polygon = PackedVector2Array(1137.7, -24.3, 1017.1, 148.9, 1010.1, 156)
+
+[node name="Superior1_15" type="CollisionPolygon2D" parent="Limites" unique_id=697406174]
+polygon = PackedVector2Array(1010.1, 156, 1010.1, 182.4, 1001.9, 212.7, 994.9, 223.9, 970.5, 234, 962.4, 234, 957.4, 220.9)
+
+[node name="Superior1_16" type="CollisionPolygon2D" parent="Limites" unique_id=417994532]
+polygon = PackedVector2Array(1137.7, -24.3, 1010.1, 156, 957.4, 220.9, 945.2, 206.7)
+
+[node name="Superior1_17" type="CollisionPolygon2D" parent="Limites" unique_id=1426379184]
+polygon = PackedVector2Array(1137.7, -24.3, 945.2, 206.7, 909.8, 175.3)
+
+[node name="Superior1_18" type="CollisionPolygon2D" parent="Limites" unique_id=1000177825]
+polygon = PackedVector2Array(1137.7, -24.3, 909.8, 175.3, 897.6, 173.2)
+
+[node name="Superior1_19" type="CollisionPolygon2D" parent="Limites" unique_id=1587408042]
+polygon = PackedVector2Array(897.6, 173.2, 898.6, 184.4, 893.5, 189.4, 873.3, 189.4)
+
+[node name="Superior1_20" type="CollisionPolygon2D" parent="Limites" unique_id=1199967261]
+polygon = PackedVector2Array(1137.7, -24.3, 897.6, 173.2, 873.3, 189.4, 867.2, 181.3)
+
+[node name="Superior1_21" type="CollisionPolygon2D" parent="Limites" unique_id=1888769298]
+polygon = PackedVector2Array(1137.7, -24.3, 867.2, 181.3, 859.1, 181.3, 854, 176.3, 855, 169.2)
+
+[node name="Superior1_22" type="CollisionPolygon2D" parent="Limites" unique_id=1082474713]
+polygon = PackedVector2Array(1137.7, -24.3, 855, 169.2, 842.9, 173.2, 812.5, 159.1)
+
+[node name="Superior1_23" type="CollisionPolygon2D" parent="Limites" unique_id=962158075]
+polygon = PackedVector2Array(1137.7, -24.3, 812.5, 159.1, 796.3, 155)
+
+[node name="Superior1_24" type="CollisionPolygon2D" parent="Limites" unique_id=1011307817]
+polygon = PackedVector2Array(1137.7, -24.3, 796.3, 155, 769.9, 155)
+
+[node name="Superior1_25" type="CollisionPolygon2D" parent="Limites" unique_id=174179625]
+polygon = PackedVector2Array(538, 162.1, 755.8, 161.1, 730.4, 186.4)
+
+[node name="MuroOeste" type="CollisionPolygon2D" parent="Limites" unique_id=1074273565]
+polygon = PackedVector2Array(-40, -40, -12, -40, -12, 480, -40, 480)
+
+[node name="MuroEste" type="CollisionPolygon2D" parent="Limites" unique_id=1995924487]
+polygon = PackedVector2Array(1126, -40, 1154, -40, 1154, 480, 1126, 480)
 
 [node name="SalidaIsla" type="Area2D" parent="." unique_id=550499452]
 position = Vector2(6, 215)
