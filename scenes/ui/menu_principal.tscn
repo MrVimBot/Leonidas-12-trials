@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dhhppcnq8d1bn"]
 
 [ext_resource type="Script" uid="uid://cfwcu04p8suux" path="res://scripts/ui/menu_principal.gd" id="1_men"]
-[ext_resource type="Texture2D" uid="uid://clo0w4gh4oba1" path="res://assets/backgrounds/cinematica/fondo_1.png" id="2_fon"]
+[ext_resource type="Texture2D" uid="uid://dbssswlgxf0th" path="res://assets/backgrounds/menu/menu_vertical.png" id="2_fon"]
+[ext_resource type="Texture2D" uid="uid://c644qbi7nwhwy" path="res://assets/backgrounds/menu/titulo.png" id="4_tit"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="3_bot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
@@ -71,8 +72,8 @@ grow_vertical = 2
 theme = SubResource("Theme_menu")
 script = ExtResource("1_men")
 
-[node name="Fondo" type="TextureRect" parent="." unique_id=967837949]
-texture_filter = 2
+[node name="VentanaFondo" type="Control" parent="." unique_id=967837948]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,26 +81,33 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Fondo" type="TextureRect" parent="VentanaFondo" unique_id=967837949]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 898.9
+grow_horizontal = 2
+mouse_filter = 2
 texture = ExtResource("2_fon")
 expand_mode = 1
 
-[node name="Titulo" type="Label" parent="." unique_id=620844236]
+[node name="Titulo" type="TextureRect" parent="." unique_id=620844236]
 unique_name_in_owner = true
+texture_filter = 1
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 120.0
-offset_top = 22.0
-offset_right = -20.0
-offset_bottom = 86.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -125.0
+offset_top = 10.0
+offset_right = 125.0
+offset_bottom = 115.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.965, 0.925, 0.824, 1)
-theme_override_colors/font_outline_color = Color(0.176, 0.106, 0.078, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 32
-text = "Las casi 12 pruebas
-de Leonidas"
-horizontal_alignment = 1
+mouse_filter = 2
+texture = ExtResource("4_tit")
+expand_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=1012905268]
 unique_name_in_owner = true
