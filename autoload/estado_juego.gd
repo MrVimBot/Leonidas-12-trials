@@ -40,6 +40,7 @@ const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
 const OBJ_COCO := &"coco"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
+const MISION_DERROTAR_MINOTAURO := &"derrotar_minotauro"
 
 ## Progreso que se guarda en la sección "progreso": nombre de la variable → valor inicial.
 ## `reiniciar()`, `guardar()` y `cargar()` la recorren: una bandera nueva solo se declara
@@ -239,6 +240,11 @@ func completar_mision(id: StringName) -> void:
 		return
 	misiones[id] = EstadoMision.COMPLETADA
 	misiones_cambio.emit()
+
+
+## Ya se recibió (activa o completada).
+func mision_empezada(id: StringName) -> bool:
+	return misiones.has(id)
 
 
 func mision_completada(id: StringName) -> bool:

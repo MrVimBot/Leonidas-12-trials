@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. Con la misión del Minotauro.
+Ave: Al sur de la isla el mar es traicionero.
+Ave: Esquiva las rocas y no dejes que los tiburones te alcancen.
+"

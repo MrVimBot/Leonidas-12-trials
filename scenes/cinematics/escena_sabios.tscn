@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" uid="uid://by8j7fi76vjkj" path="res://scripts/cinematics/escena_sabios.gd" id="1_esc"]
 [ext_resource type="Script" uid="uid://bwo4r65ndogtj" path="res://scripts/systems/dialogo.gd" id="12_dia"]
@@ -12,6 +12,12 @@
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_fauno.tres" id="10_fau"]
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_ave.tres" id="11_ave"]
 [ext_resource type="Resource" path="res://resources/dialogues/sabios_no_te_vayas.tres" id="8_nov"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_regreso.tres" id="13_reg"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_minotauro.tres" id="14_min"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_minotauro_toro.tres" id="15_mto"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_minotauro_carnero.tres" id="16_mca"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_minotauro_fauno.tres" id="17_mfa"]
+[ext_resource type="Resource" path="res://resources/dialogues/sabios_recordatorio_minotauro_ave.tres" id="18_mav"]
 
 [sub_resource type="RectangleShape2D" id="Forma_disparador"]
 size = Vector2(104, 46)
@@ -26,6 +32,9 @@ dialogo_no_te_vayas = ExtResource("8_nov")
 dialogo_despedida = ExtResource("6_des")
 recordatorios = Array[ExtResource("12_dia")]([ExtResource("7_rec"), ExtResource("9_car"), ExtResource("10_fau"), ExtResource("11_ave")])
 dialogo_recordatorio = ExtResource("7_rec")
+dialogo_regreso = ExtResource("13_reg")
+dialogo_minotauro = ExtResource("14_min")
+recordatorios_minotauro = Array[ExtResource("12_dia")]([ExtResource("15_mto"), ExtResource("16_mca"), ExtResource("17_mfa"), ExtResource("18_mav")])
 
 [node name="Disparador" type="Area2D" parent="."]
 collision_layer = 0

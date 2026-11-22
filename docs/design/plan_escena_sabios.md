@@ -158,3 +158,12 @@ en modo «después» (paso 7). Los cuatro miran siempre de frente (no hay otras 
      sabios están en modo «después», con espada y misión.
    - Partida nueva completa desde el menú (cinemática → Kathita → sabios → bosque) con las
      banderas de depuración apagadas.
+
+
+## Segunda fase: regreso con la cabeza de Medusa (hecho, 2026-11-22)
+- En la misión y la despedida los sabios piden volver con la cabeza petrificada.
+- Con Medusa vencida y sin la misión del Minotauro: burbuja «!» en los cuatro; al hablar con
+  cualquiera (`sabios_regreso`) Leonidas se coloca, enseña la cabeza (la conserva) y recibe
+  «Derrota al Minotauro» (`sabios_minotauro`): debe seguir por debajo de la isla de Medusa,
+  al sur de la cueva, por mar (ese segundo mar está PENDIENTE, ver `plan_minijuego_barco.md`).
+- Después, recordatorios `sabios_recordatorio_minotauro_*`. Prueba: `prueba_escena_sabios.gd`.

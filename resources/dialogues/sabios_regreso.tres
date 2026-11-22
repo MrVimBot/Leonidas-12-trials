@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. Leonidas vuelve al templo tras vencer a Medusa y habla con un sabio.
+Toro: ¡Leonidas! Has vuelto de la isla.
+Carnero: ¿Y bien? ¿Traes la prueba que te pedimos?
+Leonidas: Aquí está.
+"

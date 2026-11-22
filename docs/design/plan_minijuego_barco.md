@@ -338,3 +338,17 @@ Jugando (MCP: `project_run` con `zona_inicial = mar.tscn`, o desde la playa; par
 | `build_zonas`/`build_tilesets` con el editor abierto → "invalid UID" | Cerrar el editor o Recargar proyecto. |
 | El shader no se guarda por tile o rompe el batching | Plan B: un `ColorRect`/`Sprite2D` con el shader **debajo** de `SueloProvisional` solo en `mar` y dejar el resto del agua estática. |
 | Ruido ambiente del aula (demo en clase) | `calibrar()` al empezar y `margen_db` exportado; se puede recalibrar volviendo a entrar. |
+
+
+## Segundo mar (PENDIENTE, pedido el 2026-11-22)
+Tras la misión del Minotauro, los sabios mandan a Leonidas a seguir por debajo de la isla de
+Medusa, al sur de la cueva. Ahí empieza otra travesía en barco, parecida a `mar` pero más
+compleja:
+- camino **no recto** (serpenteante) entre rocas, para obligar a maniobrar;
+- **más tiburones** y **más rocas** (`roca_barco_*`), quizá algún `Remolino` más;
+- misma mecánica (`Zona.modo_barco`, `ModoBarco`, `Barco`, `Tiburon`, `Remolino`).
+
+Por decidir antes de implementarlo: nombre de la zona, dónde está su salida en la `isla`
+(agua al sur de la boca de la `cueva`), a qué lleva al llegar (el nivel del Minotauro no está
+en alcance: ¿cartel «Inaccesible en la demo»?), si la salida se abre solo con la misión del
+Minotauro (`EstadoJuego.mision_empezada(MISION_DERROTAR_MINOTAURO)`) y el arte del agua.

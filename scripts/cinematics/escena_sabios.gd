@@ -17,6 +17,13 @@ extends Node2D
 ## puede mover a otra zona (un templo con interior) sin tocar el script.
 ## Antes de la escena no tienen diálogo (ni burbuja). Al acabar, o si al cargar la zona
 ## ya se tiene la misión (`EstadoJuego.mision_recibida`), todos dicen `dialogo_recordatorio`.
+##
+## SEGUNDA FASE (regreso): con Medusa vencida (`EstadoJuego.medusa_derrotada`) y sin la
+## misión del Minotauro, los sabios llevan la burbuja «!» y `dialogo_regreso`. Al terminar
+## de hablar con cualquiera de ellos, Leonidas va a `PuntoLeonidas`, enseña la cabeza de
+## piedra (pose de objeto obtenido; la conserva) y le dan la misión del Minotauro
+## (`dialogo_minotauro`). Después dicen `recordatorios_minotauro`. Al cargar con esa misión
+## ya recibida, empiezan así y la escena se libera.
 ## Textos PROVISIONALES (resources/dialogues/sabios_*.tres, los edita el guion).
 ## Regla de las escenas guiadas: todo lo que se guarda se concede antes de devolver el
 ## control (aquí, espada, misiones y `mision_recibida` de golpe, antes del tutorial de
@@ -42,6 +49,16 @@ extends Node2D
 @export var recordatorios: Array[Dialogo] = []
 @export var dialogo_recordatorio: Dialogo
 
+@export_group("Regreso")
+## Lo que dice cualquier sabio al volver Leonidas con Medusa vencida; al cerrarlo sigue
+## la escena (la cabeza y la misión del Minotauro).
+@export var dialogo_regreso: Dialogo
+## Aviso mientras Leonidas levanta la cabeza de piedra (sin nombre de quien habla).
+@export var texto_ensenar_cabeza := "Leonidas enseña la cabeza petrificada de Medusa."
+@export var dialogo_minotauro: Dialogo
+## Recordatorios con la misión del Minotauro (mismo orden que `sabios`).
+@export var recordatorios_minotauro: Array[Dialogo] = []
+
 @export_group("Movimiento")
 ## Píxeles por segundo al caminar (Leonidas hasta su sitio y el sabio).
 @export var velocidad := 60.0
@@ -62,8 +79,15 @@ var _bloqueado: Jugador = null
 
 
 func _ready() -> void:
+	if EstadoJuego.mision_empezada(EstadoJuego.MISION_DERROTAR_MINOTAURO):
+		_modo_despues(recordatorios_minotauro)
+		queue_free()
+		return
 	if EstadoJuego.mision_recibida:
-		_modo_despues()
+		if EstadoJuego.medusa_derrotada:
+			_modo_regreso()
+			return
+		_modo_despues(recordatorios)
 		queue_free()
 		return
 	disparador.body_entered.connect(_al_entrar)
@@ -133,7 +157,51 @@ func _reproducir(jugador: Jugador) -> void:
 
 	if sabio:
 		await sabio.caminar_hasta(sitio, velocidad)
-	_modo_despues()
+	_modo_despues(recordatorios)
+	queue_free()
+
+
+## Segunda fase: los sabios esperan la cabeza. El Disparador no se usa (empieza al hablar).
+func _modo_regreso() -> void:
+	disparador.monitoring = false
+	for sabio in sabios:
+		if sabio:
+			sabio.dialogo = dialogo_regreso
+			sabio.burbuja = ZonaDialogo.Tipo.MISION
+			(sabio.get_node(^"%ZonaDialogo") as ZonaDialogo).hablado.connect(_al_hablar_regreso)
+
+
+## `hablado` llega dentro del cierre del diálogo, antes de que la caja suelte su motivo:
+## el bloqueo de la escena entra sin que el jugador pase por NORMAL.
+func _al_hablar_regreso() -> void:
+	var jugador := Jugador.actual(self)
+	if _en_curso or jugador == null:
+		return
+	_en_curso = true
+	_reproducir_regreso(jugador)
+
+
+func _reproducir_regreso(jugador: Jugador) -> void:
+	_bloquear(jugador)
+	await jugador.caminar_hasta(punto_leonidas.global_position, velocidad)
+	_mirar_a_los_sabios(jugador)
+
+	# Leonidas levanta la cabeza de piedra (se la queda). El diálogo no repinta la pose.
+	var cabeza := EstadoJuego.objeto(EstadoJuego.OBJ_CABEZA_PIEDRA)
+	jugador.mostrar_objeto_obtenido(cabeza.icono if cabeza else null, 0.0)
+	await get_tree().create_timer(0.5, false).timeout
+	await Dialogos.mostrar_texto(texto_ensenar_cabeza)
+	jugador.ocultar_objeto_obtenido()
+	_mirar_a_los_sabios(jugador)
+
+	await Dialogos.mostrar(dialogo_minotauro)
+	# Entrega atómica, antes de devolver el control.
+	EstadoJuego.completar_mision(EstadoJuego.MISION_DERROTAR_MEDUSA)
+	EstadoJuego.empezar_mision(EstadoJuego.MISION_DERROTAR_MINOTAURO)
+	SonidosUI.mision_nueva()
+
+	_modo_despues(recordatorios_minotauro)
+	_desbloquear(jugador)
 	queue_free()
 
 
@@ -152,12 +220,14 @@ func _al_salir(cuerpo: Node2D) -> void:
 	_devolviendo = false
 
 
-## Los sabios pasan a ser NPC normales que recuerdan la misión.
-func _modo_despues() -> void:
+## Los sabios pasan a ser NPC normales que recuerdan la misión (`lista`, en el orden de
+## `sabios`; si falta el de alguno, `dialogo_recordatorio`).
+func _modo_despues(lista: Array[Dialogo]) -> void:
 	for i in sabios.size():
 		if sabios[i]:
-			var d: Dialogo = recordatorios[i] if i < recordatorios.size() else null
+			var d: Dialogo = lista[i] if i < lista.size() else null
 			sabios[i].dialogo = d if d else dialogo_recordatorio
+			sabios[i].burbuja = ZonaDialogo.Tipo.HABLAR
 
 
 func _sabio_que_entrega() -> NPC:

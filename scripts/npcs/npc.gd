@@ -15,12 +15,12 @@ extends CharacterBody2D
 ##
 ## Al hablar con él se para y mira al jugador; sigue paseando al cerrar el diálogo.
 ## `paseo = false` → NPC fijo (tendera, sabios...): no se mueve ni se gira.
-## `dialogo` se puede cambiar en juego (p. ej. la escena de los sabios): pasa a su ZonaDialogo.
+## `dialogo` y `burbuja` se pueden cambiar en juego (p. ej. la escena de los sabios): pasan a su ZonaDialogo.
 ##
 ## `dialogo`, `tienda`, `burbuja` y `posicion_burbuja` son una fachada para el Inspector: se
 ## copian a su hijo ZonaDialogo (instancia de scenes/entorno/zona_dialogo.tscn) en
 ## `_enter_tree` (único sitio; antes del `_ready` de los hijos, donde ZonaDialogo aplica su
-## burbuja) y `dialogo` además se reenvía al cambiarlo.
+## burbuja) y `dialogo` y `burbuja` además se reenvían al cambiarlos.
 
 ## QUIETO: fijo (`paseo = false`). PASEANDO: espera o camina, lo decide el componente.
 enum Estado { QUIETO, PASEANDO, HABLANDO }
@@ -41,7 +41,13 @@ enum Estado { QUIETO, PASEANDO, HABLANDO }
 ## Si vende algo: un ComponenteTienda hijo del NPC (entonces no usa `dialogo`).
 @export var tienda: ComponenteTienda
 ## Burbuja sobre la cabeza al acercarse: "…" hablar, "!" misión, "$" tienda.
-@export var burbuja: ZonaDialogo.Tipo = ZonaDialogo.Tipo.HABLAR
+## Se puede cambiar en juego (los sabios ponen «!» cuando tienen una misión nueva).
+@export var burbuja: ZonaDialogo.Tipo = ZonaDialogo.Tipo.HABLAR:
+	set(valor):
+		burbuja = valor
+		var zona := get_node_or_null(^"%ZonaDialogo") as ZonaDialogo
+		if zona and not Engine.is_editor_hint():
+			zona.tipo = valor
 ## Punta de la burbuja respecto a los pies (encima de la cabeza).
 @export var posicion_burbuja := Vector2(0, -46)
 ## `offset` del Sprite para que la posición del nodo sean los pies: (0, −24) para las
