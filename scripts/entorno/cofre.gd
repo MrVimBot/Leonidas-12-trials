@@ -2,7 +2,7 @@
 class_name Cofre
 extends StaticBody2D
 ## Cofre que se abre con interactuar (E/L/X del mando) y da su premio una sola vez: monedas,
-## un objeto (`objeto` × `cantidad`) o las dos cosas. Se queda abierto para siempre: la clave
+## un objeto (`objeto` x `cantidad`) o las dos cosas. Se queda abierto para siempre: la clave
 ## del cofre se apunta en `EstadoJuego.cofres_abiertos` (va en la partida guardada).
 ##
 ## Escena: scenes/entorno/cofre.tscn (capas mundo + interactuable, como las vasijas: el
@@ -89,11 +89,11 @@ func interactuar(quien: Node) -> void:
 	_abriendo = false
 
 
-## «¡Obtuviste Coco ×2 y 10 monedas!»
+## «¡Obtuviste Coco x2 y 10 monedas!»
 func texto_premio() -> String:
 	var partes: PackedStringArray = []
 	if objeto:
-		partes.append(objeto.nombre if cantidad == 1 else "%s ×%d" % [objeto.nombre, cantidad])
+		partes.append(objeto.nombre if cantidad == 1 else "%s x%d" % [objeto.nombre, cantidad])
 	if monedas > 0:
 		partes.append("%d moneda%s" % [monedas, "" if monedas == 1 else "s"])
 	return "¡Obtuviste %s!" % " y ".join(partes)

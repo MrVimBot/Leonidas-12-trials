@@ -166,4 +166,6 @@ en modo «después» (paso 7). Los cuatro miran siempre de frente (no hay otras 
   cualquiera (`sabios_regreso`) Leonidas se coloca, enseña la cabeza (la conserva) y recibe
   «Derrota al Minotauro» (`sabios_minotauro`): debe seguir por debajo de la isla de Medusa,
   al sur de la cueva, por mar (ese segundo mar está PENDIENTE, ver `plan_minijuego_barco.md`).
+- Misión «Regresa con los sabios» (`regresar_con_sabios`): empieza al vencer a Medusa y se
+  completa al recibir la del Minotauro.
 - Después, recordatorios `sabios_recordatorio_minotauro_*`. Prueba: `prueba_escena_sabios.gd`.

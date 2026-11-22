@@ -163,6 +163,8 @@ func _reproducir(jugador: Jugador) -> void:
 
 ## Segunda fase: los sabios esperan la cabeza. El Disparador no se usa (empieza al hablar).
 func _modo_regreso() -> void:
+	# Partidas guardadas tras vencer a Medusa antes de que existiera esta misión.
+	EstadoJuego.empezar_mision(EstadoJuego.MISION_REGRESAR_CON_SABIOS)
 	disparador.monitoring = false
 	for sabio in sabios:
 		if sabio:
@@ -197,6 +199,7 @@ func _reproducir_regreso(jugador: Jugador) -> void:
 	await Dialogos.mostrar(dialogo_minotauro)
 	# Entrega atómica, antes de devolver el control.
 	EstadoJuego.completar_mision(EstadoJuego.MISION_DERROTAR_MEDUSA)
+	EstadoJuego.completar_mision(EstadoJuego.MISION_REGRESAR_CON_SABIOS)
 	EstadoJuego.empezar_mision(EstadoJuego.MISION_DERROTAR_MINOTAURO)
 	SonidosUI.mision_nueva()
 

@@ -2,7 +2,8 @@ class_name PaginaMisiones
 extends PaginaLibro
 ## Página de Misiones del libro: 3 renglones de misiones principales y 3 de secundarias
 ## (hijos de %Renglones, en ese orden, cada uno con su raya `Tachado`). Las completadas
-## salen en gris y tachadas. No tiene cursor propio.
+## salen en gris y tachadas. Si hay más de 3 de un grupo, salen las 3 más recientes (la
+## principal en curso es siempre la última que empezó). No tiene cursor propio.
 
 ## Tinta de las misiones completadas (el color de la raya está en la escena: `Tachado`).
 const TINTA_GRIS := Color(0.11, 0.13, 0.33, 0.45)
@@ -50,7 +51,8 @@ func refrescar() -> void:
 			raya.size = Vector2(ancho, 1)
 
 
-## Añade a `ids` los `POR_GRUPO` primeros de `grupo` (&"" = renglón vacío).
+## Añade a `ids` los `POR_GRUPO` últimos de `grupo`, en su orden (&"" = renglón vacío).
 static func _rellenar(ids: Array[StringName], grupo: Array[StringName]) -> void:
+	var desde := maxi(grupo.size() - POR_GRUPO, 0)
 	for i in POR_GRUPO:
-		ids.append(grupo[i] if i < grupo.size() else &"")
+		ids.append(grupo[desde + i] if desde + i < grupo.size() else &"")

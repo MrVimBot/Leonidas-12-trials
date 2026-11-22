@@ -40,6 +40,7 @@ const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
 const OBJ_COCO := &"coco"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
+const MISION_REGRESAR_CON_SABIOS := &"regresar_con_sabios"
 const MISION_DERROTAR_MINOTAURO := &"derrotar_minotauro"
 
 ## Progreso que se guarda en la sección "progreso": nombre de la variable → valor inicial.

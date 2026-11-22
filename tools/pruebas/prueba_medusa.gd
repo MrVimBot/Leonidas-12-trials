@@ -134,6 +134,7 @@ func ejecutar() -> void:
 	ok("5) la cabeza de piedra en la mano durante el aviso", vio_cabeza[0])
 	ok("5) cabeza de piedra en el inventario", EstadoJuego.cantidad(EstadoJuego.OBJ_CABEZA_PIEDRA) == 1)
 	ok("5) misión completada", EstadoJuego.mision_completada(EstadoJuego.MISION_DERROTAR_MEDUSA))
+	ok("5) misión «Regresa con los sabios» activa", EstadoJuego.mision_empezada(EstadoJuego.MISION_REGRESAR_CON_SABIOS) and not EstadoJuego.mision_completada(EstadoJuego.MISION_REGRESAR_CON_SABIOS))
 	ok("5) jefes_derrotados = 1", EstadoJuego.jefes_derrotados == 1, str(EstadoJuego.jefes_derrotados))
 	ok("5) corazones_extra = 1 y medusa_derrotada", EstadoJuego.corazones_extra == 1 and EstadoJuego.medusa_derrotada)
 	ok("5) vida 16/16", j.vida.vida_max == 16 and j.vida.vida == 16, "%d/%d" % [j.vida.vida, j.vida.vida_max])
