@@ -7,8 +7,6 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/medusa.tscn" id="8_wqbmv"]
 [ext_resource type="AudioStream" uid="uid://bmx7ra61sjk4a" path="res://assets/audio/music/bossfight.mp3" id="9_musica"]
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_medusa.tscn" id="9_q3ql0"]
-[ext_resource type="PackedScene" uid="uid://dspqfuqy6opfn" path="res://scenes/items/vasija_azul.tscn" id="10_4vwxl"]
-[ext_resource type="PackedScene" uid="uid://d037xruooid8v" path="res://scenes/items/vasija_naranja.tscn" id="11_1jt5x"]
 [ext_resource type="Texture2D" uid="uid://deu6urmv0tt8k" path="res://assets/backgrounds/nivel2/arena_medusa/fondo.png" id="20_fondo"]
 [ext_resource type="Texture2D" uid="uid://bm611jk3ydfrn" path="res://assets/sprites/entorno/nivel2/medusa_estatua_1.png" id="21_est"]
 [ext_resource type="Texture2D" uid="uid://djcyumfq6seu0" path="res://assets/sprites/entorno/nivel2/medusa_estatua_2.png" id="22_est"]
@@ -96,14 +94,6 @@ y_sort_enabled = true
 position = Vector2(272, 304)
 medusa = NodePath("../../Jefe/Medusa")
 
-[node name="Vasijas" type="Node2D" parent="Objetos" unique_id=1286210043]
-y_sort_enabled = true
-
-[node name="VasijaAzul1" parent="Objetos/Vasijas" unique_id=1727666666 instance=ExtResource("10_4vwxl")]
-position = Vector2(232, 104)
-
-[node name="VasijaNaranja1" parent="Objetos/Vasijas" unique_id=1118667160 instance=ExtResource("11_1jt5x")]
-position = Vector2(312, 268)
 
 [node name="Entradas" type="Node2D" parent="." unique_id=1075476212]
 
