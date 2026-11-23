@@ -43,19 +43,19 @@ clip_text = true
 
 [node name="Texto" type="Label" parent="Caja" unique_id=765418996]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 33.0
-offset_right = 260.0
-offset_bottom = 81.0
+offset_left = 30.0
+offset_top = 34.0
+offset_right = 264.0
+offset_bottom = 82.0
 clip_text = true
 
 [node name="Retrato" type="TextureRect" parent="Caja" unique_id=1259137425]
 visible = false
 layout_mode = 0
-offset_left = 20.0
-offset_top = 33.0
-offset_right = 66.0
-offset_bottom = 79.0
+offset_left = 30.0
+offset_top = 34.0
+offset_right = 76.0
+offset_bottom = 80.0
 mouse_filter = 2
 stretch_mode = 5
 
