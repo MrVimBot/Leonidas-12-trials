@@ -27,6 +27,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
+from skimage.morphology import skeletonize
 
 RAIZ = Path(__file__).resolve().parents[3]
 SUELO = RAIZ / "fuente/nivel3/laberinto/suelo.png"
@@ -43,11 +44,14 @@ REJILLA = 2
 ALFA = 40
 ## Cierre (px del lienzo) para tapar rendijas de 2–3 px entre trozos de muro pintados.
 CIERRE = 12
-## Cuánto se encoge la colisión respecto a lo pintado (px del lienzo; 7 ≈ 2 px de mundo). El único
-## paso a la salida de abajo es una rendija de ~12 px de mundo entre la cara de un muro y el de
-## abajo (x 175–230, y 398–407): con la colisión justa Leonidas (10×6) pasaba con 1 px de holgura
-## y se enganchaba. Encogida, el paso es más holgado y los muros siguen tapando lo que se dibuja.
-ENCOGER = 7
+## Cuánto se encoge la colisión respecto a lo pintado (px del lienzo; 14 ≈ 4 px de mundo). Con la
+## colisión justa (o encogida solo 2 px) se sentían paredes invisibles en los bordes de los muros
+## (lo probó Esteban el 2026-11-23), y el único paso a la salida de abajo, una rendija de ~12 px de
+## mundo (x 175–230, y 398–407), apenas dejaba pasar a Leonidas (10×6).
+ENCOGER = 14
+## Núcleo que se conserva de cada muro aunque sea más fino que 2 × ENCOGER (px del lienzo a cada
+## lado de su eje): sin él, encoger borraba los muros finos que sí se ven.
+NUCLEO = 4
 
 
 def alfa(ruta):
@@ -115,7 +119,9 @@ def main():
     libre = suelo & ~paredes
     # Rendijas finas entre trozos de muro: se tapan (el muro "se cierra") para que nadie pase.
     solido = ndi.binary_closing(~libre, structure=np.ones((CIERRE, CIERRE)), border_value=1)
-    solido = ndi.binary_erosion(solido, iterations=ENCOGER, border_value=1)
+    encogido = ndi.binary_erosion(solido, iterations=ENCOGER, border_value=1)
+    eje = skeletonize(solido)
+    solido = encogido | (ndi.binary_dilation(eje, iterations=NUCLEO) & solido)
     ancho = int(round(ancho_l * ESCALA))
     alto = int(round(alto_l * ESCALA))
     ancho -= ancho % REJILLA

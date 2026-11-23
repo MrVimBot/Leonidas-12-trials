@@ -4,7 +4,8 @@
 [ext_resource type="Resource" path="res://resources/dialogues/minotauro_salida.tres" id="2_sal"]
 [ext_resource type="Resource" path="res://resources/dialogues/minotauro_por_alli.tres" id="3_pal"]
 [ext_resource type="Resource" path="res://resources/dialogues/minotauro_aparece.tres" id="4_apa"]
-[ext_resource type="Resource" path="res://resources/dialogues/minotauro_invisible.tres" id="5_inv"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_invencible.tres" id="5_inv"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_tras_derrota.tres" id="10_tra"]
 [ext_resource type="Resource" path="res://resources/dialogues/minotauro_con_cuerno.tres" id="6_cue"]
 [ext_resource type="Resource" path="res://resources/dialogues/minotauro_derrota.tres" id="7_der"]
 [ext_resource type="Script" path="res://scripts/entorno/luz_antorcha.gd" id="8_luz"]
@@ -18,9 +19,10 @@ script = ExtResource("1_esc")
 dialogo_salida = ExtResource("2_sal")
 dialogo_por_alli = ExtResource("3_pal")
 dialogo_aparece = ExtResource("4_apa")
-dialogo_invisible = ExtResource("5_inv")
+dialogo_invencible = ExtResource("5_inv")
 dialogo_con_cuerno = ExtResource("6_cue")
 dialogo_derrota = ExtResource("7_der")
+dialogo_tras_derrota = ExtResource("10_tra")
 
 [node name="Disparador" type="Area2D" parent="."]
 collision_layer = 0

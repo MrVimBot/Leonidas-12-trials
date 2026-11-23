@@ -19,11 +19,13 @@ extends Node2D
 ##      cámara enseña la salida de abajo, «por allí» y vuelve (solo la primera vez por visita).
 ##   2. Se apagan las luces (zona más oscura, antorchas casi apagadas, luz alrededor de Leonidas)
 ##      y caen las rejas de las dos salidas. La cámara va al centro: el Minotauro aparece y ruge;
-##      sin cuerno se desvanece («es invisible»), con cuerno se queda. La cámara vuelve, barra de
-##      vida (`Game.empezar_jefe`) y `minotauro.empezar_combate()`.
-##   3. Minotauro a 0 (`derrotado`) → ENTREGA ATÓMICA (misión completada, `jefes_derrotados`,
-##      `minotauro_derrotado`, corazón extra que cura del todo), vuelven las luces, se abren las
-##      rejas y la escena se libera.
+##      sin cuerno, Leonidas recuerda que es invencible (`dialogo_invencible`). La cámara vuelve,
+##      barra de vida (`Game.empezar_jefe`) y `minotauro.empezar_combate()`.
+##   3. Minotauro a 0 (`derrotado`, se queda de pie) → bloqueo, vuelven las luces, se abren las
+##      rejas, `dialogo_derrota` → ENTREGA ATÓMICA (cuerno del Minotauro, misión completada,
+##      `jefes_derrotados`, `minotauro_derrotado`, corazón extra que cura del todo) → pose con el
+##      cuerno + `texto_obtenido` → el Minotauro se retira → `texto_corazon` →
+##      `dialogo_tras_derrota` y la escena se libera. Como Medusa: un jefe no suelta monedas.
 ##   4. Game Over a mitad (`Jugador.reaparecio`): Minotauro `reiniciar()`, luces y rejas como
 ##      al principio y, si reaparece dentro del Disparador, vuelve a empezar (sin el paso 1).
 ## Con `EstadoJuego.minotauro_derrotado` al cargar la zona: sin Minotauro, luz normal, rejas
@@ -42,11 +44,16 @@ extends Node2D
 @export var dialogo_salida: Dialogo
 @export var dialogo_por_alli: Dialogo
 @export var dialogo_aparece: Dialogo
-## Sin cuerno: el Minotauro se ha vuelto invisible.
-@export var dialogo_invisible: Dialogo
+## Sin cuerno: el Minotauro es invencible.
+@export var dialogo_invencible: Dialogo
 ## Con el cuerno (al repetir el combate después de conseguirlo).
 @export var dialogo_con_cuerno: Dialogo
+## El Minotauro, vencido; Leonidas se lleva su cuerno.
 @export var dialogo_derrota: Dialogo
+## Después del premio (las rejas ya están abiertas).
+@export var dialogo_tras_derrota: Dialogo
+## Aviso de objeto obtenido (sin nombre de quien habla).
+@export var texto_obtenido := "¡Obtuviste el cuerno del Minotauro!"
 ## Aviso del corazón extra (Jugabilidad p. 12).
 @export var texto_corazon := "¡Ganaste un corazón! Tu vida máxima aumenta."
 
@@ -157,10 +164,8 @@ func _encuentro(jugador: Jugador) -> void:
 	await Dialogos.mostrar(dialogo_aparece)
 	if Minotauro.tiene_cuerno():
 		await Dialogos.mostrar(dialogo_con_cuerno)
-		await minotauro.desaparecer()
 	else:
-		await minotauro.desaparecer()
-		await Dialogos.mostrar(dialogo_invisible)
+		await Dialogos.mostrar(dialogo_invencible)
 	if camara:
 		await camara.soltar_foco(duracion_camara)
 
@@ -185,19 +190,31 @@ func _derrota() -> void:
 	var game := Game.actual(self)
 	if game:
 		game.terminar_jefe()
-	_entregar()
 	var jugador := _jugador if is_instance_valid(_jugador) else Jugador.actual(self)
 	if jugador == null:
+		_entregar()
 		return
 	_bloquear(jugador)
-	await get_tree().create_timer(1.0, false).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	_encender_luces(duracion_apagar)
 	for r in rejas:
 		if r:
 			r.abrir()
-	await get_tree().create_timer(0.6, false).timeout
+	_mirar_al_minotauro(jugador)
 	await Dialogos.mostrar(dialogo_derrota)
+
+	_entregar()
+
+	# Leonidas levanta el cuerno del Minotauro. El diálogo no repinta la pose: ya está bloqueado.
+	var cuerno := EstadoJuego.objeto(EstadoJuego.OBJ_CUERNO_MINOTAURO)
+	jugador.mostrar_objeto_obtenido(cuerno.icono if cuerno else null, 0.0)
+	await get_tree().create_timer(0.5, false).timeout
+	await Dialogos.mostrar_texto(texto_obtenido)
+	jugador.ocultar_objeto_obtenido()
+	if is_instance_valid(minotauro):
+		await minotauro.retirarse()
 	await Dialogos.mostrar_texto(texto_corazon)
+	await Dialogos.mostrar(dialogo_tras_derrota)
 	_desbloquear(jugador)
 	_jugador = null
 	queue_free()
@@ -208,6 +225,7 @@ func _derrota() -> void:
 func _entregar() -> void:
 	if EstadoJuego.minotauro_derrotado:
 		return
+	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_CUERNO_MINOTAURO)
 	EstadoJuego.completar_mision(EstadoJuego.MISION_DERROTAR_MINOTAURO)
 	EstadoJuego.jefes_derrotados += 1
 	EstadoJuego.minotauro_derrotado = true
@@ -273,6 +291,11 @@ func _luz(color: Color, intensidad_antorchas: float, intensidad_leonidas: float,
 
 
 # --- Ayudantes ------------------------------------------------------------------------------
+
+func _mirar_al_minotauro(jugador: Jugador) -> void:
+	if is_instance_valid(minotauro):
+		jugador.mirar_hacia(minotauro.global_position - jugador.global_position)
+
 
 func _camara() -> CamaraPixel:
 	var game := Game.actual(self)

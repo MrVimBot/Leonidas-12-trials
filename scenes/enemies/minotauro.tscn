@@ -54,7 +54,7 @@ position = Vector2(0, -6)
 shape = SubResource("Shape_contacto")
 
 [node name="Movimiento" parent="." index="5"]
-velocidad = 40.0
+velocidad = 60.0
 
 [node name="Animador" parent="." index="6"]
 lado_mira = 1
@@ -69,7 +69,6 @@ radio_perder = 3000.0
 
 [node name="Muerte" parent="." index="10" node_paths=PackedStringArray("desactivar")]
 desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto"), NodePath("../Golpe")]
-monedas = 5
 
 [node name="Golpe" type="Area2D" parent="." index="11"]
 collision_layer = 16

@@ -7,7 +7,7 @@
 script = ExtResource("1_obj")
 id = &"cuerno"
 nombre = "Cuerno"
-descripcion = "Un cuerno antiguo. Con él puedes ver al Minotauro y herirlo."
+descripcion = "Un cuerno antiguo. Sin él, el Minotauro es invencible."
 icono = ExtResource("2_ico")
 tipo = 1
 maximo = 1

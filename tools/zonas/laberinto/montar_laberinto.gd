@@ -35,11 +35,11 @@ const SALIDA_ISLA := Rect2(449, 51, 80, 18)
 ## Base de los barrotes: al pie de la cara del muro (y 100), donde acaba el pasillo oscuro. La reja
 ## (82 de ancho → 64 de alto) sube por la boca del pasillo; más arriba asomaba por encima del dibujo.
 const REJA_NORTE := Vector2(489, 100) # tapa x 452–525
-const ANCHO_REJA_NORTE := 82.0
-## Hueco de abajo a la izquierda (x 128–163, de y 504 al borde de abajo).
-const REJA_SUR := Vector2(145, 508)
-const ANCHO_REJA_SUR := 44.0
-const FIN_DEMO := Rect2(127, 514, 38, 12)
+const ANCHO_REJA_NORTE := 88.0 # el hueco mide 448–529: un poco de más a cada lado
+## Hueco de abajo a la izquierda (x 122–167 desde y 508 hasta el borde de abajo).
+const REJA_SUR := Vector2(145, 512)
+const ANCHO_REJA_SUR := 50.0
+const FIN_DEMO := Rect2(127, 516, 38, 12)
 ## Raíz de la escena del encuentro (la boca de la entrada) y adónde mira la cámara en la salida.
 const ESCENA_POS := Vector2(489, 100)
 const PUNTO_SALIDA := Vector2(145, 500)

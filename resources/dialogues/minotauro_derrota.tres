@@ -4,7 +4,10 @@
 
 [resource]
 script = ExtResource("1_dia")
-texto = "# PROVISIONAL. El Minotauro cae.
-Leonidas: ¡Lo logré! El Minotauro ha caído.
-Leonidas: Las rejas se han abierto. Ahora sí, a buscar la salida.
+texto = "# PROVISIONAL. El Minotauro, vencido, antes de que Leonidas se lleve su cuerno.
+Minotauro: Grrr... Me has vencido, pequeño humano.
+Minotauro: ¡Espera! No me mates, te lo suplico.
+Leonidas: Tranquilo. No voy a matarte.
+Leonidas: Pero necesito tu cuerno: los sabios esperan una prueba de mi victoria.
+Minotauro: Llévatelo... y déjame en paz en mi laberinto.
 "

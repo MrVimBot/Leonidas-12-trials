@@ -4,28 +4,32 @@ extends CharacterBody2D
 ## Hereda de scenes/enemies/enemigo_pintado.tscn; arte pintado en resources/sprite_frames/
 ## minotauro.tres (parado, caminar, atacar).
 ##
-## Es INVISIBLE e invulnerable mientras Leonidas no tenga el cuerno (`EstadoJuego.OBJ_CUERNO`,
-## en un cofre del laberinto): no se ve ni él ni su sombra, la espada lo atraviesa, pero él sí
-## golpea. Al conseguir el cuerno se ve y se le puede herir al momento (`objetos_cambio`).
-## `invulnerable` + `invulnerable_cambio` siguen ese estado (la barra del jefe se pone gris).
+## Es INVENCIBLE mientras Leonidas no tenga el cuerno (`EstadoJuego.OBJ_CUERNO`, en un cofre del
+## laberinto): se le ve y la espada le da, pero no le quita vida (`vida.invulnerable_extra`). Al
+## conseguir el cuerno se le puede herir al momento (`objetos_cambio`). `invulnerable` +
+## `invulnerable_cambio` siguen ese estado (la barra del jefe se pone gris).
 ##
-## Estados: INACTIVO (escondido, sin golpes) → `empezar_combate()` → PERSEGUIR (camina por el
-## laberinto con `ComponenteRuta` hasta ponerse a un lado de Leonidas) → ATACAR (`Ataque`, un
-## espadazo hacia el lado al que mira: `Golpe` en los fotogramas `frames_golpe` de `atacar`;
-## después se queda con la espada clavada, el momento de atacarle) → ESPERA (`pausa`) →
-## PERSEGUIR. A 0 de vida: MUERTO, `derrotado` y `Muerte` (heredado) lo aplasta y lo libera.
+## Estados: INACTIVO (escondido hasta que la escena lo enseña, sin golpes) → `empezar_combate()`
+## → PERSEGUIR (camina por el laberinto con `ComponenteRuta` hasta ponerse a un lado de
+## Leonidas) → ATACAR (`Ataque`, un espadazo hacia el lado al que mira: `Golpe` en los
+## fotogramas `frames_golpe` de `atacar`; después se queda con la espada clavada, el momento de
+## atacarle) → ESPERA (`pausa`) → PERSEGUIR. A 0 de vida: DERROTADO y `derrotado`.
 ##
-## Para la escena del encuentro: `aparecer()` / `desaparecer()` (lo enseñan y lo esconden con un
-## fundido aunque no haya cuerno) y `reiniciar()` (Game Over a mitad del combate).
+## Es un jefe, como Medusa: al vencerlo NO muere como un enemigo normal (sin `ComponenteMuerte`
+## ni monedas): se queda quieto para la escena de la derrota, que después lo retira (`retirarse()`).
+##
+## Para la escena del encuentro: `aparecer()` (lo enseña con un fundido y ruge), `reiniciar()`
+## (Game Over a mitad del combate) y `retirarse()`.
 
 signal derrotado
-## Cambia al volverse invisible (sin cuerno) o visible: la barra del jefe se pone gris.
+## Cambia al quedar invencible (sin cuerno) o vulnerable: la barra del jefe se pone gris.
 signal invulnerable_cambio(activa: bool)
 
-enum Estado { INACTIVO, PERSEGUIR, ATACAR, ESPERA, MUERTO }
+enum Estado { INACTIVO, PERSEGUIR, ATACAR, ESPERA, DERROTADO }
 
 @export_group("Combate")
-@export var velocidad_caminar := 40.0
+## Píxeles por segundo (Leonidas camina a 80: puede huir, pero no dormirse).
+@export var velocidad_caminar := 60.0
 ## Ataca si Leonidas está a ≤ x en horizontal (y a ≥ 6, para no golpear de frente) y ≤ y en
 ## vertical: el espadazo barre el suelo a su lado (ver la forma `Golpe/Derecha`).
 @export var alcance := Vector2(50, 12)
@@ -33,22 +37,23 @@ enum Estado { INACTIVO, PERSEGUIR, ATACAR, ESPERA, MUERTO }
 @export var distancia_lado := 32.0
 ## Segundos quieto entre ataques.
 @export var pausa := 0.8
-## Segundos del fundido de `aparecer()` / `desaparecer()`.
+## Segundos del fundido de `aparecer()` y `retirarse()`.
 @export var duracion_fundido := 0.6
 @export_group("Sonido")
 ## Rugido al aparecer.
 @export var sonido_rugido: AudioStreamPlayer2D
 
 var estado := Estado.INACTIVO
-## True mientras es invisible en combate (sin cuerno): no se le puede herir.
+## True mientras es invencible en combate (Leonidas sin cuerno).
 var invulnerable := false:
 	set(valor):
 		if valor == invulnerable:
 			return
 		invulnerable = valor
+		vida.invulnerable_extra = valor
 		invulnerable_cambio.emit(valor)
 
-## Lo enseña la escena aunque no haya cuerno (al aparecer en el centro).
+## Lo ha enseñado la escena (antes del combate está escondido).
 var _mostrado := false
 var _espera := 0.0
 var _posicion_inicial := Vector2.ZERO
@@ -63,15 +68,21 @@ var _tween: Tween
 @onready var parpadeo: ComponenteParpadeo = $Parpadeo
 @onready var hurtbox: Hurtbox = $Hurtbox
 @onready var contacto: Hitbox = $Contacto
+@onready var golpe: Hitbox = $Golpe
 @onready var ataque: ComponenteAtaque = $Ataque
 @onready var ruta: ComponenteRuta = $Ruta
-## Le alumbra cuando se le ve: el laberinto está a oscuras durante el combate.
+## Le alumbra mientras se le ve: el laberinto está a oscuras durante el combate.
 @onready var luz: LuzAntorcha = $Luz
 
 
 func _ready() -> void:
+	# La base trae `Muerte` conectado a `vida.murio` y en una escena heredada no se puede quitar
+	# el nodo: se desconecta aquí, porque el Minotauro es un jefe y no muere (DERROTADO), como Medusa.
+	var muerte := $Muerte as ComponenteMuerte
+	if vida.murio.is_connected(muerte.morir):
+		vida.murio.disconnect(muerte.morir)
 	vida.danado.connect(_al_recibir_danio)
-	vida.murio.connect(_al_morir) # `Muerte` (heredado) también: aplasta, suelta monedas y libera
+	vida.murio.connect(_al_ser_derrotado)
 	ataque.termino.connect(_al_terminar_ataque)
 	EstadoJuego.objetos_cambio.connect(_al_cambiar_objetos)
 	EstadoJuego.estado_restablecido.connect(_actualizar)
@@ -96,9 +107,9 @@ func _physics_process(delta: float) -> void:
 
 # --- API --------------------------------------------------------------------------------------
 
-## ¿Lo ve Leonidas? (tiene el cuerno, o la escena lo está enseñando)
+## ¿Se le ve? (en cuanto la escena lo enseña y durante todo el combate)
 func es_visible() -> bool:
-	return _mostrado or (tiene_cuerno() and estado != Estado.INACTIVO)
+	return _mostrado or estado != Estado.INACTIVO
 
 
 static func tiene_cuerno() -> bool:
@@ -114,6 +125,7 @@ func empezar_combate() -> void:
 		ruta.preparar(Rect2(zona.obtener_limites()))
 	estado = Estado.PERSEGUIR
 	contacto.activo = true
+	hurtbox.activo = true
 	_actualizar()
 
 
@@ -125,6 +137,7 @@ func reiniciar() -> void:
 	movimiento.detener()
 	ataque.cancelar()
 	contacto.activo = false
+	hurtbox.activo = false
 	vida.restaurar()
 	parpadeo.detener()
 	ruta.olvidar()
@@ -135,7 +148,7 @@ func reiniciar() -> void:
 	_actualizar()
 
 
-## Lo enseña con un fundido (aunque Leonidas no tenga el cuerno) y ruge. Con `await`.
+## Lo enseña con un fundido y ruge. Con `await`.
 func aparecer() -> void:
 	_mostrado = true
 	_actualizar()
@@ -145,13 +158,11 @@ func aparecer() -> void:
 	await _fundir(1.0)
 
 
-## Deja de enseñarlo: si no hay cuerno, se desvanece. Con `await`.
-func desaparecer() -> void:
-	if not tiene_cuerno():
-		await _fundir(0.0)
-	_mostrado = false
-	modulate.a = 1.0
-	_actualizar()
+## Tras la escena de la derrota: se desvanece en la oscuridad y se libera. Con `await`.
+func retirarse() -> void:
+	luz.fijar_intensidad(0.0, duracion_fundido)
+	await _fundir(0.0)
+	queue_free()
 
 
 # --- Combate ----------------------------------------------------------------------------------
@@ -203,31 +214,34 @@ func _al_recibir_danio(_cantidad: int, _origen: Vector2) -> void:
 		parpadeo.parpadear(vida.tiempo_invulnerable())
 
 
-func _al_morir() -> void:
-	estado = Estado.MUERTO
+## A 0 de vida: quieto, sin golpes ni Hurtbox, de pie para la escena de la derrota.
+func _al_ser_derrotado() -> void:
+	estado = Estado.DERROTADO
 	ataque.cancelar()
+	golpe.set_deferred(&"activo", false)
 	contacto.set_deferred(&"activo", false)
+	hurtbox.set_deferred(&"activo", false)
 	movimiento.detener()
-	_mostrado = true # que se vea caer aunque no haya cuerno (no debería: sin él no se le hiere)
-	_actualizar()
+	parpadeo.detener()
+	invulnerable = false
+	animador.reproducir(&"parado", true)
 	derrotado.emit()
 
 
-# --- Visibilidad ------------------------------------------------------------------------------
+# --- Cuerno -----------------------------------------------------------------------------------
 
 func _al_cambiar_objetos(id: StringName, _cantidad: int) -> void:
 	if id == EstadoJuego.OBJ_CUERNO:
 		_actualizar()
 
 
-## Aplica si se ve, si se le puede herir y si la barra va en gris.
+## Aplica si se ve y si se le puede herir (y, por la señal, si la barra va en gris).
 func _actualizar() -> void:
 	var en_combate := estado == Estado.PERSEGUIR or estado == Estado.ATACAR or estado == Estado.ESPERA
 	var ve := es_visible()
 	sprite.visible = ve
 	sombra.visible = ve
 	luz.fijar_intensidad(1.0 if ve else 0.0, duracion_fundido * 0.5)
-	hurtbox.activo = en_combate and tiene_cuerno()
 	invulnerable = en_combate and not tiene_cuerno()
 
 

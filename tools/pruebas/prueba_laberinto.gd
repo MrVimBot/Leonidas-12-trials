@@ -4,12 +4,13 @@ extends "res://tools/pruebas/base_prueba.gd"
 ##    MINOTAURO); con ella, la salida lleva al laberinto (entrada de arriba).
 ## 1) Recorrido: desde la entrada se llega al cofre del cuerno y al hueco de abajo (Explorador).
 ## 2) Encuentro al llegar: diálogos, la cámara enseña la salida, se apagan las luces, caen las dos
-##    rejas, el Minotauro aparece y se vuelve invisible. Combate: barra gris, sin Hurtbox, golpes
-##    de Leonidas no le quitan vida y se acerca por el laberinto.
-## 3) Cofre: da el cuerno → se ve, se le puede herir y la barra deja el gris.
+##    rejas y el Minotauro aparece. Combate: se le ve, barra gris (invencible), los golpes de
+##    Leonidas no le quitan vida y se acerca por el laberinto.
+## 3) Cofre: da el cuerno → se le puede herir y la barra deja el gris.
 ## 4) Morir a mitad (reaparecer automático): Minotauro, luces y rejas como al principio y el
 ##    encuentro vuelve a empezar solo (se reaparece dentro del Disparador), con el cuerno visible.
-## 5) Derrota: misión completada, `minotauro_derrotado`, corazón extra, rejas abiertas, luz normal.
+## 5) Derrota de jefe: se queda de pie, diálogo, pose con el cuerno del Minotauro (en el inventario),
+##    sin monedas; misión completada, `minotauro_derrotado`, corazón extra, rejas abiertas, luz.
 ## 6) Guardar y cargar: sin escena ni Minotauro; la salida de abajo es el fin de la demo.
 
 const ISLA := "res://scenes/levels/isla.tscn"
@@ -80,7 +81,7 @@ func ejecutar() -> void:
 	var entrada := zona.punto_entrada("desde_isla")
 	ok("0) aparece en la entrada de arriba", absf(j.global_position.x - entrada.x) < 1.0
 		and j.global_position.y >= entrada.y - 1.0 and j.global_position.y <= escena.punto_leonidas.global_position.y + 1.0, str(j.global_position))
-	ok("0) Minotauro INACTIVO e invisible", minotauro.estado == Minotauro.Estado.INACTIVO and not minotauro.sprite.visible)
+	ok("0) Minotauro INACTIVO y escondido hasta la escena", minotauro.estado == Minotauro.Estado.INACTIVO and not minotauro.sprite.visible)
 
 	# 1) Recorrido (con las rejas aún abiertas: el encuentro empieza con diálogos).
 	var ex := Explorador.new(zona.get_world_2d().direct_space_state)
@@ -115,9 +116,19 @@ func ejecutar() -> void:
 	ok("2) el Minotauro apareció", vio_minotauro[0])
 	ok("2) luces apagadas", escena.oscuridad.color.is_equal_approx(escena.color_oscuro), str(escena.oscuridad.color))
 	ok("2) rejas cerradas", rejas_cerradas())
+	await ticks(2) # la colisión de las rejas se activa con set_deferred
+	var escapa := {"abajo": false, "arriba": false}
+	ex.recorrer(escena.punto_leonidas.global_position, Rect2(zona.obtener_limites()), 2.0, func(p: Vector2) -> bool:
+		if p.y > 515.0 and p.x < 200.0:
+			escapa.abajo = true
+		if p.y < 86.0:
+			escapa.arriba = true
+		return escapa.abajo and escapa.arriba)
+	ok("2) con las rejas cerradas no se sale por abajo", not escapa.abajo)
+	ok("2) ni por arriba", not escapa.arriba)
 	ok("2) Leonidas libre y la cámara vuelve con él", not j.esta_bloqueado() and not camara.enfocando())
-	ok("2) Minotauro persigue, invisible", minotauro.estado != Minotauro.Estado.INACTIVO and not minotauro.sprite.visible and not minotauro.sombra.visible)
-	ok("2) barra gris (invulnerable)", barra.visible and barra.jefe() == minotauro and barra.esta_gris())
+	ok("2) Minotauro persigue y se le ve", minotauro.estado != Minotauro.Estado.INACTIVO and minotauro.sprite.visible and minotauro.sombra.visible)
+	ok("2) invencible y barra gris", minotauro.invulnerable and minotauro.vida.invulnerable_extra and barra.visible and barra.jefe() == minotauro and barra.esta_gris())
 	minotauro.hurtbox.recibir_golpe(1, j.global_position)
 	await ticks(2)
 	ok("2) sin cuerno no se le hiere", minotauro.vida.vida == minotauro.vida.vida_max)
@@ -139,7 +150,7 @@ func ejecutar() -> void:
 	await cerrar_dialogos()
 	await ticks(3)
 	ok("3) Leonidas tiene el cuerno", Minotauro.tiene_cuerno())
-	ok("3) el Minotauro se ve", minotauro.sprite.visible and minotauro.sombra.visible)
+	ok("3) deja de ser invencible", not minotauro.invulnerable and not minotauro.vida.invulnerable_extra)
 	ok("3) la barra deja el gris", not barra.esta_gris())
 	await esperar_hasta(func() -> bool: return not minotauro.vida.es_invulnerable(), 300)
 	minotauro.hurtbox.recibir_golpe(1, j.global_position)
@@ -162,24 +173,36 @@ func ejecutar() -> void:
 	empieza = await pasar_encuentro()
 	await ticks(3)
 	ok("4) segundo encuentro hasta el combate (sin volver a enseñar la salida)", empieza)
-	ok("4) con el cuerno se ve desde el principio", minotauro.sprite.visible and not barra.esta_gris())
+	ok("4) con el cuerno se le puede herir desde el principio", minotauro.sprite.visible and not minotauro.invulnerable and not barra.esta_gris())
 
 	# 5) Derrota.
 	mucha_vida()
 	await esperar_hasta(func() -> bool: return not minotauro.vida.es_invulnerable(), 300)
+	var monedas := EstadoJuego.monedas
 	minotauro.vida.recibir_danio(99)
 	await ticks(2)
 	ok("5) sin barra", not barra.visible)
-	ok("5) entrega: misión, bandera y jefes", EstadoJuego.mision_completada(EstadoJuego.MISION_DERROTAR_MINOTAURO)
-		and EstadoJuego.minotauro_derrotado and EstadoJuego.jefes_derrotados == 1, str(EstadoJuego.jefes_derrotados))
-	ok("5) corazón extra", EstadoJuego.corazones_extra == 1 and j.vida.vida_max == 16, str(j.vida.vida_max))
+	ok("5) el Minotauro se queda de pie (DERROTADO)", minotauro.estado == Minotauro.Estado.DERROTADO and minotauro.sprite.visible)
+	ok("5) Leonidas bloqueado", j.esta_bloqueado())
+	var en_mano := j.get_node(^"Visual/ObjetoEnMano") as Sprite2D
+	var icono_trofeo := EstadoJuego.objeto(EstadoJuego.OBJ_CUERNO_MINOTAURO).icono
+	var vio_trofeo := [false]
 	var termina := await esperar_hasta(func() -> bool:
 		if Dialogos.abierto:
+			if en_mano.visible and en_mano.texture == icono_trofeo:
+				vio_trofeo[0] = true
 			accion(&"interactuar", true)
 			accion(&"interactuar", false)
 		return not is_instance_valid(escena), 3000)
 	await ticks(5)
 	ok("5) diálogos hasta el final y la escena se libera", termina)
+	ok("5) pose con el cuerno del Minotauro durante el aviso", vio_trofeo[0])
+	ok("5) el cuerno del Minotauro en el inventario", EstadoJuego.cantidad(EstadoJuego.OBJ_CUERNO_MINOTAURO) == 1)
+	ok("5) un jefe no da monedas", EstadoJuego.monedas == monedas
+		and game.find_children("*", "ObjetoSuelto", true, false).is_empty(), str(EstadoJuego.monedas))
+	ok("5) entrega: misión, bandera y jefes", EstadoJuego.mision_completada(EstadoJuego.MISION_DERROTAR_MINOTAURO)
+		and EstadoJuego.minotauro_derrotado and EstadoJuego.jefes_derrotados == 1, str(EstadoJuego.jefes_derrotados))
+	ok("5) corazón extra", EstadoJuego.corazones_extra == 1 and j.vida.vida_max == 16, str(j.vida.vida_max))
 	ok("5) Leonidas libre", not j.esta_bloqueado())
 	var rejas_abiertas := true
 	for r in zona.get_node(^"Objetos/Rejas").get_children():
