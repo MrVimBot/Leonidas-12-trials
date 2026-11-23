@@ -4112,6 +4112,7 @@ y_sort_enabled = true
 
 [node name="Cueva1" parent="Objetos/Cueva" unique_id=233084281 instance=ExtResource("4_cmj0y")]
 position = Vector2(2280, 820)
+z_index = -1
 textura = ExtResource("17_2fw6p")
 escala = 0.197
 solido = false
