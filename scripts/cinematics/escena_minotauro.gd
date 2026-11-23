@@ -6,7 +6,7 @@ extends Node2D
 ##
 ## Hijos (posiciones relativas a la raíz, que la zona pone en la entrada de arriba):
 ##   Disparador     Area2D (máscara: jugador) en la boca de la entrada: al pisarla empieza el
-##                  encuentro. La entrada `desde_isla` cae dentro (empieza al llegar) y también el
+##                  encuentro. La entrada `desde_orilla` cae dentro (empieza al llegar) y también el
 ##                  punto de control (al reaparecer tras el Game Over vuelve a empezar).
 ##   PuntoLeonidas  Marker2D: hasta dónde baja Leonidas antes de hablar (en línea recta).
 ##   LuzLeonidas    LuzAntorcha que sigue a Leonidas con las luces apagadas.

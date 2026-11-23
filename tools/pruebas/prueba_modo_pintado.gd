@@ -10,6 +10,7 @@ const V := Window.CONTENT_SCALE_MODE_VIEWPORT
 const PUEBLO := "res://scenes/levels/pueblo.tscn"
 const PINTADAS := [
 	"res://scenes/levels/isla_orilla.tscn",
+	"res://scenes/levels/orilla_minotauro.tscn",
 	"res://scenes/levels/isla.tscn",
 	"res://scenes/levels/cueva_medusa.tscn",
 	"res://scenes/levels/cueva_jefe.tscn",

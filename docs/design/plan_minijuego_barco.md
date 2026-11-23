@@ -340,15 +340,14 @@ Jugando (MCP: `project_run` con `zona_inicial = mar.tscn`, o desde la playa; par
 | Ruido ambiente del aula (demo en clase) | `calibrar()` al empezar y `margen_db` exportado; se puede recalibrar volviendo a entrar. |
 
 
-## Segundo mar (PENDIENTE, pedido el 2026-11-22)
+## Segundo mar (HECHO el 2026-11-23, trazado PROVISIONAL)
 Tras la misión del Minotauro, los sabios mandan a Leonidas a seguir por debajo de la isla de
-Medusa, al sur de la cueva. Ahí empieza otra travesía en barco, parecida a `mar` pero más
-compleja:
-- camino **no recto** (serpenteante) entre rocas, para obligar a maniobrar;
-- **más tiburones** y **más rocas** (`roca_barco_*`), quizá algún `Remolino` más;
-- misma mecánica (`Zona.modo_barco`, `ModoBarco`, `Barco`, `Tiburon`, `Remolino`).
-
-Por decidir antes de implementarlo: nombre de la zona, dónde está su salida en la `isla`
-(agua al sur de la boca de la `cueva`), a qué lleva al llegar (el nivel del Minotauro no está
-en alcance: ¿cartel «Inaccesible en la demo»?), si la salida se abre solo con la misión del
-Minotauro (`EstadoJuego.mision_empezada(MISION_DERROTAR_MINOTAURO)`) y el arte del agua.
+Medusa, al sur de la cueva. Recorrido: `isla` (`SalidaMarMinotauro`, en la orilla bajo la cueva,
+tras `BarreraMarMinotauro` con requisito MINOTAURO y el cartel `CartelMarMinotauro`) →
+**`mar_minotauro`** («Mar del sur») → **`orilla_minotauro`** (copia de `isla_orilla`) → `laberinto`.
+- `mar_minotauro` lo genera `tools/build_zonas.gd` (`_mar_minotauro`): 48×112 tiles; lenguas de
+  arrecife alternas (`LENGUAS_MAR_SUR`, cada 16 filas) dejan un hueco de 15 tiles a un lado y otro,
+  así que el camino serpentea; 27 rocas `roca_barco_*`, 8 remolinos y 7 tiburones.
+- Misma mecánica (`Zona.modo_barco`, `ModoBarco`, `Barco`); el premio de la travesía funciona igual.
+- Prueba: `tools/pruebas/prueba_mar_minotauro.gd`.
+- Pendiente: arte propio del agua/orilla (hoy el del primer mar y el de `isla_orilla`).

@@ -16,10 +16,11 @@ otro objeto distinto del cuerno del cofre).
 
 ## Cómo se llega
 
-`isla` (orilla al sur de la boca de la cueva) → `laberinto` (entrada de arriba). La orilla está
-cerrada con una `BarreraMision` (requisito `MINOTAURO`) hasta que los sabios dan la misión del
-Minotauro. Mientras no exista el segundo nivel del mar (ver `plan_minijuego_barco.md`,
-«Segundo mar»), la orilla lleva directamente al laberinto.
+`isla` (orilla al sur de la boca de la cueva) → `mar_minotauro` (barco, «Mar del sur») →
+`orilla_minotauro` (a pie) → `laberinto` (entrada de arriba, `desde_orilla`). La orilla de la isla
+está cerrada con una `BarreraMision` (`BarreraMarMinotauro`, requisito `MINOTAURO`) hasta que los
+sabios dan la misión del Minotauro (tras vencer a Medusa y volver con ellos); al lado, el cartel
+`CartelMarMinotauro` lo explica. Detalle del mar en `plan_minijuego_barco.md` («Segundo mar»).
 
 ## Piezas
 

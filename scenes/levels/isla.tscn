@@ -35,9 +35,12 @@
 [ext_resource type="Resource" path="res://resources/objetos/coco.tres" id="29_loa26"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="33_kq84f"]
 [ext_resource type="Resource" path="res://resources/dialogues/leonidas_orilla_sur.tres" id="34_4sant"]
+[ext_resource type="Texture2D" uid="uid://b3ock3yu28fix" path="res://assets/sprites/entorno/cartel.png" id="35_cartel"]
+[ext_resource type="PackedScene" uid="uid://c7k2m9xq4ndpa" path="res://scenes/entorno/zona_dialogo.tscn" id="36_zonadlg"]
+[ext_resource type="Resource" path="res://resources/dialogues/cartel_mar_minotauro.tres" id="37_cartelmm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvicc"]
-size = Vector2(156, 52)
+size = Vector2(260, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kq84f"]
 size = Vector2(200, 16)
@@ -46,7 +49,10 @@ size = Vector2(200, 16)
 size = Vector2(36, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ohix6"]
-size = Vector2(140, 40)
+size = Vector2(240, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cartelmm"]
+size = Vector2(30, 36)
 
 [node name="Isla" type="Node2D" unique_id=1457208538 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
@@ -4569,16 +4575,31 @@ position = Vector2(1433, 1215)
 [node name="Gamba22" parent="Objetos/Enemigos" unique_id=1587028082 instance=ExtResource("21_lvicc")]
 position = Vector2(1279, 1245)
 
-[node name="BarreraLaberinto" parent="Objetos" unique_id=1821163579 instance=ExtResource("33_kq84f")]
-position = Vector2(2260, 922)
+[node name="BarreraMarMinotauro" parent="Objetos" unique_id=1821163579 instance=ExtResource("33_kq84f")]
+position = Vector2(2250, 925)
 requisito = 2
 dialogo = ExtResource("34_4sant")
 dialogo_repetido = null
 direccion_retroceso = Vector2(0, -1)
 destello = false
 
-[node name="Forma" parent="Objetos/BarreraLaberinto" index="0"]
+[node name="Forma" parent="Objetos/BarreraMarMinotauro" index="0"]
 shape = SubResource("RectangleShape2D_lvicc")
+
+[node name="Carteles" type="Node2D" parent="Objetos" unique_id=1630551201]
+y_sort_enabled = true
+
+[node name="CartelMarMinotauro" parent="Objetos/Carteles" unique_id=1630551202 instance=ExtResource("4_cmj0y")]
+position = Vector2(2096, 904)
+textura = ExtResource("35_cartel")
+
+[node name="ZonaDialogo" parent="Objetos/Carteles/CartelMarMinotauro" unique_id=1630551203 instance=ExtResource("36_zonadlg")]
+dialogo = ExtResource("37_cartelmm")
+posicion_burbuja = Vector2(0, -42)
+
+[node name="Forma" type="CollisionShape2D" parent="Objetos/Carteles/CartelMarMinotauro/ZonaDialogo" unique_id=1630551204]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_cartelmm")
 
 [node name="Entradas" type="Node2D" parent="." unique_id=1953331109]
 
@@ -4591,7 +4612,7 @@ position = Vector2(125, 60)
 [node name="desde_cueva" type="Marker2D" parent="Entradas" unique_id=2134797763]
 position = Vector2(2245, 848)
 
-[node name="desde_laberinto" type="Marker2D" parent="Entradas" unique_id=599462807]
+[node name="desde_mar_minotauro" type="Marker2D" parent="Entradas" unique_id=599462807]
 position = Vector2(2260, 875)
 
 [node name="Colisiones" type="Node2D" parent="." unique_id=942872685]
@@ -5110,13 +5131,13 @@ shape = SubResource("RectangleShape2D_4sant")
 [node name="PuntoControlIsla" type="Marker2D" parent="." unique_id=259340802]
 position = Vector2(125, 110)
 
-[node name="SalidaLaberinto" type="Area2D" parent="." unique_id=839900815]
-position = Vector2(2260, 925)
+[node name="SalidaMarMinotauro" type="Area2D" parent="." unique_id=839900815]
+position = Vector2(2250, 940)
 script = ExtResource("14_i01uh")
-zona_destino = "res://scenes/levels/laberinto.tscn"
+zona_destino = "res://scenes/levels/mar_minotauro.tscn"
 entrada_destino = "desde_isla"
 
-[node name="Forma" type="CollisionShape2D" parent="SalidaLaberinto" unique_id=1145751435]
+[node name="Forma" type="CollisionShape2D" parent="SalidaMarMinotauro" unique_id=1145751435]
 shape = SubResource("RectangleShape2D_ohix6")
 
 [editable path="Objetos/Bosques/Bosque1"]
@@ -5126,4 +5147,4 @@ shape = SubResource("RectangleShape2D_ohix6")
 [editable path="Objetos/Bosques/Bosque5"]
 [editable path="Objetos/Bosques/Bosque6"]
 [editable path="Objetos/Bosques/Bosque7"]
-[editable path="Objetos/BarreraLaberinto"]
+[editable path="Objetos/BarreraMarMinotauro"]

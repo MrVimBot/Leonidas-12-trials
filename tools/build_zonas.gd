@@ -7,8 +7,9 @@ extends SceneTree
 ## de flujo de niveles (docs/design/plan_mapa_mundo.md):
 ##
 ##   casa_arbol ↑ pueblo ↓ bosque ↓ playa ↓ mar ↓ isla_orilla ↓ isla → cueva_medusa → cueva_jefe
+##   isla (orilla sur) ↓ mar_minotauro ↓ orilla_minotauro ↓ laberinto
 ##
-## La `playa`, la `isla` y la `isla_orilla` ya NO salen de aquí: se montaron con el dibujo de la
+## La `playa`, la `isla`, la `isla_orilla` y la `orilla_minotauro` ya NO salen de aquí: se montaron con el dibujo de la
 ## artista desde tools/zonas/playa/montar_playa.gd y tools/zonas/isla/montar_isla.gd y
 ## montar_orilla.gd, y se retocan a mano (metadato `editada_a_mano`).
 ##
@@ -45,6 +46,7 @@ const ROCAS_BARCO := [
 var _zonas := {
 	"bosque": _bosque,
 	"mar": _mar,
+	"mar_minotauro": _mar_minotauro,
 	"cueva_medusa": _cueva_medusa,
 	"cueva_jefe": _cueva_jefe,
 	"casa_arbol": _casa_arbol,
@@ -166,6 +168,56 @@ func _mar() -> Constructor:
 			Vector2(260, 1000), Vector2(500, 1150)]:
 		z.instancia("Peligros", REMOLINO, p)
 	for p in [Vector2(384, 560), Vector2(300, 760), Vector2(460, 930), Vector2(384, 1030)]:
+		z.instancia("Peligros", TIBURON, p)
+	return z
+
+
+# --- Mar del sur: segundo minijuego del barco, de la isla de Medusa al laberinto -----
+# Más difícil que `mar`: lenguas de arrecife alternas (izquierda/derecha) hacen un canal en
+# zigzag, con más rocas, remolinos y tiburones. Se entra desde la orilla sur de la `isla`
+# (cerrada hasta la misión del Minotauro: BarreraMarMinotauro) y se llega a `orilla_minotauro`.
+# Trazado PROVISIONAL (docs/design/plan_minijuego_barco.md, «Segundo mar»).
+
+## Lenguas de arrecife: [fila, desde la izquierda]. Dejan un hueco de 15 tiles en el otro lado.
+const LENGUAS_MAR_SUR := [[14, true], [30, false], [46, true], [62, false], [78, true], [94, false]]
+
+
+func _mar_minotauro() -> Constructor:
+	var z := Constructor.new("MarMinotauro", "Mar del sur", 48, 112, 29)
+	z.musica = MUSICA + "barco.mp3"
+	z.raiz.set("modo_barco", true)
+	z.rect([0, 0, 47, 111], C.MAR_NAV, true)
+	for r in [[0, 0, 2, 111], [45, 0, 47, 111], [0, 0, 47, 1], [0, 110, 47, 111]]:
+		z.rect(r, C.ARRECIFE, true)
+	for l in LENGUAS_MAR_SUR:
+		var f: int = l[0]
+		z.rect([3, f, 29, f + 2] if l[1] else [18, f, 44, f + 2], C.ARRECIFE, true)
+	z.rect([22, 0, 25, 1], C.MUELLE, true)
+	z.rect([22, 110, 25, 111], C.MUELLE, true)
+
+	z.entrada("desde_isla", Vector2(384, 96))
+	z.entrada("desde_orilla", Vector2(384, 1696))
+	z.salida("SalidaIsla", Vector2(384, 40), Vector2(64, 16), "isla", "desde_mar_minotauro")
+	z.salida("SalidaOrilla", Vector2(384, 1752), Vector2(64, 16), "orilla_minotauro", "desde_mar")
+
+	# Rocas en las franjas de agua entre lenguas, sin tapar los huecos.
+	var rocas := [Vector2i(14, 22), Vector2i(26, 19), Vector2i(36, 25), Vector2i(8, 27),
+		Vector2i(22, 26), Vector2i(10, 37), Vector2i(24, 35), Vector2i(34, 39), Vector2i(16, 43),
+		Vector2i(40, 43), Vector2i(28, 42), Vector2i(12, 53), Vector2i(26, 51), Vector2i(36, 56),
+		Vector2i(20, 59), Vector2i(8, 59), Vector2i(14, 69), Vector2i(30, 67), Vector2i(38, 73),
+		Vector2i(22, 75), Vector2i(8, 75), Vector2i(12, 85), Vector2i(26, 83), Vector2i(36, 89),
+		Vector2i(20, 91), Vector2i(30, 101), Vector2i(38, 105)]
+	for i in rocas.size():
+		var roca: Array = ROCAS_BARCO[i % ROCAS_BARCO.size()]
+		z.deco("Rocas", roca[0], _t(rocas[i].x, rocas[i].y),
+			{"sombra": false, "base": roca[1], "desplazamiento_base": roca[2]})
+
+	# Peligros: nada en los primeros/últimos ~200 px.
+	for p in [Vector2(560, 360), Vector2(180, 600), Vector2(440, 640), Vector2(620, 860),
+			Vector2(280, 940), Vector2(520, 1130), Vector2(160, 1180), Vector2(440, 1420)]:
+		z.instancia("Peligros", REMOLINO, p)
+	for p in [Vector2(300, 400), Vector2(480, 690), Vector2(260, 830), Vector2(420, 900),
+			Vector2(340, 1100), Vector2(420, 1350), Vector2(260, 1460)]:
 		z.instancia("Peligros", TIBURON, p)
 	return z
 

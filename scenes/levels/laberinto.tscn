@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dhk0jvr017mib"]
 
-[ext_resource type="Script" path="res://scripts/systems/zona.gd" id="1_ywsrt"]
+[ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_ywsrt"]
 [ext_resource type="AudioStream" uid="uid://6u1hy032ilqc" path="res://assets/audio/music/minotauro.mp3" id="2_d7fl1"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/nivel3/laberinto/mapa.png" id="3_nwari"]
-[ext_resource type="TileSet" path="res://resources/tilesets/naturaleza.tres" id="4_em24y"]
-[ext_resource type="PackedScene" path="res://scenes/entorno/cofre.tscn" id="5_ctjik"]
+[ext_resource type="Texture2D" uid="uid://dh85vdvab77km" path="res://assets/backgrounds/nivel3/laberinto/mapa.png" id="3_nwari"]
+[ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="4_em24y"]
+[ext_resource type="PackedScene" uid="uid://c6461asubij0m" path="res://scenes/entorno/cofre.tscn" id="5_ctjik"]
 [ext_resource type="Resource" path="res://resources/objetos/cuerno.tres" id="6_qk8td"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/minotauro.tscn" id="7_qtlcw"]
 [ext_resource type="PackedScene" path="res://scenes/entorno/reja.tscn" id="8_443m7"]
@@ -12,8 +12,8 @@
 [ext_resource type="Resource" path="res://resources/dialogues/leonidas_fin_demo.tres" id="10_m8byy"]
 [ext_resource type="PackedScene" path="res://scenes/cinematics/escena_minotauro.tscn" id="11_whbql"]
 [ext_resource type="Texture2D" path="res://resources/luces/luz_radial.tres" id="12_lrk7a"]
-[ext_resource type="Script" path="res://scripts/entorno/luz_antorcha.gd" id="13_pruyl"]
-[ext_resource type="Script" path="res://scripts/systems/salida_zona.gd" id="14_2r8uo"]
+[ext_resource type="Script" uid="uid://7g6ylv6oeepx" path="res://scripts/entorno/luz_antorcha.gd" id="13_pruyl"]
+[ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="14_2r8uo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywsrt"]
 size = Vector2(38, 12)
@@ -102,7 +102,7 @@ punto_salida = NodePath("../../../PuntoSalida")
 [node name="inicio" type="Marker2D" parent="Entradas" unique_id=628292305]
 position = Vector2(489, 118)
 
-[node name="desde_isla" type="Marker2D" parent="Entradas" unique_id=1774061324]
+[node name="desde_orilla" type="Marker2D" parent="Entradas" unique_id=1774061324]
 position = Vector2(489, 118)
 
 [node name="Colisiones" type="Node2D" parent="." unique_id=1924571865]
@@ -1088,13 +1088,13 @@ texture_scale = 0.9
 script = ExtResource("13_pruyl")
 energia = 1.1
 
-[node name="SalidaIsla" type="Area2D" parent="." unique_id=924935965]
+[node name="SalidaOrilla" type="Area2D" parent="." unique_id=924935965]
 position = Vector2(489, 60)
 script = ExtResource("14_2r8uo")
-zona_destino = "res://scenes/levels/isla.tscn"
+zona_destino = "res://scenes/levels/orilla_minotauro.tscn"
 entrada_destino = "desde_laberinto"
 
-[node name="Forma" type="CollisionShape2D" parent="SalidaIsla" unique_id=737082673]
+[node name="Forma" type="CollisionShape2D" parent="SalidaOrilla" unique_id=737082673]
 shape = SubResource("RectangleShape2D_d7fl1")
 
 [node name="PuntoSalida" type="Marker2D" parent="." unique_id=518053888]

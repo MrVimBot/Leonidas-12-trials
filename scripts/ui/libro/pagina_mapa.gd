@@ -18,10 +18,12 @@ const ZONAS := [
 	["Isla de Medusa", "Isla", "Isla"],
 	["Cueva de Medusa", "Cueva", "Cueva"],
 	["Guarida de Medusa", "Guarida", "Cueva"],
+	["Mar del sur", "Mar del sur", "Mar"],
+	["Orilla del laberinto", "Orilla sur", "Orilla"],
 	["Laberinto del Minotauro", "Laberinto", "Laberinto"],
 ]
-## Índice en ZONAS del mar (se pinta de azul).
-const MAR := 4
+## Índices en ZONAS de los mares (se pintan de azul).
+const MARES := [4, 10]
 ## Columna de cajas dentro de la zona oscura de la página (px del lienzo).
 const CAJAS := Rect2(316, 80, 108, 180)
 const COLOR_LINEA := Color("c79a6e")
@@ -75,7 +77,7 @@ func _draw() -> void:
 			var cx := roundf(r.get_center().x)
 			draw_line(Vector2(cx, r.position.y - 4), Vector2(cx, r.position.y), COLOR_LINEA)
 		var encendida := i == actual and fmod(_tiempo, 0.8) < 0.5
-		var relleno := COLOR_MAR if i == MAR else COLOR_CAJA
+		var relleno := COLOR_MAR if i in MARES else COLOR_CAJA
 		if encendida:
 			relleno = COLOR_ACTUAL
 		draw_rect(r, relleno)

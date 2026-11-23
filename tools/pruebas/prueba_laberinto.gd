@@ -1,7 +1,8 @@
 extends "res://tools/pruebas/base_prueba.gd"
 ## Nivel 3 (PROVISIONAL): el laberinto del Minotauro, con la zona y la `EscenaMinotauro` reales.
 ## 0) Isla: sin la misión del Minotauro, la orilla sur de la cueva no deja pasar (BarreraMision,
-##    MINOTAURO); con ella, la salida lleva al laberinto (entrada de arriba).
+##    MINOTAURO); con ella, la salida lleva al mar del sur (el resto del camino, orilla incluida,
+##    lo prueba prueba_mar_minotauro.gd) y de ahí se carga el laberinto (entrada de arriba).
 ## 1) Recorrido: desde la entrada se llega al cofre del cuerno y al hueco de abajo (Explorador).
 ## 2) Encuentro al llegar: diálogos, la cámara enseña la salida, se apagan las luces, caen las dos
 ##    rejas y el Minotauro aparece. Combate: se le ve, barra gris (invencible), los golpes de
@@ -15,6 +16,7 @@ extends "res://tools/pruebas/base_prueba.gd"
 
 const ISLA := "res://scenes/levels/isla.tscn"
 const LABERINTO := "res://scenes/levels/laberinto.tscn"
+const MAR_SUR := "res://scenes/levels/mar_minotauro.tscn"
 const Explorador := preload("res://tools/zonas/explorador.gd")
 ## Orilla sur de la cueva de la isla: dentro de la barrera (y fuera de la salida) y en la salida.
 const ORILLA_BARRERA := Vector2(2260, 900)
@@ -58,6 +60,8 @@ func mucha_vida() -> void:
 
 func ejecutar() -> void:
 	tiempo_maximo = 240.0
+	EstadoJuego.tutorial_barco_visto = true # la orilla lleva al mar del sur: sin tutorial
+	Microfono.nivel_forzado = 0.0
 	await crear_game(true, true)
 
 	# 0) Isla.
@@ -71,14 +75,16 @@ func ejecutar() -> void:
 	ok("0) y retrocede", j.global_position.y < ORILLA_BARRERA.y - 10.0, str(j.global_position))
 	EstadoJuego.empezar_mision(EstadoJuego.MISION_DERROTAR_MINOTAURO)
 	j.global_position = ORILLA_SALIDA
-	var llega := await esperar_hasta(func() -> bool: return game.ruta_zona == LABERINTO and not game.cambiando, 600)
-	ok("0) con la misión: la orilla lleva al laberinto", llega, game.ruta_zona)
+	var llega := await esperar_hasta(func() -> bool: return game.ruta_zona == MAR_SUR and not game.cambiando, 600)
+	ok("0) con la misión: la orilla lleva al mar del sur", llega, game.ruta_zona)
+	await ticks(10)
+	await ir(LABERINTO, "desde_orilla")
 	tomar_nodos()
 	ok("0) la zona trae al Minotauro, su escena y dos rejas", minotauro != null and escena != null and escena.rejas.size() == 2)
 	if minotauro == null or escena == null:
 		return
 	# Llega a la entrada y ya baja hacia PuntoLeonidas (el encuentro empieza al llegar).
-	var entrada := zona.punto_entrada("desde_isla")
+	var entrada := zona.punto_entrada("desde_orilla")
 	ok("0) aparece en la entrada de arriba", absf(j.global_position.x - entrada.x) < 1.0
 		and j.global_position.y >= entrada.y - 1.0 and j.global_position.y <= escena.punto_leonidas.global_position.y + 1.0, str(j.global_position))
 	ok("0) Minotauro INACTIVO y escondido hasta la escena", minotauro.estado == Minotauro.Estado.INACTIVO and not minotauro.sprite.visible)
@@ -86,7 +92,7 @@ func ejecutar() -> void:
 	# 1) Recorrido (con las rejas aún abiertas: el encuentro empieza con diálogos).
 	var ex := Explorador.new(zona.get_world_2d().direct_space_state)
 	var vistos := {"cofre": false, "hueco": false, "cerca": INF}
-	ex.recorrer(zona.punto_entrada("desde_isla"), Rect2(zona.obtener_limites()), 4.0, func(p: Vector2) -> bool:
+	ex.recorrer(zona.punto_entrada("desde_orilla"), Rect2(zona.obtener_limites()), 4.0, func(p: Vector2) -> bool:
 		if p.distance_to(JUNTO_AL_COFRE) < 6.0:
 			vistos.cofre = true
 		vistos.cerca = minf(vistos.cerca, p.distance_to(HUECO_ABAJO))
