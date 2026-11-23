@@ -8,6 +8,13 @@ extends "res://tools/pruebas/base_prueba.gd"
 const Explorador := preload("res://tools/zonas/explorador.gd")
 const ZONA := "res://scenes/levels/cueva_jefe.tscn"
 const PASO := 3.0
+## Parte de cada PNG que debe bloquear (px de textura). Lo que no sale aquí es todo el PNG. Lo
+## demás (lanza, casco roto, escombros) está tirado en el suelo y se pisa a propósito
+## (RECORTE y AREA_MINIMA de colision_estatuas_arena.py).
+const CUERPO := {
+	&"Estatua2": Rect2(134, 0, 283, 375),
+	&"Estatua3": Rect2(255, 0, 130, 437),
+}
 
 
 func ejecutar() -> void:
@@ -34,13 +41,16 @@ func ejecutar() -> void:
 		var img := deco.textura.get_image()
 		var esc := deco.escala
 		var tam := Vector2(img.get_size())
+		# el origen del nodo es el `ancla` (los pies); sin ella, el centro de abajo del PNG
+		var origen: Vector2 = deco.ancla if deco.ancla != Vector2.ZERO else Vector2(tam.x / 2.0, tam.y)
+		var cuerpo: Rect2 = CUERPO.get(StringName(deco.name), Rect2(Vector2.ZERO, tam))
 		var paso_px := maxi(int(PASO / esc), 1)
 		var dentro := 0
 		for y in range(8, img.get_height() - 8, paso_px):
 			for x in range(8, img.get_width() - 8, paso_px):
-				if not _solido(img, x, y):
+				if not cuerpo.has_point(Vector2(x, y)) or not _solido(img, x, y):
 					continue
-				var p := deco.global_position + Vector2((x - tam.x / 2.0) * esc, (y - tam.y) * esc)
+				var p := deco.global_position + (Vector2(x, y) - origen) * esc
 				if _cerca(vistos, p, 0.0):
 					dentro += 1
 		if dentro > 0:

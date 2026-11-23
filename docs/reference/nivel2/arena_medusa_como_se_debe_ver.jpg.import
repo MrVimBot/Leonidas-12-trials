@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdf670fs1qwwk"
-path="res://.godot/imported/penumbra.png-59d2d406249969795d52a0e339111f02.ctex"
+uid="uid://67oy377q14ew"
+path="res://.godot/imported/arena_medusa_como_se_debe_ver.jpg-2c027c09d86b9c1afef1300f1f4051a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/backgrounds/nivel2/pasillo_medusa/penumbra.png"
-dest_files=["res://.godot/imported/penumbra.png-59d2d406249969795d52a0e339111f02.ctex"]
+source_file="res://docs/reference/nivel2/arena_medusa_como_se_debe_ver.jpg"
+dest_files=["res://.godot/imported/arena_medusa_como_se_debe_ver.jpg-2c027c09d86b9c1afef1300f1f4051a2.ctex"]
 
 [params]
 

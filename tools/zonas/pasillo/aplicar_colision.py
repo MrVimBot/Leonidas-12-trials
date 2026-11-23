@@ -1,10 +1,12 @@
 """Pone en scenes/levels/cueva_medusa.tscn la colisión y los enemigos de colision_pasillo.json.
 
-  python3 -I tools/zonas/pasillo/calcular_colision.py     # trazos de la diseñadora -> json
+  python3 -I tools/zonas/pasillo/calcular_colision.py     # máscara de la diseñadora -> json
   python3 -I tools/zonas/pasillo/aplicar_colision.py      # json -> escena (con el editor cerrado)
 
-Edita el texto de la escena (no hay que abrir Godot): sustituye los nodos Inferior*/Superior*/
-Muro* de `Limites` y las posiciones de los cíclopes y las gambas. Es repetible.
+Edita el texto de la escena (no hay que abrir Godot): sustituye los nodos Borde*/Inferior*/Superior*/
+Muro* de `Limites` y las posiciones de los cíclopes y las gambas, y quita la penumbra y el
+oscurecido de los objetos de la versión anterior (la sombra ahora va en el fondo: ver
+actualizar_fondo.py). Es repetible.
 """
 import json, re
 
@@ -97,32 +99,24 @@ def poligono(nombre, pts):
 nuevo = ""
 # Cada contorno se parte aquí en piezas convexas: la descomposición automática de Godot daba
 # piezas que invadían el suelo libre (el pasillo parecía más estrecho de lo que es).
-for grupo in ("inferior", "superior"):
-    for i, pts in enumerate(d[grupo], 1):
-        for k, pieza in enumerate(convexos(pts), 1):
-            nuevo += poligono("%s%d_%d" % (grupo.capitalize(), i, k), pieza)
+for i, pts in enumerate(d["poligonos"], 1):
+    for k, pieza in enumerate(convexos(pts), 1):
+        nuevo += poligono("Borde%d_%d" % (i, k), pieza)
 # Muros fuera de las salidas laterales (el jugador sale por las Area2D antes de llegar).
 for nombre, (x0, x1) in (("MuroOeste", (-40, -12)), ("MuroEste", (1126, 1154))):
     nuevo += poligono(nombre, [(x0, -40), (x1, -40), (x1, 480), (x0, 480)])
 # Quita los anteriores (Borde, Inferior*, Superior*, Muro*) y pone los nuevos tras `Limites`.
-s = re.sub(r'\[node name="(Borde|Inferior[\d_]+|Superior[\d_]+|Muro\w+)" type="CollisionPolygon2D" parent="Limites"[^\]\n]*\]\n(?:[^\n\[][^\n]*\n)*\n?', "", s)  # [^\]]*: el editor añade unique_id=…
+s = re.sub(r'\[node name="(Borde[\d_]*|Inferior[\d_]+|Superior[\d_]+|Muro\w+)" type="CollisionPolygon2D" parent="Limites"[^\]\n]*\]\n(?:[^\n\[][^\n]*\n)*\n?', "", s)  # [^\]]*: el editor añade unique_id=…
 s = re.sub(r'(\[node name="Limites" type="StaticBody2D"[^\n]*\n(?:[^\n\[][^\n]*\n)*\n)', lambda m: m.group(1) + nuevo, s, count=1)
 for i, pos in enumerate(d["ciclopes"], 1):
     s = re.sub(r'(\[node name="CiclopeSerpiente%d"[^\n]*\n)position = Vector2\([^)]*\)' % i, r"\1position = Vector2(%d, %d)" % tuple(pos), s)
 for i, pos in enumerate(d["gambas"], 1):
     s = re.sub(r'(\[node name="Gamba%d"[^\n]*\n)position = Vector2\([^)]*\)' % i, r"\1position = Vector2(%d, %d)" % tuple(pos), s)
 
-# Penumbra: la imagen oscura (penumbra.png, la saca calcular_colision.py) sobre el fondo, y los
-# pilares, estatuas y rocas atenuados igual, para que el camino se lea de un vistazo.
-PENUMBRA = "assets/backgrounds/nivel2/pasillo_medusa/penumbra.png"
-if "id=\"40_penumbra\"" not in s:
-    uid = [l.split('"')[1] for l in open(PENUMBRA + ".import") if l.startswith("uid=")][0]
-    s = re.sub(r'(\[ext_resource [^\n]*id="30_fondo"\]\n)',
-               lambda m: m.group(1) + '[ext_resource type="Texture2D" uid="%s" path="res://%s" id="40_penumbra"]\n' % (uid, PENUMBRA), s, count=1)
-if 'name="Penumbra"' not in s:
-    s = s.replace('[node name="Suelo" type="TileMapLayer"',
-                  '[node name="Penumbra" type="Sprite2D" parent="Mapa"]\nscale = Vector2(2, 2)\ntexture = ExtResource("40_penumbra")\ncentered = false\n\n[node name="Suelo" type="TileMapLayer"', 1)
-ATENUADO = "modulate = Color(0.56, 0.5, 0.66, 1)"
-s = re.sub(r'(\[node name="Pasillo[^\n]*\n(?:(?!modulate)[^\n\[][^\n]*\n)*?)(sombra = false\n)', lambda m: m.group(1) + ATENUADO + "\n" + m.group(2), s)
+# Limpieza de la versión anterior: la penumbra (Mapa/Penumbra + su textura) y los objetos atenuados
+# (modulate) se quitaron al llegar el arte con la sombra de la diseñadora.
+s = re.sub(r'\[ext_resource [^\n]*id="40_penumbra"\]\n', "", s)
+s = re.sub(r'\[node name="Penumbra" type="Sprite2D" parent="Mapa"[^\n]*\n(?:[^\n\[][^\n]*\n)*\n?', "", s)
+s = s.replace("modulate = Color(0.56, 0.5, 0.66, 1)\n", "")
 open(p, "w").write(s)
 print("escena actualizada")

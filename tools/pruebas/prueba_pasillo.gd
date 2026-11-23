@@ -1,8 +1,8 @@
 extends "res://tools/pruebas/base_prueba.gd"
 ## Pasillo de Medusa con el arte definitivo (scenes/levels/cueva_medusa.tscn). La colisión sale
-## de los trazos de la diseñadora (tools/zonas/pasillo/calcular_colision.py): Leonidas no puede
-## pisar lo que dibujan los cristales, las estatuas ni las rocas de abajo, y aun así llega de
-## una salida a la otra y a todos los enemigos.
+## de la máscara de la diseñadora (`limite_de_pasillo.png`, tools/zonas/pasillo/calcular_colision.py)
+## más la silueta de cada objeto: Leonidas no puede pisar lo que dibujan los cristales, las
+## estatuas ni las rocas de abajo, y aun así llega de una salida a la otra y a todos los enemigos.
 ## - Recorrido con la forma del jugador (zona suelta, como verificar_zonas.gd).
 ## - Ningún píxel dibujado de un pilar, estatua o roca es alcanzable.
 ## - Los enemigos están en suelo libre y a ≥ 96 px de las entradas.
