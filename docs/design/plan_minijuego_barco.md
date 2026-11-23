@@ -345,9 +345,10 @@ Tras la misión del Minotauro, los sabios mandan a Leonidas a seguir por debajo 
 Medusa, al sur de la cueva. Recorrido: `isla` (`SalidaMarMinotauro`, en la orilla bajo la cueva,
 tras `BarreraMarMinotauro` con requisito MINOTAURO y el cartel `CartelMarMinotauro`) →
 **`mar_minotauro`** («Mar del sur») → **`orilla_minotauro`** (copia de `isla_orilla`) → `laberinto`.
-- `mar_minotauro` lo genera `tools/build_zonas.gd` (`_mar_minotauro`): 48×112 tiles; lenguas de
-  arrecife alternas (`LENGUAS_MAR_SUR`, cada 16 filas) dejan un hueco de 15 tiles a un lado y otro,
-  así que el camino serpentea; 27 rocas `roca_barco_*`, 8 remolinos y 7 tiburones.
+- `mar_minotauro` lo genera `tools/build_zonas.gd` (`_mar_minotauro`): 48×112 tiles; hileras de
+  rocas alternas (`LENGUAS_MAR_SUR`, cada 16 filas; antes eran franjas de arrecife, quitadas el
+  2026-11-23) dejan un paso ancho de 15 tiles a un lado y otro y huecos estrechos (24–40 px) entre
+  roca y roca, así que el camino serpentea; además 27 rocas sueltas, 8 remolinos y 7 tiburones.
 - Misma mecánica (`Zona.modo_barco`, `ModoBarco`, `Barco`); el premio de la travesía funciona igual.
 - Prueba: `tools/pruebas/prueba_mar_minotauro.gd`.
 - Pendiente: arte propio del agua/orilla (hoy el del primer mar y el de `isla_orilla`).

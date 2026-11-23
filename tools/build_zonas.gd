@@ -173,12 +173,13 @@ func _mar() -> Constructor:
 
 
 # --- Mar del sur: segundo minijuego del barco, de la isla de Medusa al laberinto -----
-# Más difícil que `mar`: lenguas de arrecife alternas (izquierda/derecha) hacen un canal en
-# zigzag, con más rocas, remolinos y tiburones. Se entra desde la orilla sur de la `isla`
+# Más difícil que `mar`: hileras de rocas alternas (izquierda/derecha) obligan a ir en zigzag
+# (o a colarse por los huecos estrechos entre rocas), con más remolinos y tiburones. Se entra desde la orilla sur de la `isla`
 # (cerrada hasta la misión del Minotauro: BarreraMarMinotauro) y se llega a `orilla_minotauro`.
 # Trazado PROVISIONAL (docs/design/plan_minijuego_barco.md, «Segundo mar»).
 
-## Lenguas de arrecife: [fila, desde la izquierda]. Dejan un hueco de 15 tiles en el otro lado.
+## Hileras de rocas: [fila, desde la izquierda]. Dejan un paso ancho (15 tiles) en el otro lado;
+## entre roca y roca (cada 5 tiles) queda un hueco de 24–40 px, justo para el barco (20 px).
 const LENGUAS_MAR_SUR := [[14, true], [30, false], [46, true], [62, false], [78, true], [94, false]]
 
 
@@ -189,9 +190,14 @@ func _mar_minotauro() -> Constructor:
 	z.rect([0, 0, 47, 111], C.MAR_NAV, true)
 	for r in [[0, 0, 2, 111], [45, 0, 47, 111], [0, 0, 47, 1], [0, 110, 47, 111]]:
 		z.rect(r, C.ARRECIFE, true)
+	var n := 0
 	for l in LENGUAS_MAR_SUR:
-		var f: int = l[0]
-		z.rect([3, f, 29, f + 2] if l[1] else [18, f, 44, f + 2], C.ARRECIFE, true)
+		var f: int = l[0] + 1
+		for c in ([5, 10, 15, 20, 25] if l[1] else [22, 27, 32, 37, 42]):
+			var roca: Array = ROCAS_BARCO[n % ROCAS_BARCO.size()]
+			z.deco("Rocas", roca[0], _t(c, f + (n % 2)),
+				{"sombra": false, "base": roca[1], "desplazamiento_base": roca[2]})
+			n += 1
 	z.rect([22, 0, 25, 1], C.MUELLE, true)
 	z.rect([22, 110, 25, 111], C.MUELLE, true)
 
