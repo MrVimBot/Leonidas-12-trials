@@ -15,6 +15,9 @@ extends Camera2D
 ## que el movimiento avance en todas las imágenes, no en una sí y otra no.
 ## - `sacudir()` la hace temblar unos instantes (al recibir daño), también en píxeles
 ##   enteros y cada vez más suave.
+## - `enfocar(punto)` / `soltar_foco()` (cinemáticas): la llevan poco a poco a un punto del
+##   mundo y de vuelta al objetivo, sin dejar de ir en píxeles enteros ni de respetar los
+##   límites. Se esperan con `await`.
 
 ## Nodo a seguir (el jugador).
 @export var objetivo: Node2D
@@ -37,6 +40,10 @@ var _sacudida_duracion := 0.0
 var _sacudida_resta := 0.0
 var _sacudida_espera := 0.0
 var _sacudida_offset := Vector2.ZERO
+## Punto (global) al que mira mientras `_peso_foco` > 0; 1 = del todo en el foco.
+var _foco := Vector2.ZERO
+var _peso_foco := 0.0
+var _tween_foco: Tween
 
 
 func _ready() -> void:
@@ -50,6 +57,8 @@ func _physics_process(delta: float) -> void:
 	if objetivo == null:
 		return
 	var meta := objetivo.global_position + desplazamiento
+	if _peso_foco > 0.0:
+		meta = meta.lerp(_foco, _peso_foco)
 	if suavizado <= 0.0:
 		_pos = meta
 	else:
@@ -93,10 +102,43 @@ func _calcular_sacudida(delta: float) -> Vector2:
 	return _sacudida_offset
 
 
-## Coloca la cámara de golpe sobre el objetivo (al cambiar de zona, al reaparecer).
+## Lleva la cámara hasta `punto` (global) en `duracion` s y se queda mirándolo hasta
+## `soltar_foco()`. Con `await` espera a que llegue.
+func enfocar(punto: Vector2, duracion := 1.0) -> void:
+	_foco = punto
+	await _mover_foco(1.0, duracion)
+
+
+## Devuelve la cámara al objetivo en `duracion` s (con `await`, espera a que llegue).
+func soltar_foco(duracion := 1.0) -> void:
+	await _mover_foco(0.0, duracion)
+
+
+## ¿Está mirando a un foco (o yendo o volviendo de él)?
+func enfocando() -> bool:
+	return _peso_foco > 0.0
+
+
+func _mover_foco(peso: float, duracion: float) -> void:
+	if _tween_foco:
+		_tween_foco.kill()
+	if duracion <= 0.0:
+		_peso_foco = peso
+		return
+	_tween_foco = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	_tween_foco.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_tween_foco.tween_property(self, ^"_peso_foco", peso, duracion)
+	await _tween_foco.finished
+
+
+## Coloca la cámara de golpe sobre el objetivo (al cambiar de zona, al reaparecer). Quita el
+## foco de una cinemática que se hubiera quedado a medias.
 func saltar_a_objetivo() -> void:
 	if objetivo == null:
 		return
+	if _tween_foco:
+		_tween_foco.kill()
+	_peso_foco = 0.0
 	_pos = objetivo.global_position + desplazamiento
 	_sacudida_resta = 0.0
 	_sacudida_offset = Vector2.ZERO

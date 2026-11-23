@@ -1,0 +1,1103 @@
+[gd_scene format=3 uid="uid://dhk0jvr017mib"]
+
+[ext_resource type="Script" uid="uid://dyekgwfudp0nn" path="res://scripts/systems/zona.gd" id="1_ywsrt"]
+[ext_resource type="AudioStream" uid="uid://6u1hy032ilqc" path="res://assets/audio/music/minotauro.mp3" id="2_d7fl1"]
+[ext_resource type="Texture2D" uid="uid://dh85vdvab77km" path="res://assets/backgrounds/nivel3/laberinto/mapa.png" id="3_nwari"]
+[ext_resource type="TileSet" uid="uid://b5ognbtgut68h" path="res://resources/tilesets/naturaleza.tres" id="4_em24y"]
+[ext_resource type="PackedScene" uid="uid://c6461asubij0m" path="res://scenes/entorno/cofre.tscn" id="5_ctjik"]
+[ext_resource type="Resource" path="res://resources/objetos/cuerno.tres" id="6_qk8td"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/minotauro.tscn" id="7_qtlcw"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/reja.tscn" id="8_443m7"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="9_6w024"]
+[ext_resource type="Resource" path="res://resources/dialogues/leonidas_fin_demo.tres" id="10_m8byy"]
+[ext_resource type="PackedScene" path="res://scenes/cinematics/escena_minotauro.tscn" id="11_whbql"]
+[ext_resource type="Texture2D" path="res://resources/luces/luz_radial.tres" id="12_lrk7a"]
+[ext_resource type="Script" uid="uid://7g6ylv6oeepx" path="res://scripts/entorno/luz_antorcha.gd" id="13_pruyl"]
+[ext_resource type="Script" uid="uid://bb8d31g8u5j2k" path="res://scripts/systems/salida_zona.gd" id="14_2r8uo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywsrt"]
+size = Vector2(38, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d7fl1"]
+size = Vector2(80, 18)
+
+[node name="Laberinto" type="Node2D" unique_id=234779637 node_paths=PackedStringArray("suelo")]
+y_sort_enabled = true
+script = ExtResource("1_ywsrt")
+nombre_zona = "Laberinto del Minotauro"
+limites_camara = Rect2i(81, 32, 782, 500)
+suelo = NodePath("Suelo")
+pintada = true
+musica = ExtResource("2_d7fl1")
+metadata/editada_a_mano = true
+
+[node name="Mapa" type="Node2D" parent="." unique_id=1012059353]
+z_index = -1
+texture_filter = 4
+
+[node name="FondoNegro" type="Polygon2D" parent="Mapa" unique_id=1313371956]
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(0, 0, 966, 0, 966, 598, 0, 598)
+
+[node name="Mapa" type="Sprite2D" parent="Mapa" unique_id=254794548]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_nwari")
+centered = false
+
+[node name="Suelo" type="TileMapLayer" parent="." unique_id=836952606]
+z_index = -1
+tile_set = ExtResource("4_em24y")
+
+[node name="Objetos" type="Node2D" parent="." unique_id=1587921543]
+y_sort_enabled = true
+
+[node name="Cofres" type="Node2D" parent="Objetos" unique_id=769143695]
+y_sort_enabled = true
+
+[node name="CofreCuerno" parent="Objetos/Cofres" unique_id=781106270 instance=ExtResource("5_ctjik")]
+position = Vector2(742, 492)
+objeto = ExtResource("6_qk8td")
+
+[node name="Jefe" type="Node2D" parent="Objetos" unique_id=222068421]
+y_sort_enabled = true
+
+[node name="Minotauro" parent="Objetos/Jefe" unique_id=201805305 instance=ExtResource("7_qtlcw")]
+position = Vector2(470, 285)
+
+[node name="Rejas" type="Node2D" parent="Objetos" unique_id=2067401788]
+y_sort_enabled = true
+
+[node name="RejaNorte" parent="Objetos/Rejas" unique_id=2033230775 instance=ExtResource("8_443m7")]
+position = Vector2(489, 100)
+ancho = 88.0
+
+[node name="RejaSur" parent="Objetos/Rejas" unique_id=1809545717 instance=ExtResource("8_443m7")]
+position = Vector2(145, 512)
+ancho = 50.0
+
+[node name="Eventos" type="Node2D" parent="Objetos" unique_id=960974154]
+y_sort_enabled = true
+
+[node name="BarreraFinDemo" parent="Objetos/Eventos" unique_id=119342482 instance=ExtResource("9_6w024")]
+position = Vector2(146, 522)
+requisito = 3
+dialogo = ExtResource("10_m8byy")
+dialogo_repetido = null
+direccion_retroceso = Vector2(0, -1)
+destello = false
+
+[node name="Forma" parent="Objetos/Eventos/BarreraFinDemo" index="0"]
+shape = SubResource("RectangleShape2D_ywsrt")
+
+[node name="EscenaMinotauro" parent="Objetos/Eventos" unique_id=275253185 node_paths=PackedStringArray("minotauro", "rejas", "oscuridad", "antorchas", "punto_salida") instance=ExtResource("11_whbql")]
+position = Vector2(489, 100)
+minotauro = NodePath("../../Jefe/Minotauro")
+rejas = [NodePath("../../Rejas/RejaNorte"), NodePath("../../Rejas/RejaSur")]
+oscuridad = NodePath("../../../Oscuridad")
+antorchas = NodePath("../../../Antorchas")
+punto_salida = NodePath("../../../PuntoSalida")
+
+[node name="Entradas" type="Node2D" parent="." unique_id=864327580]
+
+[node name="inicio" type="Marker2D" parent="Entradas" unique_id=628292305]
+position = Vector2(489, 118)
+
+[node name="desde_orilla" type="Marker2D" parent="Entradas" unique_id=1774061324]
+position = Vector2(489, 118)
+
+[node name="Colisiones" type="Node2D" parent="." unique_id=1924571865]
+
+[node name="Muros" type="StaticBody2D" parent="Colisiones" unique_id=18671581]
+collision_mask = 0
+
+[node name="Muros1" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1067631826]
+polygon = PackedVector2Array(0, 0, 966, 0, 966, 48, 0, 48)
+
+[node name="Muros2" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1099626149]
+polygon = PackedVector2Array(526, 48, 966, 48, 966, 50, 526, 50)
+
+[node name="Muros3" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2117441706]
+polygon = PackedVector2Array(0, 48, 450, 48, 450, 50, 0, 50)
+
+[node name="Muros4" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=916580967]
+polygon = PackedVector2Array(0, 50, 448, 50, 448, 52, 0, 52)
+
+[node name="Muros5" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=408480517]
+polygon = PackedVector2Array(528, 50, 966, 50, 966, 52, 528, 52)
+
+[node name="Muros6" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1990102563]
+polygon = PackedVector2Array(0, 52, 446, 52, 446, 58, 0, 58)
+
+[node name="Muros7" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=395089016]
+polygon = PackedVector2Array(0, 58, 448, 58, 448, 72, 0, 72)
+
+[node name="Muros8" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1722776898]
+polygon = PackedVector2Array(530, 52, 966, 52, 966, 74, 530, 74)
+
+[node name="Muros9" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1130841009]
+polygon = PackedVector2Array(0, 72, 450, 72, 450, 80, 0, 80)
+
+[node name="Muros10" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1882702035]
+polygon = PackedVector2Array(528, 74, 966, 74, 966, 86, 528, 86)
+
+[node name="Muros11" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=414832913]
+polygon = PackedVector2Array(0, 80, 448, 80, 448, 88, 0, 88)
+
+[node name="Muros12" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1417155808]
+polygon = PackedVector2Array(0, 88, 452, 88, 452, 92, 0, 92)
+
+[node name="Muros13" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=682704599]
+polygon = PackedVector2Array(530, 86, 966, 86, 966, 102, 530, 102)
+
+[node name="Muros14" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2081778307]
+polygon = PackedVector2Array(0, 92, 448, 92, 448, 104, 0, 104)
+
+[node name="Muros15" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=296218408]
+polygon = PackedVector2Array(766, 102, 966, 102, 966, 104, 766, 104)
+
+[node name="Muros16" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=882136204]
+polygon = PackedVector2Array(556, 102, 582, 102, 582, 104, 556, 104)
+
+[node name="Muros17" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1161553580]
+polygon = PackedVector2Array(0, 104, 108, 104, 108, 106, 0, 106)
+
+[node name="Muros18" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=467628479]
+polygon = PackedVector2Array(250, 104, 256, 104, 256, 106, 250, 106)
+
+[node name="Muros19" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=951419479]
+polygon = PackedVector2Array(198, 104, 218, 104, 218, 106, 198, 106)
+
+[node name="Muros20" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1921854428]
+polygon = PackedVector2Array(0, 106, 106, 106, 106, 108, 0, 108)
+
+[node name="Muros21" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=289490091]
+polygon = PackedVector2Array(200, 106, 216, 106, 216, 108, 200, 108)
+
+[node name="Muros22" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1748261923]
+polygon = PackedVector2Array(768, 104, 966, 104, 966, 118, 768, 118)
+
+[node name="Muros23" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=914294693]
+polygon = PackedVector2Array(766, 118, 966, 118, 966, 120, 766, 120)
+
+[node name="Muros24" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1729719030]
+polygon = PackedVector2Array(762, 120, 966, 120, 966, 122, 762, 122)
+
+[node name="Muros25" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2147132219]
+polygon = PackedVector2Array(764, 122, 966, 122, 966, 124, 764, 124)
+
+[node name="Muros26" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1620965507]
+polygon = PackedVector2Array(202, 108, 214, 108, 214, 132, 202, 132)
+
+[node name="Muros27" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=998583640]
+polygon = PackedVector2Array(198, 132, 214, 132, 214, 134, 198, 134)
+
+[node name="Muros28" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1413345364]
+polygon = PackedVector2Array(768, 124, 966, 124, 966, 148, 768, 148)
+
+[node name="Muros29" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1597339538]
+polygon = PackedVector2Array(770, 148, 966, 148, 966, 150, 770, 150)
+
+[node name="Muros30" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=915610887]
+polygon = PackedVector2Array(558, 104, 580, 104, 580, 152, 558, 152)
+
+[node name="Muros31" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=312046671]
+polygon = PackedVector2Array(774, 150, 966, 150, 966, 152, 774, 152)
+
+[node name="Muros32" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=592729311]
+polygon = PackedVector2Array(816, 152, 966, 152, 966, 154, 816, 154)
+
+[node name="Muros33" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=148097942]
+polygon = PackedVector2Array(558, 152, 582, 152, 582, 154, 558, 154)
+
+[node name="Muros34" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=997849511]
+polygon = PackedVector2Array(796, 152, 808, 152, 808, 154, 796, 154)
+
+[node name="Muros35" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=710908505]
+polygon = PackedVector2Array(834, 154, 966, 154, 966, 156, 834, 156)
+
+[node name="Muros36" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1532224256]
+polygon = PackedVector2Array(558, 154, 586, 154, 586, 156, 558, 156)
+
+[node name="Muros37" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=734214322]
+polygon = PackedVector2Array(798, 154, 800, 154, 800, 158, 798, 158)
+
+[node name="Muros38" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1317878155]
+polygon = PackedVector2Array(650, 156, 652, 156, 652, 158, 650, 158)
+
+[node name="Muros39" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=648436738]
+polygon = PackedVector2Array(558, 156, 632, 156, 632, 158, 558, 158)
+
+[node name="Muros40" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1368067624]
+polygon = PackedVector2Array(558, 158, 652, 158, 652, 160, 558, 160)
+
+[node name="Muros41" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=480164921]
+polygon = PackedVector2Array(558, 160, 660, 160, 660, 162, 558, 162)
+
+[node name="Muros42" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1987887638]
+polygon = PackedVector2Array(558, 162, 664, 162, 664, 164, 558, 164)
+
+[node name="Muros43" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1697118399]
+polygon = PackedVector2Array(156, 134, 214, 134, 214, 168, 156, 168)
+
+[node name="Muros44" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=470223514]
+polygon = PackedVector2Array(156, 168, 176, 168, 176, 170, 156, 170)
+
+[node name="Muros45" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1824093327]
+polygon = PackedVector2Array(156, 170, 172, 170, 172, 172, 156, 172)
+
+[node name="Muros46" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1243535452]
+polygon = PackedVector2Array(156, 172, 170, 172, 170, 186, 156, 186)
+
+[node name="Muros47" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=13684647]
+polygon = PackedVector2Array(156, 186, 172, 186, 172, 188, 156, 188)
+
+[node name="Muros48" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=572817794]
+polygon = PackedVector2Array(322, 186, 324, 186, 324, 188, 322, 188)
+
+[node name="Muros49" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1956360868]
+polygon = PackedVector2Array(156, 188, 174, 188, 174, 190, 156, 190)
+
+[node name="Muros50" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1589349828]
+polygon = PackedVector2Array(320, 188, 322, 188, 322, 190, 320, 190)
+
+[node name="Muros51" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=729755351]
+polygon = PackedVector2Array(364, 188, 366, 188, 366, 190, 364, 190)
+
+[node name="Muros52" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1351605503]
+polygon = PackedVector2Array(386, 188, 388, 188, 388, 190, 386, 190)
+
+[node name="Muros53" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1356067487]
+polygon = PackedVector2Array(342, 188, 346, 188, 346, 192, 342, 192)
+
+[node name="Muros54" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=777953756]
+polygon = PackedVector2Array(294, 188, 296, 188, 296, 192, 294, 192)
+
+[node name="Muros55" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1981453774]
+polygon = PackedVector2Array(336, 188, 338, 188, 338, 192, 336, 192)
+
+[node name="Muros56" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=496593169]
+polygon = PackedVector2Array(384, 190, 388, 190, 388, 192, 384, 192)
+
+[node name="Muros57" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1190337543]
+polygon = PackedVector2Array(366, 190, 368, 190, 368, 192, 366, 192)
+
+[node name="Muros58" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=4595390]
+polygon = PackedVector2Array(320, 190, 324, 190, 324, 192, 320, 192)
+
+[node name="Muros59" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=569231575]
+polygon = PackedVector2Array(558, 164, 668, 164, 668, 194, 558, 194)
+
+[node name="Muros60" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1295496781]
+polygon = PackedVector2Array(382, 192, 386, 192, 386, 194, 382, 194)
+
+[node name="Muros61" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=368666963]
+polygon = PackedVector2Array(294, 192, 298, 192, 298, 194, 294, 194)
+
+[node name="Muros62" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1611687534]
+polygon = PackedVector2Array(316, 192, 358, 192, 358, 194, 316, 194)
+
+[node name="Muros63" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=135643139]
+polygon = PackedVector2Array(366, 192, 372, 192, 372, 194, 366, 194)
+
+[node name="Muros64" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=375812221]
+polygon = PackedVector2Array(460, 194, 462, 194, 462, 196, 460, 196)
+
+[node name="Muros65" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=419382133]
+polygon = PackedVector2Array(296, 194, 386, 194, 386, 196, 296, 196)
+
+[node name="Muros66" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1354778014]
+polygon = PackedVector2Array(654, 194, 668, 194, 668, 196, 654, 196)
+
+[node name="Muros67" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=835237348]
+polygon = PackedVector2Array(534, 194, 536, 194, 536, 196, 534, 196)
+
+[node name="Muros68" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=753783241]
+polygon = PackedVector2Array(466, 194, 470, 194, 470, 198, 466, 198)
+
+[node name="Muros69" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=140844691]
+polygon = PackedVector2Array(532, 196, 536, 196, 536, 198, 532, 198)
+
+[node name="Muros70" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=105937590]
+polygon = PackedVector2Array(458, 196, 462, 196, 462, 198, 458, 198)
+
+[node name="Muros71" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1095625485]
+polygon = PackedVector2Array(296, 196, 388, 196, 388, 198, 296, 198)
+
+[node name="Muros72" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1334319544]
+polygon = PackedVector2Array(522, 196, 526, 196, 526, 198, 522, 198)
+
+[node name="Muros73" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=657009359]
+polygon = PackedVector2Array(656, 196, 668, 196, 668, 198, 656, 198)
+
+[node name="Muros74" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=975765439]
+polygon = PackedVector2Array(836, 156, 966, 156, 966, 202, 836, 202)
+
+[node name="Muros75" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=533082370]
+polygon = PackedVector2Array(296, 198, 382, 198, 382, 202, 296, 202)
+
+[node name="Muros76" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=270757002]
+polygon = PackedVector2Array(440, 198, 534, 198, 534, 202, 440, 202)
+
+[node name="Muros77" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=373541331]
+polygon = PackedVector2Array(440, 202, 536, 202, 536, 204, 440, 204)
+
+[node name="Muros78" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1353398228]
+polygon = PackedVector2Array(298, 202, 382, 202, 382, 204, 298, 204)
+
+[node name="Muros79" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2127923100]
+polygon = PackedVector2Array(832, 202, 966, 202, 966, 206, 832, 206)
+
+[node name="Muros80" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1318358176]
+polygon = PackedVector2Array(440, 204, 538, 204, 538, 206, 440, 206)
+
+[node name="Muros81" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=276045192]
+polygon = PackedVector2Array(834, 206, 966, 206, 966, 208, 834, 208)
+
+[node name="Muros82" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=489409072]
+polygon = PackedVector2Array(730, 206, 738, 206, 738, 218, 730, 218)
+
+[node name="Muros83" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1902556773]
+polygon = PackedVector2Array(658, 198, 668, 198, 668, 220, 658, 220)
+
+[node name="Muros84" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=515162279]
+polygon = PackedVector2Array(298, 204, 384, 204, 384, 220, 298, 220)
+
+[node name="Muros85" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=668673420]
+polygon = PackedVector2Array(440, 206, 532, 206, 532, 222, 440, 222)
+
+[node name="Muros86" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=431863330]
+polygon = PackedVector2Array(728, 218, 738, 218, 738, 222, 728, 222)
+
+[node name="Muros87" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2124457684]
+polygon = PackedVector2Array(658, 220, 670, 220, 670, 222, 658, 222)
+
+[node name="Muros88" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2140838175]
+polygon = PackedVector2Array(694, 222, 696, 222, 696, 224, 694, 224)
+
+[node name="Muros89" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1143829582]
+polygon = PackedVector2Array(726, 222, 738, 222, 738, 224, 726, 224)
+
+[node name="Muros90" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=676499488]
+polygon = PackedVector2Array(658, 222, 672, 222, 672, 224, 658, 224)
+
+[node name="Muros91" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=558543159]
+polygon = PackedVector2Array(440, 222, 534, 222, 534, 226, 440, 226)
+
+[node name="Muros92" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1975133504]
+polygon = PackedVector2Array(658, 224, 688, 224, 688, 226, 658, 226)
+
+[node name="Muros93" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1579123519]
+polygon = PackedVector2Array(692, 224, 738, 224, 738, 226, 692, 226)
+
+[node name="Muros94" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1027185550]
+polygon = PackedVector2Array(440, 226, 532, 226, 532, 228, 440, 228)
+
+[node name="Muros95" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1444300778]
+polygon = PackedVector2Array(442, 228, 532, 228, 532, 230, 442, 230)
+
+[node name="Muros96" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=252315159]
+polygon = PackedVector2Array(442, 230, 534, 230, 534, 232, 442, 232)
+
+[node name="Muros97" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1007370242]
+polygon = PackedVector2Array(156, 190, 250, 190, 250, 234, 156, 234)
+
+[node name="Muros98" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=790495498]
+polygon = PackedVector2Array(296, 220, 384, 220, 384, 234, 296, 234)
+
+[node name="Muros99" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1457119689]
+polygon = PackedVector2Array(532, 232, 536, 232, 536, 234, 532, 234)
+
+[node name="Muros100" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2030203575]
+polygon = PackedVector2Array(442, 232, 454, 232, 454, 234, 442, 234)
+
+[node name="Muros101" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1890888646]
+polygon = PackedVector2Array(512, 232, 526, 232, 526, 234, 512, 234)
+
+[node name="Muros102" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=466230626]
+polygon = PackedVector2Array(370, 234, 384, 234, 384, 236, 370, 236)
+
+[node name="Muros103" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1152374912]
+polygon = PackedVector2Array(658, 226, 738, 226, 738, 240, 658, 240)
+
+[node name="Muros104" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=210328161]
+polygon = PackedVector2Array(724, 240, 738, 240, 738, 242, 724, 242)
+
+[node name="Muros105" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1542534091]
+polygon = PackedVector2Array(658, 240, 672, 240, 672, 242, 658, 242)
+
+[node name="Muros106" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1568806480]
+polygon = PackedVector2Array(658, 242, 670, 242, 670, 244, 658, 244)
+
+[node name="Muros107" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=671755068]
+polygon = PackedVector2Array(726, 242, 738, 242, 738, 244, 726, 244)
+
+[node name="Muros108" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2146482340]
+polygon = PackedVector2Array(658, 244, 668, 244, 668, 246, 658, 246)
+
+[node name="Muros109" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=601115942]
+polygon = PackedVector2Array(590, 244, 594, 244, 594, 246, 590, 246)
+
+[node name="Muros110" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1500749085]
+polygon = PackedVector2Array(576, 246, 614, 246, 614, 248, 576, 248)
+
+[node name="Muros111" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=699138001]
+polygon = PackedVector2Array(656, 246, 668, 246, 668, 248, 656, 248)
+
+[node name="Muros112" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=775371099]
+polygon = PackedVector2Array(728, 244, 738, 244, 738, 250, 728, 250)
+
+[node name="Muros113" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1134018559]
+polygon = PackedVector2Array(542, 248, 668, 248, 668, 250, 542, 250)
+
+[node name="Muros114" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=236829531]
+polygon = PackedVector2Array(538, 250, 666, 250, 666, 252, 538, 252)
+
+[node name="Muros115" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=975778892]
+polygon = PackedVector2Array(726, 250, 740, 250, 740, 254, 726, 254)
+
+[node name="Muros116" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1483708305]
+polygon = PackedVector2Array(536, 252, 666, 252, 666, 254, 536, 254)
+
+[node name="Muros117" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1288648481]
+polygon = PackedVector2Array(726, 254, 762, 254, 762, 256, 726, 256)
+
+[node name="Muros118" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1882489789]
+polygon = PackedVector2Array(534, 254, 666, 254, 666, 258, 534, 258)
+
+[node name="Muros119" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1489405410]
+polygon = PackedVector2Array(726, 256, 768, 256, 768, 258, 726, 258)
+
+[node name="Muros120" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1383357412]
+polygon = PackedVector2Array(726, 258, 770, 258, 770, 264, 726, 264)
+
+[node name="Muros121" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1408539662]
+polygon = PackedVector2Array(532, 258, 668, 258, 668, 266, 532, 266)
+
+[node name="Muros122" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=964945989]
+polygon = PackedVector2Array(726, 264, 768, 264, 768, 268, 726, 268)
+
+[node name="Muros123" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1359717446]
+polygon = PackedVector2Array(0, 108, 104, 108, 104, 270, 0, 270)
+
+[node name="Muros124" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=815602513]
+polygon = PackedVector2Array(534, 266, 668, 266, 668, 272, 534, 272)
+
+[node name="Muros125" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1507636919]
+polygon = PackedVector2Array(724, 268, 768, 268, 768, 272, 724, 272)
+
+[node name="Muros126" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1353763491]
+polygon = PackedVector2Array(0, 270, 106, 270, 106, 272, 0, 272)
+
+[node name="Muros127" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1046221952]
+polygon = PackedVector2Array(0, 272, 110, 272, 110, 274, 0, 274)
+
+[node name="Muros128" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=471690926]
+polygon = PackedVector2Array(726, 272, 768, 272, 768, 274, 726, 274)
+
+[node name="Muros129" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=649305111]
+polygon = PackedVector2Array(372, 236, 384, 236, 384, 276, 372, 276)
+
+[node name="Muros130" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1890264089]
+polygon = PackedVector2Array(534, 272, 666, 272, 666, 278, 534, 278)
+
+[node name="Muros131" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1303787818]
+polygon = PackedVector2Array(370, 276, 386, 276, 386, 278, 370, 278)
+
+[node name="Muros132" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=477847790]
+polygon = PackedVector2Array(532, 278, 664, 278, 664, 280, 532, 280)
+
+[node name="Muros133" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=135742961]
+polygon = PackedVector2Array(318, 278, 388, 278, 388, 280, 318, 280)
+
+[node name="Muros134" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=850134788]
+polygon = PackedVector2Array(624, 280, 642, 280, 642, 282, 624, 282)
+
+[node name="Muros135" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=632636651]
+polygon = PackedVector2Array(532, 280, 552, 280, 552, 282, 532, 282)
+
+[node name="Muros136" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1453240473]
+polygon = PackedVector2Array(312, 280, 390, 280, 390, 282, 312, 282)
+
+[node name="Muros137" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=114197139]
+polygon = PackedVector2Array(312, 282, 392, 282, 392, 284, 312, 284)
+
+[node name="Muros138" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1306503849]
+polygon = PackedVector2Array(626, 282, 640, 282, 640, 284, 626, 284)
+
+[node name="Muros139" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1850539230]
+polygon = PackedVector2Array(532, 282, 550, 282, 550, 284, 532, 284)
+
+[node name="Muros140" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=90206560]
+polygon = PackedVector2Array(312, 284, 396, 284, 396, 286, 312, 286)
+
+[node name="Muros141" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1310496497]
+polygon = PackedVector2Array(312, 286, 400, 286, 400, 288, 312, 288)
+
+[node name="Muros142" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1526432310]
+polygon = PackedVector2Array(628, 284, 638, 284, 638, 290, 628, 290)
+
+[node name="Muros143" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=154775798]
+polygon = PackedVector2Array(312, 288, 404, 288, 404, 290, 312, 290)
+
+[node name="Muros144" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=322763653]
+polygon = PackedVector2Array(312, 290, 410, 290, 410, 292, 312, 292)
+
+[node name="Muros145" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1936836282]
+polygon = PackedVector2Array(630, 290, 638, 290, 638, 294, 630, 294)
+
+[node name="Muros146" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1198854810]
+polygon = PackedVector2Array(530, 284, 548, 284, 548, 296, 530, 296)
+
+[node name="Muros147" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1677866064]
+polygon = PackedVector2Array(312, 292, 414, 292, 414, 296, 312, 296)
+
+[node name="Muros148" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=736085688]
+polygon = PackedVector2Array(310, 296, 416, 296, 416, 298, 310, 298)
+
+[node name="Muros149" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1646330884]
+polygon = PackedVector2Array(308, 298, 334, 298, 334, 300, 308, 300)
+
+[node name="Muros150" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1200071230]
+polygon = PackedVector2Array(362, 298, 416, 298, 416, 300, 362, 300)
+
+[node name="Muros151" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1953217027]
+polygon = PackedVector2Array(306, 300, 324, 300, 324, 302, 306, 302)
+
+[node name="Muros152" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2080322099]
+polygon = PackedVector2Array(366, 300, 416, 300, 416, 302, 366, 302)
+
+[node name="Muros153" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1310194914]
+polygon = PackedVector2Array(304, 302, 322, 302, 322, 304, 304, 304)
+
+[node name="Muros154" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=808147722]
+polygon = PackedVector2Array(368, 302, 416, 302, 416, 304, 368, 304)
+
+[node name="Muros155" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=801959505]
+polygon = PackedVector2Array(302, 304, 320, 304, 320, 306, 302, 306)
+
+[node name="Muros156" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2136715787]
+polygon = PackedVector2Array(370, 304, 416, 304, 416, 306, 370, 306)
+
+[node name="Muros157" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=833917123]
+polygon = PackedVector2Array(300, 306, 320, 306, 320, 308, 300, 308)
+
+[node name="Muros158" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=984834375]
+polygon = PackedVector2Array(372, 306, 416, 306, 416, 308, 372, 308)
+
+[node name="Muros159" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=519737351]
+polygon = PackedVector2Array(378, 308, 416, 308, 416, 310, 378, 310)
+
+[node name="Muros160" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1697320332]
+polygon = PackedVector2Array(296, 308, 320, 308, 320, 310, 296, 310)
+
+[node name="Muros161" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2033076227]
+polygon = PackedVector2Array(382, 310, 416, 310, 416, 312, 382, 312)
+
+[node name="Muros162" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=763163928]
+polygon = PackedVector2Array(270, 310, 320, 310, 320, 312, 270, 312)
+
+[node name="Muros163" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=348110883]
+polygon = PackedVector2Array(532, 296, 548, 296, 548, 314, 532, 314)
+
+[node name="Muros164" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=741413201]
+polygon = PackedVector2Array(256, 312, 320, 312, 320, 314, 256, 314)
+
+[node name="Muros165" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=464213782]
+polygon = PackedVector2Array(386, 312, 416, 312, 416, 314, 386, 314)
+
+[node name="Muros166" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2020183171]
+polygon = PackedVector2Array(388, 314, 416, 314, 416, 316, 388, 316)
+
+[node name="Muros167" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1390551561]
+polygon = PackedVector2Array(390, 316, 416, 316, 416, 318, 390, 318)
+
+[node name="Muros168" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1461612710]
+polygon = PackedVector2Array(398, 318, 414, 318, 414, 320, 398, 320)
+
+[node name="Muros169" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=305916759]
+polygon = PackedVector2Array(250, 314, 320, 314, 320, 330, 250, 330)
+
+[node name="Muros170" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=681389992]
+polygon = PackedVector2Array(250, 330, 274, 330, 274, 332, 250, 332)
+
+[node name="Muros171" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=451581959]
+polygon = PackedVector2Array(836, 208, 966, 208, 966, 334, 836, 334)
+
+[node name="Muros172" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=469625751]
+polygon = PackedVector2Array(250, 332, 272, 332, 272, 334, 250, 334)
+
+[node name="Muros173" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2068537330]
+polygon = PackedVector2Array(834, 334, 966, 334, 966, 336, 834, 336)
+
+[node name="Muros174" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2138245457]
+polygon = PackedVector2Array(766, 336, 792, 336, 792, 338, 766, 338)
+
+[node name="Muros175" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2065573856]
+polygon = PackedVector2Array(832, 336, 966, 336, 966, 338, 832, 338)
+
+[node name="Muros176" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1216752778]
+polygon = PackedVector2Array(340, 336, 342, 336, 342, 338, 340, 338)
+
+[node name="Muros177" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1372708289]
+polygon = PackedVector2Array(384, 336, 388, 336, 388, 340, 384, 340)
+
+[node name="Muros178" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=264261357]
+polygon = PackedVector2Array(340, 338, 346, 338, 346, 340, 340, 340)
+
+[node name="Muros179" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1361952456]
+polygon = PackedVector2Array(344, 340, 420, 340, 420, 344, 344, 344)
+
+[node name="Muros180" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1871866856]
+polygon = PackedVector2Array(558, 344, 634, 344, 634, 346, 558, 346)
+
+[node name="Muros181" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=306312872]
+polygon = PackedVector2Array(710, 344, 728, 344, 728, 346, 710, 346)
+
+[node name="Muros182" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1530599041]
+polygon = PackedVector2Array(250, 334, 270, 334, 270, 350, 250, 350)
+
+[node name="Muros183" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=37206057]
+polygon = PackedVector2Array(346, 344, 420, 344, 420, 354, 346, 354)
+
+[node name="Muros184" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1772892118]
+polygon = PackedVector2Array(250, 350, 272, 350, 272, 354, 250, 354)
+
+[node name="Muros185" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=778707892]
+polygon = PackedVector2Array(344, 354, 420, 354, 420, 356, 344, 356)
+
+[node name="Muros186" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=5109955]
+polygon = PackedVector2Array(250, 354, 274, 354, 274, 356, 250, 356)
+
+[node name="Muros187" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=553975119]
+polygon = PackedVector2Array(558, 346, 636, 346, 636, 358, 558, 358)
+
+[node name="Muros188" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=818157044]
+polygon = PackedVector2Array(284, 356, 296, 356, 296, 358, 284, 358)
+
+[node name="Muros189" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1424762058]
+polygon = PackedVector2Array(328, 356, 330, 356, 330, 358, 328, 358)
+
+[node name="Muros190" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2024265019]
+polygon = PackedVector2Array(250, 356, 276, 356, 276, 358, 250, 358)
+
+[node name="Muros191" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=524422753]
+polygon = PackedVector2Array(340, 356, 420, 356, 420, 358, 340, 358)
+
+[node name="Muros192" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=930731929]
+polygon = PackedVector2Array(708, 346, 730, 346, 730, 360, 708, 360)
+
+[node name="Muros193" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2133884957]
+polygon = PackedVector2Array(250, 358, 362, 358, 362, 360, 250, 360)
+
+[node name="Muros194" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1370038544]
+polygon = PackedVector2Array(718, 360, 730, 360, 730, 362, 718, 362)
+
+[node name="Muros195" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=381980105]
+polygon = PackedVector2Array(560, 358, 636, 358, 636, 364, 560, 364)
+
+[node name="Muros196" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1110023821]
+polygon = PackedVector2Array(720, 362, 730, 362, 730, 364, 720, 364)
+
+[node name="Muros197" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=218091528]
+polygon = PackedVector2Array(558, 364, 560, 364, 560, 366, 558, 366)
+
+[node name="Muros198" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=639870636]
+polygon = PackedVector2Array(666, 364, 678, 364, 678, 366, 666, 366)
+
+[node name="Muros199" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=993839051]
+polygon = PackedVector2Array(622, 364, 636, 364, 636, 366, 622, 366)
+
+[node name="Muros200" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=151060266]
+polygon = PackedVector2Array(250, 360, 360, 360, 360, 368, 250, 368)
+
+[node name="Muros201" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1833612975]
+polygon = PackedVector2Array(666, 366, 680, 366, 680, 368, 666, 368)
+
+[node name="Muros202" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1882305206]
+polygon = PackedVector2Array(556, 366, 558, 366, 558, 368, 556, 368)
+
+[node name="Muros203" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1261598492]
+polygon = PackedVector2Array(666, 368, 678, 368, 678, 370, 666, 370)
+
+[node name="Muros204" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=759005128]
+polygon = PackedVector2Array(250, 368, 358, 368, 358, 378, 250, 378)
+
+[node name="Muros205" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1039292721]
+polygon = PackedVector2Array(250, 378, 276, 378, 276, 380, 250, 380)
+
+[node name="Muros206" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2045806388]
+polygon = PackedVector2Array(344, 378, 358, 378, 358, 380, 344, 380)
+
+[node name="Muros207" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=479367170]
+polygon = PackedVector2Array(250, 380, 274, 380, 274, 382, 250, 382)
+
+[node name="Muros208" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=183068487]
+polygon = PackedVector2Array(624, 366, 636, 366, 636, 386, 624, 386)
+
+[node name="Muros209" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1631577250]
+polygon = PackedVector2Array(668, 370, 678, 370, 678, 386, 668, 386)
+
+[node name="Muros210" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1602703542]
+polygon = PackedVector2Array(346, 380, 358, 380, 358, 386, 346, 386)
+
+[node name="Muros211" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1086938294]
+polygon = PackedVector2Array(644, 382, 646, 382, 646, 388, 644, 388)
+
+[node name="Muros212" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1568220227]
+polygon = PackedVector2Array(622, 386, 638, 386, 638, 388, 622, 388)
+
+[node name="Muros213" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2140328974]
+polygon = PackedVector2Array(390, 386, 398, 386, 398, 388, 390, 388)
+
+[node name="Muros214" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=413894264]
+polygon = PackedVector2Array(666, 386, 678, 386, 678, 388, 666, 388)
+
+[node name="Muros215" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1340717803]
+polygon = PackedVector2Array(348, 386, 358, 386, 358, 388, 348, 388)
+
+[node name="Muros216" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=678139087]
+polygon = PackedVector2Array(386, 388, 402, 388, 402, 390, 386, 390)
+
+[node name="Muros217" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=570285097]
+polygon = PackedVector2Array(348, 388, 360, 388, 360, 390, 348, 390)
+
+[node name="Muros218" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1344784763]
+polygon = PackedVector2Array(580, 388, 648, 388, 648, 390, 580, 390)
+
+[node name="Muros219" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1229360809]
+polygon = PackedVector2Array(660, 388, 678, 388, 678, 390, 660, 390)
+
+[node name="Muros220" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1039746711]
+polygon = PackedVector2Array(0, 274, 206, 274, 206, 392, 0, 392)
+
+[node name="Muros221" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1855263559]
+polygon = PackedVector2Array(250, 382, 272, 382, 272, 392, 250, 392)
+
+[node name="Muros222" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2131783649]
+polygon = PackedVector2Array(348, 390, 362, 390, 362, 392, 348, 392)
+
+[node name="Muros223" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=247793222]
+polygon = PackedVector2Array(380, 390, 404, 390, 404, 392, 380, 392)
+
+[node name="Muros224" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1425892749]
+polygon = PackedVector2Array(250, 392, 274, 392, 274, 394, 250, 394)
+
+[node name="Muros225" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1458564766]
+polygon = PackedVector2Array(0, 392, 170, 392, 170, 394, 0, 394)
+
+[node name="Muros226" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=806305294]
+polygon = PackedVector2Array(274, 394, 278, 394, 278, 396, 274, 396)
+
+[node name="Muros227" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1918696263]
+polygon = PackedVector2Array(0, 394, 168, 394, 168, 396, 0, 396)
+
+[node name="Muros228" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1102523779]
+polygon = PackedVector2Array(252, 394, 264, 394, 264, 396, 252, 396)
+
+[node name="Muros229" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=430332120]
+polygon = PackedVector2Array(346, 392, 404, 392, 404, 398, 346, 398)
+
+[node name="Muros230" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=596482204]
+polygon = PackedVector2Array(258, 396, 260, 396, 260, 398, 258, 398)
+
+[node name="Muros231" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=196076122]
+polygon = PackedVector2Array(766, 338, 966, 338, 966, 402, 766, 402)
+
+[node name="Muros232" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=727630641]
+polygon = PackedVector2Array(346, 398, 402, 398, 402, 404, 346, 404)
+
+[node name="Muros233" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=535948332]
+polygon = PackedVector2Array(348, 404, 402, 404, 402, 406, 348, 406)
+
+[node name="Muros234" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1276984843]
+polygon = PackedVector2Array(578, 390, 678, 390, 678, 408, 578, 408)
+
+[node name="Muros235" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1614701165]
+polygon = PackedVector2Array(348, 406, 404, 406, 404, 408, 348, 408)
+
+[node name="Muros236" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1866638736]
+polygon = PackedVector2Array(346, 408, 404, 408, 404, 410, 346, 410)
+
+[node name="Muros237" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=841963050]
+polygon = PackedVector2Array(578, 408, 590, 408, 590, 410, 578, 410)
+
+[node name="Muros238" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=734925462]
+polygon = PackedVector2Array(376, 410, 380, 410, 380, 412, 376, 412)
+
+[node name="Muros239" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1184573936]
+polygon = PackedVector2Array(220, 410, 222, 410, 222, 412, 220, 412)
+
+[node name="Muros240" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=133914530]
+polygon = PackedVector2Array(394, 410, 404, 410, 404, 412, 394, 412)
+
+[node name="Muros241" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1503275797]
+polygon = PackedVector2Array(404, 412, 406, 412, 406, 414, 404, 414)
+
+[node name="Muros242" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=226369679]
+polygon = PackedVector2Array(518, 414, 526, 414, 526, 416, 518, 416)
+
+[node name="Muros243" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2064388217]
+polygon = PackedVector2Array(0, 396, 166, 396, 166, 428, 0, 428)
+
+[node name="Muros244" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=879605876]
+polygon = PackedVector2Array(128, 428, 166, 428, 166, 430, 128, 430)
+
+[node name="Muros245" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=84904485]
+polygon = PackedVector2Array(0, 428, 124, 428, 124, 430, 0, 430)
+
+[node name="Muros246" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=986687599]
+polygon = PackedVector2Array(722, 364, 730, 364, 730, 432, 722, 432)
+
+[node name="Muros247" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1415731474]
+polygon = PackedVector2Array(0, 430, 118, 430, 118, 432, 0, 432)
+
+[node name="Muros248" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1935872752]
+polygon = PackedVector2Array(720, 432, 730, 432, 730, 434, 720, 434)
+
+[node name="Muros249" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1872889652]
+polygon = PackedVector2Array(632, 434, 668, 434, 668, 436, 632, 436)
+
+[node name="Muros250" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=912164858]
+polygon = PackedVector2Array(696, 434, 730, 434, 730, 436, 696, 436)
+
+[node name="Muros251" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1929940145]
+polygon = PackedVector2Array(0, 432, 116, 432, 116, 440, 0, 440)
+
+[node name="Muros252" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2061947006]
+polygon = PackedVector2Array(208, 412, 224, 412, 224, 446, 208, 446)
+
+[node name="Muros253" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1728169414]
+polygon = PackedVector2Array(208, 446, 226, 446, 226, 448, 208, 448)
+
+[node name="Muros254" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1920995635]
+polygon = PackedVector2Array(310, 446, 312, 446, 312, 448, 310, 448)
+
+[node name="Muros255" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1842678118]
+polygon = PackedVector2Array(290, 448, 292, 448, 292, 450, 290, 450)
+
+[node name="Muros256" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1743751747]
+polygon = PackedVector2Array(308, 448, 310, 448, 310, 450, 308, 450)
+
+[node name="Muros257" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1247672582]
+polygon = PackedVector2Array(208, 448, 228, 448, 228, 450, 208, 450)
+
+[node name="Muros258" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1356376768]
+polygon = PackedVector2Array(632, 436, 730, 436, 730, 452, 632, 452)
+
+[node name="Muros259" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1264574612]
+polygon = PackedVector2Array(578, 410, 588, 410, 588, 454, 578, 454)
+
+[node name="Muros260" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=504174490]
+polygon = PackedVector2Array(516, 416, 526, 416, 526, 454, 516, 454)
+
+[node name="Muros261" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1991311393]
+polygon = PackedVector2Array(632, 452, 646, 452, 646, 454, 632, 454)
+
+[node name="Muros262" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1725911069]
+polygon = PackedVector2Array(718, 452, 728, 452, 728, 454, 718, 454)
+
+[node name="Muros263" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1591134863]
+polygon = PackedVector2Array(0, 440, 118, 440, 118, 456, 0, 456)
+
+[node name="Muros264" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=795008159]
+polygon = PackedVector2Array(632, 454, 644, 454, 644, 456, 632, 456)
+
+[node name="Muros265" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2128214828]
+polygon = PackedVector2Array(576, 454, 588, 454, 588, 456, 576, 456)
+
+[node name="Muros266" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=363313737]
+polygon = PackedVector2Array(516, 454, 530, 454, 530, 456, 516, 456)
+
+[node name="Muros267" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1017546398]
+polygon = PackedVector2Array(208, 450, 310, 450, 310, 458, 208, 458)
+
+[node name="Muros268" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=605344379]
+polygon = PackedVector2Array(0, 456, 120, 456, 120, 458, 0, 458)
+
+[node name="Muros269" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1557617134]
+polygon = PackedVector2Array(378, 460, 398, 460, 398, 462, 378, 462)
+
+[node name="Muros270" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=985547179]
+polygon = PackedVector2Array(454, 460, 474, 460, 474, 462, 454, 462)
+
+[node name="Muros271" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=419994799]
+polygon = PackedVector2Array(632, 456, 642, 456, 642, 470, 632, 470)
+
+[node name="Muros272" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=101835372]
+polygon = PackedVector2Array(210, 458, 310, 458, 310, 470, 210, 470)
+
+[node name="Muros273" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=759298789]
+polygon = PackedVector2Array(298, 470, 310, 470, 310, 472, 298, 472)
+
+[node name="Muros274" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1752504757]
+polygon = PackedVector2Array(630, 470, 632, 470, 632, 472, 630, 472)
+
+[node name="Muros275" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2032578819]
+polygon = PackedVector2Array(300, 472, 310, 472, 310, 474, 300, 474)
+
+[node name="Muros276" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=581928386]
+polygon = PackedVector2Array(628, 472, 630, 472, 630, 474, 628, 474)
+
+[node name="Muros277" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=588747510]
+polygon = PackedVector2Array(516, 456, 588, 456, 588, 476, 516, 476)
+
+[node name="Muros278" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=485522401]
+polygon = PackedVector2Array(0, 458, 118, 458, 118, 486, 0, 486)
+
+[node name="Muros279" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1090420202]
+polygon = PackedVector2Array(764, 402, 966, 402, 966, 504, 764, 504)
+
+[node name="Muros280" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=912341453]
+polygon = PackedVector2Array(302, 474, 310, 474, 310, 504, 302, 504)
+
+[node name="Muros281" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=770043249]
+polygon = PackedVector2Array(376, 462, 476, 462, 476, 506, 376, 506)
+
+[node name="Muros282" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=640348196]
+polygon = PackedVector2Array(0, 486, 116, 486, 116, 506, 0, 506)
+
+[node name="Muros283" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=830487153]
+polygon = PackedVector2Array(300, 504, 312, 504, 312, 506, 300, 506)
+
+[node name="Muros284" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=69847495]
+polygon = PackedVector2Array(762, 504, 966, 504, 966, 506, 762, 506)
+
+[node name="Muros285" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1352144163]
+polygon = PackedVector2Array(374, 506, 478, 506, 478, 508, 374, 508)
+
+[node name="Muros286" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=140863622]
+polygon = PackedVector2Array(0, 506, 118, 506, 118, 508, 0, 508)
+
+[node name="Muros287" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1783439869]
+polygon = PackedVector2Array(298, 506, 314, 506, 314, 508, 298, 508)
+
+[node name="Muros288" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=163866226]
+polygon = PackedVector2Array(760, 506, 966, 506, 966, 508, 760, 508)
+
+[node name="Muros289" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1871821662]
+polygon = PackedVector2Array(0, 508, 122, 508, 122, 510, 0, 510)
+
+[node name="Muros290" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1250093152]
+polygon = PackedVector2Array(168, 508, 966, 508, 966, 532, 168, 532)
+
+[node name="Muros291" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=726047856]
+polygon = PackedVector2Array(0, 510, 124, 510, 124, 532, 0, 532)
+
+[node name="Muros292" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1885336586]
+polygon = PackedVector2Array(0, 532, 126, 532, 126, 534, 0, 534)
+
+[node name="Muros293" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=708167980]
+polygon = PackedVector2Array(166, 532, 966, 532, 966, 534, 166, 534)
+
+[node name="Muros294" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=165513760]
+polygon = PackedVector2Array(0, 534, 132, 534, 132, 536, 0, 536)
+
+[node name="Muros295" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=2082710416]
+polygon = PackedVector2Array(164, 534, 966, 534, 966, 536, 164, 536)
+
+[node name="Muros296" type="CollisionPolygon2D" parent="Colisiones/Muros" unique_id=1165579002]
+polygon = PackedVector2Array(0, 536, 966, 536, 966, 598, 0, 598)
+
+[node name="Pedestales" type="StaticBody2D" parent="Colisiones" unique_id=1641867598]
+collision_mask = 0
+
+[node name="Pedestales1" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=2128600436]
+polygon = PackedVector2Array(533, 101, 547, 101, 547, 113, 533, 113)
+
+[node name="Pedestales2" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=1714384708]
+polygon = PackedVector2Array(426, 103, 440, 103, 440, 115, 426, 115)
+
+[node name="Pedestales3" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=1187088372]
+polygon = PackedVector2Array(189, 260, 203, 260, 203, 272, 189, 272)
+
+[node name="Pedestales4" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=221763345]
+polygon = PackedVector2Array(771, 325, 785, 325, 785, 337, 771, 337)
+
+[node name="Pedestales5" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=1959186118]
+polygon = PackedVector2Array(477, 335, 491, 335, 491, 347, 477, 347)
+
+[node name="Pedestales6" type="CollisionPolygon2D" parent="Colisiones/Pedestales" unique_id=539242473]
+polygon = PackedVector2Array(101, 465, 115, 465, 115, 477, 101, 477)
+
+[node name="Oscuridad" type="CanvasModulate" parent="." unique_id=818381103]
+color = Color(0.55, 0.55, 0.62, 1)
+
+[node name="Antorchas" type="Node2D" parent="." unique_id=206412618]
+
+[node name="Antorcha1" type="PointLight2D" parent="Antorchas" unique_id=467960244]
+position = Vector2(540, 99)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha2" type="PointLight2D" parent="Antorchas" unique_id=1859295194]
+position = Vector2(433, 101)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha3" type="PointLight2D" parent="Antorchas" unique_id=417789270]
+position = Vector2(196, 258)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha4" type="PointLight2D" parent="Antorchas" unique_id=1249762990]
+position = Vector2(778, 323)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha5" type="PointLight2D" parent="Antorchas" unique_id=1543415640]
+position = Vector2(484, 333)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha6" type="PointLight2D" parent="Antorchas" unique_id=1116300661]
+position = Vector2(674, 366)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha7" type="PointLight2D" parent="Antorchas" unique_id=1608818375]
+position = Vector2(395, 388)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="Antorcha8" type="PointLight2D" parent="Antorchas" unique_id=1352290320]
+position = Vector2(108, 463)
+color = Color(1, 0.72, 0.38, 1)
+texture = ExtResource("12_lrk7a")
+texture_scale = 0.9
+script = ExtResource("13_pruyl")
+energia = 1.1
+
+[node name="SalidaOrilla" type="Area2D" parent="." unique_id=924935965]
+position = Vector2(489, 60)
+script = ExtResource("14_2r8uo")
+zona_destino = "res://scenes/levels/orilla_minotauro.tscn"
+entrada_destino = "desde_laberinto"
+
+[node name="Forma" type="CollisionShape2D" parent="SalidaOrilla" unique_id=737082673]
+shape = SubResource("RectangleShape2D_d7fl1")
+
+[node name="PuntoSalida" type="Marker2D" parent="." unique_id=518053888]
+position = Vector2(145, 500)
+
+[editable path="Objetos/Eventos/BarreraFinDemo"]

@@ -47,7 +47,7 @@ Las páginas se refieren a los PDF de `docs/pdf/`; el índice completo está en 
 ### Diálogos — Jugabilidad p. 15
 Autoload `Dialogos` = `scenes/ui/caja_dialogo.tscn` (`scripts/ui/caja_dialogo.gd`).
 - Caja de 300×105 en (90, 166), centrada abajo. Arte: `assets/ui/caja_dialogo.png` + `flecha_dialogo.png` (mismo lienzo; reducidos de los ×6 de la artista).
-- Pestaña del nombre: x 47–136, y 9–23. Texto: x 20–260, y 33–81 (3 renglones de ~26 letras). Si una línea no cabe, se parte sola en varios cuadros.
+- Pestaña del nombre: x 47–136, y 9–23. Texto: x 30–264, y 34–82 (3 renglones de 26 letras; ~11 px de margen con el borde del pergamino, pedido por las diseñadoras el 2026-11-23). Si una línea no cabe, se parte sola en varios cuadros.
 - **Retrato** (en la p. 15, el cuadro con la cara a la izquierda: "solo personajes importantes"): `CajaDialogo.retratos` = {"Nombre" → textura de ~46×46}; con retrato el texto se estrecha 50 px. **Faltan los retratos**: pedir a la artista al menos Leonidas, Kathita, los sabios y Medusa. Las fichas del Guión p. 136 (Medusa) y p. 138 (Leonidas, expresiones) sirven de referencia.
 - La caja de la maqueta de la p. 15 es distinta (dorada, sin borde azul): **manda el PNG que entregó la artista**.
 - Uso: `await Dialogos.mostrar(recurso_dialogo)`; los textos se escriben en `resources/dialogues/*.tres` (ver `scripts/systems/dialogo.gd`).

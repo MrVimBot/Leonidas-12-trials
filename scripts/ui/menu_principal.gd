@@ -2,11 +2,15 @@ class_name MenuPrincipal
 extends Control
 ## Menú principal (escena principal del proyecto). Jugar → `escena_jugar`
 ## (la cinemática inicial, que a su vez carga game.tscn). Salir cierra el juego.
-## Continuar (solo si hay partida guardada, ver EstadoJuego.guardar) carga la partida
-## y va directo a `escena_continuar` (game.tscn), en la zona y entrada guardadas.
+## Continuar (solo si hay partida guardada, ver EstadoJuego.guardar) abre `PantallaContinuar`
+## (resumen de la partida: ya la deja cargada); desde ahí se va a `escena_continuar`
+## (game.tscn), en la zona y posición guardadas, o se vuelve al menú.
 ##
-## PROVISIONAL: no hay arte de menú todavía. El fondo es la pintura del exterior
-## de la cinemática (fondo_1.png) y los botones son texto con la fuente del juego.
+## PROVISIONAL: no hay arte de menú todavía. El fondo es una pintura VERTICAL
+## (assets/backgrounds/menu/menu_vertical.png, 931×2000) escalada al ancho de la
+## pantalla: al abrir el menú la vista baja del cielo hasta Leonidas (`duracion_pan`)
+## y se queda ahí. El título es `titulo.png` (pixel art a ×0,5: 2 px de pantalla por píxel
+## de arte). Los botones son texto con la fuente del juego.
 ## Cuando la artista entregue el logo/botones, sustituir `Titulo` por un
 ## TextureRect y dar a los botones su textura (o un tema propio).
 ##
@@ -27,6 +31,8 @@ extends Control
 @export_file("*.tscn") var escena_jugar := "res://scenes/cinematics/cinematica_inicial.tscn"
 @export_file("*.tscn") var escena_continuar := "res://game.tscn"
 @export var duracion_fundido := 0.5
+## Segundos que tarda la vista en bajar del cielo hasta Leonidas (0 = sin movimiento, ya abajo).
+@export var duracion_pan := 9.0
 ## Píxeles que se desplaza el texto de los créditos por pulsación de arriba/abajo.
 @export var paso_desplazamiento := 16
 
@@ -47,8 +53,10 @@ var _plantilla_volver := ""
 @onready var texto_creditos: Label = %TextoCreditos
 @onready var boton_volver: Button = %Volver
 @onready var negro: ColorRect = %Negro
+@onready var fondo: Control = %Fondo
 @onready var panel: Control = %Panel
 @onready var titulo: Control = %Titulo
+@onready var pantalla_continuar: PantallaContinuar = %PantallaContinuar
 
 
 func _ready() -> void:
@@ -70,6 +78,19 @@ func _ready() -> void:
 	botones.actualizar_marcas()
 	negro.color.a = 1.0
 	create_tween().tween_property(negro, ^"color:a", 0.0, duracion_fundido)
+	_bajar_fondo()
+
+
+## La pintura es más alta que la pantalla: empieza en el cielo y baja hasta el suelo.
+func _bajar_fondo() -> void:
+	var recorrido := fondo.offset_bottom - fondo.offset_top - size.y
+	var final_y := -recorrido
+	if duracion_pan <= 0.0:
+		fondo.position.y = final_y
+		return
+	fondo.position.y = 0.0
+	var t := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(fondo, ^"position:y", final_y, duracion_pan).set_delay(duracion_fundido)
 
 
 ## Fundido a negro y, al terminar, `accion`. Ignora pulsaciones mientras tanto.
@@ -89,21 +110,33 @@ func _jugar() -> void:
 	_fundir_y(_empezar_partida)
 
 
+## Botón Continuar: enseña el resumen de la partida (que ya la carga).
 func _continuar() -> void:
-	_fundir_y(_cargar_partida)
+	if not _eligiendo:
+		return
+	if not pantalla_continuar.abrir():
+		push_warning("MenuPrincipal: no se pudo leer la partida; se empieza una nueva")
+		_jugar()
+		return
+	panel.visible = false # al ocultarse, el botón con foco lo suelta
+	titulo.visible = false
+
+
+## La tarjeta de la partida en `PantallaContinuar`: la partida ya está cargada.
+func _continuar_partida() -> void:
+	_fundir_y(get_tree().change_scene_to_file.bind(escena_continuar))
+
+
+func _volver_de_continuar() -> void:
+	panel.visible = true
+	titulo.visible = true
+	boton_continuar.grab_focus()
+	botones.actualizar_marcas()
 
 
 func _empezar_partida() -> void:
 	EstadoJuego.reiniciar() # partida nueva: monedas y manzanas a cero
 	get_tree().change_scene_to_file(escena_jugar)
-
-
-func _cargar_partida() -> void:
-	if not EstadoJuego.cargar():
-		push_warning("MenuPrincipal: no se pudo leer la partida; se empieza una nueva")
-		_empezar_partida()
-		return
-	get_tree().change_scene_to_file(escena_continuar)
 
 
 func _mostrar_creditos() -> void:

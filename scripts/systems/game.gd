@@ -65,6 +65,9 @@ var _jefe: Node = null
 var _vida_base := 0
 var _ruta_actual := ""
 var _entrada_actual := ""
+## Escena de la zona actual: se le pasa a la precarga al salir (la zona de la que se viene suele
+## ser vecina de la nueva, y así no se vuelve a cargar).
+var _escena_actual: PackedScene = null
 
 @onready var mundo: Node2D = $Mundo
 @onready var jugador: Jugador = $Jugador
@@ -72,6 +75,7 @@ var _entrada_actual := ""
 @onready var fundido: ColorRect = $Transicion/Fundido
 @onready var modo_barco: ModoBarco = $ModoBarco
 @onready var pantalla_game_over: PantallaGameOver = $PantallaGameOver
+@onready var precarga: PrecargaZonas = $PrecargaZonas
 
 
 ## El Game de la partida en curso (o null, p. ej. en el menú o con una zona suelta).
@@ -231,7 +235,8 @@ func _al_hundirse() -> void:
 
 
 func _cargar_zona(ruta: String, entrada: String) -> void:
-	var escena := load(ruta) as PackedScene
+	# Normalmente ya está precargada (PrecargaZonas): si no, se carga aquí, dentro del negro.
+	var escena := precarga.escena(ruta)
 	var raiz := escena.instantiate() if escena else null
 	var nueva := raiz as Zona
 	if nueva == null:
@@ -255,8 +260,10 @@ func _cargar_zona(ruta: String, entrada: String) -> void:
 	jugador.velocity = Vector2.ZERO
 	jugador.punto_control = jugador.global_position # se reaparece al entrar a la zona
 	var desde := _ruta_actual if ruta != _ruta_actual else "" # "" = se recarga la misma
+	precarga.preparar(zona_actual, ruta, _ruta_actual, _escena_actual)
 	_ruta_actual = ruta
 	_entrada_actual = entrada
+	_escena_actual = escena
 
 	if zona_actual.modo_barco:
 		modo_barco.subir(zona_actual, entrada, desde)

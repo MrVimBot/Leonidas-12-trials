@@ -338,3 +338,17 @@ Jugando (MCP: `project_run` con `zona_inicial = mar.tscn`, o desde la playa; par
 | `build_zonas`/`build_tilesets` con el editor abierto → "invalid UID" | Cerrar el editor o Recargar proyecto. |
 | El shader no se guarda por tile o rompe el batching | Plan B: un `ColorRect`/`Sprite2D` con el shader **debajo** de `SueloProvisional` solo en `mar` y dejar el resto del agua estática. |
 | Ruido ambiente del aula (demo en clase) | `calibrar()` al empezar y `margen_db` exportado; se puede recalibrar volviendo a entrar. |
+
+
+## Segundo mar (HECHO el 2026-11-23, trazado PROVISIONAL)
+Tras la misión del Minotauro, los sabios mandan a Leonidas a seguir por debajo de la isla de
+Medusa, al sur de la cueva. Recorrido: `isla` (`SalidaMarMinotauro`, en la orilla bajo la cueva,
+tras `BarreraMarMinotauro` con requisito MINOTAURO y el cartel `CartelMarMinotauro`) →
+**`mar_minotauro`** («Mar del sur») → **`orilla_minotauro`** (copia de `isla_orilla`) → `laberinto`.
+- `mar_minotauro` lo genera `tools/build_zonas.gd` (`_mar_minotauro`): 48×112 tiles; hileras de
+  rocas alternas (`LENGUAS_MAR_SUR`, cada 16 filas; antes eran franjas de arrecife, quitadas el
+  2026-11-23) dejan un paso ancho de 15 tiles a un lado y otro y huecos estrechos (24–40 px) entre
+  roca y roca, así que el camino serpentea; además 27 rocas sueltas, 8 remolinos y 7 tiburones.
+- Misma mecánica (`Zona.modo_barco`, `ModoBarco`, `Barco`); el premio de la travesía funciona igual.
+- Prueba: `tools/pruebas/prueba_mar_minotauro.gd`.
+- Pendiente: arte propio del agua/orilla (hoy el del primer mar y el de `isla_orilla`).

@@ -7,6 +7,11 @@ extends SceneTree
 ## de flujo de niveles (docs/design/plan_mapa_mundo.md):
 ##
 ##   casa_arbol ↑ pueblo ↓ bosque ↓ playa ↓ mar ↓ isla_orilla ↓ isla → cueva_medusa → cueva_jefe
+##   isla (orilla sur) ↓ mar_minotauro ↓ orilla_minotauro ↓ laberinto
+##
+## La `playa`, la `isla`, la `isla_orilla` y la `orilla_minotauro` ya NO salen de aquí: se montaron con el dibujo de la
+## artista desde tools/zonas/playa/montar_playa.gd y tools/zonas/isla/montar_isla.gd y
+## montar_orilla.gd, y se retocan a mano (metadato `editada_a_mano`).
 ##
 ## ⚠ SOBRESCRIBE las escenas; si una zona se retoca a mano, quítala de aquí.
 ## Después: godot --headless --path . --script res://tools/verificar_zonas.gd
@@ -26,12 +31,8 @@ const FLOR := "res://scenes/enemies/flor_falsa.tscn"
 const REMOLINO := "res://scenes/entorno/remolino.tscn"
 const TIBURON := "res://scenes/enemies/tiburon.tscn"
 const GAMBA := "res://scenes/enemies/gamba.tscn"
-const PEZ_ESPADA := "res://scenes/enemies/pez_espada.tscn"
 const CICLOPE := "res://scenes/enemies/ciclope_serpiente.tscn"
 const ARBOLES := ["pino", "cipres", "pino", "arbol_naranja", "cipres_dorado"]
-const PALMERA := "provisional/palmera"
-const MINI_PALMERA := "provisional/mini_palmera"
-const BASE_PALMERA := Vector2(12, 6)
 const SIN_SOMBRA := {"sombra": false}
 ## Rocas del mar de la artista (tools/recortes/piedras_barquito.lua): textura, colisión y
 ## su desplazamiento. Traen el agua y la sombra pintadas debajo (6–9 px): la colisión sube
@@ -44,10 +45,8 @@ const ROCAS_BARCO := [
 
 var _zonas := {
 	"bosque": _bosque,
-	"playa": _playa,
 	"mar": _mar,
-	"isla_orilla": _isla_orilla,
-	"isla": _isla,
+	"mar_minotauro": _mar_minotauro,
 	"cueva_medusa": _cueva_medusa,
 	"cueva_jefe": _cueva_jefe,
 	"casa_arbol": _casa_arbol,
@@ -88,14 +87,6 @@ func _arena(z: Constructor, r: Array) -> void:
 func _arboles_borde(z: Constructor, franjas: Array) -> void:
 	for r in franjas:
 		z.dispersar("ArbolesBorde", ARBOLES, r, Vector2(46, 34), {"solido": false})
-
-
-## Rocas grandes (sólidas) cada 40 px en una columna, delante de un límite invisible.
-func _rocas_columna(z: Constructor, x: float, y0: float, y1: float) -> void:
-	var y := y0
-	while y <= y1:
-		z.deco("Rocas", "roca_grande", Vector2(x, y), SIN_SOMBRA)
-		y += 40.0
 
 
 # --- Bosque: al sur del pueblo; primer combate ------------------------------------
@@ -144,47 +135,6 @@ func _bosque() -> Constructor:
 	return z
 
 
-# --- Playa ("Orilla del mar"): árboles arriba, mar y muelle abajo ------------------
-
-func _playa() -> Constructor:
-	var z := Constructor.new("Playa", "Orilla del mar", 60, 34, 22)
-	z.musica = MUSICA + "playa.mp3"
-	z.rect([0, 0, 59, 9], C.PASTO)
-	z.rect([0, 10, 59, 27], C.ARENA)
-	z.rect([0, 28, 59, 33], C.MAR)
-	for r in [[0, 0, 59, 1], [0, 2, 1, 9], [58, 2, 59, 9]]:
-		z.rect(r, C.SETO)
-	_arena(z, [28, 0, 31, 1])
-	_arena(z, [29, 0, 30, 9])
-	z.rect([28, 26, 31, 33], C.MUELLE, true)
-
-	z.entrada("desde_bosque", Vector2(480, 40))
-	z.entrada("desde_mar", Vector2(480, 472))
-	z.salida("SalidaBosque", Vector2(480, 8), Vector2(64, 16), "bosque", "desde_playa")
-	z.salida("SalidaMar", Vector2(480, 536), Vector2(48, 16), "mar", "desde_playa")
-
-	z.limite("Oeste", Rect2(-16, 160, 32, 290))
-	z.limite("Este", Rect2(944, 160, 32, 290))
-	_rocas_columna(z, 20, 180, 440)
-	_rocas_columna(z, 940, 180, 440)
-
-	var op := {"base": BASE_PALMERA}
-	for p in [Vector2i(8, 13), Vector2i(20, 12), Vector2i(42, 13), Vector2i(53, 12), Vector2i(14, 20), Vector2i(48, 21)]:
-		z.deco("Palmeras", PALMERA, _t(p.x, p.y), op)
-	for p in [Vector2i(25, 15), Vector2i(37, 16), Vector2i(6, 24), Vector2i(55, 24)]:
-		z.deco("Palmeras", MINI_PALMERA, _t(p.x, p.y), op)
-	z.deco("Decorados", "roca", _t(17, 17), SIN_SOMBRA)
-	z.deco("Decorados", "roca", _t(45, 23), SIN_SOMBRA)
-	z.deco("Decorados", "tronco", _t(36, 22), SIN_SOMBRA)
-	z.deco("Decorados", "troncos_apilados", _t(24, 24), SIN_SOMBRA)
-	z.cartel(Vector2(432, 420), "res://resources/dialogues/cartel_muelle.tres")
-
-	z.dispersar("Arboles", ARBOLES, [3, 3, 25, 8], Vector2(54, 36))
-	z.dispersar("Arboles", ARBOLES, [35, 3, 56, 8], Vector2(54, 36))
-	_arboles_borde(z, [[0, 0, 59, 1], [0, 0, 1, 9], [58, 0, 59, 9]])
-	return z
-
-
 # --- Mar ("Barquito"): minijuego del barco hacia el sur (docs/design/plan_minijuego_barco.md)
 # `modo_barco`: Game sustituye a Leonidas por el Barco. Muelles cortos pegados al borde;
 # el barco no navega sobre ellos: la salida está justo delante.
@@ -222,186 +172,60 @@ func _mar() -> Constructor:
 	return z
 
 
-# --- Orilla de la isla: la playa al revés (se llega por mar desde el norte) ---------
+# --- Mar del sur: segundo minijuego del barco, de la isla de Medusa al laberinto -----
+# Más difícil que `mar`: hileras de rocas alternas (izquierda/derecha) obligan a ir en zigzag
+# (o a colarse por los huecos estrechos entre rocas), con más remolinos y tiburones. Se entra desde la orilla sur de la `isla`
+# (cerrada hasta la misión del Minotauro: BarreraMarMinotauro) y se llega a `orilla_minotauro`.
+# Trazado PROVISIONAL (docs/design/plan_minijuego_barco.md, «Segundo mar»).
 
-func _isla_orilla() -> Constructor:
-	var z := Constructor.new("IslaOrilla", "Orilla de la isla", 60, 34, 24)
-	z.pintada = true # nivel 2: arte pintado, modo pintura
-	z.musica = MUSICA + "playa.mp3" # la isla de Medusa usa la música de la playa
-	z.rect([0, 0, 59, 5], C.MAR)
-	z.rect([0, 6, 59, 6], C.MAR_ORILLA)
-	z.rect([0, 7, 59, 24], C.ARENA)
-	z.rect([0, 25, 59, 33], C.PASTO)
-	for r in [[0, 32, 59, 33], [0, 25, 1, 31], [58, 25, 59, 31]]:
-		z.rect(r, C.SETO)
-	_arena(z, [28, 32, 31, 33])
-	_arena(z, [29, 25, 30, 33])
-	z.rect([28, 0, 31, 8], C.MUELLE, true)
-
-	z.entrada("desde_mar", Vector2(480, 56))
-	z.entrada("desde_isla", Vector2(480, 504))
-	z.salida("SalidaMar", Vector2(480, 8), Vector2(48, 16), "mar", "desde_isla")
-	z.salida("SalidaIsla", Vector2(480, 536), Vector2(64, 16), "isla", "desde_orilla")
-
-	z.limite("Oeste", Rect2(-16, 96, 32, 320))
-	z.limite("Este", Rect2(944, 96, 32, 320))
-	_rocas_columna(z, 20, 120, 390)
-	_rocas_columna(z, 940, 120, 390)
-
-	var op := {"base": BASE_PALMERA}
-	for p in [Vector2i(6, 11), Vector2i(16, 10), Vector2i(24, 13), Vector2i(38, 12), Vector2i(46, 10),
-			Vector2i(55, 12), Vector2i(10, 19), Vector2i(21, 21), Vector2i(40, 20), Vector2i(51, 21)]:
-		z.deco("Palmeras", PALMERA, _t(p.x, p.y), op)
-	for p in [Vector2i(13, 15), Vector2i(33, 17), Vector2i(44, 16), Vector2i(27, 22), Vector2i(5, 23), Vector2i(56, 22)]:
-		z.deco("Palmeras", MINI_PALMERA, _t(p.x, p.y), op)
-	# Primer aviso de ruinas.
-	z.deco("Ruinas", "columna_rota_1", _t(19, 16))
-	z.deco("Ruinas", "columna_rota_2", _t(43, 23))
-	z.deco("Ruinas", "roca", _t(35, 22), SIN_SOMBRA)
-	# Primer contacto con las gambas: lejos del muelle y de SalidaMar (su mordisco empuja y
-	# podría echar a Leonidas al mar) y a más de 96 px de las dos entradas.
-	_grupo_gambas(z, _t(48, 17), 3)
-
-	_arboles_borde(z, [[0, 32, 59, 33], [0, 25, 1, 33], [58, 25, 59, 33]])
-	return z
+## Hileras de rocas: [fila, desde la izquierda]. Dejan un paso ancho (15 tiles) en el otro lado;
+## entre roca y roca (cada 5 tiles) queda un hueco de 24–40 px, justo para el barco (20 px).
+const LENGUAS_MAR_SUR := [[14, true], [30, false], [46, true], [62, false], [78, true], [94, false]]
 
 
-# --- Isla de Medusa: islotes unidos por istmos; el rastro de estatuas lleva a la cueva --
-# Recorrido (tiles): A llegada (respiro) → B ruinas del norte → C playa grande (peces
-# espada) → E ruinas del este → F claro del sur (pez) → G claro de la cueva. Ramales
-# opcionales con premio (manzanos y vasijas, vigilados por gambas): D al noreste de B y H
-# al sur de F. El mar separa los islotes: la cueva (oeste) no se ve desde la llegada y hay
-# que dar toda la vuelta. Cada vez más enemigos cerca de la cueva.
+func _mar_minotauro() -> Constructor:
+	var z := Constructor.new("MarMinotauro", "Mar del sur", 48, 112, 29)
+	z.musica = MUSICA + "barco.mp3"
+	z.raiz.set("modo_barco", true)
+	z.rect([0, 0, 47, 111], C.MAR_NAV, true)
+	for r in [[0, 0, 2, 111], [45, 0, 47, 111], [0, 0, 47, 1], [0, 110, 47, 111]]:
+		z.rect(r, C.ARRECIFE, true)
+	var n := 0
+	for l in LENGUAS_MAR_SUR:
+		var f: int = l[0] + 1
+		for c in ([5, 10, 15, 20, 25] if l[1] else [22, 27, 32, 37, 42]):
+			var roca: Array = ROCAS_BARCO[n % ROCAS_BARCO.size()]
+			z.deco("Rocas", roca[0], _t(c, f + (n % 2)),
+				{"sombra": false, "base": roca[1], "desplazamiento_base": roca[2]})
+			n += 1
+	z.rect([22, 0, 25, 1], C.MUELLE, true)
+	z.rect([22, 110, 25, 111], C.MUELLE, true)
 
-func _isla() -> Constructor:
-	var z := Constructor.new("Isla", "Isla de Medusa", 112, 92, 25)
-	z.pintada = true # nivel 2: arte pintado, modo pintura
-	z.musica = MUSICA + "playa.mp3" # la isla de Medusa usa la música de la playa
-	z.rect([0, 0, 111, 91], C.MAR)
-	# Islotes: arena con hierba dentro (3 tiles de playa).
-	var islotes := {
-		"A": [Vector2i(30, 12), Vector2(15, 9)], "B": [Vector2i(64, 14), Vector2(13, 9)],
-		"D": [Vector2i(96, 10), Vector2(11, 7)], "C": [Vector2i(74, 38), Vector2(17, 10)],
-		"E": [Vector2i(86, 64), Vector2(14, 10)], "F": [Vector2i(46, 64), Vector2(14, 10)],
-		"H": [Vector2i(45, 84), Vector2(11, 5)], "G": [Vector2i(18, 50), Vector2(12, 10)],
-	}
-	for k in islotes:
-		z.elipse(islotes[k][0], islotes[k][1], C.ARENA)
-	# Istmos de arena (3–4 tiles de ancho) y la franja de llegada desde el norte.
-	var istmos := [[28, 0, 31, 4], [42, 11, 53, 14], [70, 7, 86, 10], [62, 22, 65, 30],
-			[78, 46, 81, 56], [58, 63, 73, 66], [44, 73, 47, 80], [26, 55, 40, 58]]
-	for r in istmos:
-		z.rect(r, C.ARENA)
-	for k in islotes:
-		z.elipse(islotes[k][0], islotes[k][1] - Vector2(3, 3), C.PASTO)
-	# Sendero de tierra que cruza la hierba de cada islote.
-	var senderos := [[29, 3, 30, 13], [29, 11, 44, 13], [52, 11, 64, 13], [62, 11, 64, 23], [64, 8, 72, 10],
-			[62, 28, 64, 39], [62, 37, 80, 39], [78, 37, 80, 64], [72, 63, 80, 65], [44, 63, 60, 65],
-			[44, 57, 46, 65], [45, 65, 47, 80], [17, 56, 46, 58], [17, 42, 19, 58]]
-	for r in senderos:
-		_arena(z, r)
+	z.entrada("desde_isla", Vector2(384, 96))
+	z.entrada("desde_orilla", Vector2(384, 1696))
+	z.salida("SalidaIsla", Vector2(384, 40), Vector2(64, 16), "isla", "desde_mar_minotauro")
+	z.salida("SalidaOrilla", Vector2(384, 1752), Vector2(64, 16), "orilla_minotauro", "desde_mar")
 
-	z.entrada("desde_orilla", Vector2(480, 40))
-	z.entrada("desde_cueva", Vector2(296, 712))
-	z.salida("SalidaOrilla", Vector2(480, 8), Vector2(64, 16), "isla_orilla", "desde_isla")
-	z.salida("SalidaCueva", Vector2(296, 674), Vector2(24, 12), "cueva_medusa", "desde_isla")
-	z.marcador("PuntoControlIsla", Vector2(480, 120))
-
-	# Cueva al norte del islote G, contra el mar.
-	z.deco("Cueva", "provisional/entrada_cueva", Vector2(296, 680), {"solido": false, "sombra": false})
-	z.deco("Cueva", "roca_grande", Vector2(258, 684), SIN_SOMBRA)
-	z.deco("Cueva", "roca_grande", Vector2(334, 684), SIN_SOMBRA)
-	z.reservar(Vector2(296, 680), 64.0)
-	z.limite("TrasCueva", Rect2(264, 636, 64, 30))
-
-	# Rastro de estatuas (guion pp. 23 y 39): personas petrificadas a lo largo del sendero.
-	var rastro := [
-		["estatua", Vector2i(34, 8)], ["estatua", Vector2i(53, 16)], ["estatua", Vector2i(67, 18)],
-		["estatua", Vector2i(60, 33)], ["estatua", Vector2i(83, 45)], ["estatua", Vector2i(75, 60)],
-		["estatua", Vector2i(53, 61)], ["estatua", Vector2i(41, 55)], ["estatua", Vector2i(23, 53)],
-		["estatua", Vector2i(14, 46)], ["pedestal", Vector2i(26, 9)], ["pedestal", Vector2i(58, 9)],
-		["pedestal", Vector2i(85, 35)], ["pedestal", Vector2i(50, 68)], ["pedestal", Vector2i(22, 47)],
-	]
-	for o in rastro:
-		var pos := _t(o[1].x, o[1].y)
-		z.deco("Estatuas", o[0], pos, SIN_SOMBRA)
-		z.reservar(pos, 48.0)
-	# Ruinas (B, E y junto a la cueva): donde vigilan los cíclopes.
-	var ruinas := [
-		["arco_ruinas", Vector2i(70, 13), {"base": Vector2(110, 14)}], ["columna_rota_1", Vector2i(59, 17), {}],
-		["columna_rota_2", Vector2i(90, 59), {}], ["columna_rota_3", Vector2i(94, 63), {}],
-		["columna_1", Vector2i(85, 59), {}], ["columna_rota_1", Vector2i(92, 69), {}],
-		["columna_rota_2", Vector2i(10, 50), {}], ["columna_rota_3", Vector2i(26, 49), {}],
-		["columna_1", Vector2i(8, 53), {}], ["columna_rota_1", Vector2i(28, 52), {}],
-	]
-	for o in ruinas:
-		var pos := _t(o[1].x, o[1].y)
-		z.deco("Ruinas", o[0], pos, (o[2] as Dictionary).merged(SIN_SOMBRA))
-		z.reservar(pos, 40.0)
-	var rocas := [Vector2i(20, 15), Vector2i(41, 7), Vector2i(73, 18), Vector2i(58, 42), Vector2i(90, 40),
-		Vector2i(97, 66), Vector2i(36, 67), Vector2i(57, 69), Vector2i(12, 56)]
+	# Rocas en las franjas de agua entre lenguas, sin tapar los huecos.
+	var rocas := [Vector2i(14, 22), Vector2i(26, 19), Vector2i(36, 25), Vector2i(8, 27),
+		Vector2i(22, 26), Vector2i(10, 37), Vector2i(24, 35), Vector2i(34, 39), Vector2i(16, 43),
+		Vector2i(40, 43), Vector2i(28, 42), Vector2i(12, 53), Vector2i(26, 51), Vector2i(36, 56),
+		Vector2i(20, 59), Vector2i(8, 59), Vector2i(14, 69), Vector2i(30, 67), Vector2i(38, 73),
+		Vector2i(22, 75), Vector2i(8, 75), Vector2i(12, 85), Vector2i(26, 83), Vector2i(36, 89),
+		Vector2i(20, 91), Vector2i(30, 101), Vector2i(38, 105)]
 	for i in rocas.size():
-		var pos := _t(rocas[i].x, rocas[i].y)
-		z.deco("Rocas", "roca" if i % 2 == 0 else "roca_grande", pos, SIN_SOMBRA)
-		z.reservar(pos, 32.0)
+		var roca: Array = ROCAS_BARCO[i % ROCAS_BARCO.size()]
+		z.deco("Rocas", roca[0], _t(rocas[i].x, rocas[i].y),
+			{"sombra": false, "base": roca[1], "desplazamiento_base": roca[2]})
 
-	# Premios de los ramales y del respiro de la llegada.
-	var manzanos := [Vector2i(92, 7), Vector2i(102, 12), Vector2i(39, 84), Vector2i(52, 84), Vector2i(22, 10)]
-	for i in manzanos.size():
-		var pos := _t(manzanos[i].x, manzanos[i].y)
-		z.deco("Arboles", "manzano_%d" % (i % 4 + 1), pos)
-		z.reservar(pos, 40.0)
-	for p in [Vector2i(37, 15), Vector2i(98, 7), Vector2i(100, 9), Vector2i(43, 86), Vector2i(49, 86)]:
-		z.instancia("Vasijas", VASIJA_AZUL, _t(p.x, p.y))
-	for p in [Vector2i(24, 16), Vector2i(94, 13), Vector2i(46, 87), Vector2i(31, 60)]:
-		z.instancia("Vasijas", VASIJA_NARANJA, _t(p.x, p.y))
-
-	# Enemigos (CLAUDE.md, «Enemigos del nivel 2»): ninguno a < 96 px de una entrada.
-	_grupo_gambas(z, _t(41, 16), 3) # A: al final de la llegada
-	_grupo_gambas(z, _t(68, 15), 4) # B
-	_grupo_gambas(z, _t(96, 11), 3) # D (ramal)
-	_grupo_gambas(z, _t(66, 43), 3) # C
-	_grupo_gambas(z, _t(90, 66), 5) # E
-	_grupo_gambas(z, _t(37, 62), 4) # F
-	_grupo_gambas(z, _t(45, 83), 4) # H (ramal)
-	_grupo_gambas(z, _t(19, 54), 5) # G, delante de la cueva
-	# Peces espada en claros abiertos: ≥ 180 px en línea recta sin obstáculos alrededor.
-	for p in [Vector2i(70, 33), Vector2i(84, 41), Vector2i(53, 66)]:
-		z.instancia("Enemigos", PEZ_ESPADA, _t(p.x, p.y))
-	z.reservar_rect([60, 31, 88, 45])
-	z.reservar_rect([38, 59, 58, 70])
-	# Cíclopes serpiente en las ruinas cercanas a la cueva (el guion los quiere sobre todo dentro).
-	for p in [Vector2i(88, 61), Vector2i(9, 48), Vector2i(27, 47)]:
-		z.instancia("Enemigos", CICLOPE, _t(p.x, p.y))
-
-	# Palmeras en la playa de cada islote, por el contorno y lejos de senderos, istmos, la
-	# cueva, las entradas y las carreras de los peces.
-	var evitar: Array[Rect2] = []
-	for r in istmos + senderos + [[56, 29, 92, 47], [36, 57, 60, 72], [10, 36, 26, 46]]:
-		evitar.append(Rect2(r[0] * 16 - 24, r[1] * 16 - 24, (r[2] - r[0] + 1) * 16 + 48, (r[3] - r[1] + 1) * 16 + 48))
-	for k in islotes:
-		_palmeras_orilla(z, islotes[k][0], islotes[k][1], evitar)
-	# Vegetación en la hierba (dispersar() no pisa el sendero, la arena ni lo reservado).
-	for k in islotes:
-		var c: Vector2i = islotes[k][0]
-		var r: Vector2 = islotes[k][1]
-		var area := [c.x - int(r.x) + 3, c.y - int(r.y) + 3, c.x + int(r.x) - 3, c.y + int(r.y) - 3]
-		z.dispersar("Palmeras", [PALMERA, MINI_PALMERA, PALMERA], area, Vector2(64, 44), {"base": BASE_PALMERA})
-		z.dispersar("Arbustos", ["arbusto_verde", "arbusto_1", "arbusto_2", "macizo_flores_1"], area, Vector2(88, 60))
+	# Peligros: nada en los primeros/últimos ~200 px.
+	for p in [Vector2(560, 360), Vector2(180, 600), Vector2(440, 640), Vector2(620, 860),
+			Vector2(280, 940), Vector2(520, 1130), Vector2(160, 1180), Vector2(440, 1420)]:
+		z.instancia("Peligros", REMOLINO, p)
+	for p in [Vector2(300, 400), Vector2(480, 690), Vector2(260, 830), Vector2(420, 900),
+			Vector2(340, 1100), Vector2(420, 1350), Vector2(260, 1460)]:
+		z.instancia("Peligros", TIBURON, p)
 	return z
-
-
-## Palmeras sobre la arena de un islote (a 1,5 tiles del borde, cada ~70 px de contorno),
-## salvo dentro de los rectángulos `evitar` (px).
-func _palmeras_orilla(z: Constructor, centro: Vector2i, radios: Vector2, evitar: Array[Rect2]) -> void:
-	var r := (radios - Vector2(1.5, 1.5)) * 16.0
-	var c := Vector2(centro) * 16.0 + Vector2(8, 8)
-	var n := int(TAU * sqrt((r.x * r.x + r.y * r.y) / 2.0) / 70.0)
-	for i in n:
-		var pos := c + Vector2(cos(TAU * i / n) * r.x, sin(TAU * i / n) * r.y)
-		if evitar.any(func(e: Rect2) -> bool: return e.has_point(pos)):
-			continue
-		z.deco("Palmeras", PALMERA if i % 3 else MINI_PALMERA, pos, {"base": BASE_PALMERA})
 
 
 ## Grupo de `n` gambas en un círculo de ~24 px alrededor de `centro` (plan 07, Z1).

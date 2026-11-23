@@ -168,6 +168,7 @@ func _entregar() -> void:
 		return
 	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_CABEZA_PIEDRA)
 	EstadoJuego.completar_mision(EstadoJuego.MISION_DERROTAR_MEDUSA)
+	EstadoJuego.empezar_mision(EstadoJuego.MISION_REGRESAR_CON_SABIOS)
 	EstadoJuego.jefes_derrotados += 1
 	EstadoJuego.medusa_derrotada = true
 	EstadoJuego.corazones_extra += 1

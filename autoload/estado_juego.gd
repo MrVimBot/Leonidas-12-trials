@@ -37,8 +37,13 @@ const OBJ_LIBRO := &"libro"
 const OBJ_MANZANA := &"manzana"
 const OBJ_CARTA := &"carta"
 const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
+const OBJ_COCO := &"coco"
+const OBJ_CUERNO := &"cuerno"
+const OBJ_CUERNO_MINOTAURO := &"cuerno_minotauro"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
+const MISION_REGRESAR_CON_SABIOS := &"regresar_con_sabios"
+const MISION_DERROTAR_MINOTAURO := &"derrotar_minotauro"
 
 ## Progreso que se guarda en la sección "progreso": nombre de la variable → valor inicial.
 ## `reiniciar()`, `guardar()` y `cargar()` la recorren: una bandera nueva solo se declara
@@ -52,6 +57,7 @@ const PROGRESO := {
 	&"jefes_derrotados": 0,
 	&"corazones_extra": 0,
 	&"medusa_derrotada": false,
+	&"minotauro_derrotado": false,
 }
 
 ## Dónde se guarda la partida (variable para poder probar sin tocar la real).
@@ -81,6 +87,12 @@ var corazones_extra := 0
 ## Medusa vencida (escena del encuentro, `EscenaMedusa`): al volver a `cueva_jefe` se queda en
 ## la sala con su recordatorio, sin combate.
 var medusa_derrotada := false
+## Minotauro vencido (escena del laberinto, `EscenaMinotauro`): al volver al laberinto no hay
+## combate, las rejas siguen abiertas y la luz encendida.
+var minotauro_derrotado := false
+## Cofres ya abiertos (`Cofre.clave()`: zona/nombre del nodo). No va en PROGRESO: es una lista,
+## y las constantes de PROGRESO se copian tal cual (una lista constante sería de solo lectura).
+var cofres_abiertos: Array[StringName] = []
 ## Lo pone Game mientras existe: el menú y la cinemática no cuentan como tiempo jugado.
 var contando_tiempo := false
 
@@ -122,6 +134,7 @@ func _poner_a_cero() -> void:
 	monedas = 0
 	objetos.clear()
 	misiones.clear()
+	cofres_abiertos.clear()
 	for clave: StringName in PROGRESO:
 		set(clave, PROGRESO[clave])
 	lugar_cargado = null
@@ -236,8 +249,24 @@ func completar_mision(id: StringName) -> void:
 	misiones_cambio.emit()
 
 
+## Ya se recibió (activa o completada).
+func mision_empezada(id: StringName) -> bool:
+	return misiones.has(id)
+
+
 func mision_completada(id: StringName) -> bool:
 	return misiones.get(id, -1) == EstadoMision.COMPLETADA
+
+
+# --- Cofres ---------------------------------------------------------------------------
+
+func cofre_abierto(clave: StringName) -> bool:
+	return clave in cofres_abiertos
+
+
+func marcar_cofre_abierto(clave: StringName) -> void:
+	if not cofre_abierto(clave):
+		cofres_abiertos.append(clave)
 
 
 # --- Guardar / cargar -----------------------------------------------------------------
@@ -258,6 +287,7 @@ func guardar(lugar: DatosLugar) -> bool:
 	cfg.set_value("jugador", "monedas", monedas)
 	cfg.set_value("jugador", "objetos", _a_cadenas(objetos))
 	cfg.set_value("progreso", "misiones", _a_cadenas(misiones))
+	cfg.set_value("progreso", "cofres", PackedStringArray(cofres_abiertos))
 	for clave: StringName in PROGRESO:
 		cfg.set_value("progreso", clave, get(clave))
 	var err := cfg.save(ruta_partida)
@@ -288,6 +318,9 @@ func cargar() -> bool:
 	for id: Variant in mis:
 		@warning_ignore("unsafe_call_argument") # claves/valores de ConfigFile: Variant
 		misiones[StringName(id)] = int(mis[id]) as EstadoMision
+	var cofres: PackedStringArray = cfg.get_value("progreso", "cofres", PackedStringArray())
+	for clave in cofres:
+		cofres_abiertos.append(StringName(clave))
 	for clave: StringName in PROGRESO:
 		set(clave, cfg.get_value("progreso", clave, PROGRESO[clave]))
 	_avisar_restablecido()

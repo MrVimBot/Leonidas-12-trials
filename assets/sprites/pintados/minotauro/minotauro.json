@@ -1,0 +1,59 @@
+{
+	"alto_mundo": 60,
+	"ancla": {
+		"x": 136,
+		"y": 184
+	},
+	"animaciones": {
+		"atacar": {
+			"archivo": "atacar.png",
+			"celda": {
+				"h": 206,
+				"w": 174,
+				"x": 98,
+				"y": 0
+			},
+			"columnas": 13,
+			"cuadros": 140,
+			"fps": 30,
+			"loop": false,
+			"separacion": 2
+		},
+		"caminar": {
+			"archivo": "caminar.png",
+			"celda": {
+				"h": 128,
+				"w": 97,
+				"x": 100,
+				"y": 61
+			},
+			"columnas": 10,
+			"cuadros": 72,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		},
+		"parado": {
+			"archivo": "parado.png",
+			"celda": {
+				"h": 124,
+				"w": 90,
+				"x": 98,
+				"y": 63
+			},
+			"columnas": 9,
+			"cuadros": 48,
+			"fps": 24,
+			"loop": true,
+			"separacion": 2
+		}
+	},
+	"densidad": 2,
+	"fuente": "res://fuente/nivel3/minotauro",
+	"lienzo": {
+		"h": 206,
+		"w": 272
+	},
+	"mira": "frente",
+	"nombre": "minotauro"
+}

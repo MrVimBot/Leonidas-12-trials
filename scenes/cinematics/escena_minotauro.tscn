@@ -1,0 +1,46 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/cinematics/escena_minotauro.gd" id="1_esc"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_salida.tres" id="2_sal"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_por_alli.tres" id="3_pal"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_aparece.tres" id="4_apa"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_invencible.tres" id="5_inv"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_tras_derrota.tres" id="10_tra"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_con_cuerno.tres" id="6_cue"]
+[ext_resource type="Resource" path="res://resources/dialogues/minotauro_derrota.tres" id="7_der"]
+[ext_resource type="Script" path="res://scripts/entorno/luz_antorcha.gd" id="8_luz"]
+[ext_resource type="Texture2D" path="res://resources/luces/luz_radial.tres" id="9_tex"]
+
+[sub_resource type="RectangleShape2D" id="Forma_disparador"]
+size = Vector2(72, 56)
+
+[node name="EscenaMinotauro" type="Node2D"]
+script = ExtResource("1_esc")
+dialogo_salida = ExtResource("2_sal")
+dialogo_por_alli = ExtResource("3_pal")
+dialogo_aparece = ExtResource("4_apa")
+dialogo_invencible = ExtResource("5_inv")
+dialogo_con_cuerno = ExtResource("6_cue")
+dialogo_derrota = ExtResource("7_der")
+dialogo_tras_derrota = ExtResource("10_tra")
+
+[node name="Disparador" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="Disparador"]
+position = Vector2(0, 6)
+shape = SubResource("Forma_disparador")
+
+[node name="PuntoLeonidas" type="Marker2D" parent="."]
+position = Vector2(0, 40)
+
+[node name="LuzLeonidas" type="PointLight2D" parent="."]
+top_level = true
+color = Color(1, 0.86, 0.62, 1)
+texture = ExtResource("9_tex")
+texture_scale = 1.6
+script = ExtResource("8_luz")
+energia = 0.9
+parpadeo = 0.05

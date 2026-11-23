@@ -18,7 +18,8 @@ extends SceneTree
 
 const P := preload("res://tools/pintados/personajes.gd")
 
-const FUENTE := "res://fuente/nivel2"
+## Las entradas de personajes.gd dan la carpeta relativa a esta (nivel2/gamba, nivel3/minotauro…).
+const FUENTE := "res://fuente"
 const SALIDA := "res://assets/sprites/pintados"
 ## Margen (px de la fuente) alrededor de la unión de fotogramas.
 const MARGEN := 4

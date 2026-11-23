@@ -22,6 +22,23 @@ signal golpeado
 	set(valor):
 		textura = valor
 		_actualizar()
+## Escala del dibujo. 1 = pixel art a su tamaño. El arte pintado del nivel 2
+## (assets/sprites/entorno/nivel2/) viene enorme (hasta 2000×2863) y se reduce aquí, no
+## regenerando el PNG; con escala ≠ 1 el sprite usa Linear Mipmap (el filtro del proyecto es
+## Nearest, que lo dejaría granulado). Solo se escala el Sprite, no el cuerpo: Godot no
+## recomienda escalar cuerpos físicos. La base y la sombra automáticas ya la tienen en cuenta.
+@export_range(0.01, 4.0, 0.001) var escala := 1.0:
+	set(valor):
+		escala = valor
+		_actualizar()
+## Punto del dibujo (en píxeles de la textura) que toca el suelo: queda en el origen del nodo, y
+## ahí van la colisión, la sombra y el orden por Y. (0, 0) = centro del borde inferior. Hace
+## falta en el arte pintado, que no siempre tiene el tronco centrado ni pegado abajo (palmeras
+## inclinadas, margen vacío bajo el dibujo): medido con tools/zonas/isla/medir_pies.py.
+@export var ancla := Vector2.ZERO:
+	set(valor):
+		ancla = valor
+		_actualizar()
 ## Tamaño de la colisión en la base, en píxeles. (0, 0) = automático según la imagen.
 @export var base := Vector2.ZERO:
 	set(valor):
@@ -96,12 +113,16 @@ func _actualizar() -> void:
 	if textura == null:
 		return
 	_sombra.tamano = tamano_sombra if tamano_sombra != Vector2i.ZERO \
-		else ComponenteSombra.tamano_para_ancho(textura.get_width() * 0.7)
+		else ComponenteSombra.tamano_para_ancho(textura.get_width() * escala * 0.7)
 	_sombra.position = desplazamiento_sombra
 	var tam := textura.get_size()
-	# La base de la imagen queda en el origen del nodo.
+	# El ancla (por defecto, el centro de la base de la imagen) queda en el origen del nodo; el
+	# offset va en píxeles de la textura: la escala del Sprite lo reduce con ella.
 	_sprite.centered = false
-	_sprite.offset = Vector2(-floorf(tam.x / 2.0), -tam.y)
+	_sprite.offset = -ancla if ancla != Vector2.ZERO else Vector2(-floorf(tam.x / 2.0), -tam.y)
+	_sprite.scale = Vector2(escala, escala)
+	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_PARENT_NODE if is_equal_approx(escala, 1.0) \
+		else CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	# Forma propia de cada instancia (si no, todas compartirían el rectángulo de
 	# decorado.tscn). Se crea la primera vez y luego se reutiliza en cada cambio.
 	if _forma == null:
@@ -111,7 +132,7 @@ func _actualizar() -> void:
 	_colision.position = Vector2(0, -_forma.size.y / 2.0) + desplazamiento_base
 
 
-## 80 % del ancho y una franja baja (entre 6 y 28 px) de alto.
+## 80 % del ancho y una franja baja (entre 6 y 28 px) de alto (del dibujo ya escalado).
 func tamano_base_automatico() -> Vector2:
-	var tam := textura.get_size()
+	var tam := textura.get_size() * escala
 	return Vector2(roundf(tam.x * 0.8), clampf(roundf(tam.y * 0.2), 6.0, 28.0))

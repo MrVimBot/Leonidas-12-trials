@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cafcgc36irwd6"
+path="res://.godot/imported/playa.aseprite-d9d6068d8ef5c894a61b0bec9e03a546.res"
+
+[deps]
+
+source_file="res://assets/backgrounds/playa/playa.aseprite"
+dest_files=["res://.godot/imported/playa.aseprite-d9d6068d8ef5c894a61b0bec9e03a546.res"]
+
+[params]
+

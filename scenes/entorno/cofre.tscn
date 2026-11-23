@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://c6461asubij0m"]
+
+[ext_resource type="Script" uid="uid://bwf4y17sgx7xs" path="res://scripts/entorno/cofre.gd" id="1_cof"]
+[ext_resource type="Script" uid="uid://dsqwm6jnu1und" path="res://scripts/componentes/componente_sombra.gd" id="2_som"]
+[ext_resource type="Texture2D" uid="uid://biw6qpb6th7e7" path="res://assets/sprites/entorno/nivel2/cofre_cerrado.png" id="3_cer"]
+[ext_resource type="Texture2D" uid="uid://lh3rg1jx55de" path="res://assets/sprites/entorno/nivel2/cofre_abierto.png" id="4_abi"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_objeto_recoger.tres" id="5_son"]
+
+[sub_resource type="RectangleShape2D" id="Forma_cofre"]
+size = Vector2(22, 8)
+
+[node name="Cofre" type="StaticBody2D" unique_id=781106270 node_paths=PackedStringArray("sonido_abrir")]
+collision_layer = 33
+collision_mask = 0
+script = ExtResource("1_cof")
+textura_cerrado = ExtResource("3_cer")
+textura_abierto = ExtResource("4_abi")
+sonido_abrir = NodePath("SonidoAbrir")
+
+[node name="Sombra" type="Node2D" parent="." unique_id=1266200539]
+script = ExtResource("2_som")
+tamano = Vector2i(24, 6)
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1256099900]
+unique_name_in_owner = true
+texture_filter = 4
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("3_cer")
+centered = false
+offset = Vector2(-323, -445)
+
+[node name="Colision" type="CollisionShape2D" parent="." unique_id=534952986]
+position = Vector2(0, -4)
+shape = SubResource("Forma_cofre")
+
+[node name="SonidoAbrir" type="AudioStreamPlayer2D" parent="." unique_id=2071040826]
+stream = ExtResource("5_son")
+max_distance = 320.0
+bus = &"SFX"
