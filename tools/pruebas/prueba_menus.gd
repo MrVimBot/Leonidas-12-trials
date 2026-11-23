@@ -6,6 +6,8 @@ extends "res://tools/pruebas/base_prueba.gd"
 ##     hace sola; no hay reenvío manual), arriba/abajo mueven el foco y dan la vuelta;
 ##  b2) créditos: se abren, nombran Gravity y Controller Icons, arriba/abajo desplazan el texto y se vuelve
 ##     con Enter, Esc o el botón de ratón «Volver», con el foco de nuevo en «Créditos»;
+##  b3) Continuar abre la pantalla de la partida (`PantallaContinuar`) con su vida, monedas, jefes
+##     e inventario; Esc y la flecha vuelven al menú con el foco en Continuar, y la tarjeta la carga;
 ##  c) pausa: Continuar con E y con Enter, Controles con J y volver con E/J/Enter/Espacio/Esc, Salir;
 ##  d) el libro abierto no se ve afectado (Enter no hace nada, Espacio lo cierra, nadie tiene foco)
 ##     y a pie E/J siguen interactuando/atacando.
@@ -103,6 +105,7 @@ func _caso_b() -> void:
 	menu.free()
 	await ticks(2)
 	await _caso_creditos()
+	await _caso_continuar()
 
 
 func _caso_creditos() -> void:
@@ -140,6 +143,65 @@ func _caso_creditos() -> void:
 			and get_viewport().gui_get_focus_owner() == menu.boton_creditos)
 	menu.free()
 	await ticks(2)
+
+
+func _caso_continuar() -> void:
+	# Una partida de prueba (base_prueba ya apunta EstadoJuego.ruta_partida a la de prueba).
+	EstadoJuego.reiniciar()
+	EstadoJuego.agregar_monedas(7)
+	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_ESPADA)
+	EstadoJuego.agregar_objeto(EstadoJuego.OBJ_MANZANA, 3)
+	EstadoJuego.medusa_derrotada = true
+	EstadoJuego.corazones_extra = 1
+	var lugar := DatosLugar.new()
+	lugar.zona = "res://scenes/levels/pueblo.tscn"
+	lugar.vida = 6
+	EstadoJuego.guardar(lugar)
+	EstadoJuego.reiniciar()
+	var menu := MENU_PRINCIPAL.instantiate() as MenuPrincipal
+	var pantalla := menu.get_node(^"PantallaContinuar") as PantallaContinuar
+	var pedidos := [0]
+	for c: Dictionary in pantalla.continuar_pedido.get_connections():
+		pantalla.continuar_pedido.disconnect(c["callable"] as Callable)
+	pantalla.continuar_pedido.connect(func() -> void: pedidos[0] += 1)
+	get_tree().root.add_child(menu)
+	await ticks(3)
+	ok("b3) con partida se ve Continuar y tiene el foco", menu.boton_continuar.visible
+		and get_viewport().gui_get_focus_owner() == menu.boton_continuar)
+	for vuelta: String in ["Esc", "flecha"]:
+		menu.boton_continuar.grab_focus()
+		await ticks(1)
+		await pulsar_tecla(KEY_ENTER)
+		var tarjeta := pantalla.get_node(^"Lienzo/Tarjeta") as Button
+		ok("b3) Enter sobre Continuar abre la pantalla (sin cargar aún)", pantalla.abierta
+			and not menu.panel.visible and pedidos[0] == 0 and get_viewport().gui_get_focus_owner() == tarjeta)
+		if vuelta == "Esc":
+			var corazones := pantalla.get_node(^"Lienzo/Corazones") as FilaCorazones
+			ok("b3) 4 corazones con 6 cuartos", corazones.get_child_count() == 4
+				and corazones.cuartos_visibles() == 6, "%d / %d" % [corazones.get_child_count(), corazones.cuartos_visibles()])
+			ok("b3) monedas", (pantalla.get_node(^"Lienzo/Monedas") as Label).text == "7")
+			ok("b3) laurel de Medusa con trofeo y el siguiente vacío",
+				(pantalla.get_node(^"Lienzo/Laureles/Laurel1/Trofeo") as TextureRect).texture != null
+				and (pantalla.get_node(^"Lienzo/Laureles/Laurel2/Trofeo") as TextureRect).texture == null)
+			var casilla := pantalla.get_node(^"Lienzo/Casillas/Casilla1") as TextureRect
+			ok("b3) inventario: manzanas (sin la espada)", casilla.texture == EstadoJuego.objeto(EstadoJuego.OBJ_MANZANA).icono
+				and (casilla.get_node(^"Cantidad") as Label).text == "3"
+				and (pantalla.get_node(^"Lienzo/Casillas/Casilla2") as TextureRect).texture == null)
+			await pulsar_tecla(KEY_ESCAPE)
+		else:
+			await pulsar_tecla(KEY_DOWN)
+			ok("b3) abajo pasa a la flecha", get_viewport().gui_get_focus_owner() == pantalla.get_node(^"Lienzo/Volver"))
+			await pulsar_tecla(KEY_ENTER)
+		ok("b3) se vuelve con %s y el foco queda en Continuar" % vuelta, not pantalla.abierta
+			and menu.panel.visible and get_viewport().gui_get_focus_owner() == menu.boton_continuar)
+	await pulsar_tecla(KEY_ENTER)
+	await pulsar_tecla(KEY_ENTER)
+	ok("b3) Enter sobre la tarjeta pide cargar la partida una vez", pedidos[0] == 1
+		and EstadoJuego.lugar_cargado != null, str(pedidos[0]))
+	menu.free()
+	await ticks(2)
+	EstadoJuego.reiniciar()
+	borrar_partida_prueba()
 
 
 # --- c) Pausa -----------------------------------------------------------------------------------

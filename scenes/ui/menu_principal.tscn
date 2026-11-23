@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dbssswlgxf0th" path="res://assets/backgrounds/menu/menu_vertical.png" id="2_fon"]
 [ext_resource type="Texture2D" uid="uid://c644qbi7nwhwy" path="res://assets/backgrounds/menu/titulo.png" id="4_tit"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="3_bot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pantalla_continuar.tscn" id="5_con"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boton"]
 
@@ -205,6 +206,10 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "Volver"
 
+[node name="PantallaContinuar" parent="." instance=ExtResource("5_con")]
+unique_name_in_owner = true
+layout_mode = 1
+
 [node name="Fundido" type="CanvasLayer" parent="." unique_id=758789446]
 layer = 30
 
@@ -223,3 +228,5 @@ color = Color(0, 0, 0, 1)
 [connection signal="pressed" from="Panel/Botones/Creditos" to="." method="_mostrar_creditos"]
 [connection signal="pressed" from="Panel/Botones/Salir" to="." method="_salir"]
 [connection signal="pressed" from="PantallaCreditos/PanelCreditos/VBox/Volver" to="." method="_volver_de_creditos"]
+[connection signal="continuar_pedido" from="PantallaContinuar" to="." method="_continuar_partida"]
+[connection signal="volver_pedido" from="PantallaContinuar" to="." method="_volver_de_continuar"]

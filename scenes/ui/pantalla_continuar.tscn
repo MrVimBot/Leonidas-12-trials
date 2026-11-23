@@ -1,0 +1,485 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pantalla_continuar.gd" id="1_pan"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/continuar/fondo.png" id="2_fon"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/continuar/volver.png" id="3_vol"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/continuar/volver_encendido.png" id="4_ven"]
+[ext_resource type="Texture2D" path="res://assets/ui/provisional/continuar/moneda.png" id="5_mon"]
+[ext_resource type="Script" uid="uid://b02t1hm48boo4" path="res://scripts/ui/fila_corazones.gd" id="6_cor"]
+[ext_resource type="Texture2D" uid="uid://c10em02y61270" path="res://assets/ui/provisional/icono_cabeza_piedra.png" id="7_cab"]
+[ext_resource type="Texture2D" uid="uid://36kiye46xuph" path="res://assets/ui/inventario/objetos/icono_cuerno.png" id="8_cue"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nada"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_foco"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.97, 0.8, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="Theme" id="Theme_continuar"]
+Label/colors/font_color = Color(0.25, 0.19, 0.18, 1)
+Label/font_sizes/font_size = 8
+
+[node name="PantallaContinuar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_continuar")
+script = ExtResource("1_pan")
+trofeos = Dictionary[StringName, Texture2D]({
+&"medusa_derrotada": ExtResource("7_cab"),
+&"minotauro_derrotado": ExtResource("8_cue")
+})
+
+[node name="FondoOscuro" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.239, 0.192, 0.192, 1)
+
+[node name="Lienzo" type="Control" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 268.0
+offset_bottom = 149.0
+mouse_filter = 2
+
+[node name="Fondo" type="TextureRect" parent="Lienzo"]
+layout_mode = 0
+offset_right = 268.0
+offset_bottom = 149.0
+mouse_filter = 2
+texture = ExtResource("2_fon")
+
+[node name="Tarjeta" type="Button" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 254.0
+offset_bottom = 59.0
+focus_neighbor_top = NodePath("../Volver")
+focus_neighbor_bottom = NodePath("../Volver")
+theme_override_styles/focus = SubResource("StyleBoxFlat_foco")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_nada")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_nada")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_nada")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nada")
+
+[node name="Titulo" type="Label" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 57.0
+offset_top = 19.0
+offset_right = 135.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 13
+text = "Partida 1"
+
+[node name="Tiempo" type="Label" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 33.0
+offset_right = 135.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 6
+text = "Tiempo jugado: 00:00"
+
+[node name="Corazones" type="HBoxContainer" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 141.0
+offset_top = 19.0
+offset_right = 250.0
+offset_bottom = 31.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+script = ExtResource("6_cor")
+
+[node name="Moneda" type="TextureRect" parent="Lienzo"]
+layout_mode = 0
+offset_left = 141.0
+offset_top = 39.0
+offset_right = 152.0
+offset_bottom = 50.0
+mouse_filter = 2
+texture = ExtResource("5_mon")
+
+[node name="Monedas" type="Label" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 155.0
+offset_top = 39.0
+offset_right = 200.0
+offset_bottom = 50.0
+text = "0"
+vertical_alignment = 1
+
+[node name="Jefes" type="Label" parent="Lienzo"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 63.0
+offset_right = 60.0
+offset_bottom = 75.0
+theme_override_font_sizes/font_size = 10
+text = "Jefes"
+
+[node name="Inventario" type="Label" parent="Lienzo"]
+layout_mode = 0
+offset_left = 153.0
+offset_top = 63.0
+offset_right = 220.0
+offset_bottom = 75.0
+theme_override_font_sizes/font_size = 10
+text = "Inventario"
+
+[node name="Laureles" type="GridContainer" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 74.0
+offset_right = 134.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="Laurel1" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel2" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel3" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel4" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel5" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel6" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel7" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Laurel8" type="Control" parent="Lienzo/Laureles"]
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Trofeo" type="TextureRect" parent="Lienzo/Laureles/Laurel8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Casillas" type="GridContainer" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 165.0
+offset_top = 77.0
+offset_right = 235.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 1
+columns = 4
+
+[node name="Casilla1" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla2" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla3" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla4" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla5" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla6" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla7" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Casilla8" type="TextureRect" parent="Lienzo/Casillas"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Cantidad" type="Label" parent="Lienzo/Casillas/Casilla8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 1.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.25, 0.19, 0.18, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 2
+
+[node name="Volver" type="TextureButton" parent="Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 125.0
+offset_right = 36.0
+offset_bottom = 148.0
+focus_neighbor_top = NodePath("../Tarjeta")
+focus_neighbor_bottom = NodePath("../Tarjeta")
+texture_normal = ExtResource("3_vol")
+texture_hover = ExtResource("4_ven")
+texture_focused = ExtResource("4_ven")
+
+[connection signal="pressed" from="Lienzo/Tarjeta" to="." method="_continuar"]
+[connection signal="mouse_entered" from="Lienzo/Tarjeta" to="Lienzo/Tarjeta" method="grab_focus"]
+[connection signal="pressed" from="Lienzo/Volver" to="." method="_volver_al_menu"]
+[connection signal="mouse_entered" from="Lienzo/Volver" to="Lienzo/Volver" method="grab_focus"]
