@@ -3,40 +3,30 @@
 [ext_resource type="Script" uid="uid://byxl57yte0473" path="res://scripts/ui/menu_pausa.gd" id="1_pau"]
 [ext_resource type="Script" uid="uid://3hmg0e7idvhx" path="res://scripts/ui/botones_con_marca.gd" id="2_bot"]
 [ext_resource type="PackedScene" path="res://scenes/ui/icono_mando.tscn" id="3_ico"]
+[ext_resource type="FontFile" uid="uid://b7xb34lqyqhxs" path="res://assets/fonts/gravity_bold.otf" id="4_fnt"]
+[ext_resource type="Texture2D" uid="uid://bexbwpbmgdn60" path="res://assets/ui/menu_pausa/marco.png" id="5_mar"]
+[ext_resource type="Texture2D" uid="uid://cb4csg3rtqrpo" path="res://assets/ui/menu_pausa/leonidas.png" id="6_leo"]
+[ext_resource type="Texture2D" uid="uid://bai4h5gr2ypnh" path="res://assets/ui/menu_pausa/titulo.png" id="7_tit"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vacio"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_papel"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.965, 0.925, 0.824, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.176, 0.106, 0.078, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-anti_aliasing = false
-
 [sub_resource type="Theme" id="Theme_pausa"]
-Button/colors/font_color = Color(0.176, 0.106, 0.078, 1)
-Button/colors/font_disabled_color = Color(0.176, 0.106, 0.078, 0.5)
-Button/colors/font_focus_color = Color(0.71, 0.33, 0.14, 1)
-Button/colors/font_hover_color = Color(0.71, 0.33, 0.14, 1)
-Button/colors/font_hover_pressed_color = Color(0.71, 0.33, 0.14, 1)
-Button/colors/font_pressed_color = Color(0.71, 0.33, 0.14, 1)
+default_font = ExtResource("4_fnt")
+default_font_size = 9
+Button/colors/font_color = Color(0.10980392, 0.13333334, 0.32941177, 1)
+Button/colors/font_disabled_color = Color(0.10980392, 0.13333334, 0.32941177, 0.5)
+Button/colors/font_focus_color = Color(0.55, 0.22, 0.1, 1)
+Button/colors/font_hover_color = Color(0.55, 0.22, 0.1, 1)
+Button/colors/font_hover_pressed_color = Color(0.55, 0.22, 0.1, 1)
+Button/colors/font_pressed_color = Color(0.55, 0.22, 0.1, 1)
 Button/styles/disabled = SubResource("StyleBoxEmpty_vacio")
 Button/styles/focus = SubResource("StyleBoxEmpty_vacio")
 Button/styles/hover = SubResource("StyleBoxEmpty_vacio")
 Button/styles/normal = SubResource("StyleBoxEmpty_vacio")
 Button/styles/pressed = SubResource("StyleBoxEmpty_vacio")
-Label/colors/font_color = Color(0.176, 0.106, 0.078, 1)
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_papel")
+Label/colors/font_color = Color(0.10980392, 0.13333334, 0.32941177, 1)
+Label/constants/line_spacing = -2
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_vacio")
 
 [node name="MenuPausa" type="CanvasLayer" unique_id=1155418153]
 process_mode = 3
@@ -53,88 +43,129 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_pausa")
 
-[node name="Fondo" type="ColorRect" parent="Raiz" unique_id=103371160]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.55)
+[node name="Fondo" type="TextureRect" parent="Raiz"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 270.0
+mouse_filter = 2
+expand_mode = 1
 
-[node name="Centro" type="CenterContainer" parent="Raiz" unique_id=1928469536]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Oscuro" type="ColorRect" parent="Raiz" unique_id=103371160]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 270.0
+color = Color(0.04, 0.04, 0.1, 0.6)
+
+[node name="Lienzo" type="Control" parent="Raiz"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 362.0
+offset_bottom = 333.0
 mouse_filter = 2
 
-[node name="PanelMenu" type="PanelContainer" parent="Raiz/Centro" unique_id=1703944851]
+[node name="Marco" type="TextureRect" parent="Raiz/Lienzo"]
+layout_mode = 0
+offset_right = 362.0
+offset_bottom = 333.0
+mouse_filter = 2
+texture = ExtResource("5_mar")
+
+[node name="Leonidas" type="TextureRect" parent="Raiz/Lienzo"]
+layout_mode = 0
+offset_right = 362.0
+offset_bottom = 333.0
+mouse_filter = 2
+texture = ExtResource("6_leo")
+
+[node name="Titulo" type="TextureRect" parent="Raiz/Lienzo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 362.0
+offset_bottom = 333.0
+mouse_filter = 2
+texture = ExtResource("7_tit")
+
+[node name="TituloControles" type="Label" parent="Raiz/Lienzo"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 2
+layout_mode = 0
+offset_left = 100.0
+offset_top = 63.0
+offset_right = 262.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.796, 0.769, 0.753, 1)
+theme_override_font_sizes/font_size = 14
+text = "Controles"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hoja" type="CenterContainer" parent="Raiz/Lienzo"]
+texture_filter = 2
+layout_mode = 0
+offset_left = 70.0
+offset_top = 112.0
+offset_right = 292.0
+offset_bottom = 280.0
+mouse_filter = 2
+
+[node name="PanelMenu" type="PanelContainer" parent="Raiz/Lienzo/Hoja" unique_id=1703944851]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="Raiz/Centro/PanelMenu" unique_id=1401707237]
+[node name="VBox" type="VBoxContainer" parent="Raiz/Lienzo/Hoja/PanelMenu" unique_id=1401707237]
 layout_mode = 2
 
-[node name="Titulo" type="Label" parent="Raiz/Centro/PanelMenu/VBox" unique_id=1124143780]
-layout_mode = 2
-text = "Pausa"
-horizontal_alignment = 1
-
-[node name="Botones" type="VBoxContainer" parent="Raiz/Centro/PanelMenu/VBox" unique_id=1444493561]
+[node name="Botones" type="VBoxContainer" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox" unique_id=1444493561]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("2_bot")
 
-[node name="Continuar" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=537532698]
+[node name="Continuar" type="Button" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones" unique_id=537532698]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Salir")
 text = "Continuar"
 alignment = 0
 
-[node name="Controles" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=287394292]
+[node name="Controles" type="Button" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones" unique_id=287394292]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Controles"
 alignment = 0
 
-[node name="Daltonismo" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=201561198]
+[node name="Daltonismo" type="Button" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones" unique_id=201561198]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Daltonismo"
 alignment = 0
 
-[node name="TipoEntrada" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=1720916052]
+[node name="TipoEntrada" type="Button" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones" unique_id=1720916052]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Tipo de entrada"
 alignment = 0
 
-[node name="Salir" type="Button" parent="Raiz/Centro/PanelMenu/VBox/Botones" unique_id=594479011]
+[node name="Salir" type="Button" parent="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones" unique_id=594479011]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Continuar")
 text = "Salir"
 alignment = 0
 
-[node name="PanelControles" type="PanelContainer" parent="Raiz/Centro" unique_id=1786510117]
+[node name="PanelControles" type="PanelContainer" parent="Raiz/Lienzo/Hoja" unique_id=1786510117]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="Raiz/Centro/PanelControles" unique_id=1901698515]
+[node name="VBox" type="VBoxContainer" parent="Raiz/Lienzo/Hoja/PanelControles" unique_id=1901698515]
 layout_mode = 2
 
-[node name="Titulo" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=658927380]
-layout_mode = 2
-text = "Controles"
-horizontal_alignment = 1
-
-[node name="ListaTeclado" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=399873369]
+[node name="ListaTeclado" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox" unique_id=399873369]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/line_spacing = 0
 text = "Moverse: WASD / Flechas
 Atacar: J
 Pirueta: Espacio / K
@@ -143,94 +174,103 @@ Libro: I
 Cambiar página: Q / R
 Pausa: Esc"
 
-[node name="ListaMando" type="GridContainer" parent="Raiz/Centro/PanelControles/VBox"]
+[node name="ListaMando" type="GridContainer" parent="Raiz/Lienzo/Hoja/PanelControles/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 1
 columns = 2
 
-[node name="NombreMoverse" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombreMoverse" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Moverse"
 
-[node name="IconosMoverse" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="IconosMoverse" type="HBoxContainer" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="IconoMoverse_1" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
+[node name="IconoMoverse_1" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "ps5/l_stick"
 
-[node name="IconoMoverse_2" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
+[node name="IconoMoverse_2" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando/IconosMoverse" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "ps5/dpad"
 
-[node name="NombreAtacar" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombreAtacar" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Atacar"
 
-[node name="IconoAtacar" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+[node name="IconoAtacar" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "atacar"
 
-[node name="NombrePirueta" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombrePirueta" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Pirueta"
 
-[node name="IconoPirueta" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+[node name="IconoPirueta" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "pirueta"
 
-[node name="NombreInteractuar" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombreInteractuar" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Interactuar"
 
-[node name="IconoInteractuar" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+[node name="IconoInteractuar" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "interactuar"
 
-[node name="NombreLibro" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombreLibro" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Libro"
 
-[node name="IconoLibro" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+[node name="IconoLibro" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "ps5/touch_pad"
 
-[node name="NombrePaginas" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombrePaginas" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Cambiar página"
 
-[node name="IconosPaginas" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="IconosPaginas" type="HBoxContainer" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="IconoPaginas_1" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
+[node name="IconoPaginas_1" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "pagina_anterior"
 
-[node name="IconoPaginas_2" parent="Raiz/Centro/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
+[node name="IconoPaginas_2" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando/IconosPaginas" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "pagina_siguiente"
 
-[node name="NombrePausa" type="Label" parent="Raiz/Centro/PanelControles/VBox/ListaMando"]
+[node name="NombrePausa" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando"]
 layout_mode = 2
 text = "Pausa"
 
-[node name="IconoPausa" parent="Raiz/Centro/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
+[node name="IconoPausa" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/ListaMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "pausa"
 
-[node name="Pie" type="Label" parent="Raiz/Centro/PanelControles/VBox" unique_id=1136592914]
+[node name="Pie" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox" unique_id=1136592914]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.6)
 layout_mode = 2
 text = "Esc: volver"
 horizontal_alignment = 1
 
-[node name="PieMando" type="HBoxContainer" parent="Raiz/Centro/PanelControles/VBox"]
+[node name="PieMando" type="HBoxContainer" parent="Raiz/Lienzo/Hoja/PanelControles/VBox"]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0.6)
@@ -238,16 +278,17 @@ layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 4
 
-[node name="Icono" parent="Raiz/Centro/PanelControles/VBox/PieMando" instance=ExtResource("3_ico")]
+[node name="Icono" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/PieMando" instance=ExtResource("3_ico")]
 layout_mode = 2
+custom_minimum_size = Vector2(12, 12)
 ruta = "ps5/circle"
 
-[node name="Texto" type="Label" parent="Raiz/Centro/PanelControles/VBox/PieMando"]
+[node name="Texto" type="Label" parent="Raiz/Lienzo/Hoja/PanelControles/VBox/PieMando"]
 layout_mode = 2
 text = "volver"
 
-[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Continuar" to="." method="_cerrar"]
-[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Controles" to="." method="_mostrar_controles"]
-[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Daltonismo" to="." method="_filtro_daltonismo"]
-[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/TipoEntrada" to="." method="_tipo_entrada"]
-[connection signal="pressed" from="Raiz/Centro/PanelMenu/VBox/Botones/Salir" to="." method="_salir"]
+[connection signal="pressed" from="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones/Continuar" to="." method="_cerrar"]
+[connection signal="pressed" from="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones/Controles" to="." method="_mostrar_controles"]
+[connection signal="pressed" from="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones/Daltonismo" to="." method="_filtro_daltonismo"]
+[connection signal="pressed" from="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones/TipoEntrada" to="." method="_tipo_entrada"]
+[connection signal="pressed" from="Raiz/Lienzo/Hoja/PanelMenu/VBox/Botones/Salir" to="." method="_salir"]

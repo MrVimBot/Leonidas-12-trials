@@ -19,11 +19,23 @@ extends CanvasLayer
 ## del tipo elegido (`ListaTeclado` en texto / `ListaMando` con iconos de PS5 del plugin
 ## Controller Icons, `IconoMando`; todo en la escena).
 ## «Salir» vuelve al menú principal (sin guardar: se guarda desde el libro).
+##
+## Arte de la artista (`assets/sprites/menu_pausa.aseprite` → `assets/ui/menu_pausa/`, con
+## `tools/recortes/menu_pausa.lua`): marco de 362×333 con la cartela «Pausa» y Leonidas asomado.
+## No cabe en 480×270, así que, como el libro, se dibuja en modo pintura (`Pantalla.modo_pintura`)
+## a la mayor escala entera de pantalla (`Pantalla.ajustar_a_pixel_entero`: ×3 en 1920×1080),
+## con una captura del juego detrás para que el mundo no cambie de aspecto. Las coordenadas de
+## `Lienzo` son píxeles del arte; el texto va en `Hoja` (sobre el pergamino) con la fuente del
+## libro (Gravity). En Controles, la cartela cambia «Pausa» (pintado) por `TituloControles`.
 
 var abierto := false
 
 var _viendo_controles := false
 
+@onready var _fondo: TextureRect = %Fondo
+@onready var _lienzo: Control = %Lienzo
+@onready var _titulo: Control = %Titulo
+@onready var _titulo_controles: Control = %TituloControles
 @onready var _panel_menu: Control = %PanelMenu
 @onready var _panel_controles: Control = %PanelControles
 @onready var _botones: BotonesConMarca = %Botones
@@ -44,6 +56,13 @@ func _ready() -> void:
 	_actualizar_daltonismo()
 	_boton_tipo_entrada.set_meta(&"rotulo", _boton_tipo_entrada.text)
 	_actualizar_tipo_entrada()
+	get_window().size_changed.connect(_colocar)
+
+
+## Escala entera de pantalla para el marco y lo centra. Al abrir y si cambia la ventana.
+func _colocar() -> void:
+	if abierto:
+		Pantalla.ajustar_a_pixel_entero(_lienzo)
 
 
 ## ¿Se puede abrir ahora? No con el libro, la tienda o un diálogo abiertos, ni
@@ -77,12 +96,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _abrir() -> void:
+	# Captura del juego tal como se ve ahora (a 480×270): será el fondo mientras la ventana
+	# está en modo CANVAS_ITEMS.
+	var captura := get_viewport().get_texture().get_image()
+	_fondo.texture = ImageTexture.create_from_image(captura) if captura else null
 	abierto = true
 	_viendo_controles = false
-	_panel_menu.visible = true
-	_panel_controles.visible = false
+	_mostrar_panel(false)
+	Pantalla.modo_pintura(self, true)
 	visible = true
 	get_tree().paused = true
+	_colocar()
 	_boton_continuar.grab_focus()
 	_botones.actualizar_marcas()
 
@@ -90,7 +114,17 @@ func _abrir() -> void:
 func _cerrar() -> void:
 	abierto = false
 	visible = false
+	_fondo.texture = null
+	Pantalla.restaurar(self) # vuelve al modo de la zona (pintada o no)
 	get_tree().paused = false
+
+
+## Menú (false) o Controles (true), con su título en la cartela.
+func _mostrar_panel(controles: bool) -> void:
+	_panel_menu.visible = not controles
+	_panel_controles.visible = controles
+	_titulo.visible = not controles
+	_titulo_controles.visible = controles
 
 
 func _mostrar_controles() -> void:
@@ -101,14 +135,12 @@ func _mostrar_controles() -> void:
 	_pie_controles.visible = not con_iconos
 	_lista_mando.visible = con_iconos
 	_pie_mando.visible = con_iconos
-	_panel_menu.visible = false
-	_panel_controles.visible = true
+	_mostrar_panel(true)
 
 
 func _volver_de_controles() -> void:
 	_viendo_controles = false
-	_panel_controles.visible = false
-	_panel_menu.visible = true
+	_mostrar_panel(false)
 	_boton_controles.grab_focus()
 
 
@@ -141,6 +173,8 @@ func _actualizar_tipo_entrada() -> void:
 
 func _salir() -> void:
 	abierto = false
+	_fondo.texture = null
+	# El menú principal también va en modo pintura: no hace falta restaurar.
 	get_tree().paused = false
 	var escena_principal: String = ProjectSettings.get_setting("application/run/main_scene")
 	get_tree().change_scene_to_file(escena_principal)

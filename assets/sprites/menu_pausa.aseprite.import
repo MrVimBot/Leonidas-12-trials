@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://h8osfufwa1sp"
+path="res://.godot/imported/menu_pausa.aseprite-144f9d25831b930f4730dcde599a77eb.res"
+
+[deps]
+
+source_file="res://assets/sprites/menu_pausa.aseprite"
+dest_files=["res://.godot/imported/menu_pausa.aseprite-144f9d25831b930f4730dcde599a77eb.res"]
+
+[params]
+
