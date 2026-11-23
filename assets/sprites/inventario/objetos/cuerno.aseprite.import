@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://db6fyd0ymtltl"
+path="res://.godot/imported/cuerno.aseprite-36f21455778382730d024ac7b3b55422.res"
+
+[deps]
+
+source_file="res://assets/sprites/inventario/objetos/cuerno.aseprite"
+dest_files=["res://.godot/imported/cuerno.aseprite-36f21455778382730d024ac7b3b55422.res"]
+
+[params]
+

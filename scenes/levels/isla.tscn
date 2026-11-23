@@ -33,12 +33,20 @@
 [ext_resource type="PackedScene" uid="uid://c6461asubij0m" path="res://scenes/entorno/cofre.tscn" id="27_88ur2"]
 [ext_resource type="Resource" path="res://resources/objetos/manzana.tres" id="28_kh3om"]
 [ext_resource type="Resource" path="res://resources/objetos/coco.tres" id="29_loa26"]
+[ext_resource type="PackedScene" path="res://scenes/entorno/barrera_mision.tscn" id="33_kq84f"]
+[ext_resource type="Resource" path="res://resources/dialogues/leonidas_orilla_sur.tres" id="34_4sant"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvicc"]
+size = Vector2(156, 52)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kq84f"]
 size = Vector2(200, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4sant"]
 size = Vector2(36, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ohix6"]
+size = Vector2(140, 40)
 
 [node name="Isla" type="Node2D" unique_id=1457208538 node_paths=PackedStringArray("suelo")]
 y_sort_enabled = true
@@ -4560,6 +4568,17 @@ position = Vector2(1433, 1215)
 [node name="Gamba22" parent="Objetos/Enemigos" unique_id=1587028082 instance=ExtResource("21_lvicc")]
 position = Vector2(1279, 1245)
 
+[node name="BarreraLaberinto" parent="Objetos" unique_id=1821163579 instance=ExtResource("33_kq84f")]
+position = Vector2(2260, 922)
+requisito = 2
+dialogo = ExtResource("34_4sant")
+dialogo_repetido = null
+direccion_retroceso = Vector2(0, -1)
+destello = false
+
+[node name="Forma" parent="Objetos/BarreraLaberinto" index="0"]
+shape = SubResource("RectangleShape2D_lvicc")
+
 [node name="Entradas" type="Node2D" parent="." unique_id=1953331109]
 
 [node name="inicio" type="Marker2D" parent="Entradas" unique_id=313216066]
@@ -4570,6 +4589,9 @@ position = Vector2(125, 60)
 
 [node name="desde_cueva" type="Marker2D" parent="Entradas" unique_id=2134797763]
 position = Vector2(2245, 848)
+
+[node name="desde_laberinto" type="Marker2D" parent="Entradas" unique_id=599462807]
+position = Vector2(2260, 875)
 
 [node name="Colisiones" type="Node2D" parent="." unique_id=942872685]
 
@@ -5087,6 +5109,15 @@ shape = SubResource("RectangleShape2D_4sant")
 [node name="PuntoControlIsla" type="Marker2D" parent="." unique_id=259340802]
 position = Vector2(125, 110)
 
+[node name="SalidaLaberinto" type="Area2D" parent="." unique_id=839900815]
+position = Vector2(2260, 925)
+script = ExtResource("14_i01uh")
+zona_destino = "res://scenes/levels/laberinto.tscn"
+entrada_destino = "desde_isla"
+
+[node name="Forma" type="CollisionShape2D" parent="SalidaLaberinto" unique_id=1145751435]
+shape = SubResource("RectangleShape2D_ohix6")
+
 [editable path="Objetos/Bosques/Bosque1"]
 [editable path="Objetos/Bosques/Bosque2"]
 [editable path="Objetos/Bosques/Bosque3"]
@@ -5094,3 +5125,4 @@ position = Vector2(125, 110)
 [editable path="Objetos/Bosques/Bosque5"]
 [editable path="Objetos/Bosques/Bosque6"]
 [editable path="Objetos/Bosques/Bosque7"]
+[editable path="Objetos/BarreraLaberinto"]

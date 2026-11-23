@@ -8,12 +8,17 @@ extends Area2D
 ##   VOLTERETA  Leonidas haga su primera voltereta (`EstadoJuego.voltereta_aprendida`,
 ##              la pone la escena de Kathita). Cierra el paso junto al cartel y Kathita
 ##              le recuerda que debe hacerla (resources/dialogues/kathita_barrera_*.tres).
+##   MINOTAURO  los sabios den la misión del Minotauro (`EstadoJuego.mision_empezada(
+##              MISION_DERROTAR_MINOTAURO)`). En la orilla de la isla, al sur de la cueva, antes
+##              de la salida al laberinto (resources/dialogues/leonidas_orilla_sur.tres).
+##   FIN_DEMO   siempre cerrada: el camino sigue en el guion pero no en la demo (salida de
+##              abajo del laberinto, resources/dialogues/leonidas_fin_demo.tres).
 ## Necesita un CollisionShape2D hijo que tape todo el hueco por el que se podría pasar.
 ## La primera vez sale `dialogo`; después `dialogo_repetido`. Las barreras de MISION
 ## comparten el contador `EstadoJuego.avisos_zeus`; las de VOLTERETA cuentan aparte.
 ## Textos PROVISIONALES.
 
-enum Requisito { MISION, VOLTERETA }
+enum Requisito { MISION, VOLTERETA, MINOTAURO, FIN_DEMO }
 
 @export var requisito := Requisito.MISION
 
@@ -51,8 +56,13 @@ func _exit_tree() -> void:
 
 
 func _cerrada() -> bool:
-	if requisito == Requisito.VOLTERETA:
-		return not EstadoJuego.voltereta_aprendida
+	match requisito:
+		Requisito.VOLTERETA:
+			return not EstadoJuego.voltereta_aprendida
+		Requisito.MINOTAURO:
+			return not EstadoJuego.mision_empezada(EstadoJuego.MISION_DERROTAR_MINOTAURO)
+		Requisito.FIN_DEMO:
+			return true
 	return not EstadoJuego.mision_recibida
 
 

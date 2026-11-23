@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/entorno/reja.gd" id="1_reja"]
+[ext_resource type="Texture2D" path="res://assets/sprites/entorno/nivel3/rejas.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="Forma_reja"]
+resource_local_to_scene = true
+size = Vector2(64, 8)
+
+[node name="Reja" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_reja")
+
+[node name="Visual" type="Sprite2D" parent="."]
+texture_filter = 4
+texture = ExtResource("2_tex")
+centered = false
+
+[node name="Forma" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("Forma_reja")
+disabled = true

@@ -18,6 +18,7 @@ const ZONAS := [
 	["Isla de Medusa", "Isla", "Isla"],
 	["Cueva de Medusa", "Cueva", "Cueva"],
 	["Guarida de Medusa", "Guarida", "Cueva"],
+	["Laberinto del Minotauro", "Laberinto", "Laberinto"],
 ]
 ## Índice en ZONAS del mar (se pinta de azul).
 const MAR := 4

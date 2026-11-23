@@ -38,6 +38,7 @@ const OBJ_MANZANA := &"manzana"
 const OBJ_CARTA := &"carta"
 const OBJ_CABEZA_PIEDRA := &"cabeza_piedra"
 const OBJ_COCO := &"coco"
+const OBJ_CUERNO := &"cuerno"
 const MISION_IR_AL_TEMPLO := &"ir_al_templo"
 const MISION_DERROTAR_MEDUSA := &"derrotar_medusa"
 const MISION_REGRESAR_CON_SABIOS := &"regresar_con_sabios"
@@ -55,6 +56,7 @@ const PROGRESO := {
 	&"jefes_derrotados": 0,
 	&"corazones_extra": 0,
 	&"medusa_derrotada": false,
+	&"minotauro_derrotado": false,
 }
 
 ## Dónde se guarda la partida (variable para poder probar sin tocar la real).
@@ -84,6 +86,9 @@ var corazones_extra := 0
 ## Medusa vencida (escena del encuentro, `EscenaMedusa`): al volver a `cueva_jefe` se queda en
 ## la sala con su recordatorio, sin combate.
 var medusa_derrotada := false
+## Minotauro vencido (escena del laberinto, `EscenaMinotauro`): al volver al laberinto no hay
+## combate, las rejas siguen abiertas y la luz encendida.
+var minotauro_derrotado := false
 ## Cofres ya abiertos (`Cofre.clave()`: zona/nombre del nodo). No va en PROGRESO: es una lista,
 ## y las constantes de PROGRESO se copian tal cual (una lista constante sería de solo lectura).
 var cofres_abiertos: Array[StringName] = []

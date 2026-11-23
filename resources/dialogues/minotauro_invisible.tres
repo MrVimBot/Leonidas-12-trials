@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Dialogo" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/dialogo.gd" id="1_dia"]
+
+[resource]
+script = ExtResource("1_dia")
+texto = "# PROVISIONAL. El Minotauro se vuelve invisible (Leonidas aún no tiene el cuerno).
+Leonidas: ¡Ha desaparecido! Los sabios tenían razón: es invisible.
+Leonidas: Tengo que encontrar el cofre del cuerno antes de que él me encuentre a mí.
+"

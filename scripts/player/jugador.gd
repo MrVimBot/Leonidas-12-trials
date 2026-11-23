@@ -298,6 +298,10 @@ func _mostrar_objeto_en_mano(icono: Texture2D, posicion: Vector2, saltito: bool)
 	_objeto_en_mano.texture = icono
 	_objeto_en_mano.visible = icono != null
 	_objeto_en_mano.position = posicion
+	# Las posiciones están medidas para iconos de 16×16 (centrados en la mano). Uno mayor (el
+	# cuerno, 34×32) crece hacia arriba y hacia fuera desde esa esquina, para no tapar la cabeza.
+	var exceso := (icono.get_size() - Vector2(16, 16)).max(Vector2.ZERO) if icono else Vector2.ZERO
+	_objeto_en_mano.offset = Vector2(exceso.x, -exceso.y) / 2.0
 	# Un saltito de 1 px a mitad de la pose, como si lo levantara para morderlo.
 	if icono and saltito:
 		var t := create_tween()

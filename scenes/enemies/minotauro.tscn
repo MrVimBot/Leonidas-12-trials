@@ -1,0 +1,125 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemigo_pintado.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/enemies/minotauro.gd" id="2_cer"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/minotauro.tres" id="3_spr"]
+[ext_resource type="Script" uid="uid://bxctubtneamkl" path="res://scripts/componentes/hitbox.gd" id="4_hit"]
+[ext_resource type="Script" uid="uid://6vdsq7gmjjyu" path="res://scripts/componentes/componente_ataque.gd" id="5_ata"]
+[ext_resource type="Script" path="res://scripts/componentes/componente_ruta.gd" id="6_rut"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_invocar.tres" id="sfx_rugido"]
+[ext_resource type="AudioStream" path="res://resources/audio/sfx_medusa_golpe_suelo.tres" id="sfx_golpe"]
+[ext_resource type="Script" path="res://scripts/entorno/luz_antorcha.gd" id="7_luz"]
+[ext_resource type="Texture2D" path="res://resources/luces/luz_radial.tres" id="8_tex"]
+
+[sub_resource type="RectangleShape2D" id="Shape_cuerpo"]
+size = Vector2(18, 8)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurtbox"]
+size = Vector2(26, 50)
+
+[sub_resource type="RectangleShape2D" id="Shape_contacto"]
+size = Vector2(20, 12)
+
+[sub_resource type="RectangleShape2D" id="Shape_golpe_izquierda"]
+size = Vector2(44, 26)
+
+[sub_resource type="RectangleShape2D" id="Shape_golpe_derecha"]
+size = Vector2(44, 26)
+
+[node name="Minotauro" node_paths=PackedStringArray("sonido_rugido") instance=ExtResource("1_base")]
+script = ExtResource("2_cer")
+sonido_rugido = NodePath("SonidoRugido")
+
+[node name="Sombra" parent="." index="0"]
+tamano = Vector2i(30, 8)
+
+[node name="Sprite" parent="." index="1"]
+sprite_frames = ExtResource("3_spr")
+animation = &"parado"
+offset = Vector2(0, -81)
+
+[node name="Colision" parent="." index="2"]
+position = Vector2(0, -4)
+shape = SubResource("Shape_cuerpo")
+
+[node name="Forma" parent="Hurtbox" index="0"]
+position = Vector2(0, -27)
+shape = SubResource("Shape_hurtbox")
+
+[node name="Contacto" parent="." index="4"]
+danio = 2
+
+[node name="Forma" parent="Contacto" index="0"]
+position = Vector2(0, -6)
+shape = SubResource("Shape_contacto")
+
+[node name="Movimiento" parent="." index="5"]
+velocidad = 40.0
+
+[node name="Animador" parent="." index="6"]
+lado_mira = 1
+
+[node name="Vida" parent="." index="7"]
+vida_max = 20
+invulnerabilidad = 0.25
+
+[node name="Deteccion" parent="." index="8"]
+radio_vision = 2000.0
+radio_perder = 3000.0
+
+[node name="Muerte" parent="." index="10" node_paths=PackedStringArray("desactivar")]
+desactivar = [NodePath("../Hurtbox"), NodePath("../Contacto"), NodePath("../Golpe")]
+monedas = 5
+
+[node name="Golpe" type="Area2D" parent="." index="11"]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("4_hit")
+danio = 4
+activo = false
+
+[node name="Izquierda" type="CollisionShape2D" parent="Golpe" index="0"]
+position = Vector2(-36, -3)
+shape = SubResource("Shape_golpe_izquierda")
+
+[node name="Derecha" type="CollisionShape2D" parent="Golpe" index="1"]
+position = Vector2(36, -3)
+shape = SubResource("Shape_golpe_derecha")
+
+[node name="Ataque" type="Node" parent="." index="12" node_paths=PackedStringArray("hitbox", "animador", "forma_izquierda", "forma_derecha")]
+script = ExtResource("5_ata")
+hitbox = NodePath("../Golpe")
+animador = NodePath("../Animador")
+animacion = &"atacar"
+frames_golpe = Vector2i(39, 44)
+danio = 4
+forma_izquierda = NodePath("../Golpe/Izquierda")
+forma_derecha = NodePath("../Golpe/Derecha")
+solo_lados = true
+
+[node name="Ruta" type="Node" parent="." index="13" node_paths=PackedStringArray("cuerpo")]
+script = ExtResource("6_rut")
+cuerpo = NodePath("..")
+
+[node name="Luz" type="PointLight2D" parent="."]
+position = Vector2(0, -30)
+color = Color(1, 0.62, 0.45, 1)
+texture = ExtResource("8_tex")
+texture_scale = 1.1
+script = ExtResource("7_luz")
+energia = 0.9
+parpadeo = 0.08
+
+[node name="SonidoRugido" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_rugido")
+bus = &"SFX"
+max_distance = 500.0
+
+[node name="SonidoGolpe" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_golpe")
+bus = &"SFX"
+max_distance = 500.0
+
+[connection signal="golpe_activado" from="Ataque" to="SonidoGolpe" method="play"]

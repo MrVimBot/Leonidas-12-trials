@@ -1,9 +1,10 @@
 extends RefCounted
-## Tabla de los personajes PINTADOS del nivel 2 (estilo "lineless", Guión p. 22): fotogramas
+## Tabla de los personajes PINTADOS de los niveles 2 y 3 (estilo "lineless", Guión p. 22): fotogramas
 ## sueltos a 1280×720 renderizados desde un rig, NO pixel art. La lee tools/pintados/normalizar.gd.
 ##
 ## Por personaje:
-##   fuente      carpeta dentro de fuente/nivel2/ (la copia tools/pintados/copiar_fuente.sh)
+##   fuente      carpeta dentro de fuente/ (nivel2/<personaje>: la copia tools/pintados/copiar_fuente.sh;
+##               nivel3/minotauro: copiada a mano de la entrega del 2026-11-22)
 ##   alto        alto en píxeles de MUNDO (480×270) de la animación `parado`. Leonidas mide ~25.
 ##               Es lo que fija la escala: cambiarlo y regenerar.
 ##   ancla       punto de apoyo en los PNG originales (px de 1280×720), medido en `parado`:
@@ -26,7 +27,7 @@ const DENSIDAD := 2
 
 const PERSONAJES := {
 	"gamba": {
-		"fuente": "gamba",
+		"fuente": "nivel2/gamba",
 		"alto": 28,
 		"ancla": Vector2(665, 662),
 		"mira": "izquierda",
@@ -37,7 +38,7 @@ const PERSONAJES := {
 		},
 	},
 	"pez_espada": {
-		"fuente": "pez_espada",
+		"fuente": "nivel2/pez_espada",
 		"alto": 26,
 		"ancla": Vector2(690, 537),
 		"mira": "izquierda",
@@ -51,7 +52,7 @@ const PERSONAJES := {
 	# La entrega la llama "serpiente": es el CÍCLOPE SERPIENTE (Guión p. 36, enemigo de la
 	# cueva; tiene ataque). El comerciante de mapas (otra serpiente, p. 31) sería otro sprite.
 	"ciclope_serpiente": {
-		"fuente": "serpiente",
+		"fuente": "nivel2/serpiente",
 		"alto": 34,
 		"ancla": Vector2(667, 613),
 		"mira": "izquierda",
@@ -63,7 +64,7 @@ const PERSONAJES := {
 	},
 	# Parado y caminar de frente; el ataque gira hacia la izquierda.
 	"medusa": {
-		"fuente": "medusa",
+		"fuente": "nivel2/medusa",
 		"alto": 96,
 		"ancla": Vector2(648, 670),
 		"mira": "frente",
@@ -71,6 +72,22 @@ const PERSONAJES := {
 			"parado": {"carpeta": "idle", "loop": true},
 			"caminar": {"carpeta": "caminar", "loop": true},
 			"atacar": {"carpeta": "ataque", "loop": false},
+		},
+	},
+	# Nivel 3 (PROVISIONAL, entrega del 2026-11-22): fotogramas de 2031×1142. Dibujado de frente
+	# con la espada a SU izquierda (a la derecha de la pantalla): el animador lo espeja para mirar
+	# a la izquierda (`lado_mira = DERECHA` en minotauro.tscn). Ancla medida en `idle`: centro
+	# entre las pezuñas (x 336–397 y 570–628) y su fila más baja (1012). `atacar` a 30 fps: a 24
+	# el golpe completo (140 fotogramas) duraba casi 6 s.
+	"minotauro": {
+		"fuente": "nivel3/minotauro",
+		"alto": 60,
+		"ancla": Vector2(483, 1010),
+		"mira": "frente",
+		"animaciones": {
+			"parado": {"carpeta": "idle", "loop": true},
+			"caminar": {"carpeta": "caminar", "loop": true},
+			"atacar": {"carpeta": "atacar", "loop": false, "fps": 30},
 		},
 	},
 }
